@@ -19,7 +19,7 @@ issueTrackerURL="https://github.com/Ommina/BiomeDiversity/issues" #optional
 # The modid of the mod
 modId="biomediversity" #mandatory
 
-# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
+# The version number of the mod - there's a few well known ${} variables usable here or just hardcode it
 version="${file.jarVersion}" #mandatory
 
 # A display name for the mod
