@@ -1,6 +1,7 @@
 {
   "itemGroup.biomediversity": "Biome Diversity",
 
-  "block.biomediversity.orinocite_ore": "Orinocite Ore"
+  "item.biomediversity.orinocite_ingot": "Orinocite Ingot",
 
+  "block.biomediversity.orinocite_ore": "Orinocite Ore"
 }

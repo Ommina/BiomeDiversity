@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "biomediversity:orinocite_ore"
+  },
+  "result": "biomediversity:orinocite_ingot",
+  "experience": 0.7,
+  "cookingtime": 200
+}
