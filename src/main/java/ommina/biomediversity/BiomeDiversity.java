@@ -7,9 +7,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.config.Config;
 import ommina.biomediversity.items.ModItems;
+import ommina.biomediversity.world.ModWorldGeneration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,8 +37,16 @@ public class BiomeDiversity {
 
 
     public BiomeDiversity() {
-        // Register the setup method for modloading
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::setup );
+
+        ModLoadingContext.get().registerConfig( ModConfig.Type.CLIENT, Config.CLIENT_CONFIG );
+        ModLoadingContext.get().registerConfig( ModConfig.Type.COMMON, Config.COMMON_CONFIG );
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::setup );
+
+        Config.loadConfig( Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-client.toml" ) );
+        Config.loadConfig( Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-common.toml" ) );
+
+
         // Register the enqueueIMC method for modloading
         //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::enqueueIMC );
         // Register the processIMC method for modloading
@@ -38,17 +54,20 @@ public class BiomeDiversity {
         // Register the doClientStuff method for modloading
         //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::doClientStuff );
 
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register( this );
     }
 
-/*
 
     private void setup( final FMLCommonSetupEvent event ) {
-        // some preinit code
-        LOGGER.info( "HELLO FROM PREINIT" );
-        LOGGER.info( "DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName() );
+
+        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
+
     }
+
+    /*
+
 
     private void doClientStuff( final FMLClientSetupEvent event ) {
         // do something that can only be done on the client
