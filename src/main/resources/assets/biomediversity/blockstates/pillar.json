@@ -1,0 +1,25 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "biomediversity:block/pillar_base"
+      }
+    },
+    {
+      "when": {
+        "connected": "true"
+      },
+      "apply": {
+        "model": "biomediversity:block/antenna_pillar_connected"
+      }
+    },
+    {
+      "when": {
+        "connected": "false"
+      },
+      "apply": {
+        "model": "biomediversity:block/antenna_pillar_disconnected"
+      }
+    }
+  ]
+}

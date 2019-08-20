@@ -15,7 +15,7 @@ public class Config {
     public static ForgeConfigSpec COMMON_CONFIG;
     public static ForgeConfigSpec CLIENT_CONFIG;
 
-    // WORLDGEN
+    // WorldGen
     public static final String CATEGORY_WORLD_GEN = "worldgen";
     public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
 
@@ -25,10 +25,10 @@ public class Config {
     public static ForgeConfigSpec.IntValue Orinocite_Generation_Variance;
     public static ForgeConfigSpec.IntValue Orinocite_Generation_Chances;
 
-    public static ForgeConfigSpec.IntValue FIRSTBLOCK_MAXPOWER;
-    public static ForgeConfigSpec.IntValue FIRSTBLOCK_GENERATE;
-    public static ForgeConfigSpec.IntValue FIRSTBLOCK_SEND;
-    public static ForgeConfigSpec.IntValue FIRSTBLOCK_TICKS;
+    // Pillars
+    public static final String CATEGORY_PILLAR = "pillars";
+
+    public static ForgeConfigSpec.IntValue Pillar_Capacity;
 
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
     private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -37,6 +37,10 @@ public class Config {
 
         COMMON_BUILDER.comment( "Worldgen Settings" ).push( CATEGORY_WORLD_GEN );
         setupWorldGenConfig();
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Pillar Configuration" ).push( CATEGORY_PILLAR );
+        setupPillar();
         COMMON_BUILDER.pop();
 
 
@@ -58,6 +62,13 @@ public class Config {
         Orinocite_Generation_Chances = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein (0 to disable)" ).defineInRange( "attempts", 3, 0, 10 );
 
         COMMON_BUILDER.pop();
+
+    }
+
+    private static void setupPillar() {
+
+        Pillar_Capacity = COMMON_BUILDER.comment( "Pillar capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 1000, 250000, 64000 );
+
     }
 
     public static void loadConfig( ForgeConfigSpec spec, Path path ) {

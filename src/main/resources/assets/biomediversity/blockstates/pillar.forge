@@ -1,0 +1,57 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "biomediversity:pillar_base",
+		"parent": "block/orientable",
+		"textures": {
+			"particle": "biomediversity:blocks/machine_base",
+			"0": "biomediversity:blocks/machine_base",
+			"1": "biomediversity:blocks/machine_top",
+			"3": "biomediversity:blocks/window_nonoise",
+			"4": "biomediversity:blocks/window",
+			"6": "biomediversity:blocks/internal_horizontal",
+			"8": "biomediversity:blocks/background_dark",
+			"9": "biomediversity:blocks/antenna" }
+	 }
+	,
+	"variants": {
+		"inventory": [
+			{
+				"model": "biomediversity:pillar_base",
+				"transform": {
+					"firstperson_righthand": {
+						"scale": 0.35,
+						"translation": [ 0, 0, 0 ] },
+					"thirdperson_righthand": {
+						"scale": 0.35,
+						"translation": [ 0, 0, 0 ] },
+					"firstperson_lefthand": {
+						"scale": 0.35,
+						"translation": [ 0, 0, 0 ] },
+					"thirdperson_lefthand": {
+						"scale": 0.35
+					},
+					"gui": {
+						"scale": 0.68,
+						"translation": [ 0, 0.05, 0 ],
+						"rotation": [ { "x": 20 }, { "y": 35 } ] },
+					"ground": {
+						"scale": 0.45,
+						"rotation": [ {	"x": 20 } ] }
+				 }
+			 }
+		],
+		"connected": {
+			"true": {
+				"submodel": "biomediversity:antenna_connected",
+				"transform": {
+					"translation": [ 0,	0.75, 0 ] }
+			 },
+			"false": {
+				"submodel": "biomediversity:antenna_disconnected",
+				"transform": {
+					"translation": [ 0,	0.75, 0	] }
+			 }
+		 }
+	 }
+ }

@@ -1,6 +1,12 @@
 {
   "itemGroup.biomediversity": "Biome Diversity",
 
+  "text.biomediversity.linkstaff.cleared": "Cleared",
+  "text.biomediversity.linkstaff.settingscopied": "Settings Copied",
+  "text.biomediversity.linkstaff.settingspasted": "Settings Pasted",
+  "text.biomediversity.linkstaff.pillarsettingscopied": "Pillar Settings Copied",
+  "text.biomediversity.linkstaff.copyfrom": "Copy from %s at %d, %d, %d",
+
   "item.biomediversity.orinocite_ingot": "Orinocite Ingot",
 
   "block.biomediversity.orinocite_ore": "Orinocite Ore"

@@ -3,6 +3,7 @@ package ommina.biomediversity;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.items.ModItems;
 import ommina.biomediversity.world.ModWorldGeneration;
@@ -114,6 +116,12 @@ public class BiomeDiversity {
 
             ModItems.register( event );
 
+        }
+
+        @SubscribeEvent
+        public static void onTileEntityRegistry( final RegistryEvent.Register<TileEntityType<?>> event ) {
+
+            ModTileEntities.register( event );
         }
 
     }
