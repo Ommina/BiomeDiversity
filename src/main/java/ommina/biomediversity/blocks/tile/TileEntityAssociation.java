@@ -1,15 +1,15 @@
 
 package ommina.biomediversity.blocks.tile;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import ommina.biomediversity.block.receiver.TileEntityReceiver;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.pillar.TileEntityPillar;
+import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.chunkloader.ChunkLoader;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.worlddata.PillarData;
@@ -54,7 +54,6 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
     }
 
     */
-
     @Override
     public void onLoad() {
 
@@ -64,18 +63,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
     }
 
     @Override
-    public void read( CompoundNBT compound ) {
-        super.read( compound );
-    }
-
-    @Override
-    public CompoundNBT write( CompoundNBT compound ) {
-        return super.write( compound );
-    }
-
-
-    @Override
-    public CompoundNBT writeToNBT( final CompoundNBT compound ) {
+    public CompoundNBT write( final CompoundNBT compound ) {
 
         compound.putUniqueId( "identifier", identifier );
 
@@ -88,12 +76,12 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         if ( associatedPos != null )
             NbtUtils.addBlockPosToNbt( compound, associatedPos );
 
-        return super.writeToNBT( compound );
+        return super.write( compound );
 
     }
 
     @Override
-    public abstract void readFromNBT( final CompoundNBT compound ) {
+    public void read( final CompoundNBT compound ) {
 
         identifier = compound.getUniqueId( "identifier" );
 
@@ -105,7 +93,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
             associatedPos = NbtUtils.getBlockPosFromNbt( compound );
         }
 
-        super.readFromNBT( compound );
+        super.read( compound );
 
     }
 
@@ -190,7 +178,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
         if ( !world.isBlockLoaded( remotePos ) ) {
             shouldUnload = true;
-            ChunkLoader.forceSingleChunk( world, remotePos );
+          //   ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
         }
 
         TileEntity remoteTile = world.getTileEntity( remotePos );
@@ -212,13 +200,13 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
         createLinkComplete( world, owner, identifierPillar, identifierReceiver );
 
-        if ( tile instanceof TileEntityReceiver )
-            ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork();
-        else if ( remoteTile instanceof TileEntityReceiver )
-            ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork();
+        //if ( tile instanceof TileEntityReceiver )
+           // ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork(); //TODO:
+        //else if ( remoteTile instanceof TileEntityReceiver )
+           // ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork(); //TODO:
 
-        if ( shouldUnload )
-            ChunkLoader.releaseSingleChunk( world, remotePos );
+        //if ( shouldUnload )
+           // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
 
         tile.markDirty();
 
@@ -261,7 +249,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
     private static void updateBlockStateForAntenna( TileEntityAssociation tile, boolean connected ) {
 
-        tile.getWorld().setBlockState( tile.getPos(), tile.getWorld().getBlockState( tile.getPos() ).withProperty( IS_CONNECTED, connected ), 2 );
+        tile.getWorld().setBlockState( tile.getPos(), tile.getWorld().getBlockState( tile.getPos() ).with( IS_CONNECTED, connected ), 2 );
 
     }
 
@@ -279,9 +267,9 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         if ( world.isBlockLoaded( remotePos ) ) {
             preLink( world, world.getTileEntity( remotePos ) );
         } else {
-            ChunkLoader.forceSingleChunk( world, remotePos );
+            //ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
             preLink( world, world.getTileEntity( remotePos ) );
-            ChunkLoader.releaseSingleChunk( world, remotePos );
+            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
         }
 
     }
@@ -315,9 +303,9 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         if ( world.isBlockLoaded( remotePos ) ) {
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
         } else {
-            ChunkLoader.forceSingleChunk( world, remotePos );
+            // ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
-            ChunkLoader.releaseSingleChunk( world, remotePos );
+            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
         }
 
         if ( tea == null ) { // A bugged/broken link.  One side thinks it is linked, the other doesn't.  Just clear it the local side so it's back into a good state.
@@ -351,7 +339,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         PillarData pd = PillarNetwork.getPillar( owner, identifierPillar );
 
         if ( pd.receiver == null ) {
-            Biomediversity.logger.error( "Receiver is null when attempting to unlink a PillarNetwork pillar/receiver pair" );
+            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork pillar/receiver pair" );
         }
 
         pd.receiver = null;
@@ -377,12 +365,12 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
         if ( tile instanceof TileEntityReceiver ) {
             TileEntityReceiver receiver = (TileEntityReceiver) tile;
-            receiver.getTank().setFluid( null );
+            //receiver.getTank().setFluid( null ); //TODO:
         } else if ( tile instanceof TileEntityPillar ) { // It really can't be anything else, but ok
             TileEntityPillar pillar = (TileEntityPillar) tile;
             PillarData pd = PillarNetwork.getPillar( pillar.getOwner(), pillar.getIdentifier() );
             //Biomediversity.logger.warn( "** Pillarizing " + pd.getAmount() );
-            pillar.getTank().setFluid( pd.fluid, pd.getAmount() );
+            // pillar.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO:
 
         }
 

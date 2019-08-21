@@ -3,19 +3,26 @@ package ommina.biomediversity.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.blocks.GenericBlock;
+import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.pillar.Pillar;
+import ommina.biomediversity.blocks.receiver.Receiver;
 
 public class ModBlocks {
 
     public static GenericBlock oreOrinocite;
-    public static Pillar pillar;
+
+    @ObjectHolder( BiomeDiversity.MODID + ":pillar" ) public static Pillar pillar = new Pillar();
+    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static Receiver receiver = new Receiver();
+    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static Collector collector = new Collector();
 
     public static void register( final RegistryEvent.Register<Block> event ) {
 
         oreOrinocite = registerBlock( event, "orinocite_ore", Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
 
-        pillar = registerPillar( event );
+        event.getRegistry().registerAll( pillar, receiver, collector );
 
     }
 
@@ -28,16 +35,5 @@ public class ModBlocks {
         return block;
 
     }
-
-    private static Pillar registerPillar( final RegistryEvent.Register<Block> event ) {
-
-        Pillar block = new Pillar();
-
-        event.getRegistry().register( block );
-
-        return block;
-
-    }
-
 
 }

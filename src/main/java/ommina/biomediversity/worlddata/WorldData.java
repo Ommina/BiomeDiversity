@@ -1,20 +1,17 @@
 
 package ommina.biomediversity.worlddata;
 
-import java.util.UUID;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldSavedData;
+import ommina.biomediversity.BiomeDiversity;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.MapStorage;
-import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.fluids.FluidRegistry;
-import ommina.biomediversity.Biomediversity;
+import java.util.UUID;
 
 public class WorldData extends WorldSavedData {
 
-    private static final String DATA_NAME = Biomediversity.MODID + "_PillarNetwork";
+    private static final String DATA_NAME = BiomeDiversity.MODID + "_PillarNetwork";
 
     public WorldData() {
 
@@ -27,40 +24,41 @@ public class WorldData extends WorldSavedData {
     }
 
     @Override
-    public void readFromNBT( NBTTagCompound nbt ) {
+    public void read( CompoundNBT nbt ) {
 
-        for ( String key : nbt.getKeySet() ) {
+        for ( String key : nbt.keySet() ) {
 
             try {
 
                 UUID playerIdentifier = UUID.fromString( key );
-                NBTTagCompound subPlayer = nbt.getCompoundTag( key );
+                CompoundNBT subPlayer = nbt.getCompound( key );
 
-                for ( String keySub : subPlayer.getKeySet() ) {
+                for ( String keySub : subPlayer.keySet() ) {
 
                     UUID pillarIdentifier = UUID.fromString( keySub );
 
                     if ( pillarIdentifier != null ) {
                         PillarData pd = PillarNetwork.getPillar( playerIdentifier, pillarIdentifier );
-                        NBTTagCompound subPillar = subPlayer.getCompoundTag( keySub );
+                        CompoundNBT subPillar = subPlayer.getCompound( keySub );
 
-                        pd.setAmount( subPillar.getInteger( "quantity" ) );
+                        pd.setAmount( subPillar.getInt( "quantity" ) );
                         pd.rainfall = subPillar.getFloat( "humidity" );
                         pd.temperature = subPillar.getFloat( "temperature" );
-                        pd.biomeId = subPillar.getInteger( "biomeid" );
+                        pd.biomeId = subPillar.getInt( "biomeid" );
                         pd.receiver = subPillar.getUniqueId( "receiver" );
 
-                        if ( subPillar.hasKey( "fluidname" ) )
-                            pd.fluid = FluidRegistry.getFluid( subPillar.getString( "fluidname" ) );
+                        if ( subPillar.contains( "fluidname" ) )
+                            System.out.println();
+                        //pd.fluid = FluidRegistry.getFluid( subPillar.getString( "fluidname" ) );
                     } else {
-                        Biomediversity.logger.warn( "Pillar identifier retrieved from WorldSavedData is null.  Ignoring." );
+                        BiomeDiversity.LOGGER.warn( "Pillar identifier retrieved from WorldSavedData is null.  Ignoring." );
                     }
 
                 }
 
             } catch ( IllegalArgumentException e ) {
 
-                Biomediversity.logger.warn( "Player identifier retrieved from WorldSavedData is not a valid UUID.  This is a sign of impending doom.  Ignoring." );
+                BiomeDiversity.LOGGER.warn( "Player identifier retrieved from WorldSavedData is not a valid UUID.  This is a sign of impending doom.  Ignoring." );
 
             }
 
@@ -69,7 +67,7 @@ public class WorldData extends WorldSavedData {
     }
 
     @Override
-    public NBTTagCompound writeToNBT( @Nonnull NBTTagCompound compound ) {
+    public CompoundNBT write( @Nonnull CompoundNBT compound ) {
 
         if ( PillarNetwork.isEmpty() )
             return compound;
@@ -78,57 +76,57 @@ public class WorldData extends WorldSavedData {
 
             if ( playerIdentifier == null ) {
 
-                Biomediversity.logger.warn( "WTH?  playerIdentifier is null" );
-                Biomediversity.logger.warn( "pillar network contains " + PillarNetwork.getPlayerList().size() + " entries" );
+                BiomeDiversity.LOGGER.warn( "WTH?  playerIdentifier is null" );
+                BiomeDiversity.LOGGER.warn( "pillar network contains " + PillarNetwork.getPlayerList().size() + " entries" );
 
                 int n = 1;
 
                 for ( UUID p2 : PillarNetwork.getPlayerList() ) {
-                    Biomediversity.logger.warn( " entry: " + n++ );
-                    Biomediversity.logger.warn( " p2: " + (p2 == null ? "null" : p2.toString()) );
-                    Biomediversity.logger.warn( " pillarCount: " + PillarNetwork.getPillarList( p2 ).size() );
+                    BiomeDiversity.LOGGER.warn( " entry: " + n++ );
+                    BiomeDiversity.LOGGER.warn( " p2: " + (p2 == null ? "null" : p2.toString()) );
+                    BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getPillarList( p2 ).size() );
                 }
 
             } else {
 
-                NBTTagCompound subTagPlayer = new NBTTagCompound();
+                CompoundNBT subTagPlayer = new CompoundNBT();
 
                 int n = 0;
 
                 for ( UUID pillarIdentifier : PillarNetwork.getPillarList( playerIdentifier ) ) {
 
-                    n++ ;
+                    n++;
 
                     if ( pillarIdentifier == null ) {
 
-                        Biomediversity.logger.warn( " pillarIdentifier is null.  This should not happen." );
-                        Biomediversity.logger.warn( " entry: " + n );
-                        Biomediversity.logger.warn( " owner player uuid: " + playerIdentifier.toString() );
-                        Biomediversity.logger.warn( " pillarCount: " + PillarNetwork.getPillarList( playerIdentifier ).size() );
+                        BiomeDiversity.LOGGER.warn( " pillarIdentifier is null.  This should not happen." );
+                        BiomeDiversity.LOGGER.warn( " entry: " + n );
+                        BiomeDiversity.LOGGER.warn( " owner player uuid: " + playerIdentifier.toString() );
+                        BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getPillarList( playerIdentifier ).size() );
 
                     } else {
 
                         PillarData pd = PillarNetwork.getPillar( playerIdentifier, pillarIdentifier );
-                        NBTTagCompound subTagPillar = new NBTTagCompound();
+                        CompoundNBT subTagPillar = new CompoundNBT();
 
-                        subTagPillar.setInteger( "quantity", pd.getAmount() );
-                        subTagPillar.setFloat( "humidity", pd.rainfall );
-                        subTagPillar.setFloat( "temperature", pd.temperature );
-                        subTagPillar.setInteger( "biomeid", pd.biomeId );
+                        subTagPillar.putInt( "quantity", pd.getAmount() );
+                        subTagPillar.putFloat( "humidity", pd.rainfall );
+                        subTagPillar.putFloat( "temperature", pd.temperature );
+                        subTagPillar.putInt( "biomeid", pd.biomeId );
 
                         if ( pd.receiver != null )
-                            subTagPillar.setUniqueId( "receiver", pd.receiver );
+                            subTagPillar.putUniqueId( "receiver", pd.receiver );
 
                         if ( pd.fluid != null )
-                            subTagPillar.setString( "fluidname", pd.fluid.getName() );
+                            subTagPillar.putString( "fluidname", pd.fluid.getName() );
 
-                        subTagPlayer.setTag( pillarIdentifier.toString(), subTagPillar ); // NPE here, non-crashing
+                        subTagPlayer.put( pillarIdentifier.toString(), subTagPillar ); // NPE here, non-crashing
 
                     }
 
                 }
 
-                compound.setTag( playerIdentifier.toString(), subTagPlayer );
+                compound.put( playerIdentifier.toString(), subTagPlayer );
 
             }
 
@@ -140,6 +138,8 @@ public class WorldData extends WorldSavedData {
 
     public static WorldData get( World world ) {
 
+        /*
+
         MapStorage storage = world.getPerWorldStorage();
         WorldData instance = (WorldData) storage.getOrLoadData( WorldData.class, DATA_NAME );
 
@@ -149,6 +149,10 @@ public class WorldData extends WorldSavedData {
         }
 
         return instance;
+
+        */
+
+        return null;
 
     }
 

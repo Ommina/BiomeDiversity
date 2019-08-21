@@ -1,16 +1,15 @@
 
 package ommina.biomediversity.worlddata;
 
+import net.minecraft.world.World;
+import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.pillar.TileEntityPillar;
+
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.world.World;
-import ommina.biomediversity.Biomediversity;
-import ommina.biomediversity.block.pillar.TileEntityPillar;
 
 public class PillarNetwork {
 
@@ -19,9 +18,9 @@ public class PillarNetwork {
     public static Map<UUID, PillarData> getPlayer( @Nonnull final UUID playerIdentifier ) {
 
         if ( playerIdentifier == null ) {
-            Biomediversity.logger.warn( "!* playerIdentifier is null adding to PillarNetowrk players" );
+            BiomeDiversity.LOGGER.warn( "!* playerIdentifier is null adding to PillarNetowrk players" );
             for ( StackTraceElement ste : Thread.currentThread().getStackTrace() )
-                Biomediversity.logger.warn( ste );
+                BiomeDiversity.LOGGER.warn( ste );
         }
 
         if ( !containsPlayer( playerIdentifier ) )

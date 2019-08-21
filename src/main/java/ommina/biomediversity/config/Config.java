@@ -67,7 +67,7 @@ public class Config {
 
     private static void setupPillar() {
 
-        Pillar_Capacity = COMMON_BUILDER.comment( "Pillar capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 1000, 250000, 64000 );
+        Pillar_Capacity = COMMON_BUILDER.comment( "Pillar capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 64000, 1000, 128000 );
 
     }
 
