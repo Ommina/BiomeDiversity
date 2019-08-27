@@ -17,13 +17,16 @@ public class Config {
 
     // WorldGen
     public static final String CATEGORY_WORLD_GEN = "worldgen";
-    public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
 
+    public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
     public static ForgeConfigSpec.IntValue Orinocite_Generation_MinY;
     public static ForgeConfigSpec.IntValue Orinocite_Generation_MaxY;
     public static ForgeConfigSpec.IntValue Orinocite_Generation_Base_Size;
     public static ForgeConfigSpec.IntValue Orinocite_Generation_Variance;
     public static ForgeConfigSpec.IntValue Orinocite_Generation_Chances;
+
+    public static final String SUBCATEGORY_JUNGLE_POOLS = "jungle_pools";
+    public static ForgeConfigSpec.BooleanValue Jungle_Pools_Enabled;
 
     // Pillars
     public static final String CATEGORY_PILLAR = "pillars";
@@ -60,6 +63,12 @@ public class Config {
         Orinocite_Generation_Base_Size = COMMON_BUILDER.comment( "Base size of an Orinocite ore vein" ).defineInRange( "baseSize", 5, 1, 20 );
         Orinocite_Generation_Variance = COMMON_BUILDER.comment( "Size variance of an Orinocite ore vein" ).defineInRange( "variance", 3, 0, 15 );
         Orinocite_Generation_Chances = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein (0 to disable)" ).defineInRange( "attempts", 3, 0, 10 );
+
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Jungle Pools" ).push( SUBCATEGORY_JUNGLE_POOLS );
+
+        Jungle_Pools_Enabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
 
         COMMON_BUILDER.pop();
 

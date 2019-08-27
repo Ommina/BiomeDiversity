@@ -22,11 +22,12 @@ public class ModWorldGeneration {
 
         for ( Biome biome : ForgeRegistries.BIOMES ) {
 
-            if ( biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
-                if ( Config.Orinocite_Generation_Base_Size.get() > 0 ) {
-                    addOre( biome, ModBlocks.oreOrinocite, Config.Orinocite_Generation_Base_Size.get() + Config.Orinocite_Generation_Variance.get(), Config.Orinocite_Generation_Chances.get(), Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get() );
-                }
-                addJunglePuddles( biome );
+            if ( Config.Orinocite_Generation_Base_Size.get() > 0 && biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
+                addOre( biome, ModBlocks.oreOrinocite, Config.Orinocite_Generation_Base_Size.get() + Config.Orinocite_Generation_Variance.get(), Config.Orinocite_Generation_Chances.get(), Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get() );
+            }
+
+            if ( Config.Jungle_Pools_Enabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {
+                addJunglePools( biome );
             }
 
         }
@@ -37,17 +38,8 @@ public class ModWorldGeneration {
 
     private void generateOverworld( Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider ) {
 
-        int x = chunkX * 16;
-        int z = chunkZ * 16;
-
-        generateOre( ModBlocks.oreOrinocite.getDefaultState(), world, random, x, z, Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get(), Config.Orinocite_Generation_Base_Size.get() + random.nextInt( Config.Orinocite_Generation_Variance.get() ), Config.Orinocite_Generation_Chances.get() );
-
-
         generateFluidDeposit( ModFluids.natural, random, x, z, world, chunkGenerator, chunkProvider );
-
         generateCrop( ModBlocks.cropPomegranate, random, x, z, world );
-
-        generateJunglePuddle( ModFluids.jungleWater, random, x, z, world );
 
     }
 
@@ -63,7 +55,7 @@ public class ModWorldGeneration {
         ) );
     }
 
-    private static void addJunglePuddles( Biome biome ) {
+    private static void addJunglePools( Biome biome ) {
 
         biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION, Biome.createDecoratedFeature( ModFeatures.JUNGLE_POOL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
 

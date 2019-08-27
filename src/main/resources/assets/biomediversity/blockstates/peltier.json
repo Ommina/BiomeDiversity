@@ -1,0 +1,78 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "biomediversity:peltier_base",
+		"parent": "block/orientable",
+	    "textures": {
+	        	"particle": "biomediversity:blocks/machine_base",
+		        "0": "biomediversity:blocks/machine_base_small",
+		        "1": "biomediversity:blocks/machine_top",
+		        "2": "biomediversity:blocks/background_dark",
+		        "3": "biomediversity:blocks/machine_base",
+		        "4": "biomediversity:blocks/background_grey_gradient",
+		        "5": "biomediversity:blocks/peltier_connector",
+		        "6": "biomediversity:blocks/peltier_fin"
+    	}
+	},
+	"variants": {
+		"north": {
+			"true": {
+			    "submodel": "biomediversity:peltier_fins" 
+			 } ,
+			"false": {
+			 }
+		},
+		"south": {
+			"true": {
+			    "submodel": "biomediversity:peltier_fins", "y": 180
+			 } ,
+			"false": {
+			 }
+		},
+		"west": {
+			"true": {
+			    "submodel": "biomediversity:peltier_fins", "y": 270 
+			 } ,
+			"false": {
+			 }
+		},
+		"east": {
+			"true": {
+			    "submodel": "biomediversity:peltier_fins", "y": 90 
+			 } ,
+			"false": {
+			 }
+		},
+		"inventory":  [ {
+			"model": "biomediversity:peltier_base",
+			"transform": {
+				"firstperson_righthand": { 
+			 		"scale": 0.35,
+            		"translation": [ 0, -0.25, 0 ]
+	    		},
+	    		"thirdperson_righthand": {
+	    			"scale": 0.35,
+	    			"translation": [ 0, -0.25, 0 ]
+	    		},
+				"firstperson_lefthand": { 
+			 		"scale": 0.35,
+            		"translation": [ 0, -0.25, 0 ]
+	    		},
+	    		"thirdperson_lefthand": {
+	    			"scale": 0.35,
+	    			"translation": [ 0, -0.25, 0 ]
+	    		},
+	    		"gui": {
+	    			"scale": 0.55,
+	    			"translation": [ 0, -0.10, 0 ],
+	    			"rotation": [ {"x": 20}, {"y": 35} ] 
+	    		},
+	    		"ground": {
+	    			"scale": 0.45,
+	    			"translation": [ 0, 0.25, 0 ],
+	    			"rotation": [ {"x": 20} ] 
+	    		}
+	    	} 
+		}]
+	}
+}
