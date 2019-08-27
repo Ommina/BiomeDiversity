@@ -3,13 +3,16 @@ package ommina.biomediversity.world;
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
+import ommina.biomediversity.world.feature.ModFeatures;
 
 public class ModWorldGeneration {
 
@@ -23,6 +26,7 @@ public class ModWorldGeneration {
                 if ( Config.Orinocite_Generation_Base_Size.get() > 0 ) {
                     addOre( biome, ModBlocks.oreOrinocite, Config.Orinocite_Generation_Base_Size.get() + Config.Orinocite_Generation_Variance.get(), Config.Orinocite_Generation_Chances.get(), Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get() );
                 }
+                addJunglePuddles( biome );
             }
 
         }
@@ -58,6 +62,14 @@ public class ModWorldGeneration {
              new CountRangeConfig( count, minHeight, 0, maxHeight )
         ) );
     }
+
+    private static void addJunglePuddles( Biome biome ) {
+
+        biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION, Biome.createDecoratedFeature( ModFeatures.JUNGLE_POOL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
+
+    }
+
+
 
 
     /*

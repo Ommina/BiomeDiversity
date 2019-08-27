@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.feature.Feature;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,6 +21,7 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.items.ModItems;
 import ommina.biomediversity.world.ModWorldGeneration;
+import ommina.biomediversity.world.feature.ModFeatures;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -122,6 +124,13 @@ public class BiomeDiversity {
         public static void onTileEntityRegistry( final RegistryEvent.Register<TileEntityType<?>> event ) {
 
             ModTileEntities.register( event );
+        }
+
+        @SubscribeEvent
+        public static void onFeatureRegistry( final RegistryEvent.Register<Feature<?>> event ) {
+
+            ModFeatures.register( event );
+
         }
 
     }
