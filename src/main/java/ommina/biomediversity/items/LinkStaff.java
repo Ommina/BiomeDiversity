@@ -13,7 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.pillar.TileEntityPillar;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.util.NbtUtils;
@@ -21,12 +20,12 @@ import ommina.biomediversity.util.Translator;
 import ommina.biomediversity.worlddata.PillarNetwork;
 import ommina.biomediversity.worlddata.WorldData;
 
-public class LinkStaff extends GenericItem {
+public class LinkStaff extends Item {
 
-    public static final String NAME = BiomeDiversity.MODID + ":linkstaff";
+    public static final String NAME = "linkstaff";
 
     public LinkStaff( String name, Item.Properties properties ) {
-        super( name, properties );
+        super( properties );
     }
 
     @Override

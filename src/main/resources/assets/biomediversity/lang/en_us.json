@@ -1,4 +1,5 @@
 {
+
   "itemGroup.biomediversity": "Biome Diversity",
 
   "text.biomediversity.linkstaff.cleared": "Cleared",
@@ -7,7 +8,15 @@
   "text.biomediversity.linkstaff.pillarsettingscopied": "Pillar Settings Copied",
   "text.biomediversity.linkstaff.copyfrom": "Copy from %s at %d, %d, %d",
 
+  "item.biomediversity.colza": "Colza",
+  "item.biomediversity.colza_seeds": "Colza Seeds",
   "item.biomediversity.orinocite_ingot": "Orinocite Ingot",
+  "item.biomediversity.pomegranate": "Pomegranate",
+  "item.biomediversity.pomegranate_seeds": "Pomegranate Seeds",
 
-  "block.biomediversity.orinocite_ore": "Orinocite Ore"
+  "block.biomediversity.collector": "Biometic Collector",
+  "block.biomediversity.orinocite_ore": "Orinocite Ore",
+  "block.biomediversity.pillar": "Biometic Transmitter",
+  "block.biomediversity.receiver": "Biometic Receiver"
+
 }

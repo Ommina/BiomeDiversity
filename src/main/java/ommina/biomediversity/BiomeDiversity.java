@@ -9,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -17,8 +18,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.items.ModItems;
+import ommina.biomediversity.server.ServerProxy;
 import ommina.biomediversity.world.ModWorldGeneration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +29,7 @@ import org.apache.logging.log4j.Logger;
 @Mod( "biomediversity" )
 public class BiomeDiversity {
 
-    //public static final IProxy PROXY = DistExecutor.runForDist( () -> ClientProxy::new, () -> ServerProxy::new );
+    public static final IProxy PROXY = DistExecutor.runForDist( () -> ClientProxy::new, () -> ServerProxy::new );
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "biomediversity";
     public static final ItemGroup TAB = new CreativeTab();

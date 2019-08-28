@@ -4,15 +4,15 @@
 		"model": "biomediversity:collector_base",
 		"parent": "block/orientable",
 	    "textures": {
-	        "particle": "biomediversity:blocks/machine_base",
-        	"0": "biomediversity:blocks/machine_base",
-        	"1": "biomediversity:blocks/machine_top",
-        	"2": "biomediversity:blocks/background_dark",
-        	"3": "biomediversity:blocks/internal_horizontal",
-        	"5": "biomediversity:blocks/window_nonoise",
-        	"6": "biomediversity:blocks/window",
-        	"7": "biomediversity:blocks/smallwindow",
-        	"8": "biomediversity:blocks/background_grey_gradient"
+	        "particle": "biomediversity:block/machine_base",
+        	"0": "biomediversity:block/machine_base",
+        	"1": "biomediversity:block/machine_top",
+        	"2": "biomediversity:block/background_dark",
+        	"3": "biomediversity:block/internal_horizontal",
+        	"5": "biomediversity:block/window_nonoise",
+        	"6": "biomediversity:block/window",
+        	"7": "biomediversity:block/smallwindow",
+        	"8": "biomediversity:block/background_grey_gradient"
     	}
 	},
 	"variants": {

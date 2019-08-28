@@ -6,7 +6,7 @@ import ommina.biomediversity.blocks.ModTileEntities;
 public class TileEntityPeltier extends TileEntity {
 
     public TileEntityPeltier() {
-        super( ModTileEntities.COLLECTOR );
+        super( ModTileEntities.PELTIER );
     }
 
 }

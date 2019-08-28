@@ -1,0 +1,6 @@
+{
+  "parent": "block/crop",
+  "textures": {
+    "crop": "biomediversity:block/pomegranate/6"
+  }
+}

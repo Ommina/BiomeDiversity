@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "biomediversity:block/colza/stage0"
+    },
+    "age=1": {
+      "model": "biomediversity:block/colza/stage1"
+    },
+    "age=2": {
+      "model": "biomediversity:block/colza/stage2"
+    },
+    "age=3": {
+      "model": "biomediversity:block/colza/stage3"
+    },
+    "age=4": {
+      "model": "biomediversity:block/colza/stage4"
+    },
+    "age=5": {
+      "model": "biomediversity:block/colza/stage5"
+    },
+    "age=6": {
+      "model": "biomediversity:block/colza/stage6"
+    },
+    "age=7": {
+      "model": "biomediversity:block/colza/stage7"
+    }
+  }
+}
+

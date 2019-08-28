@@ -8,7 +8,7 @@ public class GenericItem extends Item {
     public GenericItem( String name, Item.Properties properties ) {
         super( properties.group( BiomeDiversity.TAB ) );
 
-        setRegistryName( name );
+        setRegistryName( BiomeDiversity.getId( name ) );
 
     }
 
