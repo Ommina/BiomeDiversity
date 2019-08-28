@@ -24,15 +24,15 @@ public class ModItems {
 
 
     // Cool Items
-    @ObjectHolder( BiomeDiversity.MODID + ":linkstaff" ) public static Item linkStaff = new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":linkstaff" ) public static final Item LINK_STAFF = new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) );
 
     // Block Items
-    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static Item ORE_ORINOCITE = new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static final Item ORE_ORINOCITE = new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) );
 
-    @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static Item TRANSMITTER = new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static Item receiver = new BlockItem( ModBlocks.receiver, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static Item collector = new BlockItem( ModBlocks.collector, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static Item peltier = new BlockItem( ModBlocks.peltier, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static final Item TRANSMITTER = new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static final Item RECEIVER = new BlockItem( ModBlocks.RECEIVER, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static final Item COLLECTOR = new BlockItem( ModBlocks.COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static final Item PELTIER = new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) );
 
 
     @SubscribeEvent
@@ -44,14 +44,14 @@ public class ModItems {
         register( event, "colza", COLZA );
         register( event, "orinocite_ingot", INGOT_ORINOCITE );
 
-        register( event, "linkstaff", linkStaff );
+        register( event, "linkstaff", LINK_STAFF );
 
         register( event, "orinocite_ore", ORE_ORINOCITE );
 
         register( event, "transmitter", TRANSMITTER );
-        register( event, "receiver", receiver );
-        register( event, "collector", collector );
-        register( event, "peltier", peltier );
+        register( event, "receiver", RECEIVER );
+        register( event, "collector", COLLECTOR );
+        register( event, "peltier", PELTIER );
 
     }
 

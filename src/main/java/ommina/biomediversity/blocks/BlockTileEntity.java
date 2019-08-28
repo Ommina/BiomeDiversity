@@ -3,14 +3,11 @@ package ommina.biomediversity.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
-import ommina.biomediversity.BiomeDiversity;
 
 public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 
-    public BlockTileEntity( String name, Block.Properties properties ) {
+    public BlockTileEntity( Block.Properties properties ) {
         super( properties );
-
-        setRegistryName( BiomeDiversity.getId( name ) );
 
     }
 

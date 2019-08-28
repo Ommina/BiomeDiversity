@@ -13,7 +13,7 @@ public class CreativeTab extends ItemGroup {
     @Override
     public ItemStack createIcon() {
 
-        return new ItemStack( ModItems.linkStaff, 1 );
+        return new ItemStack( ModItems.LINK_STAFF, 1 );
     }
 
 

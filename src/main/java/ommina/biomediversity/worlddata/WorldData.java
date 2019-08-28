@@ -35,23 +35,23 @@ public class WorldData extends WorldSavedData {
 
                 for ( String keySub : subPlayer.keySet() ) {
 
-                    UUID pillarIdentifier = UUID.fromString( keySub );
+                    UUID transmitterIdentifier = UUID.fromString( keySub );
 
-                    if ( pillarIdentifier != null ) {
-                        PillarData pd = PillarNetwork.getPillar( playerIdentifier, pillarIdentifier );
+                    if ( transmitterIdentifier != null ) {
+                        PillarData pd = PillarNetwork.getPillar( playerIdentifier, transmitterIdentifier );
                         CompoundNBT subPillar = subPlayer.getCompound( keySub );
 
                         pd.setAmount( subPillar.getInt( "quantity" ) );
                         pd.rainfall = subPillar.getFloat( "humidity" );
                         pd.temperature = subPillar.getFloat( "temperature" );
                         pd.biomeId = subPillar.getInt( "biomeid" );
-                        pd.receiver = subPillar.getUniqueId( "receiver" );
+                        pd.receiver = subPillar.getUniqueId( "RECEIVER" );
 
                         if ( subPillar.contains( "fluidname" ) )
                             System.out.println();
                         //pd.fluid = FluidRegistry.getFluid( subPillar.getString( "fluidname" ) );
                     } else {
-                        BiomeDiversity.LOGGER.warn( "Pillar identifier retrieved from WorldSavedData is null.  Ignoring." );
+                        BiomeDiversity.LOGGER.warn( "Transmitter identifier retrieved from WorldSavedData is null.  Ignoring." );
                     }
 
                 }
@@ -77,14 +77,14 @@ public class WorldData extends WorldSavedData {
             if ( playerIdentifier == null ) {
 
                 BiomeDiversity.LOGGER.warn( "WTH?  playerIdentifier is null" );
-                BiomeDiversity.LOGGER.warn( "TRANSMITTER network contains " + PillarNetwork.getPlayerList().size() + " entries" );
+                BiomeDiversity.LOGGER.warn( "Transmitter network contains " + PillarNetwork.getPlayerList().size() + " entries" );
 
                 int n = 1;
 
                 for ( UUID p2 : PillarNetwork.getPlayerList() ) {
                     BiomeDiversity.LOGGER.warn( " entry: " + n++ );
                     BiomeDiversity.LOGGER.warn( " p2: " + (p2 == null ? "null" : p2.toString()) );
-                    BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getPillarList( p2 ).size() );
+                    BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getTransmitterList( p2 ).size() );
                 }
 
             } else {
@@ -93,34 +93,34 @@ public class WorldData extends WorldSavedData {
 
                 int n = 0;
 
-                for ( UUID pillarIdentifier : PillarNetwork.getPillarList( playerIdentifier ) ) {
+                for ( UUID transmitterIdentifier : PillarNetwork.getTransmitterList( playerIdentifier ) ) {
 
                     n++;
 
-                    if ( pillarIdentifier == null ) {
+                    if ( transmitterIdentifier == null ) {
 
                         BiomeDiversity.LOGGER.warn( " pillarIdentifier is null.  This should not happen." );
                         BiomeDiversity.LOGGER.warn( " entry: " + n );
                         BiomeDiversity.LOGGER.warn( " owner player uuid: " + playerIdentifier.toString() );
-                        BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getPillarList( playerIdentifier ).size() );
+                        BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getTransmitterList( playerIdentifier ).size() );
 
                     } else {
 
-                        PillarData pd = PillarNetwork.getPillar( playerIdentifier, pillarIdentifier );
-                        CompoundNBT subTagPillar = new CompoundNBT();
+                        PillarData pd = PillarNetwork.getPillar( playerIdentifier, transmitterIdentifier );
+                        CompoundNBT subTagTransmitter = new CompoundNBT();
 
-                        subTagPillar.putInt( "quantity", pd.getAmount() );
-                        subTagPillar.putFloat( "humidity", pd.rainfall );
-                        subTagPillar.putFloat( "temperature", pd.temperature );
-                        subTagPillar.putInt( "biomeid", pd.biomeId );
+                        subTagTransmitter.putInt( "quantity", pd.getAmount() );
+                        subTagTransmitter.putFloat( "humidity", pd.rainfall );
+                        subTagTransmitter.putFloat( "temperature", pd.temperature );
+                        subTagTransmitter.putInt( "biomeid", pd.biomeId );
 
                         if ( pd.receiver != null )
-                            subTagPillar.putUniqueId( "receiver", pd.receiver );
+                            subTagTransmitter.putUniqueId( "RECEIVER", pd.receiver );
 
                         if ( pd.fluid != null )
-                            subTagPillar.putString( "fluidname", pd.fluid.getName() );
+                            subTagTransmitter.putString( "fluidname", pd.fluid.getName() );
 
-                        subTagPlayer.put( pillarIdentifier.toString(), subTagPillar ); // NPE here, non-crashing
+                        subTagPlayer.put( transmitterIdentifier.toString(), subTagTransmitter ); // NPE here, non-crashing
 
                     }
 

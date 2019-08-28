@@ -76,7 +76,7 @@ public class PillarNetwork {
         return players.keySet();
     }
 
-    public static Set<UUID> getPillarList( final UUID playerIdentifier ) {
+    public static Set<UUID> getTransmitterList( final UUID playerIdentifier ) {
 
         return getPlayer( playerIdentifier ).keySet();
     }

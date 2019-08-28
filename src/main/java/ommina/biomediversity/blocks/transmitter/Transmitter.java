@@ -20,7 +20,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     public Transmitter() {
 
-        super( "transmitter", Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super(  Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
 
         this.setDefaultState( this.getDefaultState()
              .with( IS_CONNECTED, true ) );

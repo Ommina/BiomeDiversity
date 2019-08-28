@@ -19,9 +19,9 @@ public class ModTileEntities {
     public static void register( final RegistryEvent.Register<TileEntityType<?>> event ) {
 
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityTransmitter::new, ModBlocks.TRANSMITTER ).build( null ).setRegistryName( "transmitter" ) );
-        event.getRegistry().register( TileEntityType.Builder.create( TileEntityReceiver::new, ModBlocks.receiver ).build( null ).setRegistryName( "receiver" ) );
-        event.getRegistry().register( TileEntityType.Builder.create( TileEntityCollector::new, ModBlocks.collector ).build( null ).setRegistryName( "collector" ) );
-        event.getRegistry().register( TileEntityType.Builder.create( TileEntityTransmitter::new, ModBlocks.peltier ).build( null ).setRegistryName( "peltier" ) );
+        event.getRegistry().register( TileEntityType.Builder.create( TileEntityReceiver::new, ModBlocks.RECEIVER ).build( null ).setRegistryName( "receiver" ) );
+        event.getRegistry().register( TileEntityType.Builder.create( TileEntityCollector::new, ModBlocks.COLLECTOR ).build( null ).setRegistryName( "collector" ) );
+        event.getRegistry().register( TileEntityType.Builder.create( TileEntityPeltier::new, ModBlocks.PELTIER ).build( null ).setRegistryName( "peltier" ) );
 
     }
 

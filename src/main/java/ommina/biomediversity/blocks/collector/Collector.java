@@ -10,7 +10,7 @@ public class Collector extends BlockTileEntity<TileEntityCollector> {
 
     public Collector() {
 
-        super( "collector", Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
 
     }
 

@@ -8,8 +8,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
+import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.worlddata.PillarData;
 import ommina.biomediversity.worlddata.PillarNetwork;
@@ -150,13 +150,13 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
     public String getSourceName() {
 
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "TRANSMITTER" : "receiver";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "transmitter" : "RECEIVER";
 
     }
 
     public String getTargetName() {
 
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "receiver" : "TRANSMITTER";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "RECEIVER" : "transmitter";
 
     }
 
@@ -177,7 +177,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
         if ( !world.isBlockLoaded( remotePos ) ) {
             shouldUnload = true;
-          //   ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
+            //   ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
         }
 
         TileEntity remoteTile = world.getTileEntity( remotePos );
@@ -200,12 +200,12 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         createLinkComplete( world, owner, identifierPillar, identifierReceiver );
 
         //if ( tile instanceof TileEntityReceiver )
-           // ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork(); //TODO:
+        // ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork(); //TODO:
         //else if ( remoteTile instanceof TileEntityReceiver )
-           // ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork(); //TODO:
+        // ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork(); //TODO:
 
         //if ( shouldUnload )
-           // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
+        // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
 
         tile.markDirty();
 
@@ -338,7 +338,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         PillarData pd = PillarNetwork.getPillar( owner, identifierPillar );
 
         if ( pd.receiver == null ) {
-            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork TRANSMITTER/receiver pair" );
+            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork TRANSMITTER/RECEIVER pair" );
         }
 
         pd.receiver = null;
@@ -364,7 +364,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
         if ( tile instanceof TileEntityReceiver ) {
             TileEntityReceiver receiver = (TileEntityReceiver) tile;
-            //receiver.getTank().setFluid( null ); //TODO:
+            //RECEIVER.getTank().setFluid( null ); //TODO:
         } else if ( tile instanceof TileEntityTransmitter ) { // It really can't be anything else, but ok
             TileEntityTransmitter pillar = (TileEntityTransmitter) tile;
             PillarData pd = PillarNetwork.getPillar( pillar.getOwner(), pillar.getIdentifier() );

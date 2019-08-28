@@ -10,7 +10,7 @@ public class Receiver extends BlockTileEntity<TileEntityReceiver> {
 
     public Receiver() {
 
-        super( "receiver", Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
 
     }
 

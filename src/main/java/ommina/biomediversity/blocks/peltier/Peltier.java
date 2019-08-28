@@ -10,7 +10,7 @@ public class Peltier extends BlockTileEntity<TileEntityPeltier> {
 
     public Peltier() {
 
-        super( "peltier", Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
 
     }
 

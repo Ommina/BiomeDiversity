@@ -108,12 +108,6 @@ public class BiomeDiversity {
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
     public static class RegistryEvents {
 
-        @SubscribeEvent
-        public static void onBlocksRegistry( final RegistryEvent.Register<Block> event ) {
-
-            ModBlocks.register( event );
-        }
-
 
         @SubscribeEvent
         public static void onTileEntityRegistry( final RegistryEvent.Register<TileEntityType<?>> event ) {
