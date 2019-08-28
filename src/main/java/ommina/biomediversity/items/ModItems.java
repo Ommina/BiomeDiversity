@@ -1,63 +1,65 @@
 package ommina.biomediversity.items;
 
-import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 
+@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModItems {
 
-    public static Item oreOrinocite;
-    public static Item ingotOrinocite;
+    // Generic Items
+    @ObjectHolder( BiomeDiversity.MODID + ":pomegranate_seeds" ) public static final Item POMEGRANATE_SEEDS = new BlockNamedItem( ModBlocks.POMEGRANATE, (new Item.Properties()).group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":pomegranate" ) public static final Item POMEGRANATE = new Item( new Item.Properties().food( ModFoods.POMEGRANATE ).group( BiomeDiversity.TAB ) );
 
-    @ObjectHolder( BiomeDiversity.MODID + ":linkstaff" ) public static Item linkStaff = new LinkStaff( LinkStaff.NAME, new Item.Properties() ).setRegistryName( BiomeDiversity.getId( "linkstaff" ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":colza_seeds" ) public static final Item COLZA_SEEDS = new BlockNamedItem( ModBlocks.COLZA, (new Item.Properties()).group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":colza" ) public static final Item COLZA = new Item( new Item.Properties().group( BiomeDiversity.TAB ) );
 
-    public static Item pillar;
-    public static Item receiver;
-    public static Item collector;
-    public static Item peltier;
-
-    @ObjectHolder( BiomeDiversity.MODID + ":pomegranate_seeds" ) public static final Item POMEGRANATE_SEEDS = new BlockNamedItem( ModBlocks.POMEGRANATE, (new Item.Properties()).group( BiomeDiversity.TAB ) ).setRegistryName( BiomeDiversity.getId( "pomegranate_seeds" ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":pomegranate" ) public static final Item POMEGRANATE = new Item( new Item.Properties().food( ModFoods.POMEGRANATE ).group( BiomeDiversity.TAB ) ).setRegistryName( BiomeDiversity.getId( "pomegranate" ) );
-
-    @ObjectHolder( BiomeDiversity.MODID + ":colza_seeds" ) public static final Item COLZA_SEEDS = new BlockNamedItem( ModBlocks.COLZA, (new Item.Properties()).group( BiomeDiversity.TAB ) ).setRegistryName( BiomeDiversity.getId( "colza_seeds" ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":colza" ) public static final Item COLZA = new Item( new Item.Properties().group( BiomeDiversity.TAB ) ).setRegistryName( BiomeDiversity.getId( "colza" ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ingot" ) public static final Item INGOT_ORINOCITE = new Item( new Item.Properties().group( BiomeDiversity.TAB ) );
 
 
+    // Cool Items
+    @ObjectHolder( BiomeDiversity.MODID + ":linkstaff" ) public static Item linkStaff = new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) );
+
+    // Block Items
+    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static Item ORE_ORINOCITE = new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) );
+
+    @ObjectHolder( BiomeDiversity.MODID + ":pillar" ) public static Item pillar = new BlockItem( ModBlocks.pillar, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static Item receiver = new BlockItem( ModBlocks.receiver, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static Item collector = new BlockItem( ModBlocks.collector, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static Item peltier = new BlockItem( ModBlocks.peltier, new Item.Properties().group( BiomeDiversity.TAB ) );
+
+
+    @SubscribeEvent
     public static void register( final RegistryEvent.Register<Item> event ) {
 
-        oreOrinocite = registerItem( event, ModBlocks.oreOrinocite, new Item.Properties() );
-        ingotOrinocite = registerItem( event, "orinocite_ingot", new Item.Properties() );
+        register( event, "pomegranate_seeds", POMEGRANATE_SEEDS );
+        register( event, "pomegranate", POMEGRANATE );
+        register( event, "colza_seeds", COLZA_SEEDS );
+        register( event, "colza", COLZA );
+        register( event, "orinocite_ingot", INGOT_ORINOCITE );
 
-        pillar = registerItem( event, ModBlocks.pillar, new Item.Properties() );
-        receiver = registerItem( event, ModBlocks.receiver, new Item.Properties() );
-        collector = registerItem( event, ModBlocks.collector, new Item.Properties() );
-        peltier = registerItem( event, ModBlocks.peltier, new Item.Properties() );
+        register( event, "linkstaff", linkStaff );
 
-        event.getRegistry().registerAll( POMEGRANATE, POMEGRANATE_SEEDS, COLZA, COLZA_SEEDS, linkStaff );
+        register( event, "orinocite_ore", ORE_ORINOCITE );
 
-    }
-
-    private static Item registerItem( final RegistryEvent.Register<Item> event, final Block fromBlock, Item.Properties properties ) {
-
-        final GenericBlockItem item = new GenericBlockItem( fromBlock, properties );
-
-        event.getRegistry().register( item );
-
-        return item;
+        register( event, "pillar", pillar );
+        register( event, "receiver", receiver );
+        register( event, "collector", collector );
+        register( event, "peltier", peltier );
 
     }
 
-    private static Item registerItem( final RegistryEvent.Register<Item> event, final String name, Item.Properties properties ) {
+    private static void register( final RegistryEvent.Register<Item> event, String name, Item item ) {
 
-        final GenericItem item = new GenericItem( name, properties );
+        item.setRegistryName( BiomeDiversity.getId( name ) );
 
         event.getRegistry().register( item );
-
-        return item;
 
     }
 

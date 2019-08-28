@@ -114,12 +114,6 @@ public class BiomeDiversity {
             ModBlocks.register( event );
         }
 
-        @SubscribeEvent
-        public static void onItemsRegistry( final RegistryEvent.Register<Item> event ) {
-
-            ModItems.register( event );
-
-        }
 
         @SubscribeEvent
         public static void onTileEntityRegistry( final RegistryEvent.Register<TileEntityType<?>> event ) {

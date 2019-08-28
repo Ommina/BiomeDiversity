@@ -22,9 +22,7 @@ import ommina.biomediversity.worlddata.WorldData;
 
 public class LinkStaff extends Item {
 
-    public static final String NAME = "linkstaff";
-
-    public LinkStaff( String name, Item.Properties properties ) {
+    public LinkStaff( Item.Properties properties ) {
         super( properties );
     }
 

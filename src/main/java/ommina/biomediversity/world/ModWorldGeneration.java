@@ -23,7 +23,7 @@ public class ModWorldGeneration {
         for ( Biome biome : ForgeRegistries.BIOMES ) {
 
             if ( Config.Orinocite_Generation_Base_Size.get() > 0 && biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
-                addOre( biome, ModBlocks.oreOrinocite, Config.Orinocite_Generation_Base_Size.get() + Config.Orinocite_Generation_Variance.get(), Config.Orinocite_Generation_Chances.get(), Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get() );
+                addOre( biome, ModBlocks.ORE_ORINOCITE, Config.Orinocite_Generation_Base_Size.get() + Config.Orinocite_Generation_Variance.get(), Config.Orinocite_Generation_Chances.get(), Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get() );
             }
 
             if ( Config.Jungle_Pools_Enabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {

@@ -6,7 +6,6 @@ import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.blocks.GenericBlock;
 import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.peltier.Peltier;
@@ -15,7 +14,8 @@ import ommina.biomediversity.blocks.receiver.Receiver;
 
 public class ModBlocks {
 
-    public static GenericBlock oreOrinocite;
+
+    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static Block ORE_ORINOCITE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) ).setRegistryName( BiomeDiversity.getId( "orinocite_ore" ) );
 
     @ObjectHolder( BiomeDiversity.MODID + ":pillar" ) public static Pillar pillar = new Pillar();
     @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static Receiver receiver = new Receiver();
@@ -34,20 +34,9 @@ public class ModBlocks {
 
     public static void register( final RegistryEvent.Register<Block> event ) {
 
-        oreOrinocite = registerBlock( event, "orinocite_ore", Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
 
         event.getRegistry().registerAll( pillar, receiver, collector, peltier );
-        event.getRegistry().registerAll( POMEGRANATE, COLZA );
-
-    }
-
-    private static GenericBlock registerBlock( final RegistryEvent.Register<Block> event, final String name, final Block.Properties properties ) {
-
-        GenericBlock block = new GenericBlock( name, properties );
-
-        event.getRegistry().register( block );
-
-        return block;
+        event.getRegistry().registerAll( POMEGRANATE, COLZA, ORE_ORINOCITE );
 
     }
 

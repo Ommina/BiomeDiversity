@@ -2,6 +2,7 @@
 
   "itemGroup.biomediversity": "Biome Diversity",
 
+  "item.biomediversity.linkstaff": "Linking Staff",
   "text.biomediversity.linkstaff.cleared": "Cleared",
   "text.biomediversity.linkstaff.settingscopied": "Settings Copied",
   "text.biomediversity.linkstaff.settingspasted": "Settings Pasted",
@@ -16,6 +17,7 @@
 
   "block.biomediversity.collector": "Biometic Collector",
   "block.biomediversity.orinocite_ore": "Orinocite Ore",
+  "block.biomediversity.peltier": "Peltier",
   "block.biomediversity.pillar": "Biometic Transmitter",
   "block.biomediversity.receiver": "Biometic Receiver"
 
