@@ -1,4 +1,4 @@
-package ommina.biomediversity.blocks.pillar;
+package ommina.biomediversity.blocks.transmitter;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,13 +14,13 @@ import ommina.biomediversity.blocks.BlockTileEntity;
 
 import javax.annotation.Nullable;
 
-public class Pillar extends BlockTileEntity<TileEntityPillar> { // implements IRightClickable {
+public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // implements IRightClickable {
 
     private static final BooleanProperty IS_CONNECTED = BooleanProperty.create( "connected" );
 
-    public Pillar() {
+    public Transmitter() {
 
-        super( "pillar", Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( "transmitter", Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
 
         this.setDefaultState( this.getDefaultState()
              .with( IS_CONNECTED, true ) );
@@ -35,7 +35,7 @@ public class Pillar extends BlockTileEntity<TileEntityPillar> { // implements IR
     @Nullable
     @Override
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityPillar();
+        return new TileEntityTransmitter();
     }
 
     @Override

@@ -13,7 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import ommina.biomediversity.blocks.pillar.TileEntityPillar;
+import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.util.Translator;
@@ -155,7 +155,7 @@ public class LinkStaff extends Item {
 
         player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingspasted" ) ), true );
 
-        if ( tile instanceof TileEntityPillar )
+        if ( tile instanceof TileEntityTransmitter )
             PillarNetwork.getPillar( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier();
 
         WorldData.get( world ).markDirty();

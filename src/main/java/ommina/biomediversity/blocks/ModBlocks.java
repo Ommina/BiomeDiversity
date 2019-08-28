@@ -9,7 +9,7 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.peltier.Peltier;
-import ommina.biomediversity.blocks.pillar.Pillar;
+import ommina.biomediversity.blocks.transmitter.Transmitter;
 import ommina.biomediversity.blocks.receiver.Receiver;
 
 public class ModBlocks {
@@ -17,10 +17,10 @@ public class ModBlocks {
 
     @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static Block ORE_ORINOCITE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) ).setRegistryName( BiomeDiversity.getId( "orinocite_ore" ) );
 
-    @ObjectHolder( BiomeDiversity.MODID + ":pillar" ) public static Pillar pillar = new Pillar();
-    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static Receiver receiver = new Receiver();
-    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static Collector collector = new Collector();
-    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static Peltier peltier = new Peltier();
+    @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static final Transmitter TRANSMITTER = new Transmitter();
+    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static final Receiver receiver = new Receiver();
+    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static final Collector collector = new Collector();
+    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static final Peltier peltier = new Peltier();
 
     @ObjectHolder( BiomeDiversity.MODID + ":pomegranate" )
     public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) ).setRegistryName( BiomeDiversity.getId( "pomegranate" ) );
@@ -35,7 +35,7 @@ public class ModBlocks {
     public static void register( final RegistryEvent.Register<Block> event ) {
 
 
-        event.getRegistry().registerAll( pillar, receiver, collector, peltier );
+        event.getRegistry().registerAll( TRANSMITTER, receiver, collector, peltier );
         event.getRegistry().registerAll( POMEGRANATE, COLZA, ORE_ORINOCITE );
 
     }

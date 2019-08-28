@@ -29,7 +29,7 @@ public class ModItems {
     // Block Items
     @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static Item ORE_ORINOCITE = new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) );
 
-    @ObjectHolder( BiomeDiversity.MODID + ":pillar" ) public static Item pillar = new BlockItem( ModBlocks.pillar, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static Item TRANSMITTER = new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) );
     @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static Item receiver = new BlockItem( ModBlocks.receiver, new Item.Properties().group( BiomeDiversity.TAB ) );
     @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static Item collector = new BlockItem( ModBlocks.collector, new Item.Properties().group( BiomeDiversity.TAB ) );
     @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static Item peltier = new BlockItem( ModBlocks.peltier, new Item.Properties().group( BiomeDiversity.TAB ) );
@@ -48,7 +48,7 @@ public class ModItems {
 
         register( event, "orinocite_ore", ORE_ORINOCITE );
 
-        register( event, "pillar", pillar );
+        register( event, "transmitter", TRANSMITTER );
         register( event, "receiver", receiver );
         register( event, "collector", collector );
         register( event, "peltier", peltier );

@@ -3,7 +3,7 @@ package ommina.biomediversity.worlddata;
 
 import net.minecraft.world.World;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.pillar.TileEntityPillar;
+import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class PillarNetwork {
 
     }
 
-    public static boolean removePillar( final TileEntityPillar tile ) {
+    public static boolean removePillar( final TileEntityTransmitter tile ) {
 
         return removePillar( tile.getOwner(), tile.getIdentifier() );
 

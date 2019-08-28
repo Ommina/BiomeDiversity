@@ -8,9 +8,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.pillar.TileEntityPillar;
+import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
-import ommina.biomediversity.chunkloader.ChunkLoader;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.worlddata.PillarData;
 import ommina.biomediversity.worlddata.PillarNetwork;
@@ -151,13 +150,13 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
     public String getSourceName() {
 
-        return this.source == TileEntityPillar.LINKING_SOURCE_PILLAR ? "pillar" : "receiver";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "TRANSMITTER" : "receiver";
 
     }
 
     public String getTargetName() {
 
-        return this.source == TileEntityPillar.LINKING_SOURCE_PILLAR ? "receiver" : "pillar";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "receiver" : "TRANSMITTER";
 
     }
 
@@ -188,7 +187,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         UUID identifierReceiver;
         UUID owner;
 
-        if ( tile instanceof TileEntityPillar ) {
+        if ( tile instanceof TileEntityTransmitter ) {
             identifierPillar = tile.getIdentifier();
             identifierReceiver = tea.getIdentifier();
             owner = tile.getOwner();
@@ -317,7 +316,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         UUID identifierReceiver;
         UUID owner;
 
-        if ( tile instanceof TileEntityPillar ) {
+        if ( tile instanceof TileEntityTransmitter ) {
             identifierPillar = tile.getIdentifier();
             identifierReceiver = tea.getIdentifier();
             owner = tile.getOwner();
@@ -339,7 +338,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         PillarData pd = PillarNetwork.getPillar( owner, identifierPillar );
 
         if ( pd.receiver == null ) {
-            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork pillar/receiver pair" );
+            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork TRANSMITTER/receiver pair" );
         }
 
         pd.receiver = null;
@@ -366,11 +365,11 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         if ( tile instanceof TileEntityReceiver ) {
             TileEntityReceiver receiver = (TileEntityReceiver) tile;
             //receiver.getTank().setFluid( null ); //TODO:
-        } else if ( tile instanceof TileEntityPillar ) { // It really can't be anything else, but ok
-            TileEntityPillar pillar = (TileEntityPillar) tile;
+        } else if ( tile instanceof TileEntityTransmitter ) { // It really can't be anything else, but ok
+            TileEntityTransmitter pillar = (TileEntityTransmitter) tile;
             PillarData pd = PillarNetwork.getPillar( pillar.getOwner(), pillar.getIdentifier() );
             //Biomediversity.logger.warn( "** Pillarizing " + pd.getAmount() );
-            // pillar.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO:
+            // TRANSMITTER.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO:
 
         }
 

@@ -77,7 +77,7 @@ public class WorldData extends WorldSavedData {
             if ( playerIdentifier == null ) {
 
                 BiomeDiversity.LOGGER.warn( "WTH?  playerIdentifier is null" );
-                BiomeDiversity.LOGGER.warn( "pillar network contains " + PillarNetwork.getPlayerList().size() + " entries" );
+                BiomeDiversity.LOGGER.warn( "TRANSMITTER network contains " + PillarNetwork.getPlayerList().size() + " entries" );
 
                 int n = 1;
 
