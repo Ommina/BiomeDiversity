@@ -45,7 +45,7 @@ public class WorldData extends WorldSavedData {
                         pd.rainfall = subPillar.getFloat( "humidity" );
                         pd.temperature = subPillar.getFloat( "temperature" );
                         pd.biomeId = subPillar.getInt( "biomeid" );
-                        pd.receiver = subPillar.getUniqueId( "RECEIVER" );
+                        pd.receiver = subPillar.getUniqueId( "receiver" );
 
                         if ( subPillar.contains( "fluidname" ) )
                             System.out.println();
@@ -115,7 +115,7 @@ public class WorldData extends WorldSavedData {
                         subTagTransmitter.putInt( "biomeid", pd.biomeId );
 
                         if ( pd.receiver != null )
-                            subTagTransmitter.putUniqueId( "RECEIVER", pd.receiver );
+                            subTagTransmitter.putUniqueId( "receiver", pd.receiver );
 
                         if ( pd.fluid != null )
                             subTagTransmitter.putString( "fluidname", pd.fluid.getName() );

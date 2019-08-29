@@ -150,13 +150,13 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
     public String getSourceName() {
 
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "transmitter" : "RECEIVER";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "transmitter" : "receiver";
 
     }
 
     public String getTargetName() {
 
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "RECEIVER" : "transmitter";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "receiver" : "transmitter";
 
     }
 
@@ -338,7 +338,7 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
         PillarData pd = PillarNetwork.getPillar( owner, identifierPillar );
 
         if ( pd.receiver == null ) {
-            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork TRANSMITTER/RECEIVER pair" );
+            BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork transmitter/receiver pair" );
         }
 
         pd.receiver = null;
