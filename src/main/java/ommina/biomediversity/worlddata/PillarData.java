@@ -1,7 +1,8 @@
 
 package ommina.biomediversity.worlddata;
 
-import net.minecraftforge.fluids.Fluid;
+
+import net.minecraft.fluid.Fluid;
 import ommina.biomediversity.config.Config;
 
 import java.util.UUID;

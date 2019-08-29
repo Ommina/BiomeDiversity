@@ -1,14 +1,13 @@
 package ommina.biomediversity.items;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockNamedItem;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.fluids.ModFluids;
 
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModItems {
@@ -34,6 +33,12 @@ public class ModItems {
     @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static final Item COLLECTOR = new BlockItem( ModBlocks.COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) );
     @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static final Item PELTIER = new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) );
 
+    // Buckets
+
+    @ObjectHolder( BiomeDiversity.MODID + ":rainwater_bucket" ) public static final Item RAINWATER_BUCKET = new BucketItem( ModFluids.RAINWATER, new Item.Properties().containerItem( Items.BUCKET ).maxStackSize( 1 ).group( BiomeDiversity.TAB ) );
+
+//    public static final Item WATER_BUCKET = register("water_bucket", new BucketItem( Fluids.WATER, (new Item.Properties()).containerItem(BUCKET).maxStackSize(1).group( ItemGroup.MISC)));
+
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Item> event ) {
@@ -52,6 +57,8 @@ public class ModItems {
         register( event, "receiver", RECEIVER );
         register( event, "collector", COLLECTOR );
         register( event, "peltier", PELTIER );
+
+        register( event, "rainwater_bucket", RAINWATER_BUCKET );
 
     }
 

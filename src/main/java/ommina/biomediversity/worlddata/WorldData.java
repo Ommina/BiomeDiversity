@@ -118,7 +118,7 @@ public class WorldData extends WorldSavedData {
                             subTagTransmitter.putUniqueId( "receiver", pd.receiver );
 
                         if ( pd.fluid != null )
-                            subTagTransmitter.putString( "fluidname", pd.fluid.getName() );
+                            subTagTransmitter.putString( "fluidname", pd.fluid.getAttributes().getName() );
 
                         subTagPlayer.put( transmitterIdentifier.toString(), subTagTransmitter ); // NPE here, non-crashing
 

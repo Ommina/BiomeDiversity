@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "biomediversity:block/fluid/rainwater" }
+  }
+}

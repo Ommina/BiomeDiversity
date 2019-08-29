@@ -21,11 +21,11 @@ public class FastTesrRainBarrel extends TileEntityRendererFast<TileEntityRainBar
 
         FluidStack fluid = null;//new FluidStack( Fluids.WATER, 1000 );  te.getTank().getFluid();
 
-        if ( fluid != null && fluid.amount > 0 ) {
+        if ( fluid != null && fluid.getAmount() > 0 ) {
 
             EnumSet<RenderHelper.Faces> faces = EnumSet.of( RenderHelper.Faces.TOP );
 
-            float posY = BASE + (HEIGHT * ((float) fluid.amount / (float) 1000));// Config.rainBarrelCapacity));
+            float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) 1000));// Config.rainBarrelCapacity));
 
             RenderHelper.renderFluidCube( buffer, x, y, z, 1f / 16f, posY, high, fluid, faces );
 

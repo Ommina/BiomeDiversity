@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fluids.FluidStack;
 
+
 public abstract class TileEntityWithTank extends TileEntity { // implements ITankBroadcast {
 
     public TileEntityWithTank( TileEntityType<?> tile, int capacity ) {
@@ -86,8 +87,8 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
             return;
         }
 
-        compound.putInt( prefix + "_amount", fs.amount );
-        compound.putString( prefix + "_name", fs.getFluid().getName() );
+        compound.putInt( prefix + "_amount", fs.getAmount() );
+        compound.putString( prefix + "_name", fs.getFluid().getAttributes().getName() );
 
     }
 

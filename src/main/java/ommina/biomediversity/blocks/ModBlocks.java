@@ -1,6 +1,7 @@
 package ommina.biomediversity.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
@@ -14,6 +15,8 @@ import ommina.biomediversity.blocks.peltier.Peltier;
 import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
 import ommina.biomediversity.blocks.receiver.Receiver;
 import ommina.biomediversity.blocks.transmitter.Transmitter;
+import ommina.biomediversity.fluids.ModFlowingFluidBlock;
+import ommina.biomediversity.fluids.ModFluids;
 
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModBlocks {
@@ -32,6 +35,12 @@ public class ModBlocks {
     @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static final Receiver RECEIVER = new Receiver();
     @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static final Transmitter TRANSMITTER = new Transmitter();
 
+    // Fluids?  I guess?
+    @ObjectHolder( BiomeDiversity.MODID + ":rainwater" ) public static final FlowingFluidBlock RAINWATER = new ModFlowingFluidBlock( ModFluids.RAINWATER, Block.Properties.create( Material.WATER ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 100f ).lightValue( 0 ).noDrops() );
+
+    //public static final Block LAVA = register("lava", new FlowingFluidBlock( Fluids.LAVA, Block.Properties.create(Material.LAVA).doesNotBlockMovement().tickRandomly().hardnessAndResistance(100.0F).lightValue(15).noDrops()));
+
+
     @SubscribeEvent
     public static void onBlocksRegistry( final RegistryEvent.Register<Block> event ) {
 
@@ -45,6 +54,8 @@ public class ModBlocks {
         register( event, "rainbarrel", RAIN_BARREL );
         register( event, "receiver", RECEIVER );
         register( event, "transmitter", TRANSMITTER );
+
+        register( event, "rainwater", RAINWATER );
 
     }
 
