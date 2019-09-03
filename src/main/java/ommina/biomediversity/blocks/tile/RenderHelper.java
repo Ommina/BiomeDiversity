@@ -53,9 +53,7 @@ public class RenderHelper {
 
         buffer.setTranslation( x, y, z );
 
-        TextureAtlasSprite still = ((AtlasTexture) Minecraft.getInstance().getTextureManager().getTexture( new ResourceLocation( "minecraft:water_still" ) )).getAtlasSprite( "minecraft:water_still" );
-
-        //TextureAtlasSprite still = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite( fluid.getFluid().getStill().toString() );
+        TextureAtlasSprite still = Minecraft.getInstance().getTextureMap().getSprite( fluid.getFluid().getAttributes().getStillTexture() );
 
         int color = fluid.getFluid().getAttributes().getColor();
 

@@ -1,26 +1,30 @@
 package ommina.biomediversity;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
+import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
 import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
-import ommina.biomediversity.items.ModItems;
+import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.server.ServerProxy;
 import ommina.biomediversity.world.ModWorldGeneration;
 import org.apache.logging.log4j.LogManager;
@@ -51,13 +55,13 @@ public class BiomeDiversity {
         Config.loadConfig( Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-client.toml" ) );
         Config.loadConfig( Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-common.toml" ) );
 
-
         // Register the enqueueIMC method for modloading
         //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::enqueueIMC );
         // Register the processIMC method for modloading
         //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::processIMC );
+
         // Register the doClientStuff method for modloading
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::doClientStuff );
+        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::doClientStuff );
 
 
         // Register ourselves for server and other game events we are interested in
@@ -69,15 +73,21 @@ public class BiomeDiversity {
 
         DeferredWorkQueue.runLater( ModWorldGeneration::generate );
 
-    }
 
-    /*
+    }
 
 
     private void doClientStuff( final FMLClientSetupEvent event ) {
-        // do something that can only be done on the client
-        LOGGER.info( "Got game settings {}", event.getMinecraftSupplier().get().gameSettings );
+
+        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
+
+        Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
+        Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
+
     }
+
+        /*
+
 
     private void enqueueIMC( final InterModEnqueueEvent event ) {
         // some example code to dispatch IMC to another mod
@@ -113,6 +123,36 @@ public class BiomeDiversity {
         public static void onTileEntityRegistry( final RegistryEvent.Register<TileEntityType<?>> event ) {
 
             ModTileEntities.register( event );
+        }
+
+
+    }
+
+    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
+    public static class ForgeEvents {
+
+        @SubscribeEvent
+        public static void addSprites( final TextureStitchEvent.Pre event ) { // Fluids may be unnecessary with future Forge versions
+
+            event.addSprite( BiomeDiversity.getId( "block/fluid/fluid_blank_flow" ) );
+            event.addSprite( BiomeDiversity.getId( "block/fluid/fluid_blank_still" ) );
+            event.addSprite( BiomeDiversity.getId( "block/fluid/molten_metal_flow" ) );
+            event.addSprite( BiomeDiversity.getId( "block/fluid/molten_metal_still" ) );
+            event.addSprite( BiomeDiversity.getId( "block/fluid/viscous_blank_flow" ) );
+            event.addSprite( BiomeDiversity.getId( "block/fluid/viscous_blank_still" ) );
+
+        }
+
+    }
+
+    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT )
+    public static class ClientEvents {
+
+        @SubscribeEvent
+        public static void BindTesr( final FMLClientSetupEvent event ) {
+
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
+
         }
 
     }

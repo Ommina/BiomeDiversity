@@ -1,0 +1,172 @@
+{
+  "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+  "textures": {
+    "particle": "biomediversity:block/machine_base",
+    "0": "biomediversity:block/machine_base",
+    "1": "biomediversity:block/background_grey_gradient",
+    "2": "biomediversity:block/background_dark"
+  },
+  "elements": [
+    {
+      "name": "WallNorth",
+      "from": [1.0, 1.0, 0.0],
+      "to": [15.0, 15.0, 1.0],
+      "faces": {
+        "north": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 16.0, 16.0],
+          "cullface": "north"
+        },
+        "east": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 16.0]
+        },
+        "south": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 16.0, 16.0]
+        },
+        "west": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 16.0]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        },
+        "down": {
+          "texture": "#2",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        }
+      }
+    },
+    {
+      "name": "WallSouth",
+      "from": [1.0, 1.0, 15.0],
+      "to": [15.0, 15.0, 16.0],
+      "faces": {
+        "north": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 16.0, 16.0],
+          "cullface": "north"
+        },
+        "east": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 16.0]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 16.0, 16.0],
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 16.0]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        },
+        "down": {
+          "texture": "#2",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        }
+      }
+    },
+    {
+      "name": "WallWest",
+      "from": [0.0, 1.0, 1.0],
+      "to": [1.0, 15.0, 15.0],
+      "faces": {
+        "north": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 16.0]
+        },
+        "east": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 14.0, 14.0]
+        },
+        "south": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 16.0]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 16.0, 16.0],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 1.0, 14.0]
+        },
+        "down": {
+          "texture": "#2",
+          "uv": [0.0, 0.0, 1.0, 14.0]
+        }
+      }
+    },
+    {
+      "name": "WallEast",
+      "from": [15.0, 1.0, 1.0],
+      "to": [16.0, 15.0, 15.0],
+      "faces": {
+        "north": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 14.0]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 16.0, 16.0],
+          "cullface": "east"
+        },
+        "south": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 1.0, 14.0]
+        },
+        "west": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 16.0, 16.0]
+        },
+        "up": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 1.0, 14.0]
+        },
+        "down": {
+          "texture": "#2",
+          "uv": [0.0, 0.0, 1.0, 14.0]
+        }
+      }
+    },
+    {
+      "name": "Base",
+      "from": [1.0, 0.0, 1.0],
+      "to": [15.0, 1.0, 15.0],
+      "faces": {
+        "north": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        },
+        "east": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        },
+        "south": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        },
+        "west": {
+          "texture": "#0",
+          "uv": [0.0, 0.0, 14.0, 1.0]
+        },
+        "up": {
+          "texture": "#1",
+          "uv": [0.0, 0.0, 16.0, 16.0]
+        },
+        "down": {
+          "texture": "#2",
+          "uv": [0.0, 0.0, 14.0, 14.0],
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

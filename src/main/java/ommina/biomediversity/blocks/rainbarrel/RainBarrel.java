@@ -2,9 +2,12 @@
 package ommina.biomediversity.blocks.rainbarrel;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
 
@@ -23,14 +26,20 @@ public class RainBarrel extends BlockTileEntity<TileEntityRainBarrel> {
         return BlockRenderLayer.CUTOUT;
     }
 
+    @Override
+    public boolean hasTileEntity( BlockState state ) {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
+        return new TileEntityRainBarrel();
+    }
+
+
 /*
 
 
-    @Override
-    public TileEntityRainBarrel createTileEntity( World world, IBlockState state ) {
-
-        return new TileEntityRainBarrel();
-    }
 
     @Override
     public boolean isOpaqueCube( IBlockState state ) {
@@ -51,11 +60,6 @@ public class RainBarrel extends BlockTileEntity<TileEntityRainBarrel> {
         return BlockRenderLayer.CUTOUT;
     }
 
-    @Override
-    public Class<TileEntityRainBarrel> getTileEntityClass() {
-
-        return TileEntityRainBarrel.class;
-    }
 
     @Override
     public AxisAlignedBB getBoundingBox( IBlockState state, IBlockAccess source, BlockPos pos ) {

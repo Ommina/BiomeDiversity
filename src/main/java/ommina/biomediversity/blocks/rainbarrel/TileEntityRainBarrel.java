@@ -1,10 +1,14 @@
 
 package ommina.biomediversity.blocks.rainbarrel;
 
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
+import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.tile.TileEntityWithTank;
+import ommina.biomediversity.fluids.ModFluids;
 
-public class TileEntityRainBarrel extends TileEntityWithTank { // implements ITickable, ITankBroadcast {
+public class TileEntityRainBarrel extends TileEntityWithTank implements ITickableTileEntity { // implements ITickable, ITankBroadcast {
 
     private static final int DELAY_RAIN = 4; // 0.20s
     private static final int DELAY_NO_RAIN = 100; // 5.00s
@@ -71,9 +75,9 @@ public class TileEntityRainBarrel extends TileEntityWithTank { // implements ITi
 
     }
 */
-    /*
+
     @Override
-    public void update() {
+    public void tick() {
 
         if ( world.isRemote )
             return;
@@ -83,23 +87,23 @@ public class TileEntityRainBarrel extends TileEntityWithTank { // implements ITi
             return;
         }
 
-        if ( !world.isRainingAt( getPos().offset( EnumFacing.UP ) ) ) {
+        if ( !world.isRainingAt( getPos().offset( Direction.UP ) ) ) {
             delay = DELAY_NO_RAIN;
             return;
         }
 
-        if ( TANK.fillInternal( new FluidStack( ModFluids.rainWater, FLUID_PER_CYCLE ), true ) == FLUID_PER_CYCLE )
+        if ( TANK.fillInternal( new FluidStack( ModFluids.RAINWATER_FLOWING, FLUID_PER_CYCLE ), true ) == FLUID_PER_CYCLE )
             delay = DELAY_RAIN;
         else
             delay = DELAY_NO_RAIN;
 
-        doBroadcast();
+        //doBroadcast();
 
         this.markDirty();
 
+
     }
 
-    */
 
 //    @Override
 //    public void doBroadcast() {

@@ -5,6 +5,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fluids.FluidStack;
+import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.fluids.BdFluidTank;
+
+import javax.annotation.Nonnull;
 
 
 public abstract class TileEntityWithTank extends TileEntity { // implements ITankBroadcast {
@@ -12,7 +16,7 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
     public TileEntityWithTank( TileEntityType<?> tile, int capacity ) {
         super( tile );
 
-        //TANK = new BdFluidTank( capacity );
+        TANK = new BdFluidTank( capacity );
 
     }
 
@@ -20,6 +24,8 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
     public CompoundNBT serializeNBT() {
         return null;
     }
+
+    /*
 
     @Override
     public void read( CompoundNBT compound ) {
@@ -34,13 +40,12 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
         return super.write( compound );
 
     }
-
-
-    /*
+*/
 
     protected final BdFluidTank TANK;
 
     public TileEntityWithTank( int capacity ) {
+        super( ModTileEntities.RAIN_BARREL );
 
         TANK = new BdFluidTank( capacity );
 
@@ -49,17 +54,18 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
     // Overrides
 
     @Override
-    public void readFromNBT( NBTTagCompound compound ) {
+    public void read( CompoundNBT compound ) {
 
-        super.readFromNBT( compound );
+        super.read( compound );
 
         TANK.fillInternal( readFromNBT( compound, "tank" ), true );
 
     }
 
+/*
 
     @Override
-    public NBTTagCompound writeToNBT( NBTTagCompound compound ) {
+    public CompoundNBT write( CompoundNBT compound ) {
 
     }
 
@@ -70,6 +76,8 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
         return TANK.getFluidAmount();
     }
 
+*/
+
     // End Overrides
 
     @Nonnull
@@ -78,9 +86,8 @@ public abstract class TileEntityWithTank extends TileEntity { // implements ITan
         return TANK;
     }
 
-*/
 
-    private void writeToNBT( CompoundNBT compound, String prefix, FluidStack fs ) {
+    private void write( CompoundNBT compound, String prefix, FluidStack fs ) {
 
         if ( fs == null ) {
             compound.putInt( prefix + "_amount", 0 );
