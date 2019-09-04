@@ -9,7 +9,7 @@ public class TileEntityTransmitter extends TileEntityAssociation {
     public static final int LINKING_SOURCE_PILLAR = 1;
 
     public TileEntityTransmitter() {
-        super( ModTileEntities.TRANSMITTER, 1000 );
+        super( ModTileEntities.TRANSMITTER );
     }
 
     @Override

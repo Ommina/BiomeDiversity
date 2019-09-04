@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraftforge.client.model.animation.TileEntityRendererFast;
 import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.blocks.tile.RenderHelper;
-import ommina.biomediversity.fluids.ModFluids;
+import ommina.biomediversity.config.Config;
 
 import java.util.EnumSet;
 
@@ -23,14 +23,13 @@ public class FastTesrRainBarrel<T extends TileEntityRainBarrel> extends TileEnti
         float low = 1f / 16f;
         float high = low * 15f;
 
-        FluidStack fluid = new FluidStack( ModFluids.COOLBIOMETIC_FLOWING, 900 );
-        te.getTank().getFluid();
+        FluidStack fluid = te.getFluid();
 
         if ( !fluid.isEmpty() ) {
 
             EnumSet<RenderHelper.Faces> faces = EnumSet.of( RenderHelper.Faces.TOP );
 
-            float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) 1000));// Config.rainBarrelCapacity));
+            float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) Config.Rainbarrel_Capacity.get()));
 
             RenderHelper.renderFluidCube( buffer, x, y, z, 1f / 16f, posY, high, fluid, faces );
 

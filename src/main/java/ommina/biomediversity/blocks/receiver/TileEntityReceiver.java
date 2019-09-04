@@ -6,7 +6,7 @@ import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 public class TileEntityReceiver extends TileEntityAssociation {
 
     public TileEntityReceiver() {
-        super( ModTileEntities.RECEIVER, 1000 );
+        super( ModTileEntities.RECEIVER );
     }
 
 }

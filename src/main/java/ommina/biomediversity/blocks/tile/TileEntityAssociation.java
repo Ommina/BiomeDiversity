@@ -7,16 +7,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
+import ommina.biomediversity.config.Config;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.worlddata.PillarData;
 import ommina.biomediversity.worlddata.PillarNetwork;
 
 import java.util.UUID;
 
-public abstract class TileEntityAssociation extends TileEntityWithTank {
+public abstract class TileEntityAssociation extends TileEntity {
 
     private static final BooleanProperty IS_CONNECTED = BooleanProperty.create( "connected" );
 
@@ -30,8 +32,10 @@ public abstract class TileEntityAssociation extends TileEntityWithTank {
 
     protected int source = 0;
 
-    public TileEntityAssociation( TileEntityType<?> tile, int capacity ) {
-        super( tile, capacity );
+    protected FluidTank TANK = new FluidTank( Config.Transmitter_Capacity.get() );
+
+    public TileEntityAssociation( TileEntityType<?> tile ) {
+        super( tile );
 
         this.identifier = UUID.randomUUID();
 

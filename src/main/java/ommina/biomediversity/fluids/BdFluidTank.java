@@ -8,12 +8,17 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler {
 
     private final ObjectArrayList<Integer> fluidWhitelist = new ObjectArrayList<Integer>();
+
+    private int index = 0;
+    private boolean canFill = false;
+    private boolean canDrain = false;
 
     public BdFluidTank( int capacity ) {
         super( capacity );
@@ -29,20 +34,57 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     public BdFluidTank( Fluid fluid, int amount, int capacity ) {
         super( capacity );
 
-        this.setFluid( fluid, amount );
+        this.setFluid( new FluidStack( fluid, amount ) );
+
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+/*
+
+    public void read( CompoundNBT nbt ) {
+
+        if ( !nbt.contains( "index" + index ) )
+            return;
+
+        FluidStack fs = FluidStack.loadFluidStackFromNBT( nbt.getCompound( "index" + index ) );
+
+        if ( !fs.isEmpty() )
+            this.setFluid( fs );
+
+    }
+
+    public CompoundNBT write( CompoundNBT nbt ) {
+
+        if ( this.getFluid().isEmpty() ) {
+            nbt.remove( "index" + index );
+            return nbt;
+        }
+
+        CompoundNBT indexNbt = new CompoundNBT();
+
+        this.getFluid().writeToNBT( indexNbt );
+
+        nbt.put( "index" + index, indexNbt );
+
+        return nbt;
+
+    }
+
+*/
+
+    public void addFluidToWhitlist( List<? extends Fluid> fluid ) {
+
+        for ( Fluid f : fluid )
+            addFluid( f );
 
     }
 
     public void addFluid( Fluid fluid ) {
 
         fluidWhitelist.add( fluid.getAttributes().getName().hashCode() );
-
-    }
-
-    public void addFluid( List<? extends Fluid> fluid ) {
-
-        for ( Fluid f : fluid )
-            addFluid( f );
 
     }
 
@@ -55,71 +97,53 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     }
 
-    public int fillInternal( FluidStack fs, boolean doFill ) {
+    public boolean getCanFill() {
+        return this.canFill;
+    }
 
-        if ( fs.isEmpty() ) {
-            return 0;
-        }
+    public boolean getCanDrain() {
+        return this.canDrain;
+    }
 
-        if ( !doFill ) {
+    public BdFluidTank setCanFill( boolean canFill ) {
+        this.canFill = canFill;
+        return this;
+    }
 
-            if ( fluid.isEmpty() ) {
-                return Math.min( capacity, fs.getAmount() );
-            }
-            if ( !fluid.isFluidEqual( fs ) ) {
-                return 0;
-            }
+    public BdFluidTank setCanDrain( boolean canDrain ) {
+        this.canDrain = canDrain;
+        return this;
+    }
 
-            return Math.min( capacity - fluid.getAmount(), fs.getAmount() );
-        }
+    @Override
+    public int fill( FluidStack resource, FluidAction action ) {
 
-        if ( fluid.isEmpty() ) {
+        if ( this.canFill )
+            return super.fill( resource, action );
 
-            fluid = new FluidStack( fs, Math.min( capacity, fs.getAmount() ) );
-
-            onContentsChanged();
-
-            //if ( tile != null ) {
-            //    FluidEvent.fireEvent( new FluidEvent.FluidFillingEvent( fluid, tile.getWorld(), tile.getPos(), this, fluid.amount ) );
-            //}
-
-            return fluid.getAmount();
-
-        }
-
-        if ( !fluid.isFluidEqual( fs ) ) {
-            return 0;
-        }
-
-        int filled = capacity - fluid.getAmount();
-
-        if ( filled == 0 )
-            return 0;
-
-        if ( fs.getAmount() < filled ) {
-            fluid.setAmount( fluid.getAmount() + fs.getAmount() );
-            filled = fs.getAmount();
-        } else {
-            fluid.setAmount( capacity );
-
-        }
-
-        onContentsChanged();
-
-        //if ( tile != null ) {
-        //    FluidEvent.fireEvent( new FluidEvent.FluidFillingEvent( fluid, tile.getWorld(), tile.getPos(), this, filled ) );
-        //}
-
-        return filled;
+        return 0;
 
     }
 
-    public void setFluid( Fluid fluid, int amount ) {
+    @Nonnull
+    @Override
+    public FluidStack drain( FluidStack resource, FluidAction action ) {
 
-        if ( fluid == null )
-            setFluid( null );
-        else
-            setFluid( new FluidStack( fluid, amount ) );
+        if ( this.canDrain )
+            return super.drain( resource, action );
+
+        return FluidStack.EMPTY;
+
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain( int maxDrain, FluidAction action ) {
+
+        if ( this.canDrain )
+            return super.drain( maxDrain, action );
+
+        return FluidStack.EMPTY;
 
     }
 

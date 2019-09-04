@@ -19,7 +19,7 @@ public class PillarData {
 
     private void adjustAmount( int delta ) {
 
-        this.amount = Math.min( Math.max( 0, this.amount + delta ), Config.Pillar_Capacity.get() );
+        this.amount = Math.min( Math.max( 0, this.amount + delta ), Config.Transmitter_Capacity.get() );
 
         if ( this.amount <= 0 )
             this.fluid = null;
