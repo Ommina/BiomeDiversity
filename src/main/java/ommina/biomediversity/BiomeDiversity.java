@@ -30,9 +30,10 @@ import ommina.biomediversity.world.ModWorldGeneration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod( "biomediversity" )
+@Mod( BiomeDiversity.MODID )
 public class BiomeDiversity {
 
+    public static final boolean DEBUG = true;
     public static final IProxy PROXY = DistExecutor.runForDist( () -> ClientProxy::new, () -> ServerProxy::new );
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "biomediversity";
@@ -124,7 +125,6 @@ public class BiomeDiversity {
 
             ModTileEntities.register( event );
         }
-
 
     }
 

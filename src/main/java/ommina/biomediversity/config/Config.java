@@ -28,6 +28,10 @@ public class Config {
     public static final String SUBCATEGORY_JUNGLE_POOLS = "jungle_pools";
     public static ForgeConfigSpec.BooleanValue Jungle_Pools_Enabled;
 
+    public static final String SUBCATEGORY_FLUID_WELLS = "fluid_wells";
+    public static ForgeConfigSpec.BooleanValue fluidWellsEnabled;
+    public static ForgeConfigSpec.IntValue fluidWellGenerationRadiusBase;
+
     // Pillars
     public static final String CATEGORY_TRANSMITTER = "transmitters";
 
@@ -78,6 +82,13 @@ public class Config {
         COMMON_BUILDER.comment( "Jungle Pools" ).push( SUBCATEGORY_JUNGLE_POOLS );
 
         Jungle_Pools_Enabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
+
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Fluid Wells" ).push( SUBCATEGORY_FLUID_WELLS );
+
+        fluidWellsEnabled = COMMON_BUILDER.comment( "Enables generatarion of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
+        fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated silt-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
 
         COMMON_BUILDER.pop();
 

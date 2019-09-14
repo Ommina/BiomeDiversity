@@ -30,6 +30,9 @@ public class ModWorldGeneration {
                 addJunglePools( biome );
             }
 
+            addFluidWells( biome );
+
+
         }
 
     }
@@ -53,11 +56,19 @@ public class ModWorldGeneration {
              Placement.COUNT_RANGE,
              new CountRangeConfig( count, minHeight, 0, maxHeight )
         ) );
+
     }
 
     private static void addJunglePools( Biome biome ) {
 
         biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION, Biome.createDecoratedFeature( ModFeatures.JUNGLE_POOL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
+
+    }
+
+    private static void addFluidWells( Biome biome ) {
+
+        biome.addStructure( ModFeatures.FLUID_WELL, IFeatureConfig.NO_FEATURE_CONFIG );
+        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature( ModFeatures.FLUID_WELL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
 
     }
 

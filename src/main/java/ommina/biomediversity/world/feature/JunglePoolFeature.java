@@ -27,6 +27,7 @@ public class JunglePoolFeature extends Feature<NoFeatureConfig> {
         setRegistryName( BiomeDiversity.getId( name ) );
     }
 
+    @Override
     public boolean place( IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config ) {
 
         for ( int i = 0; i < ATTEMPTS_PER_CHUNK; i++ ) {
