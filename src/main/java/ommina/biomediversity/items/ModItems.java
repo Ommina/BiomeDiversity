@@ -28,6 +28,8 @@ public class ModItems {
 
     // Block Items
     @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static final Item ORE_ORINOCITE = new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = new BlockItem( ModBlocks.STONE_NOCIFIED_FRACTURED, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( BiomeDiversity.MODID + ":nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = new BlockItem( ModBlocks.STONE_NOCIFIED_UNDAMAGED, new Item.Properties().group( BiomeDiversity.TAB ) );
 
     @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static final Item TRANSMITTER = new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) );
     @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static final Item RECEIVER = new BlockItem( ModBlocks.RECEIVER, new Item.Properties().group( BiomeDiversity.TAB ) );
@@ -48,6 +50,8 @@ public class ModItems {
         register( event, "linkstaff", LINK_STAFF );
 
         register( event, "orinocite_ore", ORE_ORINOCITE );
+        register( event, "nocified_stone_fractured", NOCIFIED_STONE_FRACTURED );
+        register( event, "nocified_stone_undamaged", NOCIFIED_STONE_UNDAMAGED );
 
         register( event, "transmitter", TRANSMITTER );
         register( event, "receiver", RECEIVER );

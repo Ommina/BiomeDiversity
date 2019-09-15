@@ -19,18 +19,28 @@ public class Config {
     public static final String CATEGORY_WORLD_GEN = "worldgen";
 
     public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
-    public static ForgeConfigSpec.IntValue Orinocite_Generation_MinY;
-    public static ForgeConfigSpec.IntValue Orinocite_Generation_MaxY;
-    public static ForgeConfigSpec.IntValue Orinocite_Generation_Base_Size;
-    public static ForgeConfigSpec.IntValue Orinocite_Generation_Variance;
-    public static ForgeConfigSpec.IntValue Orinocite_Generation_Chances;
+    public static ForgeConfigSpec.BooleanValue orinociteOreEnabled;
+    public static ForgeConfigSpec.IntValue orinociteOreGenerationMinY;
+    public static ForgeConfigSpec.IntValue orinociteOreGenerationMaxY;
+    public static ForgeConfigSpec.IntValue orinociteOreGenerationSizeBase;
+    public static ForgeConfigSpec.IntValue orinociteOreGenerationSizeVariance;
+    public static ForgeConfigSpec.IntValue orinociteOreGenerationAttempts;
 
     public static final String SUBCATEGORY_JUNGLE_POOLS = "jungle_pools";
-    public static ForgeConfigSpec.BooleanValue Jungle_Pools_Enabled;
+    public static ForgeConfigSpec.BooleanValue junglePoolsEnabled;
 
     public static final String SUBCATEGORY_FLUID_WELLS = "fluid_wells";
     public static ForgeConfigSpec.BooleanValue fluidWellsEnabled;
     public static ForgeConfigSpec.IntValue fluidWellGenerationRadiusBase;
+
+    public static final String SUBCATEGORY_NOCIFIED_STONE = "nocified_stone";
+    public static ForgeConfigSpec.BooleanValue nocifiedStoneEnabled;
+    public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMinY;
+    public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMaxY;
+    public static ForgeConfigSpec.IntValue nocifiedStoneGenerationSizeBase;
+    public static ForgeConfigSpec.IntValue nocifiedStoneGenerationSizeVariance;
+    public static ForgeConfigSpec.IntValue nocifiedStoneGenerationAttempts;
+
 
     // Pillars
     public static final String CATEGORY_TRANSMITTER = "transmitters";
@@ -71,24 +81,36 @@ public class Config {
 
         COMMON_BUILDER.comment( "Orinocite Ore" ).push( SUBCATEGORY_ORINOCITE_ORE );
 
-        Orinocite_Generation_MinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 11, 5, 200 );
-        Orinocite_Generation_MaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 18, 5, 200 );
-        Orinocite_Generation_Base_Size = COMMON_BUILDER.comment( "Base size of an Orinocite ore vein" ).defineInRange( "baseSize", 5, 1, 20 );
-        Orinocite_Generation_Variance = COMMON_BUILDER.comment( "Size variance of an Orinocite ore vein" ).defineInRange( "variance", 3, 0, 15 );
-        Orinocite_Generation_Chances = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein (0 to disable)" ).defineInRange( "attempts", 3, 0, 10 );
+        orinociteOreEnabled = COMMON_BUILDER.comment( "Enabled generation of Orinocite ore" ).define( "enableOrinociteOre", true );
+        orinociteOreGenerationMinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 11, 5, 200 );
+        orinociteOreGenerationMaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 18, 5, 200 );
+        orinociteOreGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Orinocite ore vein" ).defineInRange( "baseSize", 5, 1, 20 );
+        orinociteOreGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of an Orinocite ore vein" ).defineInRange( "variance", 3, 0, 15 );
+        orinociteOreGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 3, 1, 15 );
 
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment( "Jungle Pools" ).push( SUBCATEGORY_JUNGLE_POOLS );
 
-        Jungle_Pools_Enabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
+        junglePoolsEnabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
 
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment( "Fluid Wells" ).push( SUBCATEGORY_FLUID_WELLS );
 
-        fluidWellsEnabled = COMMON_BUILDER.comment( "Enables generatarion of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
+        fluidWellsEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
         fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated silt-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
+
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Nocified Stone" ).push( SUBCATEGORY_NOCIFIED_STONE );
+
+        nocifiedStoneEnabled = COMMON_BUILDER.comment( "Enables generation of nocified stone in Mountain biomes." ).define( "enable_nocified_stone", true );
+        nocifiedStoneGenerationMinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 10, 5, 200 );
+        nocifiedStoneGenerationMaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 50, 5, 200 );
+        nocifiedStoneGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Nocified stone vein" ).defineInRange( "baseSize", 1, 1, 20 );
+        nocifiedStoneGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of a Nocified stone vein" ).defineInRange( "variance", 0, -1, 15 );
+        nocifiedStoneGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 2, 1, 15 );
 
         COMMON_BUILDER.pop();
 

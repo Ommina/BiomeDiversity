@@ -11,11 +11,15 @@
 
   "item.biomediversity.colza": "Colza",
   "item.biomediversity.colza_seeds": "Colza Seeds",
+  "item.biomediversity.nocified_stone_undamaged": "Undamaged Nocified Stone",
+  "item.biomediversity.nocified_stone_fractured": "Fractured Nocified Stone",
   "item.biomediversity.orinocite_ingot": "Orinocite Ingot",
   "item.biomediversity.pomegranate": "Pomegranate",
   "item.biomediversity.pomegranate_seeds": "Pomegranate Seeds",
 
   "block.biomediversity.collector": "Biometic Collector",
+  "block.biomediversity.nocified_stone_fractured": "Fractured Nocified Stone",
+  "block.biomediversity.nocified_stone_undamaged": "Nocified Stone",
   "block.biomediversity.orinocite_ore": "Orinocite Ore",
   "block.biomediversity.peltier": "Peltier",
   "block.biomediversity.pillar": "Biometic Transmitter",

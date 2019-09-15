@@ -22,39 +22,32 @@ public class ModWorldGeneration {
 
         for ( Biome biome : ForgeRegistries.BIOMES ) {
 
-            if ( Config.Orinocite_Generation_Base_Size.get() > 0 && biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
-                addOre( biome, ModBlocks.ORE_ORINOCITE, Config.Orinocite_Generation_Base_Size.get() + Config.Orinocite_Generation_Variance.get(), Config.Orinocite_Generation_Chances.get(), Config.Orinocite_Generation_MinY.get(), Config.Orinocite_Generation_MaxY.get() );
+            if ( Config.orinociteOreEnabled.get() && biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
+                addOre( biome, ModBlocks.ORE_ORINOCITE, Config.orinociteOreGenerationSizeBase.get() + Config.orinociteOreGenerationSizeVariance.get(), Config.orinociteOreGenerationAttempts.get(), Config.orinociteOreGenerationMinY.get(), Config.orinociteOreGenerationMaxY.get() );
             }
 
-            if ( Config.Jungle_Pools_Enabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {
+            if ( Config.junglePoolsEnabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {
                 addJunglePools( biome );
             }
 
-            addFluidWells( biome );
+            if ( Config.fluidWellsEnabled.get() )
+                addFluidWells( biome );
 
+            if ( Config.nocifiedStoneEnabled.get() && biome.getCategory() == Biome.Category.EXTREME_HILLS ) {
+                addOre( biome, ModBlocks.STONE_NOCIFIED_UNDAMAGED, Config.nocifiedStoneGenerationSizeBase.get() + Config.nocifiedStoneGenerationSizeVariance.get(), Config.nocifiedStoneGenerationAttempts.get(), Config.nocifiedStoneGenerationMinY.get(), Config.nocifiedStoneGenerationMaxY.get() );
+            }
 
         }
 
     }
 
-/*
-
-    private void generateOverworld( Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider ) {
-
-        generateFluidDeposit( ModFluids.natural, random, x, z, world, chunkGenerator, chunkProvider );
-        generateCrop( ModBlocks.cropPomegranate, random, x, z, world );
-
-    }
-
-*/
-
-    private static void addOre( Biome biome, Block block, int size, int count, int minHeight, int maxHeight ) {
+    private static void addOre( Biome biome, Block block, int size, int chances, int minHeight, int maxHeight ) {
 
         biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(
              ORE_FEATURE_CONFIG,
              new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), size ),
              Placement.COUNT_RANGE,
-             new CountRangeConfig( count, minHeight, 0, maxHeight )
+             new CountRangeConfig( chances, minHeight, 0, maxHeight )
         ) );
 
     }
@@ -72,19 +65,7 @@ public class ModWorldGeneration {
 
     }
 
-
-
-
     /*
-
-    private void generateFluidDeposit( BdFluid fluid, Random random, int worldX, int worldZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider ) {
-
-        if ( GenerateFluidSphere.shouldGenerate( random ) )
-            return;
-
-        new GenerateFluidSphere().generate( world, random, worldX + 8, worldZ + 8, chunkGenerator );
-
-    }
 
     private void generateCrop( BlockCrops crop, Random random, int x, int z, World world ) {
 
@@ -94,17 +75,6 @@ public class ModWorldGeneration {
         GeneratePomegranateBush generator = new GeneratePomegranateBush();
 
         generator.generate( world, x + 8, z + 8, random );
-
-    }
-
-    private void generateJunglePuddle( BdFluid fluid, Random random, int x, int z, World world ) {
-
-        if ( !GeneratorJunglePuddle.shouldGenerate() )
-            return;
-
-        GeneratorJunglePuddle generator = new GeneratorJunglePuddle();
-
-        generator.generate( fluid, world, x + 8, z + 8, random );
 
     }
 
