@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
+import ommina.biomediversity.fluids.IHasFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
 
 import javax.annotation.Nonnull;
@@ -22,7 +23,7 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class TileEntityRainBarrel extends TileEntity implements ITickableTileEntity { // implements ITickable, ITankBroadcast {
+public class TileEntityRainBarrel extends TileEntity implements ITickableTileEntity, IHasFluidTank { // implements ITickable, ITankBroadcast {
 
     private static final int DELAY_RAIN = 4; // 0.20s
     private static final int DELAY_NO_RAIN = 100; // 5.00s
@@ -129,6 +130,11 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
         this.markDirty();
 
+    }
+
+    @Override
+    public BdFluidTank getTank() {
+        return TANK;
     }
 
 

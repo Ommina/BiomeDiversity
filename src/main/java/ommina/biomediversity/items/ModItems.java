@@ -10,54 +10,54 @@ import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 
+@ObjectHolder( BiomeDiversity.MODID )
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModItems {
 
     // Generic Items
-    @ObjectHolder( BiomeDiversity.MODID + ":pomegranate_seeds" ) public static final Item POMEGRANATE_SEEDS = new BlockNamedItem( ModBlocks.POMEGRANATE, (new Item.Properties()).group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":pomegranate" ) public static final Item POMEGRANATE = new Item( new Item.Properties().food( ModFoods.POMEGRANATE ).group( BiomeDiversity.TAB ) );
+    @ObjectHolder( "pomegranate_seeds" ) public static final Item POMEGRANATE_SEEDS = null;
+    @ObjectHolder( "pomegranate" ) public static final Item POMEGRANATE = null;
 
-    @ObjectHolder( BiomeDiversity.MODID + ":colza_seeds" ) public static final Item COLZA_SEEDS = new BlockNamedItem( ModBlocks.COLZA, (new Item.Properties()).group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":colza" ) public static final Item COLZA = new Item( new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( "colza_seeds" ) public static final Item COLZA_SEEDS = null;
+    @ObjectHolder( "colza" ) public static final Item COLZA = null;
 
-    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ingot" ) public static final Item INGOT_ORINOCITE = new Item( new Item.Properties().group( BiomeDiversity.TAB ) );
-
+    @ObjectHolder( "orinocite_ingot" ) public static final Item INGOT_ORINOCITE = null;
 
     // Cool Items
-    @ObjectHolder( BiomeDiversity.MODID + ":linkstaff" ) public static final Item LINK_STAFF = new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( "linkstaff" ) public static final Item LINK_STAFF = null;
 
     // Block Items
-    @ObjectHolder( BiomeDiversity.MODID + ":orinocite_ore" ) public static final Item ORE_ORINOCITE = new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = new BlockItem( ModBlocks.STONE_NOCIFIED_FRACTURED, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = new BlockItem( ModBlocks.STONE_NOCIFIED_UNDAMAGED, new Item.Properties().group( BiomeDiversity.TAB ) );
+    @ObjectHolder( "orinocite_ore" ) public static final Item ORE_ORINOCITE = null;
+    @ObjectHolder( "nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = null;
+    @ObjectHolder( "nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = null;
 
-    @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static final Item TRANSMITTER = new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static final Item RECEIVER = new BlockItem( ModBlocks.RECEIVER, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static final Item COLLECTOR = new BlockItem( ModBlocks.COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static final Item PELTIER = new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) );
-    @ObjectHolder( BiomeDiversity.MODID + ":rainbarrel" ) public static final Item RAIN_BARREL = new BlockItem( ModBlocks.RAIN_BARREL, new Item.Properties().group( BiomeDiversity.TAB ) );
-
+    @ObjectHolder( "transmitter" ) public static final Item TRANSMITTER = null;
+    @ObjectHolder( "receiver" ) public static final Item RECEIVER = null;
+    @ObjectHolder( "collector" ) public static final Item COLLECTOR = null;
+    @ObjectHolder( "peltier" ) public static final Item PELTIER = null;
+    @ObjectHolder( "rainbarrel" ) public static final Item RAIN_BARREL = null;
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Item> event ) {
 
-        register( event, "pomegranate_seeds", POMEGRANATE_SEEDS );
-        register( event, "pomegranate", POMEGRANATE );
-        register( event, "colza_seeds", COLZA_SEEDS );
-        register( event, "colza", COLZA );
-        register( event, "orinocite_ingot", INGOT_ORINOCITE );
+        register( event, "pomegranate_seeds", new BlockNamedItem( ModBlocks.POMEGRANATE, (new Item.Properties()).group( BiomeDiversity.TAB ) ) );
+        register( event, "pomegranate", new Item( new Item.Properties().food( ModFoods.POMEGRANATE ).group( BiomeDiversity.TAB ) ) );
+        register( event, "colza_seeds", new BlockNamedItem( ModBlocks.COLZA, (new Item.Properties()).group( BiomeDiversity.TAB ) ) );
+        register( event, "colza", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
-        register( event, "linkstaff", LINK_STAFF );
+        register( event, "orinocite_ingot", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
-        register( event, "orinocite_ore", ORE_ORINOCITE );
-        register( event, "nocified_stone_fractured", NOCIFIED_STONE_FRACTURED );
-        register( event, "nocified_stone_undamaged", NOCIFIED_STONE_UNDAMAGED );
+        register( event, "linkstaff", new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
-        register( event, "transmitter", TRANSMITTER );
-        register( event, "receiver", RECEIVER );
-        register( event, "collector", COLLECTOR );
-        register( event, "peltier", PELTIER );
-        register( event, "rainbarrel", RAIN_BARREL );
+        register( event, "orinocite_ore", new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "nocified_stone_fractured", new BlockItem( ModBlocks.STONE_NOCIFIED_FRACTURED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "nocified_stone_undamaged", new BlockItem( ModBlocks.STONE_NOCIFIED_UNDAMAGED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+
+        register( event, "transmitter", new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "receiver", new BlockItem( ModBlocks.RECEIVER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "collector", new BlockItem( ModBlocks.COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "peltier", new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "rainbarrel", new BlockItem( ModBlocks.RAIN_BARREL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
     }
 
