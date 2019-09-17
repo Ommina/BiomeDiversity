@@ -26,7 +26,7 @@ public class ModFeatures {
         ModStructures.init();
         ModStructurePieceType.init();
 
-        Feature.STRUCTURES.put( BiomeDiversity.getId( "fluid_well" ).toString(), FLUID_WELL );
+//        Feature.STRUCTURES.put( BiomeDiversity.getId( "fluid_well" ).toString(), FLUID_WELL );
 
     }
 

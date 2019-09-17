@@ -1,19 +1,15 @@
 package ommina.biomediversity.world.feature;
 
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.feature.structure.Structure;
-import ommina.biomediversity.BiomeDiversity;
-
 public class ModStructures {
 
-    public static final Structure<?> FLUID_WELL = register( "fluid_well", ModFeatures.FLUID_WELL );
+    //public static final Structure<?> FLUID_WELL = register( "fluid_well", ModFeatures.FLUID_WELL );
 
     public static void init() {
         // hi!
     }
 
-    private static Structure<?> register( String key, Structure<?> structure ) {
-        return Registry.register( Registry.STRUCTURE_FEATURE, BiomeDiversity.getId( key ).toString(), structure );
-    }
+    //private static Structure<?> register( String key, Structure<?> structure ) {
+    //    return Registry.register( Registry.STRUCTURE_FEATURE, BiomeDiversity.getId( key ).toString(), structure );
+    //}
 
 }
