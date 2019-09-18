@@ -1,11 +1,9 @@
 
 package ommina.biomediversity.fluids;
 
-import net.minecraft.block.Block;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -13,8 +11,8 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder( "biomediversity" )
 public class ModFluids {
 
-    @ObjectHolder( "coolbiometic_flowing" ) public static Fluid COOLBIOMETIC_FLOWING;
-    @ObjectHolder( "coolbiometic_bucket" ) public static Item COOLBIOMETIC_BUCKET;
+    //@ObjectHolder( "coolbiometic_flowing" ) public static Fluid COOLBIOMETIC_FLOWING;
+    //@ObjectHolder( "coolbiometic_bucket" ) public static Item COOLBIOMETIC_BUCKET;
     //@ObjectHolder( "coolbiometic" ) public static Block COOLBIOMETIC;
 
     //public static BdFluid coolBiometic;
@@ -26,10 +24,10 @@ public class ModFluids {
 
     //public static BdFluid moltenOrinocite;
 
-    //@ObjectHolder( "rainwater_still" ) public static FlowingFluid RAINWATER_STILL;
+    @ObjectHolder( "rainwater_still" ) public static FlowingFluid RAINWATER_STILL;
     @ObjectHolder( "rainwater_flowing" ) public static Fluid RAINWATER_FLOWING;
     @ObjectHolder( "rainwater_bucket" ) public static Item RAINWATER_BUCKET;
-    @ObjectHolder( "rainwater" ) public static Block RAINWATER_BLOCK;
+    //@ObjectHolder( "rainwater" ) public static Block RAINWATER_BLOCK;
 
     //public static BdFluid mineralWater;
 
@@ -57,10 +55,10 @@ public class ModFluids {
 
     //public static final List<BdFluid> fluids = new ArrayList<BdFluid>();
 
+/*
+
     @SubscribeEvent
     public static void registerBlock( final RegistryEvent.Register<Block> event ) {
-
-        FluidFactory.create();
 
         FluidFactory.getBlocks().forEach( s -> event.getRegistry().register( s.getBlock() ) );
 
@@ -79,6 +77,8 @@ public class ModFluids {
         FluidFactory.getFluids().forEach( s -> event.getRegistry().register( s.getFluid() ) );
 
     }
+
+*/
 
 /*
 

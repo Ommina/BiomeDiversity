@@ -75,7 +75,7 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
 */
 
-    public void addFluidToWhitlist( List<? extends Fluid> fluid ) {
+    public void addFluidToWhitelist( List<? extends Fluid> fluid ) {
 
         for ( Fluid f : fluid )
             addFluid( f );
@@ -84,13 +84,13 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     public void addFluid( Fluid fluid ) {
 
-        fluidWhitelist.add( fluid.getAttributes().getName().hashCode() );
+        fluidWhitelist.add( fluid.hashCode() );
 
     }
 
     public boolean canFillFluidType( FluidStack fluid ) {
 
-        if ( fluid.getFluid().getAttributes().isLighterThanAir() || !fluidWhitelist.contains( fluid.getFluid().getAttributes().getName().hashCode() ) )
+        if ( fluid.getFluid().getAttributes().isLighterThanAir() || !fluidWhitelist.contains( fluid.hashCode() ) )
             return false;
 
         return this.canFillFluidType( fluid );

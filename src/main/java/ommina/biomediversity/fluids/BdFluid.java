@@ -9,18 +9,16 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 
-public abstract class BdFluid extends FlowingFluid {
+public abstract class BdFluid extends ForgeFlowingFluid {
 
     private FluidAttributes attributes;
     private Item bucketItem;
@@ -29,6 +27,7 @@ public abstract class BdFluid extends FlowingFluid {
     private Block backingBlock;
 
     public BdFluid( FluidAttributes attributes ) {
+        super( null );
         this.attributes = attributes;
     }
 
@@ -64,10 +63,10 @@ public abstract class BdFluid extends FlowingFluid {
 
     */
 
-    @Override
-    protected FluidAttributes createAttributes( Fluid fluid ) {
-        return this.attributes;
-    }
+    //@Override
+    //protected FluidAttributes createAttributes( Fluid fluid ) {
+    //    return this.attributes;
+    //}
 
     @Override
     public Fluid getFlowingFluid() {
@@ -111,10 +110,10 @@ public abstract class BdFluid extends FlowingFluid {
         return this.bucketItem;
     }
 
-    @Override
-    protected boolean func_215665_a( IFluidState state, IBlockReader block, BlockPos pos, Fluid fluid, Direction direction ) {
-        return direction == Direction.DOWN && !fluid.isIn( FluidTags.WATER );
-    }
+    //@Override
+    //protected boolean func_215665_a( IFluidState state, IBlockReader block, BlockPos pos, Fluid fluid, Direction direction ) {
+    //    return direction == Direction.DOWN && !fluid.isIn( FluidTags.WATER );
+    //}
 
     @Override
     public int getTickRate( IWorldReader worldReader ) {
