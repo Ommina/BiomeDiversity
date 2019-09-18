@@ -1,4 +1,3 @@
-
 package ommina.biomediversity.worlddata;
 
 import net.minecraft.world.World;
@@ -11,11 +10,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class PillarNetwork {
+public class TransmitterNetwork {
 
-    public static final Map<UUID, HashMap<UUID, PillarData>> players = new HashMap<UUID, HashMap<UUID, PillarData>>();
+    public static final Map<UUID, HashMap<UUID, TransmitterData>> players = new HashMap<UUID, HashMap<UUID, TransmitterData>>();
 
-    public static Map<UUID, PillarData> getPlayer( @Nonnull final UUID playerIdentifier ) {
+    public static Map<UUID, TransmitterData> getPlayer( @Nonnull final UUID playerIdentifier ) {
 
         if ( playerIdentifier == null ) {
             BiomeDiversity.LOGGER.warn( "!* playerIdentifier is null adding to PillarNetowrk players" );
@@ -24,19 +23,19 @@ public class PillarNetwork {
         }
 
         if ( !containsPlayer( playerIdentifier ) )
-            players.put( playerIdentifier, new HashMap<UUID, PillarData>() );
+            players.put( playerIdentifier, new HashMap<UUID, TransmitterData>() );
 
         return players.get( playerIdentifier );
 
     }
 
     @Nonnull
-    public static PillarData getPillar( @Nonnull final UUID playerIdentifier, @Nonnull final UUID pillarIdentifier ) {
+    public static TransmitterData getPillar( @Nonnull final UUID playerIdentifier, @Nonnull final UUID pillarIdentifier ) {
 
-        Map<UUID, PillarData> playerPillars = getPlayer( playerIdentifier );
+        Map<UUID, TransmitterData> playerPillars = getPlayer( playerIdentifier );
 
         if ( !playerPillars.containsKey( pillarIdentifier ) )
-            playerPillars.put( pillarIdentifier, new PillarData() );
+            playerPillars.put( pillarIdentifier, new TransmitterData() );
 
         return playerPillars.get( pillarIdentifier );
 

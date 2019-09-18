@@ -1,4 +1,3 @@
-
 package ommina.biomediversity.items;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,11 +12,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
+import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.util.Translator;
-import ommina.biomediversity.worlddata.PillarNetwork;
+import ommina.biomediversity.worlddata.TransmitterNetwork;
 import ommina.biomediversity.worlddata.WorldData;
 
 public class LinkStaff extends Item {
@@ -137,7 +136,7 @@ public class LinkStaff extends Item {
 
         item.setTag( compound );
 
-        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.pillarsettingscopied" ) ), true );
+        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.transmittersettingscopied" ) ), true );
 
 
         item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getTargetName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
@@ -156,7 +155,7 @@ public class LinkStaff extends Item {
         player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingspasted" ) ), true );
 
         if ( tile instanceof TileEntityTransmitter )
-            PillarNetwork.getPillar( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier();
+            TransmitterNetwork.getPillar( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier();
 
         WorldData.get( world ).markDirty();
 

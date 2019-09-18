@@ -7,7 +7,7 @@ import ommina.biomediversity.config.Config;
 
 import java.util.UUID;
 
-public class PillarData {
+public class TransmitterData {
 
     private int amount;
 
@@ -19,7 +19,7 @@ public class PillarData {
 
     private void adjustAmount( int delta ) {
 
-        this.amount = Math.min( Math.max( 0, this.amount + delta ), Config.Transmitter_Capacity.get() );
+        this.amount = Math.min( Math.max( 0, this.amount + delta ), Config.transmitterCapacity.get() );
 
         if ( this.amount <= 0 )
             this.fluid = null;

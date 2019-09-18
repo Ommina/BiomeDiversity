@@ -1,4 +1,3 @@
-
 package ommina.biomediversity.worlddata;
 
 import net.minecraft.nbt.CompoundNBT;
@@ -38,7 +37,7 @@ public class WorldData extends WorldSavedData {
                     UUID transmitterIdentifier = UUID.fromString( keySub );
 
                     if ( transmitterIdentifier != null ) {
-                        PillarData pd = PillarNetwork.getPillar( playerIdentifier, transmitterIdentifier );
+                        TransmitterData pd = TransmitterNetwork.getPillar( playerIdentifier, transmitterIdentifier );
                         CompoundNBT subPillar = subPlayer.getCompound( keySub );
 
                         pd.setAmount( subPillar.getInt( "quantity" ) );
@@ -69,22 +68,22 @@ public class WorldData extends WorldSavedData {
     @Override
     public CompoundNBT write( @Nonnull CompoundNBT compound ) {
 
-        if ( PillarNetwork.isEmpty() )
+        if ( TransmitterNetwork.isEmpty() )
             return compound;
 
-        for ( UUID playerIdentifier : PillarNetwork.getPlayerList() ) {
+        for ( UUID playerIdentifier : TransmitterNetwork.getPlayerList() ) {
 
             if ( playerIdentifier == null ) {
 
                 BiomeDiversity.LOGGER.warn( "WTH?  playerIdentifier is null" );
-                BiomeDiversity.LOGGER.warn( "Transmitter network contains " + PillarNetwork.getPlayerList().size() + " entries" );
+                BiomeDiversity.LOGGER.warn( "Transmitter network contains " + TransmitterNetwork.getPlayerList().size() + " entries" );
 
                 int n = 1;
 
-                for ( UUID p2 : PillarNetwork.getPlayerList() ) {
+                for ( UUID p2 : TransmitterNetwork.getPlayerList() ) {
                     BiomeDiversity.LOGGER.warn( " entry: " + n++ );
                     BiomeDiversity.LOGGER.warn( " p2: " + (p2 == null ? "null" : p2.toString()) );
-                    BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getTransmitterList( p2 ).size() );
+                    BiomeDiversity.LOGGER.warn( " pillarCount: " + TransmitterNetwork.getTransmitterList( p2 ).size() );
                 }
 
             } else {
@@ -93,20 +92,20 @@ public class WorldData extends WorldSavedData {
 
                 int n = 0;
 
-                for ( UUID transmitterIdentifier : PillarNetwork.getTransmitterList( playerIdentifier ) ) {
+                for ( UUID transmitterIdentifier : TransmitterNetwork.getTransmitterList( playerIdentifier ) ) {
 
                     n++;
 
                     if ( transmitterIdentifier == null ) {
 
-                        BiomeDiversity.LOGGER.warn( " pillarIdentifier is null.  This should not happen." );
+                        BiomeDiversity.LOGGER.warn( " transmitterIdentifier is null.  This should not happen." );
                         BiomeDiversity.LOGGER.warn( " entry: " + n );
                         BiomeDiversity.LOGGER.warn( " owner player uuid: " + playerIdentifier.toString() );
-                        BiomeDiversity.LOGGER.warn( " pillarCount: " + PillarNetwork.getTransmitterList( playerIdentifier ).size() );
+                        BiomeDiversity.LOGGER.warn( " transmitterCount: " + TransmitterNetwork.getTransmitterList( playerIdentifier ).size() );
 
                     } else {
 
-                        PillarData pd = PillarNetwork.getPillar( playerIdentifier, transmitterIdentifier );
+                        TransmitterData pd = TransmitterNetwork.getPillar( playerIdentifier, transmitterIdentifier );
                         CompoundNBT subTagTransmitter = new CompoundNBT();
 
                         subTagTransmitter.putInt( "quantity", pd.getAmount() );
@@ -118,7 +117,7 @@ public class WorldData extends WorldSavedData {
                             subTagTransmitter.putUniqueId( "receiver", pd.receiver );
 
                         if ( pd.fluid != null )
-                            subTagTransmitter.putString( "fluidname", pd.fluid.getAttributes().getName() );
+                            subTagTransmitter.putString( "fluidname", pd.fluid.getRegistryName().toString() );
 
                         subTagPlayer.put( transmitterIdentifier.toString(), subTagTransmitter ); // NPE here, non-crashing
 
