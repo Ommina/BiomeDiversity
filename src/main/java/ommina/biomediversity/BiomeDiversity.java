@@ -1,13 +1,10 @@
 package ommina.biomediversity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
@@ -19,12 +16,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
 import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
 import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
-import ommina.biomediversity.fluids.ModFluids;
+import ommina.biomediversity.fluids.DeferredRegistration;
+import ommina.biomediversity.fluids.FluidFactory;
+import ommina.biomediversity.network.Network;
 import ommina.biomediversity.server.ServerProxy;
 import ommina.biomediversity.world.ModWorldGeneration;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +37,7 @@ public class BiomeDiversity {
     public static final String MODID = "biomediversity";
     public static final ItemGroup TAB = new CreativeTab();
 
+
     public static ResourceLocation getId( String path ) {
 
         return new ResourceLocation( MODID, path );
@@ -47,6 +46,10 @@ public class BiomeDiversity {
 
 
     public BiomeDiversity() {
+
+        DeferredRegistration.setup();
+
+        FluidFactory.init();
 
         ModLoadingContext.get().registerConfig( ModConfig.Type.CLIENT, Config.CLIENT_CONFIG );
         ModLoadingContext.get().registerConfig( ModConfig.Type.COMMON, Config.COMMON_CONFIG );
@@ -64,26 +67,24 @@ public class BiomeDiversity {
         // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::doClientStuff );
 
-
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register( this );
     }
-
 
     private void setup( final FMLCommonSetupEvent event ) {
 
         DeferredWorkQueue.runLater( ModWorldGeneration::generate );
 
+        Network.init();
 
     }
-
 
     private void doClientStuff( final FMLClientSetupEvent event ) {
 
         //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
 
-        Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
-        Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
+        //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
+        //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
 
     }
 
@@ -116,17 +117,6 @@ public class BiomeDiversity {
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
-    public static class RegistryEvents {
-
-
-        @SubscribeEvent
-        public static void onTileEntityRegistry( final RegistryEvent.Register<TileEntityType<?>> event ) {
-
-            ModTileEntities.register( event );
-        }
-
-    }
 
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
     public static class ForgeEvents {

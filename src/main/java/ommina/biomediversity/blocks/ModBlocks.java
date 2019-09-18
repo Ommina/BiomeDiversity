@@ -1,6 +1,7 @@
 package ommina.biomediversity.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
@@ -16,6 +17,7 @@ import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
 import ommina.biomediversity.blocks.receiver.Receiver;
 import ommina.biomediversity.blocks.transmitter.Transmitter;
 
+
 @ObjectHolder( BiomeDiversity.MODID )
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModBlocks {
@@ -30,11 +32,15 @@ public class ModBlocks {
     @ObjectHolder( "pomegranate" ) public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
 
     // Tile Entity Blocks
-    @ObjectHolder( "collector" ) public static final Collector COLLECTOR = new Collector();
-    @ObjectHolder( "peltier" ) public static final Peltier PELTIER = new Peltier();
-    @ObjectHolder( "rainbarrel" ) public static final RainBarrel RAIN_BARREL = new RainBarrel();
-    @ObjectHolder( "receiver" ) public static final Receiver RECEIVER = new Receiver();
-    @ObjectHolder( "transmitter" ) public static final Transmitter TRANSMITTER = new Transmitter();
+    @ObjectHolder( "collector" ) public static Collector COLLECTOR;
+    @ObjectHolder( "peltier" ) public static Peltier PELTIER;
+    @ObjectHolder( "rainbarrel" ) public static RainBarrel RAIN_BARREL;
+    @ObjectHolder( "receiver" ) public static Receiver RECEIVER;
+    @ObjectHolder( "transmitter" ) public static Transmitter TRANSMITTER;
+
+    // Fluid Blocks  (Only those that we care about)
+    @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
+    @ObjectHolder( "junglewater" ) public static FlowingFluidBlock JUNGLEWATER;
 
 
     @SubscribeEvent
@@ -47,11 +53,11 @@ public class ModBlocks {
         register( event, "colza", COLZA );
         register( event, "pomegranate", POMEGRANATE );
 
-        register( event, "collector", COLLECTOR );
-        register( event, "peltier", PELTIER );
-        register( event, "rainbarrel", RAIN_BARREL );
-        register( event, "receiver", RECEIVER );
-        register( event, "transmitter", TRANSMITTER );
+        register( event, "collector", new Collector() );
+        register( event, "peltier", new Peltier() );
+        register( event, "rainbarrel", new RainBarrel() );
+        register( event, "receiver", new Receiver() );
+        register( event, "transmitter", new Transmitter() );
 
     }
 

@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.Deferred;
 
 import java.awt.*;
 import java.util.function.Supplier;
@@ -47,10 +46,10 @@ public class FluidWrapper {
 
     public FluidWrapper build() {
 
-        fluid_still = Deferred.FLUIDS.register( name + "_still", () -> new ForgeFlowingFluid.Source( fluid_properties ) );
-        fluid_flowing = Deferred.FLUIDS.register( name + "_flowing", () -> new ForgeFlowingFluid.Flowing( fluid_properties ) );
-        block = Deferred.BLOCKS.register( name, () -> new FlowingFluidBlock( fluid_still, Block.Properties.create( Material.WATER ).doesNotBlockMovement().hardnessAndResistance( 100f ).lightValue( luminosity ).noDrops() ) );
-        bucket = Deferred.ITEMS.register( name + "_bucket", () -> new BucketItem( fluid_still, new Item.Properties().containerItem( Items.BUCKET ).maxStackSize( 1 ).group( BiomeDiversity.TAB ) ) );
+        fluid_still = DeferredRegistration.FLUIDS.register( name + "_still", () -> new ForgeFlowingFluid.Source( fluid_properties ) );
+        fluid_flowing = DeferredRegistration.FLUIDS.register( name + "_flowing", () -> new ForgeFlowingFluid.Flowing( fluid_properties ) );
+        block = DeferredRegistration.BLOCKS.register( name, () -> new FlowingFluidBlock( fluid_still, Block.Properties.create( Material.WATER ).doesNotBlockMovement().hardnessAndResistance( 100f ).lightValue( luminosity ).noDrops() ) );
+        bucket = DeferredRegistration.ITEMS.register( name + "_bucket", () -> new BucketItem( fluid_still, new Item.Properties().containerItem( Items.BUCKET ).maxStackSize( 1 ).group( BiomeDiversity.TAB ) ) );
         fluid_properties = new ForgeFlowingFluid.Properties( fluid_still, fluid_flowing,
              FluidAttributes.builder( stillTexture, flowingTexture ).color( color.getRGB() ).luminosity( luminosity ).density( density ).temperature( temperature ).viscosity( viscosity ).rarity( rarity ) )
              .bucket( bucket ).block( block );

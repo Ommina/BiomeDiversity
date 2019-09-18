@@ -2,41 +2,34 @@
 package ommina.biomediversity.fluids;
 
 import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
+import ommina.biomediversity.BiomeDiversity;
 
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
-@ObjectHolder( "biomediversity" )
+@ObjectHolder( BiomeDiversity.MODID )
 public class ModFluids {
 
-    //@ObjectHolder( "coolbiometic_flowing" ) public static Fluid COOLBIOMETIC_FLOWING;
-    //@ObjectHolder( "coolbiometic_bucket" ) public static Item COOLBIOMETIC_BUCKET;
-    //@ObjectHolder( "coolbiometic" ) public static Block COOLBIOMETIC;
+    @ObjectHolder( "rainwater_still" ) public static FlowingFluid RAINWATER;                   // Produced by Rain Barrel TE
 
-    //public static BdFluid coolBiometic;
-    //public static BdFluid warmBiometic;
-    //public static BdFluid neutralBiometic;
+    @ObjectHolder( "coolbiometic_still" ) public static FlowingFluid COOLBIOMETIC;             // Produced by Collector (directly)
+    @ObjectHolder( "warmbiometic_still" ) public static FlowingFluid WARMBIOMETIC;
+    @ObjectHolder( "neutralbiometic_still" ) public static FlowingFluid NEUTHRALBIOMETIC;      //                       (indirectly by Mixer)
+
+    @ObjectHolder( "mineralwater_still" ) public static FlowingFluid MINERALWATER;             // WorldGen Spheres
+    @ObjectHolder( "junglewater_still" ) public static FlowingFluid JUNGLEWATER;               //          Jungle Biome
+    @ObjectHolder( "moltenorinocite_still" ) public static FlowingFluid MOLTENORINOCITE;       //          Melted Ore
+
 
     //public static BdFluid natural;
     //public static BdFluid diluteNatural;
 
-    //public static BdFluid moltenOrinocite;
-
-    @ObjectHolder( "rainwater_still" ) public static FlowingFluid RAINWATER_STILL;
-    @ObjectHolder( "rainwater_flowing" ) public static Fluid RAINWATER_FLOWING;
-    @ObjectHolder( "rainwater_bucket" ) public static Item RAINWATER_BUCKET;
-    //@ObjectHolder( "rainwater" ) public static Block RAINWATER_BLOCK;
-
-    //public static BdFluid mineralWater;
 
     //public static BdFluid swampWater;
     //public static BdFluid murkyWater;
     //public static BdFluid sillWater;
     //public static BdFluid enrichedWater;
 
-    //public static BdFluid jungleWater;
 
     //public static BdFluid freshWater;
     //public static BdFluid purifiedWater;
@@ -52,56 +45,9 @@ public class ModFluids {
     //public static BdFluid dilutePaleMix;
     //public static BdFluid diluteScintillatingMix;
 
-
-    //public static final List<BdFluid> fluids = new ArrayList<BdFluid>();
-
-/*
-
-    @SubscribeEvent
-    public static void registerBlock( final RegistryEvent.Register<Block> event ) {
-
-        FluidFactory.getBlocks().forEach( s -> event.getRegistry().register( s.getBlock() ) );
-
-    }
-
-    @SubscribeEvent
-    public static void registerItem( final RegistryEvent.Register<Item> event ) {
-
-        FluidFactory.getItems().forEach( s -> event.getRegistry().register( s.getItem() ) );
-
-    }
-
-    @SubscribeEvent
-    public static void registerFluid( final RegistryEvent.Register<Fluid> event ) {
-
-        FluidFactory.getFluids().forEach( s -> event.getRegistry().register( s.getFluid() ) );
-
-    }
-
-*/
-
 /*
 
 
-    public static void register() {
-
-
-    }
-
-    private static BdFluid register( String fluidName, String textureName ) {
-
-        BdFluid fluid = new BdFluid( fluidName, new ResourceLocation( Biomediversity.MODID, "blocks/" + textureName + "_still" ), new ResourceLocation( Biomediversity.MODID, "blocks/" + textureName + "_flow" ) );
-
-        if ( FluidRegistry.registerFluid( fluid ) )
-            FluidRegistry.addBucketForFluid( fluid );
-        else
-            fluid = (BdFluid) FluidRegistry.getFluid( fluidName );
-
-        fluids.add( fluid );
-
-        return fluid;
-
-    }
 
     private static BdFluid mix( BdFluid fluidA, BdFluid fluidB, String textureName ) {
 
