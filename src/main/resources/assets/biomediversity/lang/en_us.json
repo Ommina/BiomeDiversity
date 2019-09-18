@@ -6,7 +6,7 @@
   "text.biomediversity.linkstaff.cleared": "Cleared",
   "text.biomediversity.linkstaff.settingscopied": "Settings Copied",
   "text.biomediversity.linkstaff.settingspasted": "Settings Pasted",
-  "text.biomediversity.linkstaff.pillarsettingscopied": "Pillar Settings Copied",
+  "text.biomediversity.linkstaff.transmittersettingscopied": "Transmitter Settings Copied",
   "text.biomediversity.linkstaff.copyfrom": "Copy from %s at %d, %d, %d",
 
   "item.biomediversity.colza": "Colza",
@@ -22,7 +22,8 @@
   "block.biomediversity.nocified_stone_undamaged": "Nocified Stone",
   "block.biomediversity.orinocite_ore": "Orinocite Ore",
   "block.biomediversity.peltier": "Peltier",
-  "block.biomediversity.pillar": "Biometic Transmitter",
+  "block.biomediversity.transmitter": "Biometic Transmitter",
+  "block.biomediversity.rainbarrel": "Rain Barrel",
   "block.biomediversity.receiver": "Biometic Receiver"
 
 }

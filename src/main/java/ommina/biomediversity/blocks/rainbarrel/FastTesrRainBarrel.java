@@ -29,7 +29,7 @@ public class FastTesrRainBarrel<T extends TileEntityRainBarrel> extends TileEnti
 
             EnumSet<RenderHelper.Faces> faces = EnumSet.of( RenderHelper.Faces.TOP );
 
-            float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) Config.Rainbarrel_Capacity.get()));
+            float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) Config.rainbarrelCapacity.get()));
 
             RenderHelper.renderFluidCube( buffer, x, y, z, 1f / 16f, posY, high, fluid, faces );
 

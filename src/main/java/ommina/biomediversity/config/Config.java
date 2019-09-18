@@ -42,15 +42,15 @@ public class Config {
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationAttempts;
 
 
-    // Pillars
+    // Transmitters
     public static final String CATEGORY_TRANSMITTER = "transmitters";
 
-    public static ForgeConfigSpec.IntValue Transmitter_Capacity;
+    public static ForgeConfigSpec.IntValue transmitterCapacity;
 
     // Rain Barrel
     public static final String CATEGORY_RAINBARREL = "rainbarrel";
 
-    public static ForgeConfigSpec.IntValue Rainbarrel_Capacity;
+    public static ForgeConfigSpec.IntValue rainbarrelCapacity;
 
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
     private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -61,7 +61,7 @@ public class Config {
         setupWorldGenConfig();
         COMMON_BUILDER.pop();
 
-        COMMON_BUILDER.comment( "Pillar Configuration" ).push( CATEGORY_TRANSMITTER );
+        COMMON_BUILDER.comment( "Transmitter Configuration" ).push( CATEGORY_TRANSMITTER );
         setupTransmitter();
         COMMON_BUILDER.pop();
 
@@ -118,13 +118,13 @@ public class Config {
 
     private static void setupTransmitter() {
 
-        Transmitter_Capacity = COMMON_BUILDER.comment( "Transmitter capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 64000, 1000, 128000 );
+        transmitterCapacity = COMMON_BUILDER.comment( "Transmitter capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 64000, 1000, 128000 );
 
     }
 
     private static void setupRainBarrel() {
 
-        Rainbarrel_Capacity = COMMON_BUILDER.comment( "Rain Barrel capacity in mb." ).defineInRange( "capacity", 32000, 1000, 128000 );
+        rainbarrelCapacity = COMMON_BUILDER.comment( "Rain Barrel capacity in mb." ).defineInRange( "capacity", 32000, 1000, 128000 );
 
     }
 

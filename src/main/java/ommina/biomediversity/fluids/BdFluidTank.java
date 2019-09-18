@@ -3,6 +3,7 @@ package ommina.biomediversity.fluids;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -42,8 +43,6 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
         return index;
     }
 
-/*
-
     public void read( CompoundNBT nbt ) {
 
         if ( !nbt.contains( "index" + index ) )
@@ -73,8 +72,6 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     }
 
-*/
-
     public void addFluidToWhitelist( List<? extends Fluid> fluid ) {
 
         for ( Fluid f : fluid )
@@ -101,13 +98,13 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
         return this.canFill;
     }
 
-    public boolean getCanDrain() {
-        return this.canDrain;
-    }
-
     public BdFluidTank setCanFill( boolean canFill ) {
         this.canFill = canFill;
         return this;
+    }
+
+    public boolean getCanDrain() {
+        return this.canDrain;
     }
 
     public BdFluidTank setCanDrain( boolean canDrain ) {

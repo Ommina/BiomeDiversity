@@ -2,7 +2,9 @@ package ommina.biomediversity.blocks;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockReader;
 
 public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 
@@ -11,10 +13,17 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
 
     }
 
+    @Override
+    public boolean hasTileEntity( BlockState state ) {
+        return true;
+    }
+
+    @Override
+    public abstract TileEntity createTileEntity( BlockState state, IBlockReader world );
+
+
+
       /*
-
-
-    public abstract Class<TE> getTileEntityClass();
 
     @SuppressWarnings( "unchecked" )
     public TE getTileEntity( IBlockAccess world, BlockPos pos ) {
@@ -23,15 +32,8 @@ public abstract class BlockTileEntity<TE extends TileEntity> extends Block {
     }
 
 
-    //@Override
-    public boolean hasTileEntity( IBlockState state ) {
-
-        return true;
-    }
-
     @Nullable
     //@Override
-    public abstract TE createTileEntity( World world, IBlockState state );
 
     // Facing
 

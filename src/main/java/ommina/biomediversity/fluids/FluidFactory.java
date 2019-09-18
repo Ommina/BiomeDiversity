@@ -20,9 +20,9 @@ public class FluidFactory {
         wrapper.add( new FluidWrapper( "warmbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 15 ).setColour( new Color( 249, 79, 105, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "neutralbiometic", "fluid_blank" ).setViscosity( 1000 ).setLuminosity( 7 ).setColour( new Color( 255, 244, 182, 255 ) ).setRarity( Rarity.EPIC ).build() );
 
-        wrapper.add( new FluidWrapper( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 68, 126, 129, 224 ) ).setRarity( Rarity.COMMON ).build() );
+        wrapper.add( new FluidWrapper( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 68, 126, 129, 224 ) ).setRarity( Rarity.RARE ).build() );
         wrapper.add( new FluidWrapper( "junglewater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 59, 74, 15, 250 ) ).setRarity( Rarity.UNCOMMON ).build() );
-        wrapper.add( new FluidWrapper( "montenorinocite", "molten_metal" ).setViscosity( 15000 ).setLuminosity( 10 ).setColour( new Color( 70, 166, 41, 255 ) ).setRarity( Rarity.COMMON ).build() );
+        wrapper.add( new FluidWrapper( "moltenorinocite", "molten_metal" ).setViscosity( 15000 ).setLuminosity( 10 ).setColour( new Color( 70, 166, 41, 255 ) ).setRarity( Rarity.COMMON ).build() );
 
     }
 
@@ -41,9 +41,9 @@ public class FluidFactory {
 
 
         swampWater = (BdFluid) register( "biomepumpeda", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 122, 153, 86, 244 ) ).setRarity( EnumRarity.COMMON ); // Pumped from swamp
-        murkyWater = (BdFluid) register( "murkywater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 95, 139, 141, 244 ) ).setRarity( EnumRarity.UNCOMMON );
+        murkyWater = (BdFluid) register( "murkywater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 95, 139, 141, 244 ) ).setRarity( EnumRarity.UNCOMMON ); // From Mixer
         sillWater = (BdFluid) register( "biomepumpedb", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 209, 177, 161, 250 ) ).setRarity( EnumRarity.UNCOMMON ); // Pumped from mesa
-        enrichedWater = (BdFluid) register( "enrichedwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 77, 107, 78, 250 ) ).setRarity( EnumRarity.RARE );
+        enrichedWater = (BdFluid) register( "enrichedwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 77, 107, 78, 250 ) ).setRarity( EnumRarity.RARE ); // From Mixer
 
 
         freshWater = (BdFluid) register( "freshwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 61, 105, 175, 192 ) ).setRarity( EnumRarity.COMMON );

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "biomediversity:rainwater_still",
+    "biomediversity:rainwater_flowing"
+  ]
+}

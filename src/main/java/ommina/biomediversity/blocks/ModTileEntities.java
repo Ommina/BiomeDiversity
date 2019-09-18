@@ -2,6 +2,8 @@ package ommina.biomediversity.blocks;
 
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
@@ -10,14 +12,17 @@ import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 
+@ObjectHolder( BiomeDiversity.MODID )
+@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModTileEntities {
 
-    @ObjectHolder( BiomeDiversity.MODID + ":transmitter" ) public static TileEntityType<TileEntityTransmitter> TRANSMITTER;
-    @ObjectHolder( BiomeDiversity.MODID + ":receiver" ) public static TileEntityType<TileEntityReceiver> RECEIVER;
-    @ObjectHolder( BiomeDiversity.MODID + ":collector" ) public static TileEntityType<TileEntityCollector> COLLECTOR;
-    @ObjectHolder( BiomeDiversity.MODID + ":peltier" ) public static TileEntityType<TileEntityPeltier> PELTIER;
-    @ObjectHolder( BiomeDiversity.MODID + ":rainbarrel" ) public static TileEntityType<TileEntityRainBarrel> RAIN_BARREL;
+    @ObjectHolder( "transmitter" ) public static TileEntityType<TileEntityTransmitter> TRANSMITTER;
+    @ObjectHolder( "receiver" ) public static TileEntityType<TileEntityReceiver> RECEIVER;
+    @ObjectHolder( "collector" ) public static TileEntityType<TileEntityCollector> COLLECTOR;
+    @ObjectHolder( "peltier" ) public static TileEntityType<TileEntityPeltier> PELTIER;
+    @ObjectHolder( "rainbarrel" ) public static TileEntityType<TileEntityRainBarrel> RAIN_BARREL;
 
+    @SubscribeEvent
     public static void register( final RegistryEvent.Register<TileEntityType<?>> event ) {
 
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityTransmitter::new, ModBlocks.TRANSMITTER ).build( null ).setRegistryName( "transmitter" ) );
