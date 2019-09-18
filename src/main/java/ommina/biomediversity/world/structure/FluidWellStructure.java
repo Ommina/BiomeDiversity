@@ -37,7 +37,7 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
     @Override
     protected ChunkPos getStartPositionForPosition( ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ ) {
 
-        int i = 24;
+        int i = 20;
         int j = 8;
         int k = x + i * spacingOffsetsX;
         int l = z + i * spacingOffsetsZ;

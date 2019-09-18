@@ -23,10 +23,7 @@ public class ModFeatures {
         event.getRegistry().register( JUNGLE_POOL );
         event.getRegistry().register( FLUID_WELL );
 
-        ModStructures.init();
         ModStructurePieceType.init();
-
-//        Feature.STRUCTURES.put( BiomeDiversity.getId( "fluid_well" ).toString(), FLUID_WELL );
 
     }
 

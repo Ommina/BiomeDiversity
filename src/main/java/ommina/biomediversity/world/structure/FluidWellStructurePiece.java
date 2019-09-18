@@ -1,7 +1,6 @@
 package ommina.biomediversity.world.structure;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Tuple;
@@ -12,6 +11,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.world.GeneratorHelper;
 import ommina.biomediversity.world.feature.ModStructurePieceType;
@@ -78,7 +78,7 @@ public class FluidWellStructurePiece extends StructurePiece {
                         BlockPos pos = centre.add( x, y, z );
 
                         if ( isReplaceable( world, pos ) )
-                            this.setBlockState( world, Blocks.DIAMOND_BLOCK.getDefaultState(), pos, this.boundingBox );
+                            this.setBlockState( world, ModBlocks.MINERALWATER.getDefaultState(), pos, this.boundingBox );
                     }
 
         if ( BiomeDiversity.DEBUG )
@@ -140,6 +140,5 @@ public class FluidWellStructurePiece extends StructurePiece {
         return true;
 
     }
-
 
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.world.GeneratorHelper;
 
 import java.util.Random;
@@ -35,7 +36,7 @@ public class JunglePoolFeature extends Feature<NoFeatureConfig> {
             BlockPos blockpos = GeneratorHelper.getTopSolidBlock( world, pos.add( rand.nextInt( 8 ) - rand.nextInt( 8 ), rand.nextInt( 4 ) - rand.nextInt( 4 ), rand.nextInt( 8 ) - rand.nextInt( 8 ) ) );
 
             if ( blockpos.getY() >= MINIMUM_Y && isSuitableLocation( blockpos, world ) ) {
-                world.setBlockState( blockpos, Blocks.DIAMOND_BLOCK.getDefaultState(), 2 );
+                world.setBlockState( blockpos, ModBlocks.JUNGLEWATER.getDefaultState(), 2 );
             }
         }
 
