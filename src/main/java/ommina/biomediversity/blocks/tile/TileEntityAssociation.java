@@ -1,4 +1,3 @@
-
 package ommina.biomediversity.blocks.tile;
 
 import net.minecraft.nbt.CompoundNBT;
@@ -13,8 +12,8 @@ import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.util.NbtUtils;
-import ommina.biomediversity.worlddata.PillarData;
-import ommina.biomediversity.worlddata.PillarNetwork;
+import ommina.biomediversity.worlddata.TransmitterData;
+import ommina.biomediversity.worlddata.TransmitterNetwork;
 
 import java.util.UUID;
 
@@ -32,7 +31,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     protected int source = 0;
 
-    protected FluidTank TANK = new FluidTank( Config.Transmitter_Capacity.get() );
+    protected FluidTank TANK = new FluidTank( Config.transmitterCapacity.get() );
 
     public TileEntityAssociation( TileEntityType<?> tile ) {
         super( tile );
@@ -154,13 +153,13 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     public String getSourceName() {
 
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "transmitter" : "receiver";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "transmitter" : "receiver";
 
     }
 
     public String getTargetName() {
 
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_PILLAR ? "receiver" : "transmitter";
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "receiver" : "transmitter";
 
     }
 
@@ -217,11 +216,11 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     private static void createLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
 
-        PillarData pd = PillarNetwork.getPillar( owner, identifierPillar );
+        TransmitterData pd = TransmitterNetwork.getPillar( owner, identifierPillar );
 
         pd.receiver = identifierReceiver;
 
-        PillarNetwork.markDirty( world );
+        TransmitterNetwork.markDirty( world );
 
     }
 
@@ -339,7 +338,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     private static void removeLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
 
-        PillarData pd = PillarNetwork.getPillar( owner, identifierPillar );
+        TransmitterData pd = TransmitterNetwork.getPillar( owner, identifierPillar );
 
         if ( pd.receiver == null ) {
             BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork transmitter/receiver pair" );
@@ -347,7 +346,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         pd.receiver = null;
 
-        PillarNetwork.markDirty( world );
+        TransmitterNetwork.markDirty( world );
 
     }
 
@@ -371,7 +370,7 @@ public abstract class TileEntityAssociation extends TileEntity {
             //RECEIVER.getTank().setFluid( null ); //TODO:
         } else if ( tile instanceof TileEntityTransmitter ) { // It really can't be anything else, but ok
             TileEntityTransmitter pillar = (TileEntityTransmitter) tile;
-            PillarData pd = PillarNetwork.getPillar( pillar.getOwner(), pillar.getIdentifier() );
+            TransmitterData pd = TransmitterNetwork.getPillar( pillar.getOwner(), pillar.getIdentifier() );
             //Biomediversity.logger.warn( "** Pillarizing " + pd.getAmount() );
             // TRANSMITTER.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO:
 

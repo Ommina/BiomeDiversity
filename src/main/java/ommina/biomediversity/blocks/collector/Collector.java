@@ -4,9 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.common.ToolType;
-import ommina.biomediversity.blocks.BlockTileEntity;
 
-public class Collector extends BlockTileEntity<TileEntityCollector> {
+public class Collector extends Block { // BlockTileEntity<TileEntityCollector> {
 
     public Collector() {
 

@@ -1,7 +1,6 @@
 
 package ommina.biomediversity.blocks.rainbarrel;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -12,8 +11,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.registries.ForgeRegistries;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
@@ -50,23 +47,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
         TANK.setCanFill( true );
 
     }
-    //private LazyOptional<IItemHandler> handler2 = LazyOptional.of(this::createHandler);
-
-    private static FluidStack readFluidStack( CompoundNBT tag ) {
-
-        int amount = tag.getInt( "amount" );
-
-        if ( amount == 0 )
-            return FluidStack.EMPTY;
-
-        Fluid f = ForgeRegistries.FLUIDS.getValue( BiomeDiversity.getId( tag.getString( "name" ) ) );
-
-        if ( f == null )
-            return FluidStack.EMPTY;
-
-        return new FluidStack( f, amount );
-
-    }
 
     @Override
     public int getBroadcastTankAmount( int tank ) {
@@ -74,8 +54,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
         return TANK.getFluidAmount();
 
     }
-
-    // Overrides
 
     @Override
     public void doBroadcast() {

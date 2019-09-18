@@ -6,7 +6,7 @@ import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 
 public class TileEntityTransmitter extends TileEntityAssociation {
 
-    public static final int LINKING_SOURCE_PILLAR = 1;
+    public static final int LINKING_SOURCE_TRANSMITTER = 1;
 
     public TileEntityTransmitter() {
         super( ModTileEntities.TRANSMITTER );

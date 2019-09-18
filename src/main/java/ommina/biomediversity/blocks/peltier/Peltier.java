@@ -6,7 +6,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
 
-public class Peltier extends BlockTileEntity<TileEntityPeltier> {
+public class Peltier extends Block { //BlockTileEntity<TileEntityPeltier> {
 
     public Peltier() {
 
