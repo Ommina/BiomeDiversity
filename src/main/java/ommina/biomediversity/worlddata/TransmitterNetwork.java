@@ -1,26 +1,18 @@
 package ommina.biomediversity.worlddata;
 
-import net.minecraft.world.World;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
+import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class TransmitterNetwork {
+public class TransmitterNetwork implements ITransmitterNetwork {
 
-    public static final Map<UUID, HashMap<UUID, TransmitterData>> players = new HashMap<UUID, HashMap<UUID, TransmitterData>>();
+    private static final Map<UUID, HashMap<UUID, TransmitterData>> players = new HashMap<UUID, HashMap<UUID, TransmitterData>>();
 
-    public static Map<UUID, TransmitterData> getPlayer( @Nonnull final UUID playerIdentifier ) {
-
-        if ( playerIdentifier == null ) {
-            BiomeDiversity.LOGGER.warn( "!* playerIdentifier is null adding to PillarNetowrk players" );
-            for ( StackTraceElement ste : Thread.currentThread().getStackTrace() )
-                BiomeDiversity.LOGGER.warn( ste );
-        }
+    private static Map<UUID, TransmitterData> getPlayer( final UUID playerIdentifier ) {
 
         if ( !containsPlayer( playerIdentifier ) )
             players.put( playerIdentifier, new HashMap<UUID, TransmitterData>() );
@@ -29,8 +21,8 @@ public class TransmitterNetwork {
 
     }
 
-    @Nonnull
-    public static TransmitterData getPillar( @Nonnull final UUID playerIdentifier, @Nonnull final UUID pillarIdentifier ) {
+    @Override
+    public TransmitterData getTransmitter( final UUID playerIdentifier, final UUID pillarIdentifier ) {
 
         Map<UUID, TransmitterData> playerPillars = getPlayer( playerIdentifier );
 
@@ -41,7 +33,7 @@ public class TransmitterNetwork {
 
     }
 
-    public static boolean removePillar( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+    private static boolean removeTransmitter( final UUID playerIdentifier, final UUID pillarIdentifier ) {
 
         if ( !containsPillar( playerIdentifier, pillarIdentifier ) )
             return false;
@@ -50,18 +42,18 @@ public class TransmitterNetwork {
 
     }
 
-    public static boolean removePillar( final TileEntityTransmitter tile ) {
+    private static boolean removeTransmitter( final TileEntityTransmitter tile ) {
 
-        return removePillar( tile.getOwner(), tile.getIdentifier() );
+        return removeTransmitter( tile.getOwner(), tile.getIdentifier() );
 
     }
 
-    public static boolean containsPlayer( final UUID playerIdentifier ) {
+    private static boolean containsPlayer( final UUID playerIdentifier ) {
 
         return players.containsKey( playerIdentifier );
     }
 
-    public static boolean containsPillar( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+    private static boolean containsPillar( final UUID playerIdentifier, final UUID pillarIdentifier ) {
 
         if ( !containsPlayer( playerIdentifier ) )
             return false;
@@ -70,25 +62,33 @@ public class TransmitterNetwork {
 
     }
 
-    public static Set<UUID> getPlayerList() {
+    @Override
+    public Set<UUID> getPlayerList() {
 
         return players.keySet();
     }
 
-    public static Set<UUID> getTransmitterList( final UUID playerIdentifier ) {
+    @Override
+    public Set<UUID> getTransmitterList( final UUID playerIdentifier ) {
 
         return getPlayer( playerIdentifier ).keySet();
     }
 
-    public static boolean isEmpty() {
+    @Override
+    public boolean isEmpty() {
 
         return players.isEmpty();
     }
 
-    public static void markDirty( World world ) {
+    /*
+
+    @Override
+    public void markDirty( World world ) {
 
         WorldData.get( world ).markDirty();
 
     }
+
+    */
 
 }

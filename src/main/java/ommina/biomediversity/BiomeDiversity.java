@@ -2,9 +2,11 @@ package ommina.biomediversity;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
@@ -18,6 +20,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
 import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
+import ommina.biomediversity.blocks.transmitter.FastTesrTransmitter;
+import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.DeferredRegistration;
@@ -25,6 +29,10 @@ import ommina.biomediversity.fluids.FluidFactory;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.server.ServerProxy;
 import ommina.biomediversity.world.ModWorldGeneration;
+import ommina.biomediversity.worlddata.TransmitterNetwork;
+import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
+import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;
+import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,13 +44,6 @@ public class BiomeDiversity {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "biomediversity";
     public static final ItemGroup TAB = new CreativeTab();
-
-
-    public static ResourceLocation getId( String path ) {
-
-        return new ResourceLocation( MODID, path );
-
-    }
 
 
     public BiomeDiversity() {
@@ -75,6 +76,8 @@ public class BiomeDiversity {
 
         DeferredWorkQueue.runLater( ModWorldGeneration::generate );
 
+        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
+
         Network.init();
 
     }
@@ -85,6 +88,19 @@ public class BiomeDiversity {
 
         //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
         //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
+
+    }
+
+    @SubscribeEvent
+    public static void onAttachCapabilities( AttachCapabilitiesEvent<World> event ) {
+
+        event.addCapability( BiomeDiversity.getId( "transmitternetwork" ), new TransmitterNetworkProvider() );
+
+    }
+
+    public static ResourceLocation getId( String path ) {
+
+        return new ResourceLocation( MODID, path );
 
     }
 
@@ -121,6 +137,8 @@ public class BiomeDiversity {
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
     public static class ForgeEvents {
 
+        /*
+
         @SubscribeEvent
         public static void addSprites( final TextureStitchEvent.Pre event ) { // Fluids may be unnecessary with future Forge versions
 
@@ -133,6 +151,8 @@ public class BiomeDiversity {
 
         }
 
+        */
+
     }
 
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT )
@@ -142,6 +162,7 @@ public class BiomeDiversity {
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
 
         }
 

@@ -6,6 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
@@ -13,7 +14,8 @@ import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.worlddata.TransmitterData;
-import ommina.biomediversity.worlddata.TransmitterNetwork;
+import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
+import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;
 
 import java.util.UUID;
 
@@ -180,7 +182,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         if ( !world.isBlockLoaded( remotePos ) ) {
             shouldUnload = true;
-            //   ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
+            //   ChunkLoader.forceSingleChunk( world, remotePos ); //TODO: 14.4 port - chunkloading
         }
 
         TileEntity remoteTile = world.getTileEntity( remotePos );
@@ -203,24 +205,26 @@ public abstract class TileEntityAssociation extends TileEntity {
         createLinkComplete( world, owner, identifierPillar, identifierReceiver );
 
         //if ( tile instanceof TileEntityReceiver )
-        // ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork(); //TODO:
+        //    ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork(); //TODO: 14.4 port -- requires Receiver Tile update
         //else if ( remoteTile instanceof TileEntityReceiver )
-        // ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork(); //TODO:
+        //    ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork();
 
-        //if ( shouldUnload )
-        // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
+        if ( shouldUnload )
+            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: 14.4 port - chunkloading
 
-        tile.markDirty();
+            tile.markDirty();
 
     }
 
     private static void createLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
 
-        TransmitterData pd = TransmitterNetwork.getPillar( owner, identifierPillar );
+        LazyOptional<ITransmitterNetwork> t = world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
+
+        TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( owner, identifierPillar );
 
         pd.receiver = identifierReceiver;
 
-        TransmitterNetwork.markDirty( world );
+        //TransmitterNetwork.markDirty( world );
 
     }
 
@@ -269,9 +273,9 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( world.isBlockLoaded( remotePos ) ) {
             preLink( world, world.getTileEntity( remotePos ) );
         } else {
-            //ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
+            //ChunkLoader.forceSingleChunk( world, remotePos ); //TODO: - chunkloading
             preLink( world, world.getTileEntity( remotePos ) );
-            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
+            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: - chunkloading
         }
 
     }
@@ -305,9 +309,9 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( world.isBlockLoaded( remotePos ) ) {
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
         } else {
-            // ChunkLoader.forceSingleChunk( world, remotePos ); //TODO:
+            // ChunkLoader.forceSingleChunk( world, remotePos ); //TODO: - chunkloading
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
-            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO:
+            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: - chunkloading
         }
 
         if ( tea == null ) { // A bugged/broken link.  One side thinks it is linked, the other doesn't.  Just clear it the local side so it's back into a good state.
@@ -338,7 +342,9 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     private static void removeLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
 
-        TransmitterData pd = TransmitterNetwork.getPillar( owner, identifierPillar );
+        LazyOptional<ITransmitterNetwork> t = world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
+
+        TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( owner, identifierPillar );
 
         if ( pd.receiver == null ) {
             BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a PillarNetwork transmitter/receiver pair" );
@@ -346,7 +352,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         pd.receiver = null;
 
-        TransmitterNetwork.markDirty( world );
+        //TransmitterNetwork.markDirty( world );
 
     }
 
@@ -366,13 +372,19 @@ public abstract class TileEntityAssociation extends TileEntity {
     private static void removeLink( TileEntityAssociation tile ) {
 
         if ( tile instanceof TileEntityReceiver ) {
+
             TileEntityReceiver receiver = (TileEntityReceiver) tile;
-            //RECEIVER.getTank().setFluid( null ); //TODO:
+            //receiver.getTank().setFluid( null ); //TODO: 14.4 --> requires Receiver update
+
         } else if ( tile instanceof TileEntityTransmitter ) { // It really can't be anything else, but ok
+
             TileEntityTransmitter pillar = (TileEntityTransmitter) tile;
-            TransmitterData pd = TransmitterNetwork.getPillar( pillar.getOwner(), pillar.getIdentifier() );
+            LazyOptional<ITransmitterNetwork> t = pillar.world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
+
+            TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( pillar.getOwner(), pillar.getIdentifier() );
+
             //Biomediversity.logger.warn( "** Pillarizing " + pd.getAmount() );
-            // TRANSMITTER.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO:
+            // pillar.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO: 14.4 --> requires Transmitter update
 
         }
 
