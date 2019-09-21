@@ -15,9 +15,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.items.ModItems;
 
-public class PomegranateBlock extends CropsBlock {
+public class ColzaBlock extends CropsBlock {
 
-    private static final VoxelShape[] SHAPES = new VoxelShape[]{
+    private static final VoxelShape[] SHAPES = new VoxelShape[] {
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D ),
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D ),
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D ),
@@ -27,13 +27,13 @@ public class PomegranateBlock extends CropsBlock {
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D ),
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D ) };
 
-    public PomegranateBlock( Block.Properties builder ) {
+    public ColzaBlock( Block.Properties builder ) {
         super( builder );
     }
 
     @OnlyIn( Dist.CLIENT )
     protected IItemProvider getSeedsItem() {
-        return ModItems.POMEGRANATE_SEEDS;
+        return ModItems.COLZA_SEEDS;
     }
 
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
@@ -48,5 +48,6 @@ public class PomegranateBlock extends CropsBlock {
     protected int getBonemealAgeIncrease( World worldIn ) {
         return MathHelper.nextInt( worldIn.rand, 1, 2 );
     }
+
 
 }
