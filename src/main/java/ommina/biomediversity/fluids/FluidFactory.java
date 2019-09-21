@@ -16,7 +16,7 @@ public class FluidFactory {
 
         wrapper.add( new FluidWrapper( "rainwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 53, 83, 153, 192 ) ).setRarity( Rarity.COMMON ).build() );
 
-        wrapper.add( new FluidWrapper( "coolbiometic", "molten_metal" ).setViscosity( 2000 ).setLuminosity( 5 ).setColour( new Color( 43, 168, 226, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
+        wrapper.add( new FluidWrapper( "coolbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 5 ).setColour( new Color( 43, 168, 226, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "warmbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 15 ).setColour( new Color( 249, 79, 105, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "neutralbiometic", "fluid_blank" ).setViscosity( 1000 ).setLuminosity( 7 ).setColour( new Color( 255, 244, 182, 255 ) ).setRarity( Rarity.EPIC ).build() );
 
@@ -26,25 +26,16 @@ public class FluidFactory {
 
     }
 
-
-    //mineralWater = (BdFluid) register( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 68, 126, 196, 224 ) ).setRarity( EnumRarity.COMMON );
-    //jungleWater = (BdFluid) register( "junglewater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 59, 74, 15, 250 ) ).setRarity( EnumRarity.UNCOMMON );
-    //moltenOrinocite = (BdFluid) register( "moltenorinocite", "molten_metal" ).setViscosity( 15000 ).setLuminosity( 10 ).setColor( new Color( 70, 166, 41, 255 ) ).setRarity( EnumRarity.COMMON );
-
 /*
 
 
         natural = (BdFluid) register( "natural", "viscous_blank" ).setViscosity( 30000 ).setLuminosity( 2 ).setColor( new Color( 142, 110, 41, 249 ) ).setRarity( EnumRarity.COMMON );
         diluteNatural = (BdFluid) register( "dilutenatural", "fluid_blank" ).setViscosity( 10000 ).setLuminosity( 2 ).setColor( new Color( 180, 142, 25, 128 ) ).setRarity( EnumRarity.UNCOMMON );
 
-
-
-
         swampWater = (BdFluid) register( "biomepumpeda", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 122, 153, 86, 244 ) ).setRarity( EnumRarity.COMMON ); // Pumped from swamp
         murkyWater = (BdFluid) register( "murkywater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 95, 139, 141, 244 ) ).setRarity( EnumRarity.UNCOMMON ); // From Mixer
         sillWater = (BdFluid) register( "biomepumpedb", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 209, 177, 161, 250 ) ).setRarity( EnumRarity.UNCOMMON ); // Pumped from mesa
         enrichedWater = (BdFluid) register( "enrichedwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 77, 107, 78, 250 ) ).setRarity( EnumRarity.RARE ); // From Mixer
-
 
         freshWater = (BdFluid) register( "freshwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 61, 105, 175, 192 ) ).setRarity( EnumRarity.COMMON );
         purifiedWater = (BdFluid) register( "purifiedwater", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 0 ).setColor( new Color( 89, 163, 255, 128 ) ).setRarity( EnumRarity.COMMON );
