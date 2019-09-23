@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "biomediversity:block/pillar_base"
+        "model": "biomediversity:block/transmitter_base"
       }
     },
     {
@@ -10,7 +10,7 @@
         "connected": "true"
       },
       "apply": {
-        "model": "biomediversity:block/pillar_antenna_connected"
+        "model": "biomediversity:block/transmitter_antenna_connected"
       }
     },
     {
@@ -18,7 +18,7 @@
         "connected": "false"
       },
       "apply": {
-        "model": "biomediversity:block/pillar_antenna_disconnected"
+        "model": "biomediversity:block/transmitter_antenna_disconnected"
       }
     }
   ]

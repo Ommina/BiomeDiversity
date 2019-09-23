@@ -9,9 +9,6 @@ import ommina.biomediversity.config.Config;
 
 import java.util.EnumSet;
 
-
-//public class TreeTapTileEntityRenderer<T extends TreeTapTileEntity> extends TileEntityRendererFast<T>
-
 public class FastTesrRainBarrel<T extends TileEntityRainBarrel> extends TileEntityRendererFast<T> {
 
     @Override

@@ -1,23 +1,23 @@
-
 package ommina.biomediversity.blocks.rainbarrel;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.IHasFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.network.BroadcastHelper;
-import ommina.biomediversity.network.GenericTankPacketRequest;
+import ommina.biomediversity.network.GenericTankPacket;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
 
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class TileEntityRainBarrel extends TileEntity implements ITickableTileEntity, IHasFluidTank, ITankBroadcast { // implements ITickable, ITankBroadcast {
+public class TileEntityRainBarrel extends TileEntity implements ITickableTileEntity, IHasFluidTank, ITankBroadcast {
 
     private static final int DELAY_RAIN = 4; // 0.20s
     private static final int DELAY_NO_RAIN = 100; // 5.00s
@@ -59,7 +59,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.sendToServer( new GenericTankPacketRequest( this.pos ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankPacket( this ) );
             BROADCASTER.reset();
         }
 
@@ -68,12 +68,9 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     @Override
     public void onLoad() {
 
-        if ( getWorld().isRemote ) {
-            Network.channel.sendToServer( new GenericTankPacketRequest( this.pos ) );
-            BROADCASTER.reset();
-        }
-
+        doBroadcast();
         super.onLoad();
+
     }
 
     @Override
@@ -87,10 +84,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     public void read( CompoundNBT tag ) {
 
         TANK.read( tag );
-
         super.read( tag );
-
-        return;
 
     }
 
@@ -99,7 +93,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     public CompoundNBT write( CompoundNBT tag ) {
 
         tag = TANK.write( tag );
-
         return super.write( tag );
 
     }
@@ -110,7 +103,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     }
 
     private IFluidHandler createHandler() {
-        return new FluidTank( Config.rainbarrelCapacity.get() );
+        return TANK;
     }
 
     @Nonnull

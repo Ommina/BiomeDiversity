@@ -1,4 +1,3 @@
-
 package ommina.biomediversity.fluids;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -74,8 +73,7 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     public void addFluidToWhitelist( List<? extends Fluid> fluid ) {
 
-        for ( Fluid f : fluid )
-            addFluid( f );
+        fluid.forEach( this::addFluid );
 
     }
 

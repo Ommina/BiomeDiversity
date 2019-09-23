@@ -7,11 +7,11 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
-import ommina.biomediversity.config.Config;
+import ommina.biomediversity.network.GenericTankPacketRequest;
+import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.worlddata.TransmitterData;
 import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
@@ -24,16 +24,12 @@ public abstract class TileEntityAssociation extends TileEntity {
     private static final BooleanProperty IS_CONNECTED = BooleanProperty.create( "connected" );
 
     protected UUID owner;
-    private UUID identifier;
-
     protected UUID associatedIdentifier = null;
     protected BlockPos associatedPos = null;
-
     protected int hash = 0;
-
     protected int source = 0;
-
-    protected FluidTank TANK = new FluidTank( Config.transmitterCapacity.get() );
+    //protected FluidTank TANK = new FluidTank( Config.transmitterCapacity.get() );
+    private UUID identifier;
 
     public TileEntityAssociation( TileEntityType<?> tile ) {
         super( tile );
@@ -43,135 +39,6 @@ public abstract class TileEntityAssociation extends TileEntity {
     }
 
     // Overrides
-
-    /**
-     * This controls whether the tile entity gets replaced whenever the block state is changed. Normally only want this when block actually is replaced.
-     */
-
-    /*
-
-    @Override
-    public boolean shouldRefresh( World world, BlockPos pos, BlockState oldState, BlockState newState ) {
-
-        return (oldState.getBlock() != newState.getBlock());
-
-    }
-
-    */
-    @Override
-    public void onLoad() {
-
-        if ( !getWorld().isRemote )
-            updateBlockStateForAntenna( this, this.hasLink() );
-
-    }
-
-    @Override
-    public CompoundNBT write( final CompoundNBT compound ) {
-
-        compound.putUniqueId( "identifier", identifier );
-
-        if ( owner != null )
-            compound.putUniqueId( "owner", owner );
-
-        if ( associatedIdentifier != null )
-            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
-
-        if ( associatedPos != null )
-            NbtUtils.addBlockPosToNbt( compound, associatedPos );
-
-        return super.write( compound );
-
-    }
-
-    @Override
-    public void read( final CompoundNBT compound ) {
-
-        identifier = compound.getUniqueId( "identifier" );
-
-        if ( compound.hasUniqueId( "owner" ) )
-            owner = compound.getUniqueId( "owner" );
-
-        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
-            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
-            associatedPos = NbtUtils.getBlockPosFromNbt( compound );
-        }
-
-        super.read( compound );
-
-    }
-
-    // End Overrides
-
-    public UUID getIdentifier() {
-
-        return this.identifier;
-    }
-
-    public void setIdentifier( final UUID identifier ) {
-
-        this.identifier = identifier;
-    }
-
-    public UUID getOwner() {
-
-        return this.owner;
-    }
-
-    public void setOwner( final UUID owner ) {
-
-        this.owner = owner;
-    }
-
-    public BlockPos getAssociatedPos() {
-
-        return this.associatedPos;
-    }
-
-    public void setAssociatedPos( final BlockPos pos ) {
-
-        this.associatedPos = pos;
-    }
-
-    public UUID getAssociatedIdentifier() {
-
-        return this.associatedIdentifier;
-    }
-
-    public void setAssociatedIdentifier( final UUID associatedIdentifier ) {
-
-        this.associatedIdentifier = associatedIdentifier;
-    }
-
-    public boolean hasAssociation() {
-
-        return this.associatedIdentifier != null;
-    }
-
-    public int getSource() {
-
-        return this.source;
-    }
-
-    public String getSourceName() {
-
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "transmitter" : "receiver";
-
-    }
-
-    public String getTargetName() {
-
-        return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "receiver" : "transmitter";
-
-    }
-
-    public boolean hasLink() {
-
-        return (this.associatedIdentifier != null);
-
-    }
-
-    // Create Links
 
     public static void createLink( World world, TileEntityAssociation tile, UUID remoteIdentifier, BlockPos remotePos ) {
 
@@ -209,10 +76,10 @@ public abstract class TileEntityAssociation extends TileEntity {
         //else if ( remoteTile instanceof TileEntityReceiver )
         //    ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork();
 
-        if ( shouldUnload )
-            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: 14.4 port - chunkloading
+        //if ( shouldUnload )
+        // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: 14.4 port - chunkloading
 
-            tile.markDirty();
+        tile.markDirty();
 
     }
 
@@ -242,6 +109,8 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
+    // End Overrides
+
     private static void createLink( TileEntityAssociation tile, UUID identifier, BlockPos pos ) {
 
         tile.setAssociatedIdentifier( identifier );
@@ -252,16 +121,6 @@ public abstract class TileEntityAssociation extends TileEntity {
         tile.markDirty();
 
     }
-
-    private static void updateBlockStateForAntenna( TileEntityAssociation tile, boolean connected ) {
-
-        tile.getWorld().setBlockState( tile.getPos(), tile.getWorld().getBlockState( tile.getPos() ).with( IS_CONNECTED, connected ), 2 );
-
-    }
-
-    // End Create Links
-
-    // PreLinking
 
     private static void preLink( World world, TileEntityAssociation tile, UUID remoteIdentifier, BlockPos remotePos ) {
 
@@ -293,10 +152,6 @@ public abstract class TileEntityAssociation extends TileEntity {
         return tile;
 
     }
-
-    // End PreLinking
-
-    // Remove Links
 
     public static void removeLink( World world, TileEntityAssociation tile, boolean isDestroying ) {
 
@@ -400,6 +255,149 @@ public abstract class TileEntityAssociation extends TileEntity {
         updateBlockStateForAntenna( tile, false );
 
         tile.markDirty();
+
+    }
+
+    /**
+     * This controls whether the tile entity gets replaced whenever the block state is changed. Normally only want this when block actually is replaced.
+     */
+
+    /*
+
+    @Override
+    public boolean shouldRefresh( World world, BlockPos pos, BlockState oldState, BlockState newState ) {
+
+        return (oldState.getBlock() != newState.getBlock());
+
+    }
+
+    */
+    public void firstTick() {
+
+        if ( !getWorld().isRemote ) {
+            updateBlockStateForAntenna( this, this.hasLink() );
+        } else {
+            Network.channel.sendToServer( new GenericTankPacketRequest( this.pos ) );
+        }
+
+    }
+
+    private static void updateBlockStateForAntenna( TileEntityAssociation tile, boolean connected ) {
+
+        tile.getWorld().setBlockState( tile.getPos(), tile.getWorld().getBlockState( tile.getPos() ).with( IS_CONNECTED, connected ), 2 );
+
+    }
+
+    public boolean hasLink() {
+
+        return (this.associatedIdentifier != null);
+
+    }
+
+    @Override
+    public void read( final CompoundNBT compound ) {
+
+        identifier = compound.getUniqueId( "identifier" );
+
+        if ( compound.hasUniqueId( "owner" ) )
+            owner = compound.getUniqueId( "owner" );
+
+        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
+            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
+            associatedPos = NbtUtils.getBlockPosFromNbt( compound );
+        }
+
+        super.read( compound );
+
+    }
+
+    @Override
+    public CompoundNBT write( final CompoundNBT compound ) {
+
+        compound.putUniqueId( "identifier", identifier );
+
+        if ( owner != null )
+            compound.putUniqueId( "owner", owner );
+
+        if ( associatedIdentifier != null )
+            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
+
+        if ( associatedPos != null )
+            NbtUtils.addBlockPosToNbt( compound, associatedPos );
+
+        return super.write( compound );
+
+    }
+
+    // Create Links
+
+    public UUID getIdentifier() {
+
+        return this.identifier;
+    }
+
+    public void setIdentifier( final UUID identifier ) {
+
+        this.identifier = identifier;
+    }
+
+    public UUID getOwner() {
+
+        return this.owner;
+    }
+
+    public void setOwner( final UUID owner ) {
+
+        this.owner = owner;
+    }
+
+    public BlockPos getAssociatedPos() {
+
+        return this.associatedPos;
+    }
+
+    // End Create Links
+
+    // PreLinking
+
+    public void setAssociatedPos( final BlockPos pos ) {
+
+        this.associatedPos = pos;
+    }
+
+    public UUID getAssociatedIdentifier() {
+
+        return this.associatedIdentifier;
+    }
+
+    // End PreLinking
+
+    // Remove Links
+
+    public void setAssociatedIdentifier( final UUID associatedIdentifier ) {
+
+        this.associatedIdentifier = associatedIdentifier;
+    }
+
+    public boolean hasAssociation() {
+
+        return this.associatedIdentifier != null;
+    }
+
+    public int getSource() {
+
+        return this.source;
+    }
+
+    public String getSourceName() {
+
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "transmitter" : "receiver";
+
+    }
+
+    public String getTargetName() {
+
+        return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "receiver" : "transmitter";
 
     }
 
