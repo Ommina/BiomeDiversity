@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 
-package ommina.biomediversity.world.feature;
+package ommina.biomediversity.world.gen.feature;
 
 import mcp.MethodsReturnNonnullByDefault;
 

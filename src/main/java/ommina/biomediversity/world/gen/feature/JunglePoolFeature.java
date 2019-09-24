@@ -1,4 +1,4 @@
-package ommina.biomediversity.world.feature;
+package ommina.biomediversity.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.block.Block;
@@ -12,7 +12,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.world.GeneratorHelper;
+import ommina.biomediversity.world.gen.GeneratorHelper;
 
 import java.util.Random;
 import java.util.function.Function;

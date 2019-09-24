@@ -1,9 +1,9 @@
-package ommina.biomediversity.world.feature;
+package ommina.biomediversity.world.gen.feature;
 
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.world.structure.FluidWellStructurePiece;
+import ommina.biomediversity.world.gen.structure.FluidWellStructurePiece;
 
 public class ModStructurePieceType {
 

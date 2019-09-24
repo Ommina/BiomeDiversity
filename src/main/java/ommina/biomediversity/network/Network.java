@@ -9,10 +9,8 @@ public class Network {
 
     private static final ResourceLocation NAME = BiomeDiversity.getId( "network" );
     private static final String PROTOCOL_VERSION = "1";
-
-    private static int channelId = 0;
-
     public static SimpleChannel channel;
+    private static int channelId = 0;
 
     static {
 
@@ -40,6 +38,7 @@ public class Network {
     }
 
     public static void init() {
+        // Hi!
     }
 
     /*

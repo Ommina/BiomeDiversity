@@ -1,4 +1,4 @@
-package ommina.biomediversity.world.feature;
+package ommina.biomediversity.world.gen.feature;
 
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.world.structure.FluidWellStructure;
+import ommina.biomediversity.world.gen.structure.FluidWellStructure;
 
 @ObjectHolder( BiomeDiversity.MODID )
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )

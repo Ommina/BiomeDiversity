@@ -1,4 +1,4 @@
-package ommina.biomediversity.world.structure;
+package ommina.biomediversity.world.gen.structure;
 
 import com.mojang.datafixers.Dynamic;
 import net.minecraft.util.SharedSeedRandom;

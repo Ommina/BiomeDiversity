@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 
-package ommina.biomediversity.world.structure;
+package ommina.biomediversity.world.gen.structure;
 
 import mcp.MethodsReturnNonnullByDefault;
 

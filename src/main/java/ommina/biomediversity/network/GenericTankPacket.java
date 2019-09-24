@@ -48,13 +48,6 @@ public class GenericTankPacket {
 
     }
 
-    public void toBytes( PacketBuffer buf ) {
-
-        buf.writeBlockPos( this.pos );
-        this.fluid.writeToPacket( buf );
-
-    }
-
     public static void handle( GenericTankPacket packet, Supplier<NetworkEvent.Context> ctx ) {
 
         ctx.get().enqueueWork( () -> {
@@ -72,6 +65,13 @@ public class GenericTankPacket {
         } );
 
         ctx.get().setPacketHandled( true );
+
+    }
+
+    public void toBytes( PacketBuffer buf ) {
+
+        buf.writeBlockPos( this.pos );
+        this.fluid.writeToPacket( buf );
 
     }
 

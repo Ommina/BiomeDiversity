@@ -1,4 +1,4 @@
-package ommina.biomediversity.world;
+package ommina.biomediversity.world.gen;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
@@ -12,7 +12,7 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
-import ommina.biomediversity.world.feature.ModFeatures;
+import ommina.biomediversity.world.gen.feature.ModFeatures;
 
 public class ModWorldGeneration {
 

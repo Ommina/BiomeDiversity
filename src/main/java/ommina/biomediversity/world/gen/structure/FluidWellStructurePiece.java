@@ -1,4 +1,4 @@
-package ommina.biomediversity.world.structure;
+package ommina.biomediversity.world.gen.structure;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.IFluidState;
@@ -13,8 +13,8 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
-import ommina.biomediversity.world.GeneratorHelper;
-import ommina.biomediversity.world.feature.ModStructurePieceType;
+import ommina.biomediversity.world.gen.GeneratorHelper;
+import ommina.biomediversity.world.gen.feature.ModStructurePieceType;
 
 import java.util.Random;
 

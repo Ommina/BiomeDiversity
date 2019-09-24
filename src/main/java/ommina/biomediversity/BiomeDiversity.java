@@ -28,7 +28,7 @@ import ommina.biomediversity.fluids.DeferredRegistration;
 import ommina.biomediversity.fluids.FluidFactory;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.server.ServerProxy;
-import ommina.biomediversity.world.ModWorldGeneration;
+import ommina.biomediversity.world.gen.ModWorldGeneration;
 import ommina.biomediversity.worlddata.TransmitterNetwork;
 import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
 import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;

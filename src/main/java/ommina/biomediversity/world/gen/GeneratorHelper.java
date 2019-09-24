@@ -1,5 +1,5 @@
 
-package ommina.biomediversity.world;
+package ommina.biomediversity.world.gen;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;

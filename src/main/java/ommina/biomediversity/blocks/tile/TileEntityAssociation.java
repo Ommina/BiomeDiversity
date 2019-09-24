@@ -13,6 +13,7 @@ import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.network.GenericTankPacketRequest;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.NbtUtils;
+import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
 import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
 import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;
@@ -49,7 +50,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         if ( !world.isBlockLoaded( remotePos ) ) {
             shouldUnload = true;
-            //   ChunkLoader.forceSingleChunk( world, remotePos ); //TODO: 14.4 port - chunkloading
+            ChunkLoader.forceSingle( world, remotePos );
         }
 
         TileEntity remoteTile = world.getTileEntity( remotePos );
@@ -76,8 +77,8 @@ public abstract class TileEntityAssociation extends TileEntity {
         //else if ( remoteTile instanceof TileEntityReceiver )
         //    ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork();
 
-        //if ( shouldUnload )
-        // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: 14.4 port - chunkloading
+        if ( shouldUnload )
+            ChunkLoader.releaseSingle( world, remotePos );
 
         tile.markDirty();
 
@@ -132,9 +133,9 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( world.isBlockLoaded( remotePos ) ) {
             preLink( world, world.getTileEntity( remotePos ) );
         } else {
-            //ChunkLoader.forceSingleChunk( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.forceSingle( world, remotePos ); //TODO: - chunkloading
             preLink( world, world.getTileEntity( remotePos ) );
-            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.releaseSingle( world, remotePos ); //TODO: - chunkloading
         }
 
     }
@@ -164,9 +165,9 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( world.isBlockLoaded( remotePos ) ) {
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
         } else {
-            // ChunkLoader.forceSingleChunk( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.forceSingle( world, remotePos ); //TODO: - chunkloading
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
-            // ChunkLoader.releaseSingleChunk( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.releaseSingle( world, remotePos ); //TODO: - chunkloading
         }
 
         if ( tea == null ) { // A bugged/broken link.  One side thinks it is linked, the other doesn't.  Just clear it the local side so it's back into a good state.
