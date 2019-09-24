@@ -37,7 +37,7 @@ public class TransmitterNetworkStorage implements Capability.IStorage<ITransmitt
     public INBT writeNBT( Capability<ITransmitterNetwork> capability, ITransmitterNetwork instance, Direction side ) {
 
         if ( instance.isEmpty() )
-            return null;
+            return new CompoundNBT();
 
         CompoundNBT nbt = new CompoundNBT();
 
@@ -81,7 +81,7 @@ public class TransmitterNetworkStorage implements Capability.IStorage<ITransmitt
                         subTagTransmitter.putInt( "quantity", pd.getAmount() );
                         subTagTransmitter.putFloat( "humidity", pd.rainfall );
                         subTagTransmitter.putFloat( "temperature", pd.temperature );
-                        subTagTransmitter.putInt( "biomeid", pd.biomeId );
+                        subTagTransmitter.putString( "biomeid", pd.biomeId.toString() );
 
                         if ( pd.receiver != null )
                             subTagTransmitter.putUniqueId( "receiver", pd.receiver );
@@ -147,7 +147,7 @@ public class TransmitterNetworkStorage implements Capability.IStorage<ITransmitt
                         pd.setAmount( subPillar.getInt( "quantity" ) );
                         pd.rainfall = subPillar.getFloat( "humidity" );
                         pd.temperature = subPillar.getFloat( "temperature" );
-                        pd.biomeId = subPillar.getInt( "biomeid" );
+                        pd.biomeId = new ResourceLocation( subPillar.getString( "biomeid" ) );
                         pd.receiver = subPillar.getUniqueId( "receiver" );
                         pd.fluid = ForgeRegistries.FLUIDS.getValue( new ResourceLocation( subPillar.getString( "fluidname" ) ) );
 

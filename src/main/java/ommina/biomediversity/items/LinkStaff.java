@@ -12,14 +12,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.util.Translator;
 import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
-import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;
 
 public class LinkStaff extends Item {
 
@@ -73,6 +72,12 @@ public class LinkStaff extends Item {
 
     }
 
+    private boolean isAlreadyCopying( ItemStack item, TileEntityAssociation tile ) {
+
+        return isCopying( item ) && item.getTag().getInt( "copyfrom" ) == tile.getSource();
+
+    }
+
     private ActionResultType useUnSneaking( ItemUseContext context, TileEntityAssociation te, ItemStack item ) {
 
         if ( !isCopying( item ) )
@@ -99,12 +104,6 @@ public class LinkStaff extends Item {
 
     }
 
-    private boolean isAlreadyCopying( ItemStack item, TileEntityAssociation tile ) {
-
-        return isCopying( item ) && item.getTag().getInt( "copyfrom" ) == tile.getSource();
-
-    }
-
     private void copy( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
 
         CompoundNBT compound;
@@ -121,26 +120,6 @@ public class LinkStaff extends Item {
         player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingscopied" ) ), true );
 
         item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getSourceName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
-
-    }
-
-    private void copyAssociation( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
-
-        CompoundNBT compound;
-        BlockPos pos = tile.getAssociatedPos();
-
-        compound = new CompoundNBT();
-
-        compound.putInt( "copyfrom", 1 );
-        compound.putUniqueId( "identifier", tile.getAssociatedIdentifier() );
-
-        NbtUtils.addBlockPosToNbt( compound, pos );
-
-        item.setTag( compound );
-
-        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.transmittersettingscopied" ) ), true );
-
-        item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getTargetName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
 
     }
 
@@ -165,13 +144,33 @@ public class LinkStaff extends Item {
             //    tag.put("inv", compound);
             //});
 
-            LazyOptional<ITransmitterNetwork> t = world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
+            LazyOptional<ITransmitterNetwork> t = world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null );
 
             ((ITransmitterNetwork) t).getTransmitter( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier();
 
         }
 
         //WorldData.get( world ).markDirty();
+
+    }
+
+    private void copyAssociation( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
+
+        CompoundNBT compound;
+        BlockPos pos = tile.getAssociatedPos();
+
+        compound = new CompoundNBT();
+
+        compound.putInt( "copyfrom", 1 );
+        compound.putUniqueId( "identifier", tile.getAssociatedIdentifier() );
+
+        NbtUtils.addBlockPosToNbt( compound, pos );
+
+        item.setTag( compound );
+
+        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.transmittersettingscopied" ) ), true );
+
+        item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getTargetName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
 
     }
 

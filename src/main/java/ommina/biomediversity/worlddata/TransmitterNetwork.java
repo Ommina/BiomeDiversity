@@ -12,12 +12,20 @@ public class TransmitterNetwork implements ITransmitterNetwork {
 
     private static final Map<UUID, HashMap<UUID, TransmitterData>> players = new HashMap<UUID, HashMap<UUID, TransmitterData>>();
 
-    private static Map<UUID, TransmitterData> getPlayer( final UUID playerIdentifier ) {
+    @Override
+    public boolean removeTransmitter( final TileEntityTransmitter tile ) {
 
-        if ( !containsPlayer( playerIdentifier ) )
-            players.put( playerIdentifier, new HashMap<UUID, TransmitterData>() );
+        return removeTransmitter( tile.getOwner(), tile.getIdentifier() );
 
-        return players.get( playerIdentifier );
+    }
+
+    @Override
+    public boolean removeTransmitter( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+
+        if ( !containsPillar( playerIdentifier, pillarIdentifier ) )
+            return false;
+
+        return (players.get( playerIdentifier ).remove( pillarIdentifier ) != null);
 
     }
 
@@ -33,32 +41,12 @@ public class TransmitterNetwork implements ITransmitterNetwork {
 
     }
 
-    private static boolean removeTransmitter( final UUID playerIdentifier, final UUID pillarIdentifier ) {
-
-        if ( !containsPillar( playerIdentifier, pillarIdentifier ) )
-            return false;
-
-        return (players.get( playerIdentifier ).remove( pillarIdentifier ) != null);
-
-    }
-
-    private static boolean removeTransmitter( final TileEntityTransmitter tile ) {
-
-        return removeTransmitter( tile.getOwner(), tile.getIdentifier() );
-
-    }
-
-    private static boolean containsPlayer( final UUID playerIdentifier ) {
-
-        return players.containsKey( playerIdentifier );
-    }
-
-    private static boolean containsPillar( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+    private static Map<UUID, TransmitterData> getPlayer( final UUID playerIdentifier ) {
 
         if ( !containsPlayer( playerIdentifier ) )
-            return false;
+            players.put( playerIdentifier, new HashMap<UUID, TransmitterData>() );
 
-        return players.get( playerIdentifier ).containsKey( pillarIdentifier );
+        return players.get( playerIdentifier );
 
     }
 
@@ -78,6 +66,20 @@ public class TransmitterNetwork implements ITransmitterNetwork {
     public boolean isEmpty() {
 
         return players.isEmpty();
+    }
+
+    private static boolean containsPillar( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+
+        if ( !containsPlayer( playerIdentifier ) )
+            return false;
+
+        return players.get( playerIdentifier ).containsKey( pillarIdentifier );
+
+    }
+
+    private static boolean containsPlayer( final UUID playerIdentifier ) {
+
+        return players.containsKey( playerIdentifier );
     }
 
     /*

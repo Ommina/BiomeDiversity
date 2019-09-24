@@ -3,6 +3,7 @@ package ommina.biomediversity.blocks.transmitter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -27,7 +29,10 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.BlockTileEntity;
+import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.items.ModItems;
+import ommina.biomediversity.worlddata.TransmitterData;
+import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;
 
 import javax.annotation.Nullable;
 
@@ -77,11 +82,11 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
             } else if ( heldItem.getItem() == ModItems.LINK_STAFF )
                 return false;
 
-            LazyOptional<IFluidHandler> foo = tile.getCapability( CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null );
+            LazyOptional<IFluidHandler> capability = tile.getCapability( CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null );
 
-            if ( foo.isPresent() ) {
+            if ( capability.isPresent() ) {
 
-                IFluidHandler tfi = foo.orElse( null );
+                IFluidHandler tfi = capability.orElse( null );
                 IItemHandler playerInv = new InvWrapper( player.inventory );
 
                 FluidActionResult far = FluidUtil.tryEmptyContainerAndStow( heldItem, tfi, playerInv, 1000, player, true );
@@ -109,10 +114,54 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     }
 
     @Override
+    public void onBlockPlacedBy( World world, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack ) {
+
+        if ( livingEntity instanceof PlayerEntity ) {
+
+            PlayerEntity player = (PlayerEntity) livingEntity;
+            TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( blockPos );
+            Biome biome = world.getBiome( blockPos );
+
+            tile.setOwner( player.getUniqueID() );
+
+            if ( !world.isRemote ) {
+
+                world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+                    TransmitterData pd = cap.getTransmitter( player.getUniqueID(), tile.getIdentifier() );
+                    pd.setAmount( 0 );
+                    pd.temperature = MathHelper.clamp( biome.getTemperature( blockPos ), 0.0f, 1.0f );
+                    pd.rainfall = MathHelper.clamp( biome.getDownfall(), 0.0f, 1.0f );
+                    pd.biomeId = biome.getRegistryName();
+
+                } );
+
+            }
+
+        }
+
+        super.onBlockPlacedBy( world, blockPos, blockState, livingEntity, itemStack );
+    }
+
+    @Override
+    public void onBlockHarvested( World world, BlockPos pos, BlockState blockState, PlayerEntity playerEntity ) {
+
+        TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
+
+        if ( tile.hasLink() ) {
+            TileEntityAssociation.removeLink( world, tile, true );
+        } else {
+            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.removeTransmitter( tile ) );
+        }
+
+        super.onBlockHarvested( world, pos, blockState, playerEntity );
+
+    }
+
+    @Override
     protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
         builder.add( IS_CONNECTED );
     }
-
 
     private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
 
@@ -128,64 +177,13 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         if ( tile.getAssociatedPos() != null )
             BiomeDiversity.LOGGER.info( "  Position  : " + tile.getAssociatedPos().toString() );
 
-        //if ( tile.getTank().getFluid() != null )
-        //    BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank().getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank().getFluid().getAmount() + ")" );
+        if ( tile.getTank( 0 ).getFluid() != null )
+            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
 
         Biome b = world.getBiome( pos );
 
         BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
 
     }
-
-        /*
-
-
-    @Override
-    public void breakBlock( World world, BlockPos pos, IBlockState state ) {
-
-        TileEntityPillar tile = getTileEntity( world, pos );
-
-        if ( tile.hasLink() ) {
-            TileEntityAssociation.removeLink( world, tile, true );
-        } else {
-            PillarNetwork.removeTransmitter( tile );
-            PillarNetwork.markDirty( world );
-        }
-
-        super.breakBlock( world, pos, state );
-
-    }
-
-    @Override
-    public void onBlockPlacedBy( World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack ) {
-
-        if ( placer instanceof EntityPlayer ) {
-
-            EntityPlayer player = (EntityPlayer) placer;
-            TileEntityPillar tile = getTileEntity( world, pos );
-            Biome biome = world.getBiome( pos );
-
-            tile.setOwner( player.getUniqueID() );
-
-            if ( !world.isRemote ) {
-
-                PillarData pd = PillarNetwork.getTransmitter( player.getUniqueID(), tile.getIdentifier() );
-
-                pd.setAmount( 0 );
-                pd.temperature = MathHelper.clamp( biome.getTemperature( pos ), 0.0f, 1.0f );
-                pd.rainfall = MathHelper.clamp( biome.getRainfall(), 0.0f, 1.0f );
-                pd.biomeId = Biome.getIdForBiome( biome );
-
-                WorldData.get( world ).markDirty();
-
-            }
-
-        }
-
-        super.onBlockPlacedBy( world, pos, state, placer, stack );
-
-    }
-
-*/
 
 }

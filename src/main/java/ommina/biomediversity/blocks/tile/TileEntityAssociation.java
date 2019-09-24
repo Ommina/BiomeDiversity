@@ -29,7 +29,7 @@ public abstract class TileEntityAssociation extends TileEntity {
     protected BlockPos associatedPos = null;
     protected int hash = 0;
     protected int source = 0;
-    //protected FluidTank TANK = new FluidTank( Config.transmitterCapacity.get() );
+    protected boolean firstTick = true;
     private UUID identifier;
 
     public TileEntityAssociation( TileEntityType<?> tile ) {
@@ -86,13 +86,9 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     private static void createLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
 
-        LazyOptional<ITransmitterNetwork> t = world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
-
-        TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( owner, identifierPillar );
+        TransmitterData pd = ((ITransmitterNetwork) world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null )).getTransmitter( owner, identifierPillar );
 
         pd.receiver = identifierReceiver;
-
-        //TransmitterNetwork.markDirty( world );
 
     }
 
@@ -133,9 +129,9 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( world.isBlockLoaded( remotePos ) ) {
             preLink( world, world.getTileEntity( remotePos ) );
         } else {
-            ChunkLoader.forceSingle( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.forceSingle( world, remotePos );
             preLink( world, world.getTileEntity( remotePos ) );
-            ChunkLoader.releaseSingle( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.releaseSingle( world, remotePos );
         }
 
     }
@@ -165,9 +161,9 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( world.isBlockLoaded( remotePos ) ) {
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
         } else {
-            ChunkLoader.forceSingle( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.forceSingle( world, remotePos );
             tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
-            ChunkLoader.releaseSingle( world, remotePos ); //TODO: - chunkloading
+            ChunkLoader.releaseSingle( world, remotePos );
         }
 
         if ( tea == null ) { // A bugged/broken link.  One side thinks it is linked, the other doesn't.  Just clear it the local side so it's back into a good state.
@@ -198,7 +194,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     private static void removeLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
 
-        LazyOptional<ITransmitterNetwork> t = world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
+        LazyOptional<ITransmitterNetwork> t = world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null );
 
         TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( owner, identifierPillar );
 
@@ -234,10 +230,10 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         } else if ( tile instanceof TileEntityTransmitter ) { // It really can't be anything else, but ok
 
-            TileEntityTransmitter pillar = (TileEntityTransmitter) tile;
-            LazyOptional<ITransmitterNetwork> t = pillar.world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY, null );
+            TileEntityTransmitter transmitter = (TileEntityTransmitter) tile;
+            LazyOptional<ITransmitterNetwork> t = transmitter.world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null );
 
-            TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( pillar.getOwner(), pillar.getIdentifier() );
+            TransmitterData pd = ((ITransmitterNetwork) t).getTransmitter( transmitter.getOwner(), transmitter.getIdentifier() );
 
             //Biomediversity.logger.warn( "** Pillarizing " + pd.getAmount() );
             // pillar.getTank().setFluid( pd.fluid, pd.getAmount() ); //TODO: 14.4 --> requires Transmitter update
@@ -273,9 +269,11 @@ public abstract class TileEntityAssociation extends TileEntity {
     }
 
     */
-    public void firstTick() {
+    protected void doFirstTick() {
 
-        if ( !getWorld().isRemote ) {
+        firstTick = false;
+
+        if ( !this.getWorld().isRemote ) {
             updateBlockStateForAntenna( this, this.hasLink() );
         } else {
             Network.channel.sendToServer( new GenericTankPacketRequest( this.pos ) );

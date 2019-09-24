@@ -5,6 +5,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -45,6 +47,8 @@ public class BiomeDiversity {
     public static final String MODID = "biomediversity";
     public static final ItemGroup TAB = new CreativeTab();
 
+    @CapabilityInject( ITransmitterNetwork.class )
+    public static Capability<ITransmitterNetwork> TRANSMITTER_NETWORK_CAPABILITY;
 
     public BiomeDiversity() {
 
@@ -92,9 +96,15 @@ public class BiomeDiversity {
     }
 
     @SubscribeEvent
-    public static void onAttachCapabilities( AttachCapabilitiesEvent<World> event ) {
+    public void onAttachCapabilities( AttachCapabilitiesEvent<World> event ) {
+
+        if ( event.getObject().isRemote )
+            return;
 
         event.addCapability( BiomeDiversity.getId( "transmitternetwork" ), new TransmitterNetworkProvider() );
+
+        //event.addCapability(new ResourceLocation(MODID, LOADERID), provider);
+        //event.addListener(() -> inst.invalidate())
 
     }
 

@@ -14,7 +14,6 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
-import ommina.biomediversity.fluids.IHasFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankPacket;
@@ -26,7 +25,7 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class TileEntityRainBarrel extends TileEntity implements ITickableTileEntity, IHasFluidTank, ITankBroadcast {
+public class TileEntityRainBarrel extends TileEntity implements ITickableTileEntity, ITankBroadcast {
 
     private static final int DELAY_RAIN = 4; // 0.20s
     private static final int DELAY_NO_RAIN = 100; // 5.00s
@@ -49,9 +48,10 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public int getBroadcastTankAmount( int tank ) {
+    public void onLoad() {
 
-        return TANK.getFluidAmount();
+        doBroadcast();
+        super.onLoad();
 
     }
 
@@ -66,11 +66,8 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     }
 
     @Override
-    public void onLoad() {
-
-        doBroadcast();
-        super.onLoad();
-
+    public BdFluidTank getTank( int index ) {
+        return TANK;
     }
 
     @Override
@@ -96,7 +93,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
         return super.write( tag );
 
     }
-
 
     public FluidStack getFluid() {
         return TANK.getFluid();
@@ -143,11 +139,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
         this.markDirty();
 
-    }
-
-    @Override
-    public BdFluidTank getTank() {
-        return TANK;
     }
 
 }

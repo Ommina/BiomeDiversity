@@ -1,9 +1,11 @@
 package ommina.biomediversity.network;
 
+import ommina.biomediversity.fluids.BdFluidTank;
+
 public interface ITankBroadcast {
 
-    public int getBroadcastTankAmount( int tank );
+    void doBroadcast();
 
-    public void doBroadcast();
+    BdFluidTank getTank( int index );
 
 }

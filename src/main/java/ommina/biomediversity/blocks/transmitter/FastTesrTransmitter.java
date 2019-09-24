@@ -25,7 +25,7 @@ public class FastTesrTransmitter<T extends TileEntityTransmitter> extends TileEn
         y += offset;
         z += offset;
 
-        FluidStack fluid = te.getTank().getFluid();
+        FluidStack fluid = te.getTank( 0 ).getFluid();
 
         if ( !fluid.isEmpty() ) {
 

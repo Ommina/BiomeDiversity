@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
-import ommina.biomediversity.fluids.IHasFluidTank;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -29,10 +28,10 @@ public class GenericTankPacket {
 
     public GenericTankPacket( TileEntity tile ) {
 
-        if ( !(tile instanceof IHasFluidTank) )
+        if ( !(tile instanceof ITankBroadcast) )
             throw new RuntimeException( "Tried to create a generic tank packet for a tile without a tank" );
 
-        this.fluid = ((IHasFluidTank) tile).getTank().getFluid();
+        this.fluid = ((ITankBroadcast) tile).getTank( 0 ).getFluid();
         this.pos = tile.getPos();
 
     }
@@ -57,8 +56,8 @@ public class GenericTankPacket {
             if ( world.get().isBlockLoaded( packet.pos ) ) {
                 TileEntity tile = world.get().getTileEntity( packet.pos );
 
-                if ( tile instanceof IHasFluidTank )
-                    ((IHasFluidTank) tile).getTank().setFluid( packet.fluid );
+                if ( tile instanceof ITankBroadcast )
+                    ((ITankBroadcast) tile).getTank( 0 ).setFluid( packet.fluid );
 
             }
 

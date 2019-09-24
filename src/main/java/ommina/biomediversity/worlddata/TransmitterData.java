@@ -1,21 +1,26 @@
-
 package ommina.biomediversity.worlddata;
 
 
 import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ResourceLocation;
 import ommina.biomediversity.config.Config;
 
 import java.util.UUID;
 
 public class TransmitterData {
 
-    private int amount;
-
     public Fluid fluid;
     public float rainfall;
     public float temperature;
-    public int biomeId;
+    public ResourceLocation biomeId;
     public UUID receiver;
+    private int amount;
+
+    public void drain( int amount ) {
+
+        adjustAmount( amount * -1 );
+
+    }
 
     private void adjustAmount( int delta ) {
 
@@ -26,27 +31,21 @@ public class TransmitterData {
 
     }
 
-    public void drain( int amount ) {
-
-        adjustAmount( amount * -1 );
-
-    }
-
     public void fill( int amount ) {
 
         adjustAmount( amount );
 
     }
 
-    public void setAmount( int amount ) {
-
-        this.amount = amount;
-
-    }
-
     public int getAmount() {
 
         return this.amount;
+
+    }
+
+    public void setAmount( int amount ) {
+
+        this.amount = amount;
 
     }
 

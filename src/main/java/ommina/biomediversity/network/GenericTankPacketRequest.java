@@ -7,7 +7,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import ommina.biomediversity.fluids.IHasFluidTank;
 
 import java.util.function.Supplier;
 
@@ -46,13 +45,8 @@ public class GenericTankPacketRequest {
 
                 TileEntity tile = world.getTileEntity( pos );
 
-                if ( tile instanceof IHasFluidTank ) {
-
-                    //PacketDistributor.TargetPoint squidPoint = new PacketDistributor.TargetPoint( this.squid.posX, this.squid.posY, this.squid.posZ, 16.0F, this.squid.dimension );
-
+                if ( tile instanceof ITankBroadcast )
                     Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankPacket( tile ) );
-                    //Network.channel.send( PacketDistributor.ALL.noArg(), new GenericTankPacket( tile ) );   //TODO: Figure out how to send this to those nearby, instead of all
-                }
 
             }
 
