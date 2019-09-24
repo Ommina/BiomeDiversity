@@ -20,24 +20,24 @@ public class TransmitterNetwork implements ITransmitterNetwork {
     }
 
     @Override
-    public boolean removeTransmitter( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+    public boolean removeTransmitter( final UUID playerIdentifier, final UUID transmitterIdentifier ) {
 
-        if ( !containsPillar( playerIdentifier, pillarIdentifier ) )
+        if ( !containsTransmitter( playerIdentifier, transmitterIdentifier ) )
             return false;
 
-        return (players.get( playerIdentifier ).remove( pillarIdentifier ) != null);
+        return (players.get( playerIdentifier ).remove( transmitterIdentifier ) != null);
 
     }
 
     @Override
-    public TransmitterData getTransmitter( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+    public TransmitterData getTransmitter( final UUID playerIdentifier, final UUID transmitterIdentifier ) {
 
-        Map<UUID, TransmitterData> playerPillars = getPlayer( playerIdentifier );
+        Map<UUID, TransmitterData> playerTransmitters = getPlayer( playerIdentifier );
 
-        if ( !playerPillars.containsKey( pillarIdentifier ) )
-            playerPillars.put( pillarIdentifier, new TransmitterData() );
+        if ( !playerTransmitters.containsKey( transmitterIdentifier ) )
+            playerTransmitters.put( transmitterIdentifier, new TransmitterData() );
 
-        return playerPillars.get( pillarIdentifier );
+        return playerTransmitters.get( transmitterIdentifier );
 
     }
 
@@ -68,12 +68,12 @@ public class TransmitterNetwork implements ITransmitterNetwork {
         return players.isEmpty();
     }
 
-    private static boolean containsPillar( final UUID playerIdentifier, final UUID pillarIdentifier ) {
+    private static boolean containsTransmitter( final UUID playerIdentifier, final UUID transmitterIdentifier ) {
 
         if ( !containsPlayer( playerIdentifier ) )
             return false;
 
-        return players.get( playerIdentifier ).containsKey( pillarIdentifier );
+        return players.get( playerIdentifier ).containsKey( transmitterIdentifier );
 
     }
 
@@ -81,16 +81,5 @@ public class TransmitterNetwork implements ITransmitterNetwork {
 
         return players.containsKey( playerIdentifier );
     }
-
-    /*
-
-    @Override
-    public void markDirty( World world ) {
-
-        WorldData.get( world ).markDirty();
-
-    }
-
-    */
 
 }
