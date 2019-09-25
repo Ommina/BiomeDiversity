@@ -113,8 +113,16 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     @Override
     public int fill( FluidStack resource, FluidAction action ) {
 
-        if ( this.canFill )
-            return super.fill( resource, action );
+        if ( this.canFill ) {
+
+            int amount = super.fill( resource, action );
+
+            if ( amount > 0 )
+                onFill( amount );
+
+            return amount;
+
+        }
 
         return 0;
 
@@ -136,9 +144,19 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     public FluidStack drain( int maxDrain, FluidAction action ) {
 
         if ( this.canDrain )
-            return super.drain( maxDrain, action );
+            return drain_internal( maxDrain, action );
 
         return FluidStack.EMPTY;
+
+    }
+
+    public FluidStack drain_internal( int maxDrain, FluidAction action ) {
+
+        return super.drain( maxDrain, action );
+
+    }
+
+    protected void onFill( int amount ) {
 
     }
 

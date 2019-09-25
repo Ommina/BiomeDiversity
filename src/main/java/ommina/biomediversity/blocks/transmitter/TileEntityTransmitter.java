@@ -3,13 +3,18 @@ package ommina.biomediversity.blocks.transmitter;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.PacketDistributor;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.config.Config;
@@ -18,6 +23,7 @@ import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankPacket;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
+import ommina.biomediversity.worlddata.TransmitterData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,8 +37,17 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     private static final int MINIMUM_DELTA = 200;
     private static List<Fluid> fluidWhitelist = new ArrayList<Fluid>();
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
-    private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
-    private boolean isLoaded = false;
+    private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
+
+        @Override
+        protected void onFill( int amount ) {
+
+            updateFluidDisplay( getWorld(), getPos() );
+
+            super.onContentsChanged();
+        }
+
+    };
     private LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
 
     public TileEntityTransmitter() {
@@ -46,6 +61,51 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     }
 
+    private static void updateFluidDisplay( World world, BlockPos pos ) {
+
+        if ( world.isRemote )
+            return;
+
+        TileEntity te = world.getTileEntity( pos );
+
+        if ( te == null )
+            return;
+
+        if ( te instanceof TileEntityTransmitter ) {
+
+            TileEntityTransmitter tile = (TileEntityTransmitter) te;
+
+            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+                TransmitterData pd = cap.getTransmitter( tile.getOwner(), tile.getIdentifier() );
+                FluidStack fluid = tile.getTank( 0 ).getFluid();
+
+                if ( !tile.firstTick ) {
+                    pd.setAmount( fluid.getAmount() );
+                    pd.fluid = fluid.getFluid();
+                } else {
+                    pd.setAmount( 0 );
+                    pd.fluid = null;
+                }
+
+            } );
+
+
+// TODO: Needs to be moved to a general Fluid Changed Event
+/*
+
+        } else if ( te instanceof TileEntityMixer ) {
+            ((TileEntityMixer) te).checkNeedsMixing();
+        }
+
+        if ( te instanceof ITankBroadcast )
+            ((ITankBroadcast) te).doBroadcast();
+
+*/
+
+        }
+    }
+
     public static void addFluidToWhitelist( Fluid fluid ) {
 
         fluidWhitelist.add( fluid );
@@ -56,6 +116,8 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     public void onLoad() {
 
         BROADCASTER.reset();
+
+        BiomeDiversity.LOGGER.info( "Receiver Loaded" );
 
     }
 

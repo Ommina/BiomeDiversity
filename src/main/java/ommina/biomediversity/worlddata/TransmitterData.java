@@ -37,6 +37,12 @@ public class TransmitterData {
 
     }
 
+    public boolean isValid() {
+
+        return (biomeId != null); //TODO: Are there reasonable sanity checks for temperature / rainfall that we can include here?
+
+    }
+
     public int getAmount() {
 
         return this.amount;

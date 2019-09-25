@@ -76,20 +76,26 @@ public class TransmitterNetworkStorage implements Capability.IStorage<ITransmitt
                     } else {
 
                         TransmitterData pd = instance.getTransmitter( playerIdentifier, transmitterIdentifier );
-                        CompoundNBT subTagTransmitter = new CompoundNBT();
 
-                        subTagTransmitter.putInt( "quantity", pd.getAmount() );
-                        subTagTransmitter.putFloat( "humidity", pd.rainfall );
-                        subTagTransmitter.putFloat( "temperature", pd.temperature );
-                        subTagTransmitter.putString( "biomeid", pd.biomeId.toString() );
+                        if ( pd.isValid() ) {
 
-                        if ( pd.receiver != null )
-                            subTagTransmitter.putUniqueId( "receiver", pd.receiver );
+                            CompoundNBT subTagTransmitter = new CompoundNBT();
 
-                        if ( pd.fluid != null )
-                            subTagTransmitter.putString( "fluidname", pd.fluid.getRegistryName().toString() );
+                            subTagTransmitter.putInt( "quantity", pd.getAmount() );
+                            subTagTransmitter.putFloat( "humidity", pd.rainfall );
+                            subTagTransmitter.putFloat( "temperature", pd.temperature );
+                            subTagTransmitter.putString( "biomeid", pd.biomeId.toString() );
 
-                        subTagPlayer.put( transmitterIdentifier.toString(), subTagTransmitter ); // NPE here, non-crashing
+                            if ( pd.receiver != null )
+                                subTagTransmitter.putUniqueId( "receiver", pd.receiver );
+
+                            if ( pd.fluid != null )
+                                subTagTransmitter.putString( "fluidname", pd.fluid.getRegistryName().toString() );
+
+                            subTagPlayer.put( transmitterIdentifier.toString(), subTagTransmitter ); // NPE here, non-crashing
+
+                        }
+
 
                     }
 

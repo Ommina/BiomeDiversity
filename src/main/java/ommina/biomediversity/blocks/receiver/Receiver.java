@@ -3,13 +3,25 @@ package ommina.biomediversity.blocks.receiver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.tile.TileEntityAssociation;
+import ommina.biomediversity.items.ModItems;
+import ommina.biomediversity.worlddata.TransmitterData;
 
 import javax.annotation.Nullable;
 
@@ -42,6 +54,63 @@ public class Receiver extends Block { //BlockTileEntity<TileEntityReceiver> {
         return BlockRenderLayer.CUTOUT;
     }
 
+    @Override
+    public boolean onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+
+        if ( world.isRemote )
+            return true;
+
+        TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
+        ItemStack heldItem = player.getHeldItem( hand );
+
+        if ( !heldItem.isEmpty() ) {
+
+            if ( heldItem.getItem() == Items.CARROT ) {
+                debuggingCarrot( tile );
+                return true;
+            } else if ( heldItem.getItem() == ModItems.LINK_STAFF )
+                return false;
+
+        }
+
+        //player.openGui( Biomediversity.instance, ModGuiHandler.PILLAR, world, pos.getX(), pos.getY(), pos.getZ() );
+
+        return true;
+
+    }
+
+    private static void debuggingCarrot( TileEntityReceiver tile ) {
+
+        BiomeDiversity.LOGGER.info( "Receiver identifier: " + tile.getIdentifier().toString() );
+
+        if ( tile.getOwner() != null )
+            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
+
+        if ( tile.getAssociatedIdentifier() != null )
+            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
+
+        if ( tile.getAssociatedPos() != null )
+            BiomeDiversity.LOGGER.info( " Position: " + tile.getAssociatedPos().toString() );
+
+        if ( tile.getTank( 0 ).getFluid() != null )
+            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getRegistryName().toString() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
+
+        if ( tile.getOwner() != null && tile.getAssociatedIdentifier() != null ) {
+
+            tile.getWorld().getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+                TransmitterData pd = cap.getTransmitter( tile.getOwner(), tile.getAssociatedIdentifier() );
+                BiomeDiversity.LOGGER.info( " TRANSMITTER_NETWORK" );
+                BiomeDiversity.LOGGER.info( "   Biome id : " + pd.biomeId );
+                BiomeDiversity.LOGGER.info( "   Biome temperature : " + pd.temperature );
+                if ( pd.fluid != null )
+                    BiomeDiversity.LOGGER.info( "   Fluid: " + pd.fluid.getRegistryName().toString() + " (" + pd.getAmount() + ")" );
+            } );
+
+        }
+
+    }
+
     @Nullable
     @Override
     public BlockState getStateForPlacement( BlockItemUseContext context ) {
@@ -49,8 +118,39 @@ public class Receiver extends Block { //BlockTileEntity<TileEntityReceiver> {
     }
 
     @Override
+    public void onBlockPlacedBy( World world, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack stack ) {
+
+        if ( livingEntity instanceof PlayerEntity ) {
+
+            PlayerEntity player = (PlayerEntity) livingEntity;
+            TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
+
+            tile.setOwner( player.getUniqueID() );
+            tile.markDirty();
+
+        }
+
+        super.onBlockPlacedBy( world, pos, state, livingEntity, stack );
+
+    }
+
+    @Override
+    public void onBlockHarvested( World world, BlockPos pos, BlockState blockState, PlayerEntity playerEntity ) {
+
+        TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
+
+        if ( tile.hasLink() ) {
+            TileEntityAssociation.removeLink( world, tile, true );
+        }
+
+        super.onBlockHarvested( world, pos, blockState, playerEntity );
+
+    }
+
+    @Override
     protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
         builder.add( IS_CONNECTED );
     }
+
 
 }

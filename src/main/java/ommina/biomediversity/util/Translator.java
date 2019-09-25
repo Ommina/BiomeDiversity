@@ -13,7 +13,7 @@ public class Translator {
     }
 
     public static String translateToLocal(String key) {
-        return I18n.format(key);
+        return I18n.format(key).replaceAll( "\\$\\$", "%" );
     }
 
     public static String translateToLocalFormatted(String key, Object... format) {

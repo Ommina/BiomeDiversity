@@ -7,7 +7,7 @@
   "text.biomediversity.linkstaff.settingscopied": "Settings Copied",
   "text.biomediversity.linkstaff.settingspasted": "Settings Pasted",
   "text.biomediversity.linkstaff.transmittersettingscopied": "Transmitter Settings Copied",
-  "text.biomediversity.linkstaff.copyfrom": "Copy from %s at %d, %d, %d",
+  "text.biomediversity.linkstaff.copyfrom": "Copy from $$s at $$d, $$d, $$d",
 
   "item.biomediversity.colza": "Colza",
   "item.biomediversity.colza_seeds": "Colza Seeds",

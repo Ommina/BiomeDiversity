@@ -12,13 +12,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.LazyOptional;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.util.Translator;
-import ommina.biomediversity.worlddata.capabilities.ITransmitterNetwork;
 
 public class LinkStaff extends Item {
 
@@ -136,21 +134,9 @@ public class LinkStaff extends Item {
 
         if ( tile instanceof TileEntityTransmitter ) {
 
-            //world.getCapability( TransmitterNetworkProvider.TRANSMITTER_NETWORK_CAPABILITY ).isPresent( c -> {
-            //    ((ITransmitterNetwork) c).getTransmitter( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier(); });
-
-            //handler.ifPresent(h -> {
-            //    CompoundNBT compound = ((INBTSerializable<CompoundNBT>)h).serializeNBT();
-            //    tag.put("inv", compound);
-            //});
-
-            LazyOptional<ITransmitterNetwork> t = world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null );
-
-            ((ITransmitterNetwork) t).getTransmitter( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier();
+            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier() );
 
         }
-
-        //WorldData.get( world ).markDirty();
 
     }
 
