@@ -17,7 +17,7 @@ import ommina.biomediversity.items.ModItems;
 
 public class ColzaBlock extends CropsBlock {
 
-    private static final VoxelShape[] SHAPES = new VoxelShape[] {
+    private static final VoxelShape[] SHAPES = new VoxelShape[]{
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D ),
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D ),
          Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D ),
@@ -31,23 +31,25 @@ public class ColzaBlock extends CropsBlock {
         super( builder );
     }
 
-    @OnlyIn( Dist.CLIENT )
-    protected IItemProvider getSeedsItem() {
-        return ModItems.COLZA_SEEDS;
-    }
-
+    @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
         return SHAPES[state.get( this.getAgeProperty() )];
     }
 
+    @Override
     protected boolean isValidGround( BlockState state, IBlockReader worldIn, BlockPos pos ) {
 
         return (state.getBlock() == Blocks.FARMLAND || state.getBlock() == Blocks.GRASS_BLOCK || state.getBlock() == Blocks.DIRT);
     }
 
+    @Override
     protected int getBonemealAgeIncrease( World worldIn ) {
         return MathHelper.nextInt( worldIn.rand, 1, 2 );
     }
 
+    @OnlyIn( Dist.CLIENT )
+    protected IItemProvider getSeedsItem() {
+        return ModItems.COLZA_SEEDS;
+    }
 
 }

@@ -34,7 +34,7 @@ public class FluidStrengths {
     public static int getStrength( int hashCode ) {
 
         if ( !fluids.containsKey( hashCode ) ) {
-            BiomeDiversity.LOGGER.info( "FluidStrength hash not found.  Returning 0" );
+            //BiomeDiversity.LOGGER.info( "FluidStrength hash not found.  Returning 0" );
             return 0;
         }
 

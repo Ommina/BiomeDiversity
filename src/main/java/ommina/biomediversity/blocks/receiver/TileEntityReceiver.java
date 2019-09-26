@@ -2,15 +2,18 @@ package ommina.biomediversity.blocks.receiver;
 
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;
+import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankPacket;
@@ -25,14 +28,18 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
 
+    private int fluidHash;
     private int lastAmount = 0;
     private int power;
     private String biomeId;
     private float temperature;
     private float rainfall;
 
-    private int delay = 20;// One Second Config.RECEIVER_UPDATE_DELAY;
+    private int delay = Constants.RECEIVER_TICK_DELAY;
     private int loop = 1;
+
+    private TileEntityCollector collector = new TileEntityCollector();
+    private BlockPos collectorPos;
 
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
@@ -49,7 +56,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         if ( delay > 0 )
             return;
 
-        delay = 20;
+        delay = Constants.RECEIVER_TICK_DELAY;
 
         if ( world.isRemote || world.isBlockPowered( getPos() ) )
             return;
@@ -96,9 +103,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                         // BROADCASTER.setTemperature( client_temperature ); // TODO: Network Packet
 
-                        if ( pd.fluid != null ) {
-
-/*
+                        if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION ) {
 
                             if ( collector != null && !collector.isCollectorTurnedOff() ) {
 
@@ -106,12 +111,12 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                                     boolean isPillarLoaded = false;
 
-                                    int drainAmount = Config.costInmbPerSecond;
+                                    int drainAmount = Constants.RECEIVER_CONSUMPTION;
 
                                     fluidHash = pd.fluid.hashCode();
                                     power = FluidStrengths.getStrength( fluidHash );
 
-                                    collector.collect( hash, fluidHash, power, biomeId, temperature, rainfall );
+                                    // collector.collect( hash, fluidHash, power, biomeId, temperature, rainfall ); //TODO: Make the collector do something
 
                                     pd.drain( drainAmount );
 
@@ -119,37 +124,19 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                                     if ( isPillarLoaded ) {
                                         TileEntity te = world.getTileEntity( this.getAssociatedPos() );
-                                        if ( te != null && te instanceof TileEntityPillar ) {
-                                            TileEntityPillar tep = (TileEntityPillar) te;
-                                            tep.getTank().drainInternal( drainAmount, true );
+                                        if ( te != null && te instanceof TileEntityTransmitter ) {
+                                            TileEntityTransmitter tep = (TileEntityTransmitter) te;
+                                            tep.getTank( 0 ).drain_internal( Constants.RECEIVER_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
                                         }
                                     }
 
-                                    if ( pd.getAmount() + drainAmount - lastAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
-                                        resetChunkloadDuration();
+                                    //if ( pd.getAmount() + drainAmount - lastAmount >= CHUNKLOAD_MIN_FLUID_INCREASE ) //TODO: Automatic chunkloading
+                                    //    resetChunkloadDuration();
 
                                     lastAmount = pd.getAmount();
 
                                 }
                             }
-
-*/
-
-// ------------------------ REMOVE
-
-                            boolean isPillarLoaded = false;
-
-                            isPillarLoaded = world.isBlockLoaded( this.getAssociatedPos() );
-
-                            if ( isPillarLoaded ) {
-                                TileEntity te = world.getTileEntity( this.getAssociatedPos() );
-                                if ( te != null && te instanceof TileEntityTransmitter ) {
-                                    TileEntityTransmitter tep = (TileEntityTransmitter) te;
-                                    tep.getTank( 0 ).drain_internal( 20, IFluidHandler.FluidAction.EXECUTE );
-                                }
-                            }
-
-// ------------------------ REMOVE
 
 
                             this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() - 20 ) );
@@ -207,6 +194,12 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         } );
 
+    }
+
+    @Override
+    public boolean hasFastRenderer() {
+
+        return true;
     }
 
     @Override

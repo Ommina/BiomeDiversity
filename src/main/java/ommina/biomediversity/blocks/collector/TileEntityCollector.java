@@ -9,5 +9,8 @@ public class TileEntityCollector extends TileEntity {
         super( ModTileEntities.COLLECTOR );
     }
 
+    public boolean isCollectorTurnedOff() {
+        return false; //TODO: Collector should be disabled by redstone
+    }
 
 }

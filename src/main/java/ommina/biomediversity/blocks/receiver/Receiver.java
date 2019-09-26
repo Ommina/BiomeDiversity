@@ -15,6 +15,8 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
@@ -25,9 +27,12 @@ import ommina.biomediversity.worlddata.TransmitterData;
 
 import javax.annotation.Nullable;
 
-public class Receiver extends Block { //BlockTileEntity<TileEntityReceiver> {
+public class Receiver extends Block {
 
+    private static final VoxelShape SHAPE = Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 32.0D, 16.0D );
+    //Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D ),
     private static final BooleanProperty IS_CONNECTED = BooleanProperty.create( "connected" );
+
 
     public Receiver() {
 
@@ -39,14 +44,14 @@ public class Receiver extends Block { //BlockTileEntity<TileEntityReceiver> {
     }
 
     @Override
-    public boolean hasTileEntity( BlockState state ) {
-        return true;
+    public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
+        return SHAPE;
     }
 
-    @Nullable
     @Override
-    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityReceiver();
+    @Deprecated
+    public VoxelShape getRaytraceShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {
+        return SHAPE;
     }
 
     @Override
@@ -150,6 +155,17 @@ public class Receiver extends Block { //BlockTileEntity<TileEntityReceiver> {
     @Override
     protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
         builder.add( IS_CONNECTED );
+    }
+
+    @Override
+    public boolean hasTileEntity( BlockState state ) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
+        return new TileEntityReceiver();
     }
 
 
