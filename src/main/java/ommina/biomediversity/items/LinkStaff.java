@@ -25,28 +25,7 @@ public class LinkStaff extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick( World world, PlayerEntity player, Hand hand ) {
-
-        if ( player.isSneaking() ) {
-
-            removeCopiedSettings( player.getHeldItem( hand ) );
-            player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.cleared" ) ), true );
-
-        }
-
-        return ActionResult.newResult( ActionResultType.SUCCESS, player.getHeldItem( hand ) );
-
-    }
-
-    private void removeCopiedSettings( ItemStack item ) {
-
-        item.clearCustomName();
-        item.setTag( null );
-
-    }
-
-    @Override
-    public ActionResultType onItemUseFirst( ItemStack stack, ItemUseContext context ) {
+    public ActionResultType onItemUse( ItemUseContext context ) {
 
         if ( context.getWorld().isRemote )
             return ActionResultType.SUCCESS;
@@ -67,6 +46,26 @@ public class LinkStaff extends Item {
             return useUnSneaking( context, tile, item );
 
         return useSneaking( context, tile, item );
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick( World world, PlayerEntity player, Hand hand ) {
+
+        if ( player.isSneaking() ) {
+
+            removeCopiedSettings( player.getHeldItem( hand ) );
+            player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.cleared" ) ), true );
+
+        }
+
+        return ActionResult.newResult( ActionResultType.SUCCESS, player.getHeldItem( hand ) );
+
+    }
+
+    private void removeCopiedSettings( ItemStack item ) {
+
+        item.clearCustomName();
+        item.setTag( null );
 
     }
 

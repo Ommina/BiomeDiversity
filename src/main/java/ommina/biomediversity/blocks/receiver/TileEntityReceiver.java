@@ -9,6 +9,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.blocks.collector.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
@@ -19,30 +20,50 @@ import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankPacket;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
+import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
 
-public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast {
+import java.util.UUID;
+
+public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, IClusterComponent {
 
     private static final int TANK_COUNT = 1;
     private static final int MINIMUM_DELTA = 200;
+    private static final float CHUNKLOAD_MIN_PERCENTAGE = 0.20f;
+    private static final float CHUNKLOAD_MAX_PERCENTAGE = 0.80f;
+    private static final int CHUNKLOAD_MIN_FLUID_INCREASE = 90;
+    private static final int MAX_CHUNKLOAD_DURATION = 5 * 60 * 20 / Constants.RECEIVER_TICK_DELAY; // 5min
+    private static final int SEARCH_ON_LOOP = 5;
+    private static final int MAX_SEARCH_COUNT = 36000 / (Constants.RECEIVER_TICK_DELAY * SEARCH_ON_LOOP); // ~30min
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
-
+    private int searchAttemptCount = 0;
     private int fluidHash;
     private int lastAmount = 0;
     private int power;
     private String biomeId;
     private float temperature;
     private float rainfall;
-
+    private int chunkloadDurationRemaining = 0;
+    private boolean chunkloadingTimedOut = false;
     private int delay = Constants.RECEIVER_TICK_DELAY;
     private int loop = 1;
-
     private TileEntityCollector collector = new TileEntityCollector();
     private BlockPos collectorPos;
+    private UUID chunkloadTicket = null;
 
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
+    }
+
+    @Override
+    public TileEntityCollector getCollector() {
+        return this.collector;
+    }
+
+    @Override
+    public boolean isClusterComponentConnected() {
+        return (this.collector != null);
     }
 
     @Override
@@ -109,7 +130,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                                 if ( !world.isBlockPowered( getPos() ) ) {
 
-                                    boolean isPillarLoaded = false;
+                                    boolean isTransmitterLoaded = false;
 
                                     int drainAmount = Constants.RECEIVER_CONSUMPTION;
 
@@ -120,9 +141,9 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                                     pd.drain( drainAmount );
 
-                                    isPillarLoaded = world.isBlockLoaded( this.getAssociatedPos() );
+                                    isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
 
-                                    if ( isPillarLoaded ) {
+                                    if ( isTransmitterLoaded ) {
                                         TileEntity te = world.getTileEntity( this.getAssociatedPos() );
                                         if ( te != null && te instanceof TileEntityTransmitter ) {
                                             TileEntityTransmitter tep = (TileEntityTransmitter) te;
@@ -130,16 +151,18 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                                         }
                                     }
 
-                                    //if ( pd.getAmount() + drainAmount - lastAmount >= CHUNKLOAD_MIN_FLUID_INCREASE ) //TODO: Automatic chunkloading
-                                    //    resetChunkloadDuration();
+                                    if ( pd.getAmount() + drainAmount - lastAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
+                                        resetChunkloadDuration();
 
                                     lastAmount = pd.getAmount();
 
                                 }
                             }
 
-
-                            this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() - 20 ) );
+                            if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION )
+                                this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+                            else
+                                this.getTank( 0 ).setFluid( FluidStack.EMPTY );
 
                             world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
 
@@ -149,14 +172,14 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                 } );
 
-                // doChunkloading(); // TODO: Enable automatic chunkloading
+                doChunkloading();
 
             }
 
-            //if ( collector == null && (loop % SEARCH_ON_LOOP) == 0 ) {
-            //    findCollector();
-            //    updateBlockStateForLink( this, this.isLinked() );
-            //}
+            if ( collector == null && (loop % SEARCH_ON_LOOP) == 0 ) {
+                findCollector();
+                //updateBlockStateForLink( this, this.isLinked() );
+            }
 
             doBroadcast();
 
@@ -196,10 +219,60 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    @Override
-    public boolean hasFastRenderer() {
+    public void resetChunkloadDuration() {
 
-        return true;
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+        chunkloadingTimedOut = false;
+    }
+
+    public void doChunkloading() {
+
+        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
+            return;
+
+        chunkloadDurationRemaining--;
+
+        if ( chunkloadTicket == null && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut )
+            loadPillarChunk();
+
+        else if ( chunkloadTicket != null && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0) )
+            unloadPillarChunk();
+
+    }
+
+    private boolean findCollector() {
+
+        if ( collectorPos != null && getCollectorFromPos() )
+            return true;
+
+        if ( searchAttemptCount > MAX_SEARCH_COUNT )
+            return false;
+
+        searchAttemptCount++;
+
+        int posX = getPos().getX();
+        int posY = getPos().getY();
+        int posZ = getPos().getZ();
+
+        for ( int y = posY - Config.receiverCollectorSearchVertialNeg.get(); y <= posY + Config.receiverCollectorSearchVertialPos.get(); y++ )
+            for ( int x = posX - Config.receiverCollectorSearchHorizontal.get(); x <= posX + Config.receiverCollectorSearchHorizontal.get(); x++ )
+                for ( int z = posZ - Config.receiverCollectorSearchHorizontal.get(); z <= posZ + Config.receiverCollectorSearchHorizontal.get(); z++ ) {
+                    BlockPos bp = new BlockPos( x, y, z );
+                    if ( world.isBlockLoaded( bp ) ) {
+                        TileEntity te = world.getTileEntity( bp );
+                        if ( te instanceof IClusterComponent ) {
+                            IClusterComponent tecc = (IClusterComponent) te;
+                            if ( tecc.isClusterComponentConnected() ) {
+                                this.collector = tecc.getCollector();
+                                markDirty();
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+        return false;
+
     }
 
     @Override
@@ -217,5 +290,77 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         return TANK;
     }
+
+    private void loadPillarChunk() {
+
+        chunkloadTicket = ChunkLoader.forceSingle( world, this.getAssociatedPos() );
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+
+        BiomeDiversity.LOGGER.debug( "Loading pillar at " + this.getAssociatedPos().toString() );
+
+    }
+
+    private void unloadPillarChunk() {
+
+        if ( chunkloadTicket == null )
+            return;
+
+        ChunkLoader.releaseSingle( world, this.getAssociatedPos() );
+        chunkloadTicket = null;
+
+        chunkloadingTimedOut = chunkloadDurationRemaining == 0;
+
+        BiomeDiversity.LOGGER.debug( "Unloading pillar at " + this.getAssociatedPos().toString() );
+
+    }
+
+    // End Chunkloading
+
+    // Collector Finding
+
+    private boolean getCollectorFromPos() {
+
+        // Logic for unloaded collector is different than a collector that just isn't found.
+        // If pos is set, and there's no collector there, unset the pos, clear the nbt, and clear the field so it will start searching
+        // If collector is just unloaded... stall / hang out.  It might still exist, but until it's loaded, we're stuck.
+
+        if ( collectorPos == null || !hasWorld() || !world.isBlockLoaded( collectorPos ) )
+            return false;
+
+        TileEntity te = getWorld().getTileEntity( collectorPos );
+
+        if ( te != null && te instanceof TileEntityCollector ) {
+            collector = (TileEntityCollector) te;
+            markDirty();
+            return true;
+        }
+
+        removeCollector();
+
+        return false;
+
+    }
+
+    public void removeCollector() {
+
+        collectorPos = null;
+        collector = null;
+        markDirty();
+
+    }
+
+    @Override
+    public boolean hasFastRenderer() {
+
+        return true;
+    }
+
+    public void resetSearchCount() {
+
+        searchAttemptCount = 0;
+    }
+
+    // End Collector Finding
+
 
 }

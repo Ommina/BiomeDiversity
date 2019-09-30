@@ -11,52 +11,56 @@ public class RenderHelper {
 
     public static void renderFluidCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
 
+        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( fluid.getFluid().getAttributes().getStillTexture() );
+        final int color = fluid.getFluid().getAttributes().getColor();
+
+        renderCube( buffer, x, y, z, w, h, l, sprite, color, faces );
+
+    }
+
+    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, int color, EnumSet<Faces> faces ) {
+
         double texY = Math.min( 16, h * 16f );
 
         buffer.setTranslation( x, y, z );
 
-        final TextureAtlasSprite still = Minecraft.getInstance().getTextureMap().getSprite( fluid.getFluid().getAttributes().getStillTexture() );
-
-        int color = fluid.getFluid().getAttributes().getColor();
-
         float[] rgba = new float[]{ ((color >> 16) & 0xFF) / 255f, ((color >> 8) & 0xFF) / 255f, ((color) & 0xFF) / 255f, ((color >> 24) & 0xFF) / 255f };
 
         if ( faces.contains( Faces.TOP ) ) {
-            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getMaxV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getMaxV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMaxV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMaxV() ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.NORTH ) ) {
-            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.SOUTH ) ) {
-            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.WEST ) ) {
-            buffer.pos( 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
         }
 
 
         if ( faces.contains( Faces.EAST ) ) {
-            buffer.pos( l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMinU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( still.getMaxU(), still.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
         }
-
 
     }
 

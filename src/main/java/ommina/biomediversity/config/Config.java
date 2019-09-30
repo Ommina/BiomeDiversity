@@ -12,28 +12,31 @@ import java.nio.file.Path;
 @Mod.EventBusSubscriber
 public class Config {
 
+    public static final String CATEGORY_WORLD_GEN = "worldgen";
+    public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
+    public static final String SUBCATEGORY_JUNGLE_POOLS = "jungle_pools";
+    public static final String SUBCATEGORY_FLUID_WELLS = "fluid_wells";
+    public static final String SUBCATEGORY_NOCIFIED_STONE = "nocified_stone";
+    public static final String CATEGORY_TRANSMITTER = "transmitters";
+    public static final String CATAGORY_RECEIVER = "receivers";
+    public static final String CATEGORY_RAINBARREL = "rainbarrel";
+
+    private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+    private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
     public static ForgeConfigSpec COMMON_CONFIG;
     public static ForgeConfigSpec CLIENT_CONFIG;
 
     // WorldGen
-    public static final String CATEGORY_WORLD_GEN = "worldgen";
-
-    public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
     public static ForgeConfigSpec.BooleanValue orinociteOreEnabled;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationMinY;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationMaxY;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationSizeBase;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationSizeVariance;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationAttempts;
-
-    public static final String SUBCATEGORY_JUNGLE_POOLS = "jungle_pools";
     public static ForgeConfigSpec.BooleanValue junglePoolsEnabled;
-
-    public static final String SUBCATEGORY_FLUID_WELLS = "fluid_wells";
     public static ForgeConfigSpec.BooleanValue fluidWellsEnabled;
     public static ForgeConfigSpec.IntValue fluidWellGenerationRadiusBase;
-
-    public static final String SUBCATEGORY_NOCIFIED_STONE = "nocified_stone";
     public static ForgeConfigSpec.BooleanValue nocifiedStoneEnabled;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMinY;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMaxY;
@@ -41,19 +44,18 @@ public class Config {
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationSizeVariance;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationAttempts;
 
-
     // Transmitters
-    public static final String CATEGORY_TRANSMITTER = "transmitters";
-
     public static ForgeConfigSpec.IntValue transmitterCapacity;
 
+    // Receivers
+    public static ForgeConfigSpec.BooleanValue receiverEnableChunkLoading;
+    public static ForgeConfigSpec.IntValue receiverCollectorSearchHorizontal;
+    public static ForgeConfigSpec.IntValue receiverCollectorSearchVertialPos;
+    public static ForgeConfigSpec.IntValue receiverCollectorSearchVertialNeg;
+
+
     // Rain Barrel
-    public static final String CATEGORY_RAINBARREL = "rainbarrel";
-
     public static ForgeConfigSpec.IntValue rainbarrelCapacity;
-
-    private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-    private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
     static {
 
@@ -63,6 +65,10 @@ public class Config {
 
         COMMON_BUILDER.comment( "Transmitter Configuration" ).push( CATEGORY_TRANSMITTER );
         setupTransmitter();
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Receiver Configuration" ).push( CATAGORY_RECEIVER );
+        setupReceiver();
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment( "Rainbarrel Configuration" ).push( CATEGORY_RAINBARREL );
@@ -125,6 +131,15 @@ public class Config {
     private static void setupRainBarrel() {
 
         rainbarrelCapacity = COMMON_BUILDER.comment( "Rain Barrel capacity in mb." ).defineInRange( "capacity", 32000, 1000, 128000 );
+
+    }
+
+    private static void setupReceiver() {
+
+        receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the receiver chunkload distant transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
+        receiverCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
+        receiverCollectorSearchVertialPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
+        receiverCollectorSearchVertialNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
 
     }
 
