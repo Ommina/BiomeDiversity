@@ -12,15 +12,14 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.blocks.crops.ColzaBlock;
-import ommina.biomediversity.blocks.crops.GrassOnlyBlock;
+import ommina.biomediversity.blocks.crops.FakePlantBlock;
 
 import java.util.Random;
 import java.util.function.Function;
 
 public class ColzaFeature extends Feature<NoFeatureConfig> {
 
-    private static final GrassOnlyBlock COLZA_BLOCK = (GrassOnlyBlock) ModBlocks.WORLD_COLZA;
+    private static final FakePlantBlock COLZA_BLOCK = (FakePlantBlock) ModBlocks.WORLD_COLZA;
 
     public ColzaFeature( String name, Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
         super( config );

@@ -254,7 +254,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         int posY = getPos().getY();
         int posZ = getPos().getZ();
 
-        for ( int y = posY - Config.receiverCollectorSearchVertialNeg.get(); y <= posY + Config.receiverCollectorSearchVertialPos.get(); y++ )
+        for ( int y = posY - Config.receiverCollectorSearchVerticalNeg.get(); y <= posY + Config.receiverCollectorSearchVerticalPos.get(); y++ )
             for ( int x = posX - Config.receiverCollectorSearchHorizontal.get(); x <= posX + Config.receiverCollectorSearchHorizontal.get(); x++ )
                 for ( int z = posZ - Config.receiverCollectorSearchHorizontal.get(); z <= posZ + Config.receiverCollectorSearchHorizontal.get(); z++ ) {
                     BlockPos bp = new BlockPos( x, y, z );

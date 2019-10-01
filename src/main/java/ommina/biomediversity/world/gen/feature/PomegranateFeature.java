@@ -12,15 +12,14 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.blocks.crops.GrassOnlyBlock;
-import ommina.biomediversity.blocks.crops.PomegranateBlock;
+import ommina.biomediversity.blocks.crops.FakePlantBlock;
 
 import java.util.Random;
 import java.util.function.Function;
 
 public class PomegranateFeature extends Feature<NoFeatureConfig> {
 
-    private static final GrassOnlyBlock POMEGRANATE_BLOCK = (GrassOnlyBlock) ModBlocks.WORLD_POMEGRANATE;
+    private static final FakePlantBlock POMEGRANATE_BLOCK = (FakePlantBlock) ModBlocks.WORLD_POMEGRANATE;
 
     public PomegranateFeature( String name, Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
         super( config );

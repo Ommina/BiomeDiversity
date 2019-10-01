@@ -7,20 +7,21 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import ommina.biomediversity.BiomeDiversity;
 
-public class GrassOnlyBlock extends Block {
+public class FakePlantBlock extends Block {
 
-    public GrassOnlyBlock( Block.Properties builder ) {
+    public FakePlantBlock( Block.Properties builder ) {
         super( builder );
     }
 
     @Override
-    public void neighborChanged( BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving ) {
+    public void neighborChanged( BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean isMoving ) {
 
-        BiomeDiversity.LOGGER.info( "nc: pos: " + pos.toString() + " block: " + block.toString() + " fromPos: " + fromPos + " isMoving" + isMoving );
+        if ( neighborPos.getY() == pos.getY() - 1 && world.getBlockState( neighborPos ).isAir() )
+            Block.replaceBlock( this.getDefaultState(), Blocks.AIR.getDefaultState(), world, pos, 2 );
 
-        super.neighborChanged( state, world, pos, block, fromPos, isMoving );
+        super.neighborChanged( state, world, pos, block, neighborPos, isMoving );
+
     }
 
     @Override

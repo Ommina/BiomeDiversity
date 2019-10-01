@@ -14,17 +14,16 @@ import ommina.biomediversity.world.gen.structure.FluidWellStructure;
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModFeatures {
 
-    @ObjectHolder( "jungle_pool" ) public static JunglePoolFeature JUNGLE_POOL = new JunglePoolFeature( "jungle_pool", NoFeatureConfig::deserialize );
-    @ObjectHolder( "fluid_well" ) public static Structure<NoFeatureConfig> FLUID_WELL = new FluidWellStructure( "fluid_well", NoFeatureConfig::deserialize );
+    @ObjectHolder( "jungle_pool" ) public static JunglePoolFeature JUNGLE_POOL;
+    @ObjectHolder( "fluid_well" ) public static Structure<NoFeatureConfig> FLUID_WELL;
     @ObjectHolder( "pomegranate" ) public static PomegranateFeature POMEGRANTE;
     @ObjectHolder( "colza" ) public static ColzaFeature COLZA;
-
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Feature<?>> event ) {
 
-        event.getRegistry().register( JUNGLE_POOL );
-        event.getRegistry().register( FLUID_WELL );
+        event.getRegistry().register( new JunglePoolFeature( "jungle_pool", NoFeatureConfig::deserialize ) );
+        event.getRegistry().register( new FluidWellStructure( "fluid_well", NoFeatureConfig::deserialize ) );
         event.getRegistry().register( new PomegranateFeature( "pomegranate", NoFeatureConfig::deserialize ) );
         event.getRegistry().register( new ColzaFeature( "colza", NoFeatureConfig::deserialize ) );
 
