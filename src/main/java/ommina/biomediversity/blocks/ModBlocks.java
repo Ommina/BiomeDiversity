@@ -12,6 +12,7 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.blocks.BlockNocifiedUndamaged;
 import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.crops.ColzaBlock;
+import ommina.biomediversity.blocks.crops.GrassOnlyBlock;
 import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.peltier.Peltier;
 import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
@@ -31,6 +32,8 @@ public class ModBlocks {
     // Crops
     @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
     @ObjectHolder( "pomegranate" ) public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
+    @ObjectHolder( "world_colza" ) public static final Block WORLD_COLZA = new GrassOnlyBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
+    @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new GrassOnlyBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
 
     // Tile Entity Blocks
     @ObjectHolder( "collector" ) public static Collector COLLECTOR;
@@ -53,6 +56,8 @@ public class ModBlocks {
 
         register( event, "colza", COLZA );
         register( event, "pomegranate", POMEGRANATE );
+        register( event, "world_colza", WORLD_COLZA );
+        register( event, "world_pomegranate", WORLD_POMEGRANATE );
 
         register( event, "collector", new Collector() );
         register( event, "peltier", new Peltier() );

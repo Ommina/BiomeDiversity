@@ -3,9 +3,7 @@ package ommina.biomediversity.world.gen;
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
 import net.minecraft.world.gen.placement.Placement;
@@ -16,7 +14,7 @@ import ommina.biomediversity.world.gen.feature.ModFeatures;
 
 public class ModWorldGeneration {
 
-    private static OreFeature ORE_FEATURE_CONFIG = new OreFeature( OreFeatureConfig::deserialize );
+    private static final OreFeature ORE_FEATURE_CONFIG = new OreFeature( OreFeatureConfig::deserialize );
 
     public static void generate() {
 
@@ -26,15 +24,23 @@ public class ModWorldGeneration {
                 addOre( biome, ModBlocks.ORE_ORINOCITE, Config.orinociteOreGenerationSizeBase.get() + Config.orinociteOreGenerationSizeVariance.get(), Config.orinociteOreGenerationAttempts.get(), Config.orinociteOreGenerationMinY.get(), Config.orinociteOreGenerationMaxY.get() );
             }
 
-            if ( Config.junglePoolsEnabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {
+            if ( Config.junglePoolGenerationEnabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {
                 addJunglePools( biome );
             }
 
-            if ( Config.fluidWellsEnabled.get() )
+            if ( Config.fluidWellGenerationEnabled.get() )
                 addFluidWells( biome );
 
             if ( Config.nocifiedStoneEnabled.get() && biome.getCategory() == Biome.Category.EXTREME_HILLS ) {
                 addOre( biome, ModBlocks.STONE_NOCIFIED_UNDAMAGED, Config.nocifiedStoneGenerationSizeBase.get() + Config.nocifiedStoneGenerationSizeVariance.get(), Config.nocifiedStoneGenerationAttempts.get(), Config.nocifiedStoneGenerationMinY.get(), Config.nocifiedStoneGenerationMaxY.get() );
+            }
+
+            if ( Config.pomegranateGenerationEnabled.get() && biome.getCategory() == Biome.Category.SAVANNA ) {
+                addPlant( ModFeatures.POMEGRANTE, biome );
+            }
+
+            if ( Config.colzaGenerationEnabled.get() && biome.getCategory() == Biome.Category.PLAINS ) {
+                addPlant( ModFeatures.COLZA, biome );
             }
 
         }
@@ -65,19 +71,10 @@ public class ModWorldGeneration {
 
     }
 
-    /*
+    private static void addPlant( Feature<NoFeatureConfig> feature, Biome biome ) {
 
-    private void generateCrop( BlockCrops crop, Random random, int x, int z, World world ) {
-
-        if ( !GeneratePomegranateBush.shouldGenerate() )
-            return;
-
-        GeneratePomegranateBush generator = new GeneratePomegranateBush();
-
-        generator.generate( world, x + 8, z + 8, random );
+        biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature( feature, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 4 ) ) );
 
     }
-
-*/
 
 }

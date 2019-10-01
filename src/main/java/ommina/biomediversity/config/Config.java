@@ -13,10 +13,14 @@ import java.nio.file.Path;
 public class Config {
 
     public static final String CATEGORY_WORLD_GEN = "worldgen";
+
     public static final String SUBCATEGORY_ORINOCITE_ORE = "orinocite_ore";
     public static final String SUBCATEGORY_JUNGLE_POOLS = "jungle_pools";
     public static final String SUBCATEGORY_FLUID_WELLS = "fluid_wells";
     public static final String SUBCATEGORY_NOCIFIED_STONE = "nocified_stone";
+    public static final String SUBCATEGORY_POMEGRANATE = "pomegranate";
+    public static final String SUBCATEGORY_COLZA = "colza";
+
     public static final String CATEGORY_TRANSMITTER = "transmitters";
     public static final String CATAGORY_RECEIVER = "receivers";
     public static final String CATEGORY_RAINBARREL = "rainbarrel";
@@ -34,8 +38,10 @@ public class Config {
     public static ForgeConfigSpec.IntValue orinociteOreGenerationSizeBase;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationSizeVariance;
     public static ForgeConfigSpec.IntValue orinociteOreGenerationAttempts;
-    public static ForgeConfigSpec.BooleanValue junglePoolsEnabled;
-    public static ForgeConfigSpec.BooleanValue fluidWellsEnabled;
+    public static ForgeConfigSpec.BooleanValue junglePoolGenerationEnabled;
+    public static ForgeConfigSpec.BooleanValue fluidWellGenerationEnabled;
+    public static ForgeConfigSpec.BooleanValue pomegranateGenerationEnabled;
+    public static ForgeConfigSpec.BooleanValue colzaGenerationEnabled;
     public static ForgeConfigSpec.IntValue fluidWellGenerationRadiusBase;
     public static ForgeConfigSpec.BooleanValue nocifiedStoneEnabled;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMinY;
@@ -50,8 +56,8 @@ public class Config {
     // Receivers
     public static ForgeConfigSpec.BooleanValue receiverEnableChunkLoading;
     public static ForgeConfigSpec.IntValue receiverCollectorSearchHorizontal;
-    public static ForgeConfigSpec.IntValue receiverCollectorSearchVertialPos;
-    public static ForgeConfigSpec.IntValue receiverCollectorSearchVertialNeg;
+    public static ForgeConfigSpec.IntValue receiverCollectorSearchVerticalPos;
+    public static ForgeConfigSpec.IntValue receiverCollectorSearchVerticalNeg;
 
 
     // Rain Barrel
@@ -98,13 +104,13 @@ public class Config {
 
         COMMON_BUILDER.comment( "Jungle Pools" ).push( SUBCATEGORY_JUNGLE_POOLS );
 
-        junglePoolsEnabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
+        junglePoolGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
 
         COMMON_BUILDER.pop();
 
         COMMON_BUILDER.comment( "Fluid Wells" ).push( SUBCATEGORY_FLUID_WELLS );
 
-        fluidWellsEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
+        fluidWellGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
         fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated silt-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
 
         COMMON_BUILDER.pop();
@@ -117,6 +123,18 @@ public class Config {
         nocifiedStoneGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Nocified stone vein" ).defineInRange( "baseSize", 1, 1, 20 );
         nocifiedStoneGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of a Nocified stone vein" ).defineInRange( "variance", 0, -1, 15 );
         nocifiedStoneGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 2, 1, 15 );
+
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Pomegranate Generation" ).push( SUBCATEGORY_POMEGRANATE );
+
+        pomegranateGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of small pomegrante patches in savanna-type biomes." ).define( "enable_pomegranate", true );
+
+        COMMON_BUILDER.pop();
+
+        COMMON_BUILDER.comment( "Colza Generation" ).push( SUBCATEGORY_COLZA );
+
+        colzaGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of small colza patches in plains-type biomes." ).define( "enable_colza", true );
 
         COMMON_BUILDER.pop();
 
@@ -138,8 +156,8 @@ public class Config {
 
         receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the receiver chunkload distant transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
         receiverCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
-        receiverCollectorSearchVertialPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
-        receiverCollectorSearchVertialNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
+        receiverCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
+        receiverCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
 
     }
 
