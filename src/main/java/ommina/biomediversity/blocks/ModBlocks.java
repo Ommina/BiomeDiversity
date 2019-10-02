@@ -32,8 +32,8 @@ public class ModBlocks {
     // Crops
     @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
     @ObjectHolder( "pomegranate" ) public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
-    @ObjectHolder( "world_colza" ) public static final Block WORLD_COLZA = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
-    @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
+    @ObjectHolder( "world_colza" ) public static final Block WORLD_COLZA = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.PLANT ) );
+    @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.PLANT ) );
 
     // Tile Entity Blocks
     @ObjectHolder( "collector" ) public static Collector COLLECTOR;
@@ -45,7 +45,6 @@ public class ModBlocks {
     // Fluid Blocks  (Only those that we care about)
     @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
     @ObjectHolder( "junglewater" ) public static FlowingFluidBlock JUNGLEWATER;
-
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Block> event ) {

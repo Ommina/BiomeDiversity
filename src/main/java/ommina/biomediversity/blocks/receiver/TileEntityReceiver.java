@@ -23,8 +23,6 @@ import ommina.biomediversity.network.Network;
 import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
 
-import java.util.UUID;
-
 public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, IClusterComponent {
 
     private static final int TANK_COUNT = 1;
@@ -35,8 +33,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private static final int MAX_CHUNKLOAD_DURATION = 5 * 60 * 20 / Constants.RECEIVER_TICK_DELAY; // 5min
     private static final int SEARCH_ON_LOOP = 5;
     private static final int MAX_SEARCH_COUNT = 36000 / (Constants.RECEIVER_TICK_DELAY * SEARCH_ON_LOOP); // ~30min
+
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
+
     private int searchAttemptCount = 0;
     private int fluidHash;
     private int lastAmount = 0;
@@ -48,14 +48,16 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private boolean chunkloadingTimedOut = false;
     private int delay = Constants.RECEIVER_TICK_DELAY;
     private int loop = 1;
+
     private TileEntityCollector collector = new TileEntityCollector();
     private BlockPos collectorPos;
-    private UUID chunkloadTicket = null;
+    private boolean isChunkloadingTransmitter = false;
 
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
     }
 
+//region
     @Override
     public TileEntityCollector getCollector() {
         return this.collector;
@@ -219,26 +221,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    public void resetChunkloadDuration() {
-
-        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
-        chunkloadingTimedOut = false;
-    }
-
-    public void doChunkloading() {
-
-        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
-            return;
-
-        chunkloadDurationRemaining--;
-
-        if ( chunkloadTicket == null && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut )
-            loadPillarChunk();
-
-        else if ( chunkloadTicket != null && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0) )
-            unloadPillarChunk();
-
-    }
 
     private boolean findCollector() {
 
@@ -291,32 +273,55 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         return TANK;
     }
 
-    private void loadPillarChunk() {
+    //region Chunkloading
+    private void loadTransmitterChunk() {
 
-        chunkloadTicket = ChunkLoader.forceSingle( world, this.getAssociatedPos() );
+        ChunkLoader.forceSingle( world, this.getAssociatedPos() );
+
+        isChunkloadingTransmitter = true;
         chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
 
         BiomeDiversity.LOGGER.debug( "Loading pillar at " + this.getAssociatedPos().toString() );
 
     }
 
-    private void unloadPillarChunk() {
+    private void unloadTransmitterChunk() {
 
-        if ( chunkloadTicket == null )
+        if ( !isChunkloadingTransmitter )
             return;
 
         ChunkLoader.releaseSingle( world, this.getAssociatedPos() );
-        chunkloadTicket = null;
+        isChunkloadingTransmitter = false;
 
-        chunkloadingTimedOut = chunkloadDurationRemaining == 0;
+        chunkloadingTimedOut = (chunkloadDurationRemaining == 0);
 
         BiomeDiversity.LOGGER.debug( "Unloading pillar at " + this.getAssociatedPos().toString() );
 
     }
 
-    // End Chunkloading
+    public void resetChunkloadDuration() {
 
-    // Collector Finding
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+        chunkloadingTimedOut = false;
+    }
+
+    public void doChunkloading() {
+
+        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
+            return;
+
+        chunkloadDurationRemaining--;
+
+        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut )
+            loadTransmitterChunk();
+
+        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0) )
+            unloadTransmitterChunk();
+
+    }
+
+
+//region Collector Finding
 
     private boolean getCollectorFromPos() {
 
@@ -329,7 +334,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         TileEntity te = getWorld().getTileEntity( collectorPos );
 
-        if ( te != null && te instanceof TileEntityCollector ) {
+        if ( te instanceof TileEntityCollector ) {
             collector = (TileEntityCollector) te;
             markDirty();
             return true;
@@ -359,8 +364,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         searchAttemptCount = 0;
     }
-
-    // End Collector Finding
-
+//endregion
+//endregion
 
 }

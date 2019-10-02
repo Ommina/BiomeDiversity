@@ -7,49 +7,45 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.UUID;
-
 public class ChunkLoader {
 
-    public static UUID forceSingle( World world, BlockPos pos ) {
+    public static void forceSingle( World world, BlockPos pos ) {
 
-        return forceSingle( world, new ChunkPos( pos ) );
-
-    }
-
-    public static UUID forceSingle( World world, ChunkPos pos ) {
-
-        return forceChunk( world, pos, true );
+        forceSingle( world, new ChunkPos( pos ) );
 
     }
 
-    private static UUID forceChunk( World world, ChunkPos pos, boolean doForceLoad ) {
+    public static void forceSingle( World world, ChunkPos pos ) {
+
+        forceChunk( world, pos, true );
+
+    }
+
+    private static void forceChunk( World world, ChunkPos pos, boolean doForceLoad ) {
 
         if ( pos.x < -1875000 || pos.x > 1875000 || pos.z < -1875000 || pos.z > 1875000 )
-            return null;
+            return;
 
         MinecraftServer server = world.getServer();
 
         if ( server == null )
-            return null;
+            return;
 
         ServerWorld serverworld = server.getWorld( DimensionType.OVERWORLD ); //TODO: Can DimensionManager somehow let us use other dimensions as well?
 
         serverworld.forceChunk( pos.x, pos.z, doForceLoad );
 
-        return UUID.randomUUID();
+    }
+
+    public static void releaseSingle( World world, BlockPos pos ) {
+
+        releaseSingle( world, new ChunkPos( pos ) );
 
     }
 
-    public static boolean releaseSingle( World world, BlockPos pos ) {
+    public static void releaseSingle( World world, ChunkPos pos ) {
 
-        return releaseSingle( world, new ChunkPos( pos ) );
-
-    }
-
-    public static boolean releaseSingle( World world, ChunkPos pos ) {
-
-        return (forceChunk( world, pos, false ) != null);
+        forceChunk( world, pos, false );
 
     }
 
