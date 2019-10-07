@@ -1,5 +1,6 @@
 package ommina.biomediversity.blocks.receiver;
 
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,7 @@ import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankPacket;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
+import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
 
@@ -48,7 +50,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private boolean chunkloadingTimedOut = false;
     private int delay = Constants.RECEIVER_TICK_DELAY;
     private int loop = 1;
-
     private TileEntityCollector collector = new TileEntityCollector();
     private BlockPos collectorPos;
     private boolean isChunkloadingTransmitter = false;
@@ -57,52 +58,67 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         super( ModTileEntities.RECEIVER );
     }
 
-//region
-    @Override
-    public TileEntityCollector getCollector() {
-        return this.collector;
-    }
+    public void doChunkloading() {
 
-    @Override
-    public boolean isClusterComponentConnected() {
-        return (this.collector != null);
-    }
-
-    @Override
-    public void tick() {
-
-        if ( firstTick )
-            doFirstTick();
-
-        delay--;
-
-        if ( delay > 0 )
+        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
             return;
 
-        delay = Constants.RECEIVER_TICK_DELAY;
+        chunkloadDurationRemaining--;
 
-        if ( world.isRemote || world.isBlockPowered( getPos() ) )
-            return;
+        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut )
+            loadTransmitterChunk();
 
-        doMainWork();
-
-        loop++;
+        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0) )
+            unloadTransmitterChunk();
 
     }
 
-    @Override
-    protected void doFirstTick() {
-        super.doFirstTick();
+    public void refreshReceiverTankFromPillarNetwork() {
 
-        if ( !world.isRemote ) {
-            if ( this.getOwner() == null )
-                BiomeDiversity.LOGGER.warn( "Receiver has null owner at: " + this.getPos() );
-            else
-                refreshReceiverTankFromPillarNetwork();
-        }
+        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
 
-        BROADCASTER.reset();
+            TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getIdentifier() );
 
+            if ( pd.fluid != null ) {
+
+                this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+
+                lastAmount = pd.getAmount();
+
+                if ( !FluidStrengths.contains( pd.fluid.hashCode() ) ) {
+                    BiomeDiversity.LOGGER.warn( "Fluid network contains a fluid with hash " + pd.fluid.hashCode() + ", but it is not in the config.  Perhaps it was removed?  Setting power to 1.00.  BiomeId: " + pd.biomeId );
+                    power = 1;
+                } else {
+                    power = FluidStrengths.getStrength( pd.fluid.hashCode() );
+                }
+
+                biomeId = pd.biomeId.toString();
+                temperature = pd.temperature;
+                rainfall = pd.rainfall;
+
+            }
+
+        } );
+
+    }
+
+    public void removeCollector() {
+
+        collectorPos = null;
+        collector = null;
+        markDirty();
+
+    }
+
+    public void resetChunkloadDuration() {
+
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+        chunkloadingTimedOut = false;
+    }
+
+    public void resetSearchCount() {
+
+        searchAttemptCount = 0;
     }
 
     private void doMainWork() {
@@ -192,36 +208,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    public void refreshReceiverTankFromPillarNetwork() {
-
-        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
-
-            TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getIdentifier() );
-
-            if ( pd.fluid != null ) {
-
-                this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
-
-                lastAmount = pd.getAmount();
-
-                if ( !FluidStrengths.contains( pd.fluid.hashCode() ) ) {
-                    BiomeDiversity.LOGGER.warn( "Fluid network contains a fluid with hash " + pd.fluid.hashCode() + ", but it is not in the config.  Perhaps it was removed?  Setting power to 1.00.  BiomeId: " + pd.biomeId );
-                    power = 1;
-                } else {
-                    power = FluidStrengths.getStrength( pd.fluid.hashCode() );
-                }
-
-                biomeId = pd.biomeId.toString();
-                temperature = pd.temperature;
-                rainfall = pd.rainfall;
-
-            }
-
-        } );
-
-    }
-
-
     private boolean findCollector() {
 
         if ( collectorPos != null && getCollectorFromPos() )
@@ -257,20 +243,27 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    @Override
-    public void doBroadcast() {
+    private boolean getCollectorFromPos() {
 
-        if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankPacket( this ) );
-            BROADCASTER.reset();
+        // Logic for unloaded collector is different than a collector that just isn't found.
+        // If pos is set, and there's no collector there, unset the pos, clear the nbt, and clear the field so it will start searching
+        // If collector is just unloaded... stall / hang out.  It might still exist, but until it's loaded, we're stuck.
+
+        if ( collectorPos == null || !hasWorld() || !world.isBlockLoaded( collectorPos ) )
+            return false;
+
+        TileEntity te = getWorld().getTileEntity( collectorPos );
+
+        if ( te instanceof TileEntityCollector ) {
+            collector = (TileEntityCollector) te;
+            markDirty();
+            return true;
         }
 
-    }
+        removeCollector();
 
-    @Override
-    public BdFluidTank getTank( int index ) {
+        return false;
 
-        return TANK;
     }
 
     //region Chunkloading
@@ -299,59 +292,64 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    public void resetChunkloadDuration() {
+    // Overrides
+    @Override
+    public void doBroadcast() {
 
-        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
-        chunkloadingTimedOut = false;
-    }
-
-    public void doChunkloading() {
-
-        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
-            return;
-
-        chunkloadDurationRemaining--;
-
-        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut )
-            loadTransmitterChunk();
-
-        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0) )
-            unloadTransmitterChunk();
-
-    }
-
-
-//region Collector Finding
-
-    private boolean getCollectorFromPos() {
-
-        // Logic for unloaded collector is different than a collector that just isn't found.
-        // If pos is set, and there's no collector there, unset the pos, clear the nbt, and clear the field so it will start searching
-        // If collector is just unloaded... stall / hang out.  It might still exist, but until it's loaded, we're stuck.
-
-        if ( collectorPos == null || !hasWorld() || !world.isBlockLoaded( collectorPos ) )
-            return false;
-
-        TileEntity te = getWorld().getTileEntity( collectorPos );
-
-        if ( te instanceof TileEntityCollector ) {
-            collector = (TileEntityCollector) te;
-            markDirty();
-            return true;
+        if ( BROADCASTER.needsBroadcast() ) {
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankPacket( this ) );
+            BROADCASTER.reset();
         }
 
-        removeCollector();
+    }
 
-        return false;
+    @Override
+    public BdFluidTank getTank( int index ) {
+
+        return TANK;
+    }
+
+    @Override
+    protected void doFirstTick() {
+        super.doFirstTick();
+
+        if ( !world.isRemote ) {
+            if ( this.getOwner() == null )
+                BiomeDiversity.LOGGER.warn( "Receiver has null owner at: " + this.getPos() );
+            else
+                refreshReceiverTankFromPillarNetwork();
+        }
+
+        BROADCASTER.reset();
 
     }
 
-    public void removeCollector() {
+    @Override
+    public void read( CompoundNBT nbt ) {
 
-        collectorPos = null;
-        collector = null;
-        markDirty();
+        collectorPos = NbtUtils.getBlockPos( nbt );
 
+        super.read( nbt );
+
+    }
+
+    @Override
+    public CompoundNBT write( CompoundNBT nbt ) {
+
+        NbtUtils.putBlockPos( nbt, collectorPos );
+
+        return super.write( nbt );
+
+    }
+
+    @Override
+    public TileEntityCollector getCollector() {
+        return this.collector;
+    }
+
+    @Override
+    public boolean isClusterComponentConnected() {
+        return (this.collector != null);
     }
 
     @Override
@@ -360,11 +358,26 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         return true;
     }
 
-    public void resetSearchCount() {
+    @Override
+    public void tick() {
 
-        searchAttemptCount = 0;
+        if ( firstTick )
+            doFirstTick();
+
+        delay--;
+
+        if ( delay > 0 )
+            return;
+
+        delay = Constants.RECEIVER_TICK_DELAY;
+
+        if ( world.isRemote || world.isBlockPowered( getPos() ) )
+            return;
+
+        doMainWork();
+
+        loop++;
+
     }
-//endregion
-//endregion
 
 }

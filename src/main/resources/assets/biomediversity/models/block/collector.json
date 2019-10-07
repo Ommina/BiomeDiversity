@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "biomediversity:block/background_dark",
-    "2": "biomediversity:block/cluster_machine_background2",
-    "6": "biomediversity:block/collector_parts",
+    "2": "biomediversity:block/cluster_bg_gradiant",
+    "6": "biomediversity:block/cluster_parts",
     "7": "biomediversity:block/cluster_gradient",
     "particle": "biomediversity:block/background_dark"
   },

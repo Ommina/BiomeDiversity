@@ -110,7 +110,7 @@ public class LinkStaff extends Item {
         compound.putInt( "copyfrom", tile.getSource() );
         compound.putUniqueId( "identifier", tile.getIdentifier() );
 
-        NbtUtils.addBlockPosToNbt( compound, tile.getPos() );
+        NbtUtils.putBlockPos( compound, tile.getPos() );
 
         item.setTag( compound );
 
@@ -124,7 +124,7 @@ public class LinkStaff extends Item {
 
         CompoundNBT compound = item.getTag();
 
-        TileEntityAssociation.createLink( world, tile, compound.getUniqueId( "identifier" ), NbtUtils.getBlockPosFromNbt( compound ) );
+        TileEntityAssociation.createLink( world, tile, compound.getUniqueId( "identifier" ), NbtUtils.getBlockPos( compound ) );
 
         item.clearCustomName();
         item.setTag( null );
@@ -149,7 +149,7 @@ public class LinkStaff extends Item {
         compound.putInt( "copyfrom", 1 );
         compound.putUniqueId( "identifier", tile.getAssociatedIdentifier() );
 
-        NbtUtils.addBlockPosToNbt( compound, pos );
+        NbtUtils.putBlockPos( compound, pos );
 
         item.setTag( compound );
 

@@ -301,7 +301,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         if ( compound.hasUniqueId( "associatedidentifier" ) ) {
             associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
-            associatedPos = NbtUtils.getBlockPosFromNbt( compound );
+            associatedPos = NbtUtils.getBlockPos( compound );
         }
 
         super.read( compound );
@@ -320,7 +320,7 @@ public abstract class TileEntityAssociation extends TileEntity {
             compound.putUniqueId( "associatedidentifier", associatedIdentifier );
 
         if ( associatedPos != null )
-            NbtUtils.addBlockPosToNbt( compound, associatedPos );
+            NbtUtils.putBlockPos( compound, associatedPos );
 
         return super.write( compound );
 

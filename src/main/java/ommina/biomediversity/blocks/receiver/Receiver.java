@@ -30,7 +30,6 @@ import javax.annotation.Nullable;
 public class Receiver extends Block {
 
     private static final VoxelShape SHAPE = Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 32.0D, 16.0D );
-    //Block.makeCuboidShape( 0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D ),
     private static final BooleanProperty IS_CONNECTED = BooleanProperty.create( "connected" );
 
 
