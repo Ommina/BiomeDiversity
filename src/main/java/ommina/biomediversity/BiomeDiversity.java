@@ -4,6 +4,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -78,22 +79,9 @@ public class BiomeDiversity {
         MinecraftForge.EVENT_BUS.register( this );
     }
 
-    private void setup( final FMLCommonSetupEvent event ) {
+    public static ResourceLocation getId( String path ) {
 
-        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
-
-        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
-
-        Network.init();
-
-    }
-
-    private void doClientStuff( final FMLClientSetupEvent event ) {
-
-        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
-
-        //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
-        //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
+        return new ResourceLocation( MODID, path );
 
     }
 
@@ -110,9 +98,22 @@ public class BiomeDiversity {
 
     }
 
-    public static ResourceLocation getId( String path ) {
+    private void doClientStuff( final FMLClientSetupEvent event ) {
 
-        return new ResourceLocation( MODID, path );
+        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
+
+        //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
+        //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
+
+    }
+
+    private void setup( final FMLCommonSetupEvent event ) {
+
+        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
+
+        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
+
+        Network.init();
 
     }
 
@@ -149,21 +150,6 @@ public class BiomeDiversity {
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
     public static class ForgeEvents {
 
-        /*
-
-        @SubscribeEvent
-        public static void addSprites( final TextureStitchEvent.Pre event ) { // Fluids may be unnecessary with future Forge versions
-
-            event.addSprite( BiomeDiversity.getId( "block/fluid/fluid_blank_flow" ) );
-            event.addSprite( BiomeDiversity.getId( "block/fluid/fluid_blank_still" ) );
-            event.addSprite( BiomeDiversity.getId( "block/fluid/molten_metal_flow" ) );
-            event.addSprite( BiomeDiversity.getId( "block/fluid/molten_metal_still" ) );
-            event.addSprite( BiomeDiversity.getId( "block/fluid/viscous_blank_flow" ) );
-            event.addSprite( BiomeDiversity.getId( "block/fluid/viscous_blank_still" ) );
-
-        }
-
-        */
 
     }
 
@@ -176,6 +162,13 @@ public class BiomeDiversity {
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
+
+        }
+
+        @SubscribeEvent
+        public static void addSprites( final TextureStitchEvent.Pre event ) { // Fluids may be unnecessary with future Forge versions
+
+            event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
 
         }
 

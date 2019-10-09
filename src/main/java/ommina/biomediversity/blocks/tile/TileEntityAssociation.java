@@ -54,26 +54,26 @@ public abstract class TileEntityAssociation extends TileEntity {
         TileEntity remoteTile = world.getTileEntity( remotePos );
         TileEntityAssociation tea = createLink( world, remoteTile, tile );
 
-        UUID identifierPillar;
+        UUID identifierTransmitter;
         UUID identifierReceiver;
         UUID owner;
 
         if ( tile instanceof TileEntityTransmitter ) {
-            identifierPillar = tile.getIdentifier();
+            identifierTransmitter = tile.getIdentifier();
             identifierReceiver = tea.getIdentifier();
             owner = tile.getOwner();
         } else {
             identifierReceiver = tile.getIdentifier();
-            identifierPillar = tea.getIdentifier();
+            identifierTransmitter = tea.getIdentifier();
             owner = tea.getOwner();
         }
 
-        createLinkComplete( world, owner, identifierPillar, identifierReceiver );
+        createLinkComplete( world, owner, identifierTransmitter, identifierReceiver );
 
         if ( tile instanceof TileEntityReceiver )
-            ((TileEntityReceiver) tile).refreshReceiverTankFromPillarNetwork();
+            ((TileEntityReceiver) tile).refreshReceiverTankFromTransmitterNetwork();
         else if ( remoteTile instanceof TileEntityReceiver )
-            ((TileEntityReceiver) remoteTile).refreshReceiverTankFromPillarNetwork();
+            ((TileEntityReceiver) remoteTile).refreshReceiverTankFromTransmitterNetwork();
 
         if ( shouldUnload )
             ChunkLoader.releaseSingle( world, remotePos );
@@ -82,9 +82,9 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
-    private static void createLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
+    private static void createLinkComplete( World world, UUID owner, UUID identifierTransmitter, UUID identifierReceiver ) {
 
-        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( owner, identifierPillar ).receiver = identifierReceiver );
+        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( owner, identifierTransmitter ).receiver = identifierReceiver );
 
     }
 
@@ -167,32 +167,32 @@ public abstract class TileEntityAssociation extends TileEntity {
             return;
         }
 
-        UUID identifierPillar;
+        UUID identifierTransmitter;
         UUID identifierReceiver;
         UUID owner;
 
         if ( tile instanceof TileEntityTransmitter ) {
-            identifierPillar = tile.getIdentifier();
+            identifierTransmitter = tile.getIdentifier();
             identifierReceiver = tea.getIdentifier();
             owner = tile.getOwner();
         } else {
             identifierReceiver = tile.getIdentifier();
-            identifierPillar = tea.getIdentifier();
+            identifierTransmitter = tea.getIdentifier();
             owner = tea.getOwner();
         }
 
-        removeLinkComplete( world, owner, identifierPillar, identifierReceiver );
+        removeLinkComplete( world, owner, identifierTransmitter, identifierReceiver );
 
         if ( !isDestroying )
             removeLink( tile );
 
     }
 
-    private static void removeLinkComplete( World world, UUID owner, UUID identifierPillar, UUID identifierReceiver ) {
+    private static void removeLinkComplete( World world, UUID owner, UUID identifierTransmitter, UUID identifierReceiver ) {
 
         world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
 
-            TransmitterData pd = cap.getTransmitter( owner, identifierPillar );
+            TransmitterData pd = cap.getTransmitter( owner, identifierTransmitter );
 
             if ( pd.receiver == null ) {
                 BiomeDiversity.LOGGER.error( "Receiver is null when attempting to unlink a TransmitterNetwork transmitter/receiver pair" );

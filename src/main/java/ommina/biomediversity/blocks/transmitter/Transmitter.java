@@ -32,7 +32,6 @@ import ommina.biomediversity.blocks.BlockTileEntity;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.items.ModItems;
 import ommina.biomediversity.worlddata.TransmitterData;
-import ommina.biomediversity.worlddata.capabilities.TransmitterNetworkProvider;
 
 import javax.annotation.Nullable;
 
@@ -49,17 +48,30 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     }
 
-    @Override
-    public boolean hasTileEntity( BlockState state ) {
-        return true;
+    private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
+
+        BiomeDiversity.LOGGER.info( "Transmitter identifier: " + tile.getIdentifier().toString() );
+        BiomeDiversity.LOGGER.info( " Position: " + tile.getPos().toString() );
+
+        if ( tile.getOwner() != null )
+            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
+
+        if ( tile.getAssociatedIdentifier() != null )
+            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
+
+        if ( tile.getAssociatedPos() != null )
+            BiomeDiversity.LOGGER.info( "  Position  : " + tile.getAssociatedPos().toString() );
+
+        if ( tile.getTank( 0 ).getFluid() != null )
+            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
+
+        Biome b = world.getBiome( pos );
+
+        BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
+
     }
 
-    @Nullable
-    @Override
-    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityTransmitter();
-    }
-
+// Overrides
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -93,8 +105,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
                 if ( far.isSuccess() )
                     player.setHeldItem( hand, far.getResult() );
-
-                BiomeDiversity.LOGGER.warn( "splish!" );
 
                 return true;
             }
@@ -163,27 +173,16 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         builder.add( IS_CONNECTED );
     }
 
-    private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
-
-        BiomeDiversity.LOGGER.info( "Pillar identifier: " + tile.getIdentifier().toString() );
-        BiomeDiversity.LOGGER.info( " Position: " + tile.getPos().toString() );
-
-        if ( tile.getOwner() != null )
-            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
-
-        if ( tile.getAssociatedIdentifier() != null )
-            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
-
-        if ( tile.getAssociatedPos() != null )
-            BiomeDiversity.LOGGER.info( "  Position  : " + tile.getAssociatedPos().toString() );
-
-        if ( tile.getTank( 0 ).getFluid() != null )
-            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
-
-        Biome b = world.getBiome( pos );
-
-        BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
-
+    @Override
+    public boolean hasTileEntity( BlockState state ) {
+        return true;
     }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
+        return new TileEntityTransmitter();
+    }
+//Overrides
 
 }

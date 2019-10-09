@@ -28,7 +28,7 @@ public class FastTesrRainBarrel<T extends TileEntityRainBarrel> extends TileEnti
 
             float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) Config.rainbarrelCapacity.get()));
 
-            RenderHelper.renderFluidCube( buffer, x, y, z, 1f / 16f, posY, high, fluid, faces );
+            RenderHelper.renderCube( buffer, x, y, z, 1f / 16f, posY, high, fluid, faces );
 
         }
 

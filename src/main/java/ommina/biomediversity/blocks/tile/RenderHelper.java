@@ -3,28 +3,72 @@ package ommina.biomediversity.blocks.tile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.awt.*;
 import java.util.EnumSet;
 
 public class RenderHelper {
 
-    public static void renderFluidCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
+    public enum Faces {
+        TOP,
+        BOTTOM,
+        NORTH,
+        SOUTH,
+        WEST,
+        EAST
+    }
 
-        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( fluid.getFluid().getAttributes().getStillTexture() );
-        final int color = fluid.getFluid().getAttributes().getColor();
+    public static float[] getRGBA( int color ) {
 
-        renderCube( buffer, x, y, z, w, h, l, sprite, color, faces );
+        return new float[]{ ((color >> 16) & 0xFF) / 255f, ((color >> 8) & 0xFF) / 255f, ((color) & 0xFF) / 255f, ((color >> 24) & 0xFF) / 255f };
 
     }
 
-    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, int color, EnumSet<Faces> faces ) {
+    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, int color, EnumSet<Faces> faces ) {
+
+        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+        final float[] rgba = getRGBA( color );
+
+        renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+
+    }
+
+    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, float[] rgba, EnumSet<Faces> faces ) {
+
+        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+
+        renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+
+    }
+
+    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {
+
+        render( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+
+    }
+
+    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
+
+        renderCube( buffer, x, y, z, w, h, l, fluid.getFluid().getAttributes().getStillTexture(), fluid.getFluid().getAttributes().getColor(), faces );
+
+    }
+
+    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, Color color, EnumSet<Faces> faces ) {
+
+        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+        final float[] rgba = getRGBA( color.getRGB() );
+
+        renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+
+    }
+
+    private static void render( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {
 
         double texY = Math.min( 16, h * 16f );
 
         buffer.setTranslation( x, y, z );
-
-        float[] rgba = new float[]{ ((color >> 16) & 0xFF) / 255f, ((color >> 8) & 0xFF) / 255f, ((color) & 0xFF) / 255f, ((color >> 24) & 0xFF) / 255f };
 
         if ( faces.contains( Faces.TOP ) ) {
             buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
@@ -61,6 +105,11 @@ public class RenderHelper {
             buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
             buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
         }
+
+    }
+
+    private static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, int color, EnumSet<Faces> faces ) {
+
 
     }
 
@@ -110,14 +159,6 @@ public class RenderHelper {
 
 */
 
-    public enum Faces {
-        TOP,
-        BOTTOM,
-        NORTH,
-        SOUTH,
-        WEST,
-        EAST
-    }
 
 /*
 

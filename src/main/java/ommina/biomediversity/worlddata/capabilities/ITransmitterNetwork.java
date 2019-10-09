@@ -9,16 +9,16 @@ import java.util.UUID;
 
 public interface ITransmitterNetwork {
 
-    boolean removeTransmitter( @Nonnull final TileEntityTransmitter tile );
-
-    boolean removeTransmitter( @Nonnull final UUID playerIdentifier, @Nonnull final UUID transmitterIdentifier );
-
-    TransmitterData getTransmitter( @Nonnull final UUID playerIdentifier, @Nonnull final UUID pillarIdentifier );
-
     Set<UUID> getPlayerList();
+
+    TransmitterData getTransmitter( @Nonnull final UUID playerIdentifier, @Nonnull final UUID transmitterIdentifier );
 
     Set<UUID> getTransmitterList( final UUID playerIdentifier );
 
     boolean isEmpty();
+
+    boolean removeTransmitter( @Nonnull final TileEntityTransmitter tile );
+
+    boolean removeTransmitter( @Nonnull final UUID playerIdentifier, @Nonnull final UUID transmitterIdentifier );
 
 }

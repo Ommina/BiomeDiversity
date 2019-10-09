@@ -39,6 +39,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
 
+// Overrides
         @Override
         protected void onFill( int amount ) {
 
@@ -46,6 +47,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
             super.onContentsChanged();
         }
+//Overrides
 
     };
     private LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
@@ -58,6 +60,12 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
         TANK.addFluidToWhitelist( fluidWhitelist );
 
         this.source = LINKING_SOURCE_TRANSMITTER;
+
+    }
+
+    public static void addFluidToWhitelist( Fluid fluid ) {
+
+        fluidWhitelist.add( fluid );
 
     }
 
@@ -106,40 +114,12 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
         }
     }
 
-    public static void addFluidToWhitelist( Fluid fluid ) {
+    private IFluidHandler createHandler() {
 
-        fluidWhitelist.add( fluid );
-
+        return TANK;
     }
 
-    @Override
-    public void onLoad() {
-
-        BROADCASTER.reset();
-
-        BiomeDiversity.LOGGER.info( "Receiver Loaded" );
-
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-
-        return true;
-    }
-
-    @Override
-    public void tick() {
-
-        if ( firstTick )
-            doFirstTick();
-
-        if ( world.isRemote )
-            return;
-
-        doBroadcast();
-
-    }
-
+// Overrides
     @Override
     public void doBroadcast() {
 
@@ -154,6 +134,32 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     public BdFluidTank getTank( int index ) {
 
         return TANK;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
+
+        if ( cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY )
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty( cap, handler );
+
+        return super.getCapability( cap, side );
+
+    }
+
+    @Override
+    public void onLoad() {
+
+        BROADCASTER.reset();
+
+        BiomeDiversity.LOGGER.info( "Transmitter loaded: " + getPos().toString() );
+
+    }
+
+    @Override
+    public boolean hasFastRenderer() {
+
+        return true;
     }
 
     @Override
@@ -171,20 +177,18 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     }
 
-    private IFluidHandler createHandler() {
-
-        return TANK;
-    }
-
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
+    public void tick() {
 
-        if ( cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY )
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty( cap, handler );
+        if ( firstTick )
+            doFirstTick();
 
-        return super.getCapability( cap, side );
+        if ( world.isRemote )
+            return;
+
+        doBroadcast();
 
     }
+//Overrides
 
 }

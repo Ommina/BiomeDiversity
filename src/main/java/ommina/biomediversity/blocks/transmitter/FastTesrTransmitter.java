@@ -31,7 +31,7 @@ public class FastTesrTransmitter<T extends TileEntityTransmitter> extends TileEn
 
             float height = (HEIGHT * ((float) fluid.getAmount() / (float) Config.transmitterCapacity.get()));
 
-            RenderHelper.renderFluidCube( buffer, x, y, z, WIDTH, height, LENGTH, fluid, faces );
+            RenderHelper.renderCube( buffer, x, y, z, WIDTH, height, LENGTH, fluid, faces );
 
         }
 
