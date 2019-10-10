@@ -1,8 +1,8 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "1": "biomediversity:block/cluster_parts",
-    "particle": "biomediversity:block/cluster_parts"
+    "1": "biomediversity:block/cluster/cluster_parts",
+    "particle": "biomediversity:block/cluster/cluster_parts"
   },
   "elements": [
     {
