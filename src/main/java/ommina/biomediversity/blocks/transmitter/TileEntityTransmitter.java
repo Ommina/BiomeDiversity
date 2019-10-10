@@ -39,7 +39,8 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
 
-// Overrides
+        //region Overrides
+        // Overrides
         @Override
         protected void onFill( int amount ) {
 
@@ -47,6 +48,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
             super.onContentsChanged();
         }
+//endregion Overrides
 //Overrides
 
     };
@@ -114,12 +116,29 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
         }
     }
 
+    public void refreshTransmitterTankFromTransmitterNetwork() {
+
+        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+            TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getIdentifier() );
+
+            if ( pd.fluid == null ) {
+                this.getTank( 0 ).setFluid( FluidStack.EMPTY );
+            } else {
+                this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+            }
+
+        } );
+
+    }
+
     private IFluidHandler createHandler() {
 
         return TANK;
     }
 
-// Overrides
+//region Overrides
+
     @Override
     public void doBroadcast() {
 
@@ -134,6 +153,32 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     public BdFluidTank getTank( int index ) {
 
         return TANK;
+    }
+
+    @Override
+    protected void doFirstTick() {
+        super.doFirstTick();
+
+        if ( world.isRemote )
+            return;
+
+        refreshTransmitterTankFromTransmitterNetwork();
+
+    }
+
+    @Override
+    public void read( CompoundNBT tag ) {
+
+        TANK.read( tag );
+        super.read( tag );
+    }
+
+    @Override
+    public CompoundNBT write( CompoundNBT tag ) {
+
+        tag = TANK.write( tag );
+        return super.write( tag );
+
     }
 
     @Nonnull
@@ -163,21 +208,6 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     }
 
     @Override
-    public void read( CompoundNBT tag ) {
-
-        TANK.read( tag );
-        super.read( tag );
-    }
-
-    @Override
-    public CompoundNBT write( CompoundNBT tag ) {
-
-        tag = TANK.write( tag );
-        return super.write( tag );
-
-    }
-
-    @Override
     public void tick() {
 
         if ( firstTick )
@@ -189,6 +219,6 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
         doBroadcast();
 
     }
-//Overrides
+//endregion Overrides
 
 }

@@ -32,9 +32,16 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
     private static final float[] COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
     private static final float[] COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
 
+    private static void renderLight( BufferBuilder buffer, double x, double y, double z, float offset, float size, float side, ResourceLocation spriteResource, float[] color ) {
 
-//region Overrides
+        RenderHelper.renderCube( buffer, x + offset, y, z + offset, size, HEIGHT_CONNECTION, size, spriteResource, color, FACES_NORTHWEST );
+        RenderHelper.renderCube( buffer, x + side, y, z + offset, size, HEIGHT_CONNECTION, size, spriteResource, color, FACES_NORTHEAST );
+        RenderHelper.renderCube( buffer, x + offset, y, z + side, size, HEIGHT_CONNECTION, size, spriteResource, color, FACES_SOUTHWEST );
+        RenderHelper.renderCube( buffer, x + side, y, z + side, size, HEIGHT_CONNECTION, size, spriteResource, color, FACES_SOUTHEAST );
 
+    }
+
+    //region Overrides
     @Override
     public void renderTileEntityFast( TileEntityReceiver te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer ) {
 
@@ -52,24 +59,12 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
 
         y += 3f / 16f;
 
-        float offset = 1f / 16f / 2f;
-        float size = 1f / 16f / 2f;
-        float side = 15f / 16f;
+        final float side = 15f / 16f;
 
         float[] color = te.isClusterComponentConnected() ? COLOUR_CONNECTED : COLOUR_DISCONNECTED;
 
-        RenderHelper.renderCube( buffer, x + offset, y, z + offset, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_NORTHWEST );
-        RenderHelper.renderCube( buffer, x + side, y, z + offset, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_NORTHEAST );
-        RenderHelper.renderCube( buffer, x + offset, y, z + side, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_SOUTHWEST );
-        RenderHelper.renderCube( buffer, x + side, y, z + side, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_SOUTHEAST );
-
-        offset = 0;
-        size = 1f / 16f;
-
-        RenderHelper.renderCube( buffer, x + offset, y, z + offset, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_NORTHWEST );
-        RenderHelper.renderCube( buffer, x + side, y, z + offset, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_NORTHEAST );
-        RenderHelper.renderCube( buffer, x + offset, y, z + side, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_SOUTHWEST );
-        RenderHelper.renderCube( buffer, x + side, y, z + side, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_SOUTHEAST );
+        renderLight( buffer, x, y, z, 1f / 16f / 2f, 1f / 16f / 2f, side, INTERNAL_SPRITE, color );
+        renderLight( buffer, x, y, z, 0, 1f / 16f, side, EXTERNAL_SPRITE, color );
 
     }
 
