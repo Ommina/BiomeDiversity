@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
-import ommina.biomediversity.network.GenericTankPacketRequest;
+import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.world.chunkloader.ChunkLoader;
@@ -274,7 +274,7 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( !this.getWorld().isRemote ) {
             updateBlockStateForAntenna( this, this.hasLink() );
         } else {
-            Network.channel.sendToServer( new GenericTankPacketRequest( this.pos ) );
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
         }
 
     }

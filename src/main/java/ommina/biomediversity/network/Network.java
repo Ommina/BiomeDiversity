@@ -22,10 +22,10 @@ public class Network {
              .networkProtocolVersion( () -> PROTOCOL_VERSION )
              .simpleChannel();
 
-        channel.messageBuilder( GenericTankPacket.class, channelId++ )
-             .decoder( GenericTankPacket::fromBytes )
-             .encoder( GenericTankPacket::toBytes )
-             .consumer( GenericTankPacket::handle )
+        channel.messageBuilder( GenericTankUpdatePacket.class, channelId++ )
+             .decoder( GenericTankUpdatePacket::fromBytes )
+             .encoder( GenericTankUpdatePacket::toBytes )
+             .consumer( GenericTankUpdatePacket::handle )
              .add();
 
         channel.messageBuilder( ReceiverUpdatePacket.class, channelId++ )
@@ -34,10 +34,10 @@ public class Network {
              .consumer( TileEntityReceiver::handle )
              .add();
 
-        channel.messageBuilder( GenericTankPacketRequest.class, channelId++ )
-             .decoder( GenericTankPacketRequest::fromBytes )
-             .encoder( GenericTankPacketRequest::toBytes )
-             .consumer( GenericTankPacketRequest::handle )
+        channel.messageBuilder( GenericTilePacketRequest.class, channelId++ )
+             .decoder( GenericTilePacketRequest::fromBytes )
+             .encoder( GenericTilePacketRequest::toBytes )
+             .consumer( GenericTilePacketRequest::handle )
              .add();
 
     }

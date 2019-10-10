@@ -16,7 +16,7 @@ import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.network.BroadcastHelper;
-import ommina.biomediversity.network.GenericTankPacket;
+import ommina.biomediversity.network.GenericTankUpdatePacket;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
 
@@ -59,7 +59,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankPacket( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
             BROADCASTER.reset();
         }
 

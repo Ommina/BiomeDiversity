@@ -21,6 +21,7 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
     private static final EnumSet<RenderHelper.Faces> FACES_SOUTHEAST = EnumSet.of( RenderHelper.Faces.SOUTH, RenderHelper.Faces.EAST );
 
     private static final ResourceLocation INTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
+    private static final ResourceLocation EXTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_external" );
 
     private static final float WIDTH_FLUID = 14f / 16f;
     private static final float LENGTH_FLUID = 14f / 16f;
@@ -51,9 +52,9 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
 
         y += 3f / 16f;
 
-        final float offset = 1f / 16f / 2f;
-        final float size = 1f / 16f / 2f;
-        final float side = 15f / 16f;
+        float offset = 1f / 16f / 2f;
+        float size = 1f / 16f / 2f;
+        float side = 15f / 16f;
 
         float[] color = te.isClusterComponentConnected() ? COLOUR_CONNECTED : COLOUR_DISCONNECTED;
 
@@ -61,6 +62,14 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
         RenderHelper.renderCube( buffer, x + side, y, z + offset, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_NORTHEAST );
         RenderHelper.renderCube( buffer, x + offset, y, z + side, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_SOUTHWEST );
         RenderHelper.renderCube( buffer, x + side, y, z + side, size, HEIGHT_CONNECTION, size, INTERNAL_SPRITE, color, FACES_SOUTHEAST );
+
+        offset = 0;
+        size = 1f / 16f;
+
+        RenderHelper.renderCube( buffer, x + offset, y, z + offset, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_NORTHWEST );
+        RenderHelper.renderCube( buffer, x + side, y, z + offset, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_NORTHEAST );
+        RenderHelper.renderCube( buffer, x + offset, y, z + side, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_SOUTHWEST );
+        RenderHelper.renderCube( buffer, x + side, y, z + side, size, HEIGHT_CONNECTION, size, EXTERNAL_SPRITE, color, FACES_SOUTHEAST );
 
     }
 

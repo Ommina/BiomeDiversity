@@ -166,9 +166,10 @@ public class BiomeDiversity {
         }
 
         @SubscribeEvent
-        public static void addSprites( final TextureStitchEvent.Pre event ) { // Fluids may be unnecessary with future Forge versions
+        public static void addSprites( final TextureStitchEvent.Pre event ) {
 
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
+            event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
 
         }
 

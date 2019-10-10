@@ -81,7 +81,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                     ter.TANK.setFluid( packet.fluid );
                     ter.collectorPos = packet.collectorPos;
 
-                    if ( world.get().isBlockLoaded( ter.collectorPos ) ) {
+                    if ( ter.collectorPos != null && world.get().isBlockLoaded( ter.collectorPos ) ) {
                         ter.collector = (TileEntityCollector) world.get().getTileEntity( ter.collectorPos );
                     }
 
@@ -241,7 +241,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     private boolean findCollector() {
 
-        if ( collectorPos != null && isCollectorTeAtCollectorPos() )
+        if ( collectorPos != null && checkCollectorTeAtCollectorPos() )
             return true;
 
         if ( searchAttemptCount > MAX_SEARCH_COUNT )
@@ -279,7 +279,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    private boolean isCollectorTeAtCollectorPos() {
+    private boolean checkCollectorTeAtCollectorPos() {
 
         // Logic for unloaded collector is different than a collector that just isn't found.
         // If pos is set, and there's no collector there, unset the pos, clear the nbt, and clear the field so it will start searching
@@ -349,6 +349,9 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         super.doFirstTick();
 
         if ( !world.isRemote ) {
+
+            checkCollectorTeAtCollectorPos();
+
             if ( this.getOwner() == null )
                 BiomeDiversity.LOGGER.warn( "Receiver has null owner at: " + this.getPos() );
             else

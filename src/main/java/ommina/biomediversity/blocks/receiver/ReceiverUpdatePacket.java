@@ -1,6 +1,7 @@
 package ommina.biomediversity.blocks.receiver;
 
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.network.ITankBroadcast;
@@ -12,6 +13,10 @@ public class ReceiverUpdatePacket {
     public BlockPos collectorPos;
 
     public ReceiverUpdatePacket() {
+    }
+
+    public ReceiverUpdatePacket( TileEntity tile ) {
+        this( (TileEntityReceiver) tile );
     }
 
     public ReceiverUpdatePacket( TileEntityReceiver tile ) {

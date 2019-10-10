@@ -12,21 +12,21 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class GenericTankPacket {
+public class GenericTankUpdatePacket {
 
     private FluidStack fluid;
     private BlockPos pos;
 
-    public GenericTankPacket() {
+    public GenericTankUpdatePacket() {
     }
 
-    public GenericTankPacket( Fluid fluid, int amount ) {
+    public GenericTankUpdatePacket( Fluid fluid, int amount ) {
 
         this.fluid = new FluidStack( fluid, amount );
 
     }
 
-    public GenericTankPacket( TileEntity tile ) {
+    public GenericTankUpdatePacket( TileEntity tile ) {
 
         if ( !(tile instanceof ITankBroadcast) )
             throw new RuntimeException( "Tried to create a generic tank packet for a tile without a tank" );
@@ -36,9 +36,9 @@ public class GenericTankPacket {
 
     }
 
-    public static GenericTankPacket fromBytes( PacketBuffer buf ) {
+    public static GenericTankUpdatePacket fromBytes( PacketBuffer buf ) {
 
-        GenericTankPacket packet = new GenericTankPacket();
+        GenericTankUpdatePacket packet = new GenericTankUpdatePacket();
 
         packet.pos = buf.readBlockPos();
         packet.fluid = FluidStack.readFromPacket( buf );
@@ -47,7 +47,7 @@ public class GenericTankPacket {
 
     }
 
-    public static void handle( GenericTankPacket packet, Supplier<NetworkEvent.Context> ctx ) {
+    public static void handle( GenericTankUpdatePacket packet, Supplier<NetworkEvent.Context> ctx ) {
 
         ctx.get().enqueueWork( () -> {
 
