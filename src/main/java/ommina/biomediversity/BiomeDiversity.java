@@ -114,6 +114,7 @@ public class BiomeDiversity {
         CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
 
         Network.init();
+        PROXY.init();
 
     }
 

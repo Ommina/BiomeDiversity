@@ -26,9 +26,15 @@ public class RenderHelper {
 
     }
 
+    public static TextureAtlasSprite getSprite( ResourceLocation resourceLocation ) {
+
+        return Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+
+    }
+
     public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, int color, EnumSet<Faces> faces ) {
 
-        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+        final TextureAtlasSprite sprite = getSprite( resourceLocation );
         final float[] rgba = getRGBA( color );
 
         renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
@@ -37,7 +43,7 @@ public class RenderHelper {
 
     public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, float[] rgba, EnumSet<Faces> faces ) {
 
-        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+        final TextureAtlasSprite sprite = getSprite( resourceLocation );
 
         renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
 
@@ -57,7 +63,7 @@ public class RenderHelper {
 
     public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, Color color, EnumSet<Faces> faces ) {
 
-        final TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+        final TextureAtlasSprite sprite = getSprite( resourceLocation );
         final float[] rgba = getRGBA( color.getRGB() );
 
         renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
@@ -108,10 +114,6 @@ public class RenderHelper {
 
     }
 
-    private static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, int color, EnumSet<Faces> faces ) {
-
-
-    }
 
     ;
 

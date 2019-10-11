@@ -1,11 +1,11 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "7": "biomediversity:block/cluster_parts",
-    "8": "biomediversity:block/cluster_bg_gradiant",
+    "7": "biomediversity:block/cluster/cluster_parts",
+    "8": "biomediversity:block/cluster/cluster_bg_gradiant",
     "10": "biomediversity:block/background_dark",
     "13": "biomediversity:block/window_nonoise",
-    "particle": "biomediversity:block/cluster_bg_gradiant"
+    "particle": "biomediversity:block/cluster/cluster_bg_gradiant"
   },
   "elements": [
     {

@@ -4,6 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +20,7 @@ import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.peltier.Peltier;
 import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
 import ommina.biomediversity.blocks.receiver.Receiver;
+import ommina.biomediversity.blocks.receiver.ReceiverContainer;
 import ommina.biomediversity.blocks.transmitter.Transmitter;
 
 
@@ -42,9 +46,22 @@ public class ModBlocks {
     @ObjectHolder( "receiver" ) public static Receiver RECEIVER;
     @ObjectHolder( "transmitter" ) public static Transmitter TRANSMITTER;
 
+    // Containers
+    @ObjectHolder( "receiver" ) public static ContainerType<ReceiverContainer> RECEIVER_CONTAINER;
+
     // Fluid Blocks  (Only those that we care about)
     @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
     @ObjectHolder( "junglewater" ) public static FlowingFluidBlock JUNGLEWATER;
+
+    @SubscribeEvent
+    public static void onContainerRegistry( final RegistryEvent.Register<ContainerType<?>> event ) {
+
+        event.getRegistry().register( IForgeContainerType.create( ( windowId, inv, data ) -> {
+            BlockPos pos = data.readBlockPos();
+            return new ReceiverContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
+        } ).setRegistryName( "receiver" ) );
+
+    }
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Block> event ) {

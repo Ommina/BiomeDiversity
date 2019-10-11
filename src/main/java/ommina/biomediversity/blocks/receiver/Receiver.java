@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,6 +22,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkHooks;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.items.ModItems;
@@ -83,7 +86,7 @@ public class Receiver extends Block {
 
     }
 
-//region Overrides
+    //region Overrides
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
         return SHAPE;
@@ -104,7 +107,7 @@ public class Receiver extends Block {
     public boolean onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return true;
+            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
 
         TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
         ItemStack heldItem = player.getHeldItem( hand );
@@ -119,7 +122,11 @@ public class Receiver extends Block {
 
         }
 
-        //player.openGui( Biomediversity.instance, ModGuiHandler.PILLAR, world, pos.getX(), pos.getY(), pos.getZ() );
+        if ( tile instanceof INamedContainerProvider ) {
+            NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
+        } else {
+            throw new IllegalStateException( "Our named container provider is missing!" );
+        }
 
         return true;
 

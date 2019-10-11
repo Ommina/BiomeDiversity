@@ -1,9 +1,15 @@
 package ommina.biomediversity.blocks.receiver;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, IClusterComponent {
+public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, IClusterComponent, INamedContainerProvider {
 
     private static final int TANK_COUNT = 1;
     private static final int MINIMUM_DELTA = 200;
@@ -59,7 +65,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private TileEntityCollector collector;
     private BlockPos collectorPos;
     private boolean isChunkloadingTransmitter = false;
-
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
     }
@@ -156,6 +161,29 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     public void resetSearchCount() {
 
         searchAttemptCount = 0;
+    }
+
+    private boolean checkCollectorTeAtCollectorPos() {
+
+        // Logic for unloaded collector is different than a collector that just isn't found.
+        // If pos is set, and there's no collector there, unset the pos, clear the nbt, and clear the field so it will start searching
+        // If collector is just unloaded... stall / hang out.  It might still exist, but until it's loaded, we're stuck.
+
+        if ( collectorPos == null || !hasWorld() || !world.isBlockLoaded( collectorPos ) )
+            return false;
+
+        TileEntity te = getWorld().getTileEntity( collectorPos );
+
+        if ( te instanceof TileEntityCollector ) {
+            collector = (TileEntityCollector) te;
+            markDirty();
+            return true;
+        }
+
+        removeCollector();
+
+        return false;
+
     }
 
     private void doMainWork() {
@@ -279,29 +307,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    private boolean checkCollectorTeAtCollectorPos() {
-
-        // Logic for unloaded collector is different than a collector that just isn't found.
-        // If pos is set, and there's no collector there, unset the pos, clear the nbt, and clear the field so it will start searching
-        // If collector is just unloaded... stall / hang out.  It might still exist, but until it's loaded, we're stuck.
-
-        if ( collectorPos == null || !hasWorld() || !world.isBlockLoaded( collectorPos ) )
-            return false;
-
-        TileEntity te = getWorld().getTileEntity( collectorPos );
-
-        if ( te instanceof TileEntityCollector ) {
-            collector = (TileEntityCollector) te;
-            markDirty();
-            return true;
-        }
-
-        removeCollector();
-
-        return false;
-
-    }
-
     private void loadTransmitterChunk() {
 
         ChunkLoader.forceSingle( world, this.getAssociatedPos() );
@@ -328,6 +333,12 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     }
 
     //region Overrides
+    @Nullable
+    @Override
+    public Container createMenu( int i, PlayerInventory playerInventory, PlayerEntity playerEntity ) {
+        return new ReceiverContainer( i, world, pos, playerInventory, playerEntity );
+    }
+
     @Override
     public void doBroadcast() {
 
@@ -390,6 +401,11 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public boolean isClusterComponentConnected() {
         return (this.collector != null);
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent( getType().getRegistryName().getPath() );
     }
 
     @Override
