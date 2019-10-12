@@ -171,6 +171,7 @@ public class BiomeDiversity {
 
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
+            event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
 
         }
 
