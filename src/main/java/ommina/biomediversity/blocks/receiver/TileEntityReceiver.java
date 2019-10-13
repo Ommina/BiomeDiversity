@@ -12,6 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -48,8 +49,9 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private static final int SEARCH_ON_LOOP = 5;
     private static final int MAX_SEARCH_COUNT = 36000 / (Constants.RECEIVER_TICK_DELAY * SEARCH_ON_LOOP); // ~30min
 
-    private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
-    private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
+    final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
+    final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
+    final EnergyStorage BATTERY = new EnergyStorage( Config.receiverRequirePowerToOperate.get() || Config.receiverRequirePowerToChunkload.get() ? Config.receiverPowerCapacity.get() : 0, Integer.MAX_VALUE, 0 );
 
     private int searchAttemptCount = 0;
     private int fluidHash;
@@ -65,6 +67,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private TileEntityCollector collector;
     private BlockPos collectorPos;
     private boolean isChunkloadingTransmitter = false;
+
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
     }
@@ -85,6 +88,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                     ter.TANK.setFluid( packet.fluid );
                     ter.collectorPos = packet.collectorPos;
+                    ter.temperature = packet.temperature;
 
                     if ( ter.collectorPos != null && world.get().isBlockLoaded( ter.collectorPos ) ) {
                         ter.collector = (TileEntityCollector) world.get().getTileEntity( ter.collectorPos );
@@ -100,6 +104,14 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
+    public EnergyStorage clientGetBattery() {
+        return BATTERY;
+    }
+
+    public float clientTemperature() {
+        return this.temperature;
+    }
+
     public void doChunkloading() {
 
         if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
@@ -107,10 +119,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         chunkloadDurationRemaining--;
 
-        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut )
+        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut && hasEnoughPowerToChunkload() )
             loadTransmitterChunk();
 
-        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0) )
+        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0 || !hasEnoughPowerToChunkload()) )
             unloadTransmitterChunk();
 
     }
@@ -128,14 +140,13 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                 lastAmount = pd.getAmount();
 
                 if ( !FluidStrengths.contains( pd.fluid.hashCode() ) ) {
-                    BiomeDiversity.LOGGER.warn( "Fluid network contains a fluid with hash " + pd.fluid.hashCode() + ", but it is not in the config.  Perhaps it was removed?  Setting power to 1.00.  BiomeId: " + pd.biomeId );
+                    BiomeDiversity.LOGGER.warn( "Fluid network contains a fluid with hash " + pd.fluid.hashCode() + ", but it is not in the config.  Perhaps it was removed?  Setting power to 1.  BiomeId: " + pd.biomeId );
                     power = 1;
                 } else {
                     power = FluidStrengths.getStrength( pd.fluid.hashCode() );
                 }
 
                 biomeId = pd.biomeId.toString();
-                temperature = pd.temperature;
                 rainfall = pd.rainfall;
 
             }
@@ -188,7 +199,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     private void doMainWork() {
 
-        if ( this.getAssociatedIdentifier() != null ) {
+        if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
 
             //if ( this.getOwner() == null && this.getAssociatedPos() != null )
             //    repairOwner( this.getAssociatedPos() );
@@ -197,59 +208,57 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                 TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getAssociatedIdentifier() );
 
-                if ( pd != null ) {
+                // biomeId = pd.biomeId; // TODO: BiomeID used to be an id, and is now a ResourceLocation.  How should the collector deal with this?
 
-                    // biomeId = pd.biomeId; // TODO: BiomeID used to be an id, and is now a ResourceLocation.  How should the collector deal with this?
-                    //temperature = pd.temperature + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
-                    rainfall = pd.rainfall;
+                temperature = pd.temperature; // + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
+                rainfall = pd.rainfall;
 
-                    // BROADCASTER.setTemperature( client_temperature ); // TODO: Network Packet
+                // BROADCASTER.setTemperature( client_temperature ); // TODO: Network Packet
 
-                    if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION ) {
+                if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION ) {
 
-                        if ( this.collector != null && !this.collector.isCollectorTurnedOff() ) {
+                    if ( this.collector != null && !this.collector.isCollectorTurnedOff() ) {
 
-                            if ( !world.isBlockPowered( getPos() ) ) {
+                        if ( !world.isBlockPowered( getPos() ) ) {
 
-                                boolean isTransmitterLoaded = false;
+                            boolean isTransmitterLoaded = false;
 
-                                int drainAmount = Constants.RECEIVER_CONSUMPTION;
+                            int drainAmount = Constants.RECEIVER_CONSUMPTION;
 
-                                fluidHash = pd.fluid.hashCode();
-                                power = FluidStrengths.getStrength( fluidHash );
+                            fluidHash = pd.fluid.hashCode();
+                            power = FluidStrengths.getStrength( fluidHash );
 
-                                // collector.collect( hash, fluidHash, power, biomeId, temperature, rainfall ); //TODO: Make the collector do something
+                            // collector.collect( hash, fluidHash, power, biomeId, temperature, rainfall ); //TODO: Make the collector do something
 
-                                pd.drain( drainAmount );
+                            pd.drain( drainAmount );
 
-                                isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
+                            isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
 
-                                if ( isTransmitterLoaded ) {
-                                    TileEntity te = world.getTileEntity( this.getAssociatedPos() );
-                                    if ( te instanceof TileEntityTransmitter ) {
-                                        TileEntityTransmitter tep = (TileEntityTransmitter) te;
-                                        tep.getTank( 0 ).drain_internal( Constants.RECEIVER_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
-                                    }
+                            if ( isTransmitterLoaded ) {
+                                TileEntity te = world.getTileEntity( this.getAssociatedPos() );
+                                if ( te instanceof TileEntityTransmitter ) {
+                                    TileEntityTransmitter tep = (TileEntityTransmitter) te;
+                                    tep.getTank( 0 ).drain_internal( Constants.RECEIVER_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
                                 }
-
-                                if ( pd.getAmount() + drainAmount - lastAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
-                                    resetChunkloadDuration();
-
-                                lastAmount = pd.getAmount();
-
                             }
+
+                            if ( pd.getAmount() + drainAmount - lastAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
+                                resetChunkloadDuration();
+
+                            lastAmount = pd.getAmount();
+
                         }
-
-                        if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION )
-                            this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
-                        else
-                            this.getTank( 0 ).setFluid( FluidStack.EMPTY );
-
-                        world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
-
                     }
 
+                    if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION )
+                        this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+                    else
+                        this.getTank( 0 ).setFluid( FluidStack.EMPTY );
+
+                    world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
+
                 }
+
 
             } );
 
@@ -304,6 +313,12 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                 }
 
         return false;
+
+    }
+
+    private boolean hasEnoughPowerToChunkload() {
+
+        return !Config.receiverRequirePowerToChunkload.get() || BATTERY.getEnergyStored() >= Config.receiverPowerConsumptionChunloading.get() * Constants.RECEIVER_TICK_DELAY;
 
     }
 

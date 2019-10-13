@@ -3,6 +3,7 @@ package ommina.biomediversity.gui.controls;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import ommina.biomediversity.gui.Control;
 
 import java.util.List;
 

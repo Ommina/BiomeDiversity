@@ -1,4 +1,4 @@
-package ommina.biomediversity.gui.controls;
+package ommina.biomediversity.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -7,11 +7,13 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.RenderHelper;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.text.NumberFormat;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Locale;
 public abstract class Control extends AbstractGui {
 
     public static final TextureAtlasSprite OVERLAY_SPRITE = RenderHelper.getSprite( BiomeDiversity.getId( "gui/overlay" ) );
+    public static final ResourceLocation OVERLAY_RESOURCE = BiomeDiversity.getId( "textures/gui/overlay.png" );
 
     protected static final NumberFormat format = NumberFormat.getInstance( Locale.getDefault() );
     protected static FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
@@ -54,6 +57,7 @@ public abstract class Control extends AbstractGui {
 
     public abstract void drawForegroundLayer();
 
+    @Nullable
     public abstract List<String> getTooltip( boolean isShiftKeyDown );
 
     public boolean ownsMousePoint( int mouseX, int mouseY ) {

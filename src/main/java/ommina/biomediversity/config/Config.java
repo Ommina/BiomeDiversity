@@ -55,110 +55,31 @@ public class Config {
 
     // Receivers
     public static ForgeConfigSpec.BooleanValue receiverEnableChunkLoading;
+    public static ForgeConfigSpec.BooleanValue receiverRequirePowerToOperate;
+    public static ForgeConfigSpec.BooleanValue receiverRequirePowerToChunkload;
+    public static ForgeConfigSpec.IntValue receiverPowerCapacity;
+    public static ForgeConfigSpec.IntValue receiverPowerConsumptionBase;
+    public static ForgeConfigSpec.IntValue receiverPowerConsumptionChunloading;
     public static ForgeConfigSpec.IntValue receiverCollectorSearchHorizontal;
     public static ForgeConfigSpec.IntValue receiverCollectorSearchVerticalPos;
     public static ForgeConfigSpec.IntValue receiverCollectorSearchVerticalNeg;
-
 
     // Rain Barrel
     public static ForgeConfigSpec.IntValue rainbarrelCapacity;
 
     static {
 
-        COMMON_BUILDER.comment( "Worldgen Settings" ).push( CATEGORY_WORLD_GEN );
         setupWorldGenConfig();
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Transmitter Configuration" ).push( CATEGORY_TRANSMITTER );
         setupTransmitter();
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Receiver Configuration" ).push( CATAGORY_RECEIVER );
         setupReceiver();
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Rainbarrel Configuration" ).push( CATEGORY_RAINBARREL );
         setupRainBarrel();
-        COMMON_BUILDER.pop();
-
 
         COMMON_CONFIG = COMMON_BUILDER.build();
         CLIENT_CONFIG = CLIENT_BUILDER.build();
+
     }
 
     private Config() {
-    }
-
-    private static void setupWorldGenConfig() {
-
-        COMMON_BUILDER.comment( "Orinocite Ore" ).push( SUBCATEGORY_ORINOCITE_ORE );
-
-        orinociteOreEnabled = COMMON_BUILDER.comment( "Enabled generation of Orinocite ore" ).define( "enableOrinociteOre", true );
-        orinociteOreGenerationMinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 11, 5, 200 );
-        orinociteOreGenerationMaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 18, 5, 200 );
-        orinociteOreGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Orinocite ore vein" ).defineInRange( "baseSize", 5, 1, 20 );
-        orinociteOreGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of an Orinocite ore vein" ).defineInRange( "variance", 3, 0, 15 );
-        orinociteOreGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 3, 1, 15 );
-
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Jungle Pools" ).push( SUBCATEGORY_JUNGLE_POOLS );
-
-        junglePoolGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
-
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Fluid Wells" ).push( SUBCATEGORY_FLUID_WELLS );
-
-        fluidWellGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
-        fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated silt-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
-
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Nocified Stone" ).push( SUBCATEGORY_NOCIFIED_STONE );
-
-        nocifiedStoneEnabled = COMMON_BUILDER.comment( "Enables generation of nocified stone in Mountain biomes." ).define( "enable_nocified_stone", true );
-        nocifiedStoneGenerationMinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 10, 5, 200 );
-        nocifiedStoneGenerationMaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 50, 5, 200 );
-        nocifiedStoneGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Nocified stone vein" ).defineInRange( "baseSize", 1, 1, 20 );
-        nocifiedStoneGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of a Nocified stone vein" ).defineInRange( "variance", 0, -1, 15 );
-        nocifiedStoneGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 2, 1, 15 );
-
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Pomegranate Generation" ).push( SUBCATEGORY_POMEGRANATE );
-
-        pomegranateGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of small pomegrante patches in savanna-type biomes." ).define( "enable_pomegranate", true );
-
-        COMMON_BUILDER.pop();
-
-        COMMON_BUILDER.comment( "Colza Generation" ).push( SUBCATEGORY_COLZA );
-
-        colzaGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of small colza patches in plains-type biomes." ).define( "enable_colza", true );
-
-        COMMON_BUILDER.pop();
-
-    }
-
-    private static void setupTransmitter() {
-
-        transmitterCapacity = COMMON_BUILDER.comment( "Transmitter capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 64000, 1000, 128000 );
-
-    }
-
-    private static void setupRainBarrel() {
-
-        rainbarrelCapacity = COMMON_BUILDER.comment( "Rain Barrel capacity in mb." ).defineInRange( "capacity", 32000, 1000, 128000 );
-
-    }
-
-    private static void setupReceiver() {
-
-        receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the receiver chunkload distant transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
-        receiverCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
-        receiverCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
-        receiverCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
-
     }
 
     public static void loadConfig( ForgeConfigSpec spec, Path path ) {
@@ -167,6 +88,7 @@ public class Config {
              .sync()
              .autosave()
              .writingMode( WritingMode.REPLACE )
+             .preserveInsertionOrder()
              .build();
 
         configData.load();
@@ -180,6 +102,118 @@ public class Config {
 
     @SubscribeEvent
     public static void onReload( final ModConfig.ConfigReloading configEvent ) {
+    }
+
+    private static void setupWorldGenConfig() {
+
+        COMMON_BUILDER.comment( "Worldgen Settings" ).push( CATEGORY_WORLD_GEN );
+
+        {
+
+            COMMON_BUILDER.comment( "Orinocite Ore" ).push( SUBCATEGORY_ORINOCITE_ORE );
+
+            orinociteOreEnabled = COMMON_BUILDER.comment( "Enabled generation of Orinocite ore" ).define( "enableOrinociteOre", true );
+            orinociteOreGenerationMinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 11, 5, 200 );
+            orinociteOreGenerationMaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 18, 5, 200 );
+            orinociteOreGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Orinocite ore vein" ).defineInRange( "baseSize", 5, 1, 20 );
+            orinociteOreGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of an Orinocite ore vein" ).defineInRange( "variance", 3, 0, 15 );
+            orinociteOreGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 3, 1, 15 );
+
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.comment( "Jungle Pools" ).push( SUBCATEGORY_JUNGLE_POOLS );
+
+            junglePoolGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of semi-common single-block pools in Jungle biomes." ).define( "enable_jungle_pools", true );
+
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.comment( "Fluid Wells" ).push( SUBCATEGORY_FLUID_WELLS );
+
+            fluidWellGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
+            fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated silt-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
+
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.comment( "Nocified Stone" ).push( SUBCATEGORY_NOCIFIED_STONE );
+
+            nocifiedStoneEnabled = COMMON_BUILDER.comment( "Enables generation of nocified stone in Mountain biomes." ).define( "enable_nocified_stone", true );
+            nocifiedStoneGenerationMinY = COMMON_BUILDER.comment( "Minimum y-level for ore to spawn" ).defineInRange( "ymin", 10, 5, 200 );
+            nocifiedStoneGenerationMaxY = COMMON_BUILDER.comment( "Maximum y=level for ore to spawn" ).defineInRange( "ymax", 50, 5, 200 );
+            nocifiedStoneGenerationSizeBase = COMMON_BUILDER.comment( "Base size of an Nocified stone vein" ).defineInRange( "baseSize", 1, 1, 20 );
+            nocifiedStoneGenerationSizeVariance = COMMON_BUILDER.comment( "Size variance of a Nocified stone vein" ).defineInRange( "variance", 0, -1, 15 );
+            nocifiedStoneGenerationAttempts = COMMON_BUILDER.comment( "Attempt per chunk to spawn a vein" ).defineInRange( "attempts", 2, 1, 15 );
+
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.comment( "Pomegranate Generation" ).push( SUBCATEGORY_POMEGRANATE );
+
+            pomegranateGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of small pomegrante patches in savanna-type biomes." ).define( "enable_pomegranate", true );
+
+            COMMON_BUILDER.pop();
+
+            COMMON_BUILDER.comment( "Colza Generation" ).push( SUBCATEGORY_COLZA );
+
+            colzaGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of small colza patches in plains-type biomes." ).define( "enable_colza", true );
+
+            COMMON_BUILDER.pop();
+
+        }
+
+        COMMON_BUILDER.pop();
+
+    }
+
+    private static void setupTransmitter() {
+
+        COMMON_BUILDER.comment( "Transmitter Configuration" ).push( CATEGORY_TRANSMITTER );
+
+        {
+
+            transmitterCapacity = COMMON_BUILDER.comment( "Transmitter capacity in mb.  Larger values need less attention." ).defineInRange( "capacity", 64000, 1000, 128000 );
+
+        }
+
+        COMMON_BUILDER.pop();
+
+    }
+
+    private static void setupRainBarrel() {
+
+        COMMON_BUILDER.comment( "Rainbarrel Configuration" ).push( CATEGORY_RAINBARREL );
+
+        {
+
+            rainbarrelCapacity = COMMON_BUILDER.comment( "Rain Barrel capacity in mb." ).defineInRange( "capacity", 32000, 1000, 128000 );
+
+        }
+
+        COMMON_BUILDER.pop();
+
+    }
+
+    private static void setupReceiver() {
+
+        COMMON_BUILDER.comment( "Receiver Configuration" ).push( CATAGORY_RECEIVER );
+
+        {
+
+            receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the receiver chunkload distant transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
+
+            receiverCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
+            receiverCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
+            receiverCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
+
+            receiverRequirePowerToOperate = COMMON_BUILDER.comment( "Require RF to operate.  This means a third-party will be required to jump-start power generation." ).define( "receiver_require_power_base", false );
+            receiverRequirePowerToChunkload = COMMON_BUILDER.comment( "Require RF to chunkload transmitter chunks (as necessary)" ).define( "receiver_require_power_chunkloading", false );
+
+            receiverPowerCapacity = COMMON_BUILDER.comment( "Receiver RF Capacity.  Only useful if one of the two 'Require RF' options is 'true'" ).defineInRange( "receiver_power_capacity", 100000, 1000, 1000000 );
+            receiverPowerConsumptionBase = COMMON_BUILDER.comment( "Receiver baseline power consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_baseline", 1, 1, 1024 );
+            receiverPowerConsumptionChunloading = COMMON_BUILDER.comment( "Receiver chunkloading power conumption.  RF/tick" ).defineInRange( "receiver_power_consumption_chunkloading", 1, 1, 8192 );
+
+        }
+
+        COMMON_BUILDER.pop();
+
     }
 
 }

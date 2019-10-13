@@ -6,7 +6,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import ommina.biomediversity.gui.controls.Control;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,9 +24,19 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
 
     @Override
     public void render( int mouseX, int mouseY, float partialTicks ) {
+
         this.renderBackground();
         super.render( mouseX, mouseY, partialTicks );
         this.renderHoveredToolTip( mouseX, mouseY );
+    }
+
+    @Override
+    protected void renderHoveredToolTip( int mouseX, int mouseY ) {
+
+        for ( Control ctl : controls )
+            if ( ctl.ownsMousePoint( mouseX - this.guiLeft, mouseY - guiTop ) && ctl.getTooltip( hasShiftDown() ) != null )
+                this.renderTooltip( ctl.getTooltip( hasShiftDown() ), mouseX, mouseY );
+
     }
 
     @Override
@@ -55,7 +64,6 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
             ctl.drawBackgroundLayer( x, y );
 
     }
-
 //endregion Overrides
 
 }

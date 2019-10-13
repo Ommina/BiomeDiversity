@@ -8,20 +8,22 @@ import net.minecraft.fluid.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.fluids.BdFluidTank;
+import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.gui.UV;
 import ommina.biomediversity.util.MathUtil;
+import ommina.biomediversity.util.Translator;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @OnlyIn( Dist.CLIENT )
 public class Tank extends Control {
 
     public static final int WIDTH = 16;
-    public static final int HEIGHT = 55;
+    public static final int HEIGHT = 52;
 
     public static UV FG = new UV( 0, 0, WIDTH, HEIGHT );
 
@@ -61,7 +63,7 @@ public class Tank extends Control {
 
         GlStateManager.color4f( rgba[0], rgba[1], rgba[2], rgba[3] );
 
-        Control.drawSprite( x + position.x, y + position.y + height - heightTexture, 0, width, heightTexture - 2, fluidStillSprite ); //TODO: Needs to be tiled; it's all squishy in the GUI
+        Control.drawSprite( x + position.x, y + position.y + height + 1 - heightTexture, 0, width, heightTexture, fluidStillSprite ); //TODO: Needs to be tiled; it's all squishy in the GUI
 
         GlStateManager.color4f( 1f, 1f, 1f, 1f );
 
@@ -70,7 +72,7 @@ public class Tank extends Control {
     @Override
     public void drawForegroundLayer() {
 
-        Minecraft.getInstance().getTextureManager().bindTexture( BiomeDiversity.getId( "textures/gui/overlay.png" ) );
+        Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         Control.drawSprite( (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
 
@@ -88,9 +90,9 @@ public class Tank extends Control {
             return null;
 
         if ( !isShiftKeyDown )
-            return Arrays.asList( fluidStack.getTranslationKey() );
+            return Collections.singletonList( Translator.translateToLocal( fluidStack.getTranslationKey() ) );
 
-        return Arrays.asList( fluidStack.getTranslationKey(), format.format( fluidStack.getAmount() ) );
+        return Arrays.asList( Translator.translateToLocal( fluidStack.getTranslationKey() ), format.format( fluidStack.getAmount() ) + "mb" );
 
     }
 //endregion Overrides

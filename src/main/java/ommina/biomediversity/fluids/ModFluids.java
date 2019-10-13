@@ -1,4 +1,3 @@
-
 package ommina.biomediversity.fluids;
 
 import net.minecraft.fluid.FlowingFluid;
@@ -14,7 +13,7 @@ public class ModFluids {
 
     @ObjectHolder( "coolbiometic_still" ) public static FlowingFluid COOLBIOMETIC;             // Produced by Collector (directly)
     @ObjectHolder( "warmbiometic_still" ) public static FlowingFluid WARMBIOMETIC;
-    @ObjectHolder( "neutralbiometic_still" ) public static FlowingFluid NEUTHRALBIOMETIC;      //                       (indirectly by Mixer)
+    @ObjectHolder( "neutralbiometic_still" ) public static FlowingFluid NEUTRALBIOMETIC;       //                       (indirectly by Mixer)
 
     @ObjectHolder( "mineralwater_still" ) public static FlowingFluid MINERALWATER;             // WorldGen Spheres
     @ObjectHolder( "junglewater_still" ) public static FlowingFluid JUNGLEWATER;               //          Jungle Biome

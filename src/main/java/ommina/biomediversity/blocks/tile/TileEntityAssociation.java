@@ -16,6 +16,7 @@ import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public abstract class TileEntityAssociation extends TileEntity {
@@ -348,6 +349,7 @@ public abstract class TileEntityAssociation extends TileEntity {
         this.owner = owner;
     }
 
+    @Nullable
     public BlockPos getAssociatedPos() {
 
         return this.associatedPos;
@@ -357,11 +359,12 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     // PreLinking
 
-    public void setAssociatedPos( final BlockPos pos ) {
+    public void setAssociatedPos( @Nullable final BlockPos pos ) {
 
         this.associatedPos = pos;
     }
 
+    @Nullable
     public UUID getAssociatedIdentifier() {
 
         return this.associatedIdentifier;
@@ -371,7 +374,7 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     // Remove Links
 
-    public void setAssociatedIdentifier( final UUID associatedIdentifier ) {
+    public void setAssociatedIdentifier( @Nullable UUID associatedIdentifier ) {
 
         this.associatedIdentifier = associatedIdentifier;
     }

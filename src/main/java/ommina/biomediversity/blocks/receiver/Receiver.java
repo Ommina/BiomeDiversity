@@ -6,7 +6,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -107,9 +106,13 @@ public class Receiver extends Block {
     public boolean onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
+            return true;
 
         TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
+
+        if ( tile == null )
+            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
+
         ItemStack heldItem = player.getHeldItem( hand );
 
         if ( !heldItem.isEmpty() ) {
@@ -122,11 +125,7 @@ public class Receiver extends Block {
 
         }
 
-        if ( tile instanceof INamedContainerProvider ) {
-            NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
-        } else {
-            throw new IllegalStateException( "Our named container provider is missing!" );
-        }
+        NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
         return true;
 
@@ -184,6 +183,5 @@ public class Receiver extends Block {
         return new TileEntityReceiver();
     }
 //endregion Overrides
-
 
 }

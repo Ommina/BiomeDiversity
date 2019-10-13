@@ -11,6 +11,7 @@ public class ReceiverUpdatePacket {
     public FluidStack fluid;
     public BlockPos tilePos;
     public BlockPos collectorPos;
+    public float temperature;
 
     public ReceiverUpdatePacket() {
     }
@@ -23,6 +24,7 @@ public class ReceiverUpdatePacket {
 
         this.fluid = ((ITankBroadcast) tile).getTank( 0 ).getFluid();
         this.tilePos = tile.getPos();
+        this.temperature = tile.clientTemperature();
 
         if ( tile.getCollector() != null )
             this.collectorPos = tile.getCollector().getPos();
@@ -34,6 +36,7 @@ public class ReceiverUpdatePacket {
         ReceiverUpdatePacket packet = new ReceiverUpdatePacket();
 
         packet.tilePos = buf.readBlockPos();
+        packet.temperature = buf.readFloat();
 
         if ( buf.readBoolean() )
             packet.collectorPos = buf.readBlockPos();
@@ -47,6 +50,7 @@ public class ReceiverUpdatePacket {
     public void toBytes( PacketBuffer buf ) {
 
         buf.writeBlockPos( this.tilePos );
+        buf.writeFloat( this.temperature );
 
         if ( this.collectorPos != null ) {
             buf.writeBoolean( true );
