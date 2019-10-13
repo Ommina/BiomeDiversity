@@ -8,9 +8,10 @@
     {
       "name": "NorthwestRiser",
       "from": [1, 27, 1],
-      "to": [3, 32, 2],
+      "to": [3, 32, 3],
       "faces": {
         "north": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
+        "east": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
         "south": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
         "west": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
         "up": {"uv": [14.75, 4, 16, 4.5], "rotation": 90, "texture": "#1", "cullface": "up"},
@@ -19,7 +20,7 @@
     },
     {
       "name": "NortheastRiser",
-      "from": [14, 27, 1],
+      "from": [13, 27, 1],
       "to": [15, 32, 3],
       "faces": {
         "north": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
@@ -33,7 +34,7 @@
     {
       "name": "SouthwestRiser",
       "from": [1, 27, 13],
-      "to": [2, 32, 15],
+      "to": [3, 32, 15],
       "faces": {
         "north": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
         "east": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
@@ -44,7 +45,7 @@
     },
     {
       "name": "SoutheastRiser",
-      "from": [13, 27, 14],
+      "from": [13, 27, 13],
       "to": [15, 32, 15],
       "faces": {
         "north": {"uv": [14.75, 4, 16, 8], "texture": "#1", "cullface": "up"},
