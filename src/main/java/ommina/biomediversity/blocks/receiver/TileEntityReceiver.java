@@ -57,7 +57,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private int fluidHash;
     private int lastAmount = 0;
     private int power;
-    private String biomeId;
+    private String biomeRegistryName = "null:null";
     private float temperature;
     private float rainfall;
     private int chunkloadDurationRemaining = 0;
@@ -89,6 +89,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                     ter.TANK.setFluid( packet.fluid );
                     ter.collectorPos = packet.collectorPos;
                     ter.temperature = packet.temperature;
+                    ter.biomeRegistryName = packet.biomeRegistryName;
 
                     if ( ter.collectorPos != null && world.get().isBlockLoaded( ter.collectorPos ) ) {
                         ter.collector = (TileEntityCollector) world.get().getTileEntity( ter.collectorPos );
@@ -108,10 +109,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         return BATTERY;
     }
 
-    public float clientTemperature() {
-        return this.temperature;
-    }
-
     public void doChunkloading() {
 
         if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
@@ -125,6 +122,14 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0 || !hasEnoughPowerToChunkload()) )
             unloadTransmitterChunk();
 
+    }
+
+    public String getBiomeRegistryName() {
+        return this.biomeRegistryName;
+    }
+
+    public float getTemperature() {
+        return this.temperature;
     }
 
     public void refreshReceiverTankFromTransmitterNetwork() {
@@ -146,7 +151,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                     power = FluidStrengths.getStrength( pd.fluid.hashCode() );
                 }
 
-                biomeId = pd.biomeId.toString();
+                biomeRegistryName = pd.biomeId.toString();
                 rainfall = pd.rainfall;
 
             }
@@ -208,12 +213,9 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                 TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getAssociatedIdentifier() );
 
-                // biomeId = pd.biomeId; // TODO: BiomeID used to be an id, and is now a ResourceLocation.  How should the collector deal with this?
-
+                biomeRegistryName = pd.biomeId.toString();
                 temperature = pd.temperature; // + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
                 rainfall = pd.rainfall;
-
-                // BROADCASTER.setTemperature( client_temperature ); // TODO: Network Packet
 
                 if ( pd.fluid != null && pd.getAmount() >= Constants.RECEIVER_CONSUMPTION ) {
 
@@ -289,8 +291,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         int posX = getPos().getX();
         int posY = getPos().getY();
         int posZ = getPos().getZ();
-
-        System.out.println( "STARTING at " + getPos().toString() );
 
         for ( int y = posY - Config.receiverCollectorSearchVerticalNeg.get(); y <= posY + Config.receiverCollectorSearchVerticalPos.get(); y++ )
             for ( int x = posX - Config.receiverCollectorSearchHorizontal.get(); x <= posX + Config.receiverCollectorSearchHorizontal.get(); x++ )

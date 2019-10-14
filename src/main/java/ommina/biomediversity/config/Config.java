@@ -2,12 +2,20 @@ package ommina.biomediversity.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.registries.ForgeRegistries;
+import ommina.biomediversity.BiomeDiversity;
 
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Mod.EventBusSubscriber
 public class Config {
@@ -20,6 +28,9 @@ public class Config {
     public static final String SUBCATEGORY_NOCIFIED_STONE = "nocified_stone";
     public static final String SUBCATEGORY_POMEGRANATE = "pomegranate";
     public static final String SUBCATEGORY_COLZA = "colza";
+
+    public static final String CATEGORY_POWER = "power";
+    public static final String SUBCATEGORY_BIOMES = "biomes";
 
     public static final String CATEGORY_TRANSMITTER = "transmitters";
     public static final String CATAGORY_RECEIVER = "receivers";
@@ -50,6 +61,10 @@ public class Config {
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationSizeVariance;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationAttempts;
 
+    // Power Generation
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> powerBiomeWhitelist;// = new ArrayList<? extends String>();
+    public static Set<String> powerBiomes;
+
     // Transmitters
     public static ForgeConfigSpec.IntValue transmitterCapacity;
 
@@ -70,12 +85,15 @@ public class Config {
     static {
 
         setupWorldGenConfig();
+        setupPowerConfig();
         setupTransmitter();
         setupReceiver();
         setupRainBarrel();
 
         COMMON_CONFIG = COMMON_BUILDER.build();
         CLIENT_CONFIG = CLIENT_BUILDER.build();
+
+        parseBiomeList();
 
     }
 
@@ -98,10 +116,15 @@ public class Config {
     @SubscribeEvent
     public static void onLoad( final ModConfig.Loading configEvent ) {
 
+        System.out.println( "hello" );
+
     }
 
     @SubscribeEvent
     public static void onReload( final ModConfig.ConfigReloading configEvent ) {
+
+        System.out.println( "hello" );
+
     }
 
     private static void setupWorldGenConfig() {
@@ -213,6 +236,53 @@ public class Config {
         }
 
         COMMON_BUILDER.pop();
+
+    }
+
+    private static void setupPowerConfig() {
+
+        COMMON_BUILDER.comment( "Power Generation" ).push( CATEGORY_POWER );
+
+        {
+
+            COMMON_BUILDER.comment( "Biomes" ).push( SUBCATEGORY_BIOMES );
+
+            powerBiomeWhitelist = COMMON_BUILDER.defineList( "biomes", Arrays.asList( "minecraft:*" ), o -> o instanceof String );
+
+            //pristineOutputs.put(MobKey.BLAZE, builder.defineList(MobKey.BLAZE, Arrays.asList(DeepConstants.LOOT.BLAZE), o -> o instanceof String));
+
+
+            COMMON_BUILDER.pop();
+
+        }
+
+        COMMON_BUILDER.pop();
+
+    }
+
+    private static void parseBiomeList() {
+
+        powerBiomes = new HashSet<String>();
+
+        for ( String s : powerBiomeWhitelist.get() ) {
+
+            String[] s2 = s.split( ":" );
+
+            if ( s2.length != 2 ) {
+                BiomeDiversity.LOGGER.warn( "Unable to parse config entry " + s + ", skipping." );
+                continue;
+            }
+
+            for ( Biome b : ForgeRegistries.BIOMES.getValues() ) {
+
+                ResourceLocation resourceLocation = b.getRegistryName();
+
+                if ( s2[0].equals( resourceLocation.getNamespace() ) && (s2[1].equals( "*" ) || s2[1].equalsIgnoreCase( resourceLocation.getPath() )) ) {
+                    powerBiomes.add( b.getRegistryName().toString() );
+                }
+
+            }
+        }
 
     }
 

@@ -1,9 +1,12 @@
 package ommina.biomediversity.blocks.receiver;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.gui.BaseContainerScreen;
@@ -38,13 +41,16 @@ public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
         guiInventory.setPostion( new Point( 8, ySize - 94 ) );
         controls.add( guiInventory );
 
-        Temperature temp = new Temperature( receiver, "clientTemperature", -2f, 2f );
+        Temperature temp = new Temperature( receiver, "getTemperature", -2f, 2f );
         temp.setPostion( TEMPERATURE_GAUGE );
         controls.add( temp );
 
-        //Text biomeName = new Text( ForgeRegistries.BIOMES.getValue(  ) Biome.BIOMES.g  Biome.getBiomeForId(  receiver.getBiomeId() ).getBiomeName() + " " + Integer.toString( receiver.getBiomeId() ), Text.Justification.LEFT, xSize );
-        //biomeName.setPostion( BIOMENAME_TEXT );
-        //controls.add( biomeName );
+        Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( receiver.getBiomeRegistryName() ) );
+        if ( biome != null ) {
+            Text biomeName = new Text( biome.getDisplayName().getString(), Text.Justification.LEFT, xSize );
+            biomeName.setPostion( BIOMENAME_TEXT );
+            controls.add( biomeName );
+        }
 
         Tank t = new Tank( receiver.getTank( 0 ) );
         t.setPostion( TANK_INPUT );
@@ -53,7 +59,6 @@ public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
         RfGauge rf = new RfGauge( receiver.clientGetBattery() );
         rf.setPostion( POWER_GAUGE );
         controls.add( rf );
-
 
     }
 
