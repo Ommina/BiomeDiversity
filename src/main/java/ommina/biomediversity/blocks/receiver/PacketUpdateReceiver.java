@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.network.ITankBroadcast;
 
-public class ReceiverUpdatePacket {
+public class PacketUpdateReceiver {
 
     public FluidStack fluid;
     public BlockPos tilePos;
@@ -14,14 +14,14 @@ public class ReceiverUpdatePacket {
     public String biomeRegistryName;
     public float temperature;
 
-    public ReceiverUpdatePacket() {
+    public PacketUpdateReceiver() {
     }
 
-    public ReceiverUpdatePacket( TileEntity tile ) {
+    public PacketUpdateReceiver( TileEntity tile ) {
         this( (TileEntityReceiver) tile );
     }
 
-    public ReceiverUpdatePacket( TileEntityReceiver tile ) {
+    public PacketUpdateReceiver( TileEntityReceiver tile ) {
 
         this.fluid = ((ITankBroadcast) tile).getTank( 0 ).getFluid();
         this.tilePos = tile.getPos();
@@ -33,9 +33,9 @@ public class ReceiverUpdatePacket {
 
     }
 
-    public static ReceiverUpdatePacket fromBytes( PacketBuffer buf ) {
+    public static PacketUpdateReceiver fromBytes( PacketBuffer buf ) {
 
-        ReceiverUpdatePacket packet = new ReceiverUpdatePacket();
+        PacketUpdateReceiver packet = new PacketUpdateReceiver();
 
         packet.tilePos = buf.readBlockPos();
         packet.temperature = buf.readFloat();

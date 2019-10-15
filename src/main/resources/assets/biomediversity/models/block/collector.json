@@ -5,7 +5,7 @@
     "2": "biomediversity:block/cluster/cluster_bg_gradiant",
     "6": "biomediversity:block/cluster/cluster_parts",
     "7": "biomediversity:block/cluster/cluster_gradient",
-    "particle": "biomediversity:block/cluster/background_dark"
+    "particle": "biomediversity:block/background_dark"
   },
   "elements": [
     {

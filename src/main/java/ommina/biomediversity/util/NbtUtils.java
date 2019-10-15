@@ -12,7 +12,12 @@ public class NbtUtils {
     private static final String POSZ = "posz";
 
     @Nullable
-    public static BlockPos getBlockPos( CompoundNBT nbt ) {
+    public static BlockPos getBlockPos( String keyName, CompoundNBT compound ) {
+
+        CompoundNBT nbt = compound.getCompound( keyName );
+
+        if ( nbt.isEmpty() )
+            return null;
 
         if ( nbt.contains( POSX ) && nbt.contains( POSY ) && nbt.contains( POSZ ) )
             return new BlockPos( nbt.getInt( POSX ), nbt.getInt( POSY ), nbt.getInt( POSZ ) );
@@ -21,7 +26,9 @@ public class NbtUtils {
 
     }
 
-    public static void putBlockPos( CompoundNBT nbt, BlockPos pos ) {
+    public static void putBlockPos( String keyName, CompoundNBT compound, BlockPos pos ) {
+
+        CompoundNBT nbt = compound.getCompound( keyName );
 
         nbt.putInt( POSX, pos.getX() );
         nbt.putInt( POSY, pos.getY() );
@@ -29,11 +36,9 @@ public class NbtUtils {
 
     }
 
-    public static void removeBlockPos( CompoundNBT nbt ) {
+    public static void removeBlockPos( String keyName, CompoundNBT compound ) {
 
-        nbt.remove( POSX );
-        nbt.remove( POSY );
-        nbt.remove( POSZ );
+        compound.remove( keyName );
 
     }
 

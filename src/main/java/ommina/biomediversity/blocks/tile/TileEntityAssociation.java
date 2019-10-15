@@ -26,7 +26,7 @@ public abstract class TileEntityAssociation extends TileEntity {
     protected UUID owner;
     protected UUID associatedIdentifier = null;
     protected BlockPos associatedPos = null;
-    protected int hash = 0;
+    //protected int hash = 0;
     protected int source = 0;
     protected boolean firstTick = true;
     private UUID identifier;
@@ -83,11 +83,55 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
+    public static void removeLink( World world, TileEntityAssociation tile, boolean isDestroying ) {
+
+        // Removes a connection from a tile. If that tile has a connection to another tile, remove the other's connection too
+        // (That is, remove BOTH sides of the connection)
+
+        BlockPos remotePos = tile.getAssociatedPos();
+        TileEntityAssociation tea = null;
+
+        if ( world.isBlockLoaded( remotePos ) ) {
+            tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
+        } else {
+            ChunkLoader.forceSingle( world, remotePos );
+            tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
+            ChunkLoader.releaseSingle( world, remotePos );
+        }
+
+        if ( tea == null ) { // A bugged/broken link.  One side thinks it is linked, the other doesn't.  Just clear it the local side so it's back into a good state.
+            clearAssociation( tile );
+            return;
+        }
+
+        UUID identifierTransmitter;
+        UUID identifierReceiver;
+        UUID owner;
+
+        if ( tile instanceof TileEntityTransmitter ) {
+            identifierTransmitter = tile.getIdentifier();
+            identifierReceiver = tea.getIdentifier();
+            owner = tile.getOwner();
+        } else {
+            identifierReceiver = tile.getIdentifier();
+            identifierTransmitter = tea.getIdentifier();
+            owner = tea.getOwner();
+        }
+
+        removeLinkComplete( world, owner, identifierTransmitter, identifierReceiver );
+
+        if ( !isDestroying )
+            removeLink( tile );
+
+    }
+
     private static void createLinkComplete( World world, UUID owner, UUID identifierTransmitter, UUID identifierReceiver ) {
 
         world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( owner, identifierTransmitter ).receiver = identifierReceiver );
 
     }
+
+    // End Overrides
 
     private static TileEntityAssociation createLink( World world, TileEntity remoteTE, TileEntityAssociation tile ) {
 
@@ -102,8 +146,6 @@ public abstract class TileEntityAssociation extends TileEntity {
         return remoteTile;
 
     }
-
-    // End Overrides
 
     private static void createLink( TileEntityAssociation tile, UUID identifier, BlockPos pos ) {
 
@@ -144,48 +186,6 @@ public abstract class TileEntityAssociation extends TileEntity {
         }
 
         return tile;
-
-    }
-
-    public static void removeLink( World world, TileEntityAssociation tile, boolean isDestroying ) {
-
-        // Removes a connection from a tile. If that tile has a connection to another tile, remove the other's connection too
-        // (That is, remove BOTH sides of the connection)
-
-        BlockPos remotePos = tile.getAssociatedPos();
-        TileEntityAssociation tea = null;
-
-        if ( world.isBlockLoaded( remotePos ) ) {
-            tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
-        } else {
-            ChunkLoader.forceSingle( world, remotePos );
-            tea = removeLink( world, world.getTileEntity( remotePos ), isDestroying );
-            ChunkLoader.releaseSingle( world, remotePos );
-        }
-
-        if ( tea == null ) { // A bugged/broken link.  One side thinks it is linked, the other doesn't.  Just clear it the local side so it's back into a good state.
-            clearAssociation( tile );
-            return;
-        }
-
-        UUID identifierTransmitter;
-        UUID identifierReceiver;
-        UUID owner;
-
-        if ( tile instanceof TileEntityTransmitter ) {
-            identifierTransmitter = tile.getIdentifier();
-            identifierReceiver = tea.getIdentifier();
-            owner = tile.getOwner();
-        } else {
-            identifierReceiver = tile.getIdentifier();
-            identifierTransmitter = tea.getIdentifier();
-            owner = tea.getOwner();
-        }
-
-        removeLinkComplete( world, owner, identifierTransmitter, identifierReceiver );
-
-        if ( !isDestroying )
-            removeLink( tile );
 
     }
 
@@ -254,77 +254,32 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
-    /**
-     * This controls whether the tile entity gets replaced whenever the block state is changed. Normally only want this when block actually is replaced.
-     */
-
-    /*
-
-    @Override
-    public boolean shouldRefresh( World world, BlockPos pos, BlockState oldState, BlockState newState ) {
-
-        return (oldState.getBlock() != newState.getBlock());
-
-    }
-
-    */
-    protected void doFirstTick() {
-
-        firstTick = false;
-
-        if ( !this.getWorld().isRemote ) {
-            updateBlockStateForAntenna( this, this.hasLink() );
-        } else {
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
-        }
-
-    }
-
     private static void updateBlockStateForAntenna( TileEntityAssociation tile, boolean connected ) {
 
         tile.getWorld().setBlockState( tile.getPos(), tile.getWorld().getBlockState( tile.getPos() ).with( IS_CONNECTED, connected ), 2 );
 
     }
 
-    public boolean hasLink() {
+    @Nullable
+    public UUID getAssociatedIdentifier() {
 
-        return (this.associatedIdentifier != null);
-
+        return this.associatedIdentifier;
     }
 
-    @Override
-    public void read( final CompoundNBT compound ) {
+    public void setAssociatedIdentifier( @Nullable UUID associatedIdentifier ) {
 
-        identifier = compound.getUniqueId( "identifier" );
-
-        if ( compound.hasUniqueId( "owner" ) )
-            owner = compound.getUniqueId( "owner" );
-
-        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
-            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
-            associatedPos = NbtUtils.getBlockPos( compound );
-        }
-
-        super.read( compound );
-
+        this.associatedIdentifier = associatedIdentifier;
     }
 
-    @Override
-    public CompoundNBT write( final CompoundNBT compound ) {
+    @Nullable
+    public BlockPos getAssociatedPos() {
 
-        compound.putUniqueId( "identifier", identifier );
+        return this.associatedPos;
+    }
 
-        if ( owner != null )
-            compound.putUniqueId( "owner", owner );
+    public void setAssociatedPos( @Nullable final BlockPos pos ) {
 
-        if ( associatedIdentifier != null )
-            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
-
-        if ( associatedPos != null )
-            NbtUtils.putBlockPos( compound, associatedPos );
-
-        return super.write( compound );
-
+        this.associatedPos = pos;
     }
 
     // Create Links
@@ -349,45 +304,14 @@ public abstract class TileEntityAssociation extends TileEntity {
         this.owner = owner;
     }
 
-    @Nullable
-    public BlockPos getAssociatedPos() {
+    public int getSource() {
 
-        return this.associatedPos;
+        return this.source;
     }
 
     // End Create Links
 
     // PreLinking
-
-    public void setAssociatedPos( @Nullable final BlockPos pos ) {
-
-        this.associatedPos = pos;
-    }
-
-    @Nullable
-    public UUID getAssociatedIdentifier() {
-
-        return this.associatedIdentifier;
-    }
-
-    // End PreLinking
-
-    // Remove Links
-
-    public void setAssociatedIdentifier( @Nullable UUID associatedIdentifier ) {
-
-        this.associatedIdentifier = associatedIdentifier;
-    }
-
-    public boolean hasAssociation() {
-
-        return this.associatedIdentifier != null;
-    }
-
-    public int getSource() {
-
-        return this.source;
-    }
 
     public String getSourceName() {
 
@@ -398,6 +322,84 @@ public abstract class TileEntityAssociation extends TileEntity {
     public String getTargetName() {
 
         return this.source == TileEntityTransmitter.LINKING_SOURCE_TRANSMITTER ? "receiver" : "transmitter";
+
+    }
+
+    // End PreLinking
+
+    // Remove Links
+
+    public boolean hasAssociation() {
+
+        return this.associatedIdentifier != null;
+    }
+
+    public boolean hasLink() {
+
+        return (this.associatedIdentifier != null);
+
+    }
+
+    //region Overrides
+    @Override
+    public void read( final CompoundNBT compound ) {
+
+        identifier = compound.getUniqueId( "identifier" );
+
+        if ( compound.hasUniqueId( "owner" ) )
+            owner = compound.getUniqueId( "owner" );
+
+        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
+            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
+            associatedPos = NbtUtils.getBlockPos( "associatedpos", compound );
+        }
+
+        super.read( compound );
+
+    }
+
+    @Override
+    public CompoundNBT write( final CompoundNBT compound ) {
+
+        compound.putUniqueId( "identifier", identifier );
+
+        if ( owner != null )
+            compound.putUniqueId( "owner", owner );
+
+        if ( associatedIdentifier != null )
+            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
+
+        if ( associatedPos != null )
+            NbtUtils.putBlockPos( "associatedpos", compound, associatedPos );
+
+        return super.write( compound );
+
+    }
+//endregion Overrides
+
+    /**
+     * This controls whether the tile entity gets replaced whenever the block state is changed. Normally only want this when block actually is replaced.
+     */
+
+    /*
+
+    @Override
+    public boolean shouldRefresh( World world, BlockPos pos, BlockState oldState, BlockState newState ) {
+
+        return (oldState.getBlock() != newState.getBlock());
+
+    }
+
+    */
+    protected void doFirstTick() {
+
+        firstTick = false;
+
+        if ( !this.getWorld().isRemote ) {
+            updateBlockStateForAntenna( this, this.hasLink() );
+        } else {
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+        }
 
     }
 

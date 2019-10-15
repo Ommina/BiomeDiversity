@@ -4,7 +4,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.receiver.ReceiverUpdatePacket;
+import ommina.biomediversity.blocks.collector.TileEntityCollector;
+import ommina.biomediversity.blocks.collector.PacketUpdateCollector;
+import ommina.biomediversity.blocks.receiver.PacketUpdateReceiver;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 
 public class Network {
@@ -28,10 +30,16 @@ public class Network {
              .consumer( GenericTankUpdatePacket::handle )
              .add();
 
-        channel.messageBuilder( ReceiverUpdatePacket.class, channelId++ )
-             .decoder( ReceiverUpdatePacket::fromBytes )
-             .encoder( ReceiverUpdatePacket::toBytes )
+        channel.messageBuilder( PacketUpdateReceiver.class, channelId++ )
+             .decoder( PacketUpdateReceiver::fromBytes )
+             .encoder( PacketUpdateReceiver::toBytes )
              .consumer( TileEntityReceiver::handle )
+             .add();
+
+        channel.messageBuilder( PacketUpdateCollector.class, channelId++ )
+             .decoder( PacketUpdateCollector::fromBytes )
+             .encoder( PacketUpdateCollector::toBytes )
+             .consumer( TileEntityCollector::handle )
              .add();
 
         channel.messageBuilder( GenericTilePacketRequest.class, channelId++ )

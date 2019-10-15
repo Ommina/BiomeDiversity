@@ -35,6 +35,7 @@ public class Config {
     public static final String CATEGORY_TRANSMITTER = "transmitters";
     public static final String CATAGORY_RECEIVER = "receivers";
     public static final String CATEGORY_RAINBARREL = "rainbarrel";
+    public static final String CATEGORY_COLLECTOR = "collector";
 
     private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
     private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -62,8 +63,14 @@ public class Config {
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationAttempts;
 
     // Power Generation
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> powerBiomeWhitelist;// = new ArrayList<? extends String>();
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> powerBiomeWhitelist;
     public static Set<String> powerBiomes;
+    public static ForgeConfigSpec.IntValue powerMaxBiomeCount;
+    public static ForgeConfigSpec.DoubleValue powerBiomeDiversity;
+    public static ForgeConfigSpec.IntValue powerBiomeAdjustment;
+    public static ForgeConfigSpec.DoubleValue powerFinalMultiplier;
+    public static ForgeConfigSpec.IntValue powerMaxReceiversPerFluid;
+    public static ForgeConfigSpec.DoubleValue powerRepeatedFluidPenalty;
 
     // Transmitters
     public static ForgeConfigSpec.IntValue transmitterCapacity;
@@ -82,6 +89,10 @@ public class Config {
     // Rain Barrel
     public static ForgeConfigSpec.IntValue rainbarrelCapacity;
 
+    // Collector
+    public static ForgeConfigSpec.BooleanValue collectorIsSelfThrottleEnabled;
+    public static ForgeConfigSpec.IntValue collectorEnergyCapacity;
+
     static {
 
         setupWorldGenConfig();
@@ -89,6 +100,7 @@ public class Config {
         setupTransmitter();
         setupReceiver();
         setupRainBarrel();
+        setupCollector();
 
         COMMON_CONFIG = COMMON_BUILDER.build();
         CLIENT_CONFIG = CLIENT_BUILDER.build();
@@ -116,14 +128,29 @@ public class Config {
     @SubscribeEvent
     public static void onLoad( final ModConfig.Loading configEvent ) {
 
-        System.out.println( "hello" );
+        //System.out.println( "hello" );
 
     }
 
     @SubscribeEvent
     public static void onReload( final ModConfig.ConfigReloading configEvent ) {
 
-        System.out.println( "hello" );
+        //System.out.println( "hello" );
+
+    }
+
+    public static void setupCollector() {
+
+        COMMON_BUILDER.comment( "Collector Configuration" ).push( CATEGORY_COLLECTOR );
+
+        {
+
+            collectorIsSelfThrottleEnabled = COMMON_BUILDER.comment( "Should the collector turn off automatically when it cannot accept a full round of power, saving the player's fluid.  If false, the player will still be able to automate the shutoff via a comparator and redstone." ).define( "collector_self_throttle", true );
+            collectorEnergyCapacity = COMMON_BUILDER.comment( "Energy stored by the collector, in FE units.  Energy produced greater than this amount will be discarded." ).defineInRange( "collector_capacity", 1000000, 10, Integer.MAX_VALUE );
+
+        }
+
+        COMMON_BUILDER.pop();
 
     }
 
@@ -248,9 +275,12 @@ public class Config {
             COMMON_BUILDER.comment( "Biomes" ).push( SUBCATEGORY_BIOMES );
 
             powerBiomeWhitelist = COMMON_BUILDER.defineList( "biomes", Arrays.asList( "minecraft:*" ), o -> o instanceof String );
-
-            //pristineOutputs.put(MobKey.BLAZE, builder.defineList(MobKey.BLAZE, Arrays.asList(DeepConstants.LOOT.BLAZE), o -> o instanceof String));
-
+            powerMaxBiomeCount = COMMON_BUILDER.comment( "Maximum number of unique biomes that will be counted.  May be useful if there is a biome-adding mod installed, and the ease of finding new biomes sends power production through the roof" ).defineInRange( "max_biome_count", 20, 1, 128 );
+            powerBiomeDiversity = COMMON_BUILDER.comment( "Bonus multiplier for each unique biome (from the biome list) with a paired Transmitter.\nUsed in conjunction with fluid stength to determine total power produced." ).defineInRange( "biome_diversity", 1.075d, 1d, 3.0d );
+            powerBiomeAdjustment = COMMON_BUILDER.comment( "Value to add to power produced by biome_Diversity.  Applied BEFORE final multiplier" ).defineInRange( "biome_adjustment", -11, -10000, +10000 );
+            powerFinalMultiplier = COMMON_BUILDER.comment( "After all other calculations are done, the result is multiplied by this value.\nValues greater than 1.00 will increase power production dramatically.\nLikewise, less than 1.00 will reduce power produced, and 0 will effectively disable power entirely." ).defineInRange( "final_multiplier", 1d, 0d, 100d );
+            powerMaxReceiversPerFluid = COMMON_BUILDER.comment( "Maximum number of times a fluid can be used before a suffering a power-generation penalty.  Encourages using multiple fluids." ).defineInRange( "max_fluid_receivers", 8, 1, 999 );
+            powerRepeatedFluidPenalty = COMMON_BUILDER.comment( "Power creation penalty for repeated fluids.  A percentage loss multipled by number of receivers over the limit." ).defineInRange( "repeater_fluid_penalty", 0.046d, 0d, 0.5d );
 
             COMMON_BUILDER.pop();
 

@@ -24,6 +24,104 @@ public class LinkStaff extends Item {
         super( properties );
     }
 
+    private void copy( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
+
+        CompoundNBT compound;
+        BlockPos pos = tile.getPos();
+
+        compound = new CompoundNBT();
+        compound.putInt( "copyfrom", tile.getSource() );
+        compound.putUniqueId( "identifier", tile.getIdentifier() );
+
+        NbtUtils.putBlockPos( "pos", compound, tile.getPos() );
+
+        item.setTag( compound );
+
+        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingscopied" ) ), true );
+
+        item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getSourceName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
+
+    }
+
+    private void copyAssociation( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
+
+        CompoundNBT compound;
+        BlockPos pos = tile.getAssociatedPos();
+
+        compound = new CompoundNBT();
+
+        compound.putInt( "copyfrom", 1 );
+        compound.putUniqueId( "identifier", tile.getAssociatedIdentifier() );
+
+        NbtUtils.putBlockPos( "pos", compound, pos );
+
+        item.setTag( compound );
+
+        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.transmittersettingscopied" ) ), true );
+
+        item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getTargetName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
+
+    }
+
+    private boolean isAlreadyCopying( ItemStack item, TileEntityAssociation tile ) {
+
+        return isCopying( item ) && item.getTag().getInt( "copyfrom" ) == tile.getSource();
+
+    }
+
+    private boolean isCopying( ItemStack item ) {
+
+        return item.getTag() != null && item.getTag().contains( "copyfrom" );
+
+    }
+
+    private void paste( World world, ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
+
+        CompoundNBT compound = item.getTag();
+
+        TileEntityAssociation.createLink( world, tile, compound.getUniqueId( "identifier" ), NbtUtils.getBlockPos( "pos", compound ) );
+
+        item.clearCustomName();
+        item.setTag( null );
+
+        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingspasted" ) ), true );
+
+        if ( tile instanceof TileEntityTransmitter ) {
+
+            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier() );
+
+        }
+
+    }
+
+    private void removeCopiedSettings( ItemStack item ) {
+
+        item.clearCustomName();
+        item.setTag( null );
+
+    }
+
+    private ActionResultType useSneaking( ItemUseContext context, TileEntityAssociation te, ItemStack item ) {
+
+        if ( !isCopying( item ) && te.hasAssociation() )
+            copyAssociation( context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
+
+        return ActionResultType.SUCCESS;
+
+    }
+
+    private ActionResultType useUnSneaking( ItemUseContext context, TileEntityAssociation te, ItemStack item ) {
+
+        if ( !isCopying( item ) )
+            copy( context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
+        else
+            paste( context.getWorld(), context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
+
+        return ActionResultType.SUCCESS;
+
+    }
+
+    //region Overrides
     @Override
     public ActionResultType onItemUse( ItemUseContext context ) {
 
@@ -61,102 +159,6 @@ public class LinkStaff extends Item {
         return ActionResult.newResult( ActionResultType.SUCCESS, player.getHeldItem( hand ) );
 
     }
-
-    private void removeCopiedSettings( ItemStack item ) {
-
-        item.clearCustomName();
-        item.setTag( null );
-
-    }
-
-    private boolean isAlreadyCopying( ItemStack item, TileEntityAssociation tile ) {
-
-        return isCopying( item ) && item.getTag().getInt( "copyfrom" ) == tile.getSource();
-
-    }
-
-    private ActionResultType useUnSneaking( ItemUseContext context, TileEntityAssociation te, ItemStack item ) {
-
-        if ( !isCopying( item ) )
-            copy( context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
-        else
-            paste( context.getWorld(), context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
-
-        return ActionResultType.SUCCESS;
-
-    }
-
-    private ActionResultType useSneaking( ItemUseContext context, TileEntityAssociation te, ItemStack item ) {
-
-        if ( !isCopying( item ) && te.hasAssociation() )
-            copyAssociation( context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
-
-        return ActionResultType.SUCCESS;
-
-    }
-
-    private boolean isCopying( ItemStack item ) {
-
-        return item.getTag() != null && item.getTag().contains( "copyfrom" );
-
-    }
-
-    private void copy( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
-
-        CompoundNBT compound;
-        BlockPos pos = tile.getPos();
-
-        compound = new CompoundNBT();
-        compound.putInt( "copyfrom", tile.getSource() );
-        compound.putUniqueId( "identifier", tile.getIdentifier() );
-
-        NbtUtils.putBlockPos( compound, tile.getPos() );
-
-        item.setTag( compound );
-
-        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingscopied" ) ), true );
-
-        item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getSourceName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
-
-    }
-
-    private void paste( World world, ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
-
-        CompoundNBT compound = item.getTag();
-
-        TileEntityAssociation.createLink( world, tile, compound.getUniqueId( "identifier" ), NbtUtils.getBlockPos( compound ) );
-
-        item.clearCustomName();
-        item.setTag( null );
-
-        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.settingspasted" ) ), true );
-
-        if ( tile instanceof TileEntityTransmitter ) {
-
-            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( tile.getOwner(), tile.getIdentifier() ).receiver = tile.getAssociatedIdentifier() );
-
-        }
-
-    }
-
-    private void copyAssociation( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
-
-        CompoundNBT compound;
-        BlockPos pos = tile.getAssociatedPos();
-
-        compound = new CompoundNBT();
-
-        compound.putInt( "copyfrom", 1 );
-        compound.putUniqueId( "identifier", tile.getAssociatedIdentifier() );
-
-        NbtUtils.putBlockPos( compound, pos );
-
-        item.setTag( compound );
-
-        player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.transmittersettingscopied" ) ), true );
-
-        item.setDisplayName( new StringTextComponent( String.format( Translator.translateToLocal( "text.biomediversity.linkstaff.copyfrom" ), tile.getTargetName(), pos.getX(), pos.getY(), pos.getZ() ) ) );
-
-    }
+//endregion Overrides
 
 }

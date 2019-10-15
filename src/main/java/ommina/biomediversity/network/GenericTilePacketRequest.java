@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import ommina.biomediversity.blocks.receiver.ReceiverUpdatePacket;
+import ommina.biomediversity.blocks.receiver.PacketUpdateReceiver;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 
 import java.util.function.Supplier;
@@ -49,7 +49,7 @@ public class GenericTilePacketRequest {
                 PacketDistributor.TargetPoint pd = new PacketDistributor.TargetPoint( tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), 64.0f, DimensionType.OVERWORLD );
 
                 if ( tile instanceof TileEntityReceiver ) {
-                    Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new ReceiverUpdatePacket( tile ) );
+                    Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PacketUpdateReceiver( tile ) );
                 } else if ( tile instanceof ITankBroadcast ) {
                     Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new GenericTankUpdatePacket( tile ) );
                 }
