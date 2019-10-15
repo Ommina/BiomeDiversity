@@ -165,7 +165,7 @@ public abstract class TileEntityAssociation extends TileEntity {
         if ( tile.hasLink() )
             removeLink( world, tile, false );
 
-        if ( world.isBlockLoaded( remotePos ) ) {
+        if ( remotePos != null && world.isBlockLoaded( remotePos ) ) {
             preLink( world, world.getTileEntity( remotePos ) );
         } else {
             ChunkLoader.forceSingle( world, remotePos );
@@ -329,14 +329,14 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     // Remove Links
 
-    public boolean hasAssociation() {
+    //public boolean hasAssociation() {
 
-        return this.associatedIdentifier != null;
-    }
+    //    return this.associatedIdentifier != null;
+    //}
 
     public boolean hasLink() {
 
-        return (this.associatedIdentifier != null);
+        return (this.associatedIdentifier != null && this.associatedPos != null);
 
     }
 

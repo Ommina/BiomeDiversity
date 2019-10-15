@@ -103,7 +103,7 @@ public class LinkStaff extends Item {
 
     private ActionResultType useSneaking( ItemUseContext context, TileEntityAssociation te, ItemStack item ) {
 
-        if ( !isCopying( item ) && te.hasAssociation() )
+        if ( !isCopying( item ) && te.hasLink() )
             copyAssociation( context.getPlayer().getHeldItem( context.getHand() ), te, context.getPlayer() );
 
         return ActionResultType.SUCCESS;

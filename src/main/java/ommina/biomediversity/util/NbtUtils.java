@@ -34,6 +34,8 @@ public class NbtUtils {
         nbt.putInt( POSY, pos.getY() );
         nbt.putInt( POSZ, pos.getZ() );
 
+        compound.put( keyName, nbt );
+
     }
 
     public static void removeBlockPos( String keyName, CompoundNBT compound ) {
