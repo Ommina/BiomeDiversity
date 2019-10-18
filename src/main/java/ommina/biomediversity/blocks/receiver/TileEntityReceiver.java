@@ -64,7 +64,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private boolean chunkloadingTimedOut = false;
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int loop = 1;
-    private TileEntityCollector collector;
     private BlockPos collectorPos;
     private boolean isChunkloadingTransmitter = false;
 
@@ -91,10 +90,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                     ter.temperature = packet.temperature;
                     ter.biomeRegistryName = packet.biomeRegistryName;
 
-                    if ( ter.collectorPos != null && world.get().isBlockLoaded( ter.collectorPos ) ) {
-                        ter.collector = (TileEntityCollector) world.get().getTileEntity( ter.collectorPos );
-                    }
-
                 }
 
             }
@@ -111,7 +106,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     public void doChunkloading() {
 
-        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null || collector == null )
+        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null )
             return;
 
         chunkloadDurationRemaining--;
@@ -126,6 +121,21 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     public String getBiomeRegistryName() {
         return this.biomeRegistryName;
+    }
+
+    @Nullable
+    public TileEntityCollector getCollector() {
+
+        if ( hasWorld() && this.collectorPos != null && world.isBlockLoaded( this.collectorPos ) ) {
+
+            TileEntity tileEntity = world.getTileEntity( this.collectorPos );
+
+            if ( tileEntity instanceof TileEntityCollector )
+                return (TileEntityCollector) tileEntity;
+
+        }
+        return null;
+
     }
 
     public float getTemperature() {
@@ -160,17 +170,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    public void resetChunkloadDuration() {
-
-        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
-        chunkloadingTimedOut = false;
-    }
-
-    public void resetSearchCount() {
-
-        searchAttemptCount = 0;
-    }
-
 /*
 
     private boolean checkCollectorTeAtCollectorPos() {
@@ -198,17 +197,33 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
 */
 
-    private boolean collectorExistsAtCollectorPos() {
+    public void resetChunkloadDuration() {
 
-        if ( !hasWorld() || !world.isBlockLoaded( collectorPos ) ) {
-            return true;
-        }
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+        chunkloadingTimedOut = false;
+    }
 
-        return (getWorld().getTileEntity( collectorPos ) instanceof TileEntityCollector);
 
+    public void resetSearchCount() {
+
+        searchAttemptCount = 0;
     }
 
     private void doMainWork() {
+
+        TileEntityCollector coll = getCollector();
+
+        //System.out.println( "work again" );
+
+        if ( coll == null ) {
+
+            if ( hasWorld() && this.collectorPos != null && world.isBlockLoaded( this.collectorPos ) )
+                removeCollector();
+            if ( this.collectorPos == null && (loop % SEARCH_ON_LOOP) == 0 )
+                findCollector();
+            return;
+
+        }
 
         if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
 
@@ -222,7 +237,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                 if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
 
-                    if ( this.collector != null && !this.collector.isCollectorTurnedOff() ) {
+                    if ( !coll.isCollectorTurnedOff() ) {
 
                         if ( !world.isBlockPowered( getPos() ) ) {
 
@@ -233,7 +248,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                             fluidHashCode = pd.fluid.hashCode();
                             power = FluidStrengths.getStrength( fluidHashCode );
 
-                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
+                            coll.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
 
                             pd.drain( drainAmount );
 
@@ -271,22 +286,25 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         }
 
-        setCollector();
-
-        if ( this.collector == null && (loop % SEARCH_ON_LOOP) == 0 ) {
-            findCollector();
-        }
-
         doBroadcast();
 
         this.markDirty();
 
     }
 
+/*
+
+    private boolean doesCollectorExist() {
+
+        return isCollectorLoaded() && (getWorld().getTileEntity( collectorPos ) instanceof TileEntityCollector);
+
+    }
+
+*/
+
     private boolean findCollector() {
 
-        if ( collectorPos != null && collectorExistsAtCollectorPos() ) {
-            setCollector();
+        if ( collectorPos != null && hasWorld() && world.isBlockLoaded( this.collectorPos ) ) {
             return true;
         }
 
@@ -308,8 +326,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                         if ( te instanceof IClusterComponent ) {
                             IClusterComponent tecc = (IClusterComponent) te;
                             if ( tecc.isClusterComponentConnected() ) {
-                                this.collector = tecc.getCollector();
-                                this.collectorPos = tecc.getCollector().getPos();
+                                this.collectorPos = tecc.getCollectorPos();
                                 markDirty();
                                 BROADCASTER.forceBroadcast();
                                 return true;
@@ -339,25 +356,21 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
-    private void removeCollector() {
+/*
 
-        BROADCASTER.forceBroadcast();
+    private boolean isCollectorLoaded() {
 
-        collectorPos = null;
-        collector = null;
-        markDirty();
+        return (hasWorld() && collectorPos != null && world.isBlockLoaded( collectorPos ));
 
     }
 
-    private void setCollector() {
+*/
 
-        if ( collectorPos == null || !collectorExistsAtCollectorPos() )
-            removeCollector();
-        else if ( collector == null && hasWorld() && world.isBlockLoaded( collectorPos ) )
-            collector = (TileEntityCollector) getWorld().getTileEntity( collectorPos );
-        else
-            return;
+    private void removeCollector() {
 
+        collectorPos = null;
+        BROADCASTER.forceBroadcast();
+        doBroadcast();
         markDirty();
 
     }
@@ -376,6 +389,22 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 
+/*
+
+    private void setCollector() {
+
+        if ( collectorPos == null || !doesCollectorExist() )
+            removeCollector();
+        else if ( collector == null && hasWorld() && world.isBlockLoaded( collectorPos ) )
+            collector = (TileEntityCollector) getWorld().getTileEntity( collectorPos );
+        else
+            return;
+
+        markDirty();
+
+    }
+
+*/
 
     //region Overrides
     @Nullable
@@ -400,15 +429,15 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         return TANK;
     }
 
-    @Nullable
     @Override
-    public TileEntityCollector getCollector() {
-        return this.collector;
+    @Nullable
+    public BlockPos getCollectorPos() {
+        return this.collectorPos;
     }
 
     @Override
     public boolean isClusterComponentConnected() {
-        return (this.collector != null);
+        return (this.collectorPos != null);
     }
 
     @Override
@@ -446,8 +475,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         super.doFirstTick();
 
         if ( !world.isRemote ) {
-
-            setCollector();
 
             if ( this.getOwner() == null )
                 BiomeDiversity.LOGGER.warn( "Receiver has null owner at: " + this.getPos() );

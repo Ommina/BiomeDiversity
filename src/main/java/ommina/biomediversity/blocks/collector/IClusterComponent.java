@@ -1,8 +1,13 @@
 package ommina.biomediversity.blocks.collector;
 
+import net.minecraft.util.math.BlockPos;
+
+import javax.annotation.Nullable;
+
 public interface IClusterComponent {
 
-    TileEntityCollector getCollector();
+    @Nullable
+    BlockPos getCollectorPos();
 
     boolean isClusterComponentConnected();
 

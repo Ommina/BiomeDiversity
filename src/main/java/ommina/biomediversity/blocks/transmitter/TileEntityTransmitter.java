@@ -37,10 +37,10 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     private static final int MINIMUM_DELTA = 200;
     private static List<Fluid> fluidWhitelist = new ArrayList<Fluid>();
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
+
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
 
         //region Overrides
-        // Overrides
         @Override
         protected void onFill( int amount ) {
 
@@ -49,7 +49,6 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
             super.onContentsChanged();
         }
 //endregion Overrides
-//Overrides
 
     };
     private LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
@@ -155,32 +154,6 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
         return TANK;
     }
 
-    @Override
-    protected void doFirstTick() {
-        super.doFirstTick();
-
-        if ( world.isRemote )
-            return;
-
-        refreshTransmitterTankFromTransmitterNetwork();
-
-    }
-
-    @Override
-    public void read( CompoundNBT tag ) {
-
-        TANK.read( tag );
-        super.read( tag );
-    }
-
-    @Override
-    public CompoundNBT write( CompoundNBT tag ) {
-
-        tag = TANK.write( tag );
-        return super.write( tag );
-
-    }
-
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
@@ -205,6 +178,32 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     public boolean hasFastRenderer() {
 
         return true;
+    }
+
+    @Override
+    public void read( CompoundNBT tag ) {
+
+        TANK.read( tag );
+        super.read( tag );
+    }
+
+    @Override
+    public CompoundNBT write( CompoundNBT tag ) {
+
+        tag = TANK.write( tag );
+        return super.write( tag );
+
+    }
+
+    @Override
+    protected void doFirstTick() {
+        super.doFirstTick();
+
+        if ( world.isRemote )
+            return;
+
+        refreshTransmitterTankFromTransmitterNetwork();
+
     }
 
     @Override

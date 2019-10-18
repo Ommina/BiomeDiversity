@@ -27,9 +27,7 @@ public class PacketUpdateReceiver {
         this.tilePos = tile.getPos();
         this.temperature = tile.getTemperature();
         this.biomeRegistryName = tile.getBiomeRegistryName();
-
-        if ( tile.getCollector() != null )
-            this.collectorPos = tile.getCollector().getPos();
+        this.collectorPos = tile.getCollectorPos();
 
     }
 

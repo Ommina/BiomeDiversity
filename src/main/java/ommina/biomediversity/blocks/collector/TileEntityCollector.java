@@ -21,6 +21,7 @@ import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.Pair;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -131,8 +132,9 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     @Override
-    public TileEntityCollector getCollector() {
-        return this;
+    @Nullable
+    public BlockPos getCollectorPos() {
+        return this.getPos();
     }
 
     @Override
