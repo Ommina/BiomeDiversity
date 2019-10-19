@@ -82,9 +82,6 @@ public class Config {
     public static ForgeConfigSpec.IntValue receiverPowerCapacity;
     public static ForgeConfigSpec.IntValue receiverPowerConsumptionBase;
     public static ForgeConfigSpec.IntValue receiverPowerConsumptionChunloading;
-    public static ForgeConfigSpec.IntValue receiverCollectorSearchHorizontal;
-    public static ForgeConfigSpec.IntValue receiverCollectorSearchVerticalPos;
-    public static ForgeConfigSpec.IntValue receiverCollectorSearchVerticalNeg;
 
     // Rain Barrel
     public static ForgeConfigSpec.IntValue rainbarrelCapacity;
@@ -92,6 +89,11 @@ public class Config {
     // Collector
     public static ForgeConfigSpec.BooleanValue collectorIsSelfThrottleEnabled;
     public static ForgeConfigSpec.IntValue collectorEnergyCapacity;
+
+    // Cluster Tiles (Receivers, Plugs)
+    public static ForgeConfigSpec.IntValue clusterCollectorSearchHorizontal;
+    public static ForgeConfigSpec.IntValue clusterCollectorSearchVerticalPos;
+    public static ForgeConfigSpec.IntValue clusterCollectorSearchVerticalNeg;
 
     static {
 
@@ -249,9 +251,9 @@ public class Config {
 
             receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the receiver chunkload distant transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
 
-            receiverCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
-            receiverCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
-            receiverCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
+            clusterCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
+            clusterCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
+            clusterCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
 
             receiverRequirePowerToOperate = COMMON_BUILDER.comment( "Require RF to operate.  This means a third-party will be required to jump-start power generation." ).define( "receiver_require_power_base", false );
             receiverRequirePowerToChunkload = COMMON_BUILDER.comment( "Require RF to chunkload transmitter chunks (as necessary)" ).define( "receiver_require_power_chunkloading", false );
