@@ -71,7 +71,8 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     }
 
-// Overrides
+//region Overrides
+    // Overrides
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -160,7 +161,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
         if ( tile.hasLink() ) {
             TileEntityAssociation.removeLink( world, tile, true );
-        } else {
             world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.removeTransmitter( tile ) );
         }
 
@@ -183,6 +183,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
         return new TileEntityTransmitter();
     }
+//endregion Overrides
 //Overrides
 
 }

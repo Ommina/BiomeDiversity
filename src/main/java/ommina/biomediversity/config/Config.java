@@ -249,18 +249,18 @@ public class Config {
 
         {
 
-            receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the receiver chunkload distant transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
+            receiverEnableChunkLoading = COMMON_BUILDER.comment( "Let the Receiver chunkload distant Transmitters when fluid amounts get low." ).define( "receiver_enable_chunkloading", true );
 
-            clusterCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked receiver will search when looking for a Collector" ).defineInRange( "receiver_search_horizontal", 9, 3, 18 );
-            clusterCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_pos", 3, 1, 6 );
-            clusterCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked receiver will search when looking for a collector") ).defineInRange( "receiver_search_vertial_neg", 2, 1, 6 );
+            clusterCollectorSearchHorizontal = COMMON_BUILDER.comment( "Horizontal distance a (radius) an unlinked cluster component will search when looking for a Collector" ).defineInRange( "cluster_search_horizontal", 9, 3, 18 );
+            clusterCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked cluster component will search when looking for a collector") ).defineInRange( "cluster_search_vertial_pos", 3, 1, 6 );
+            clusterCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked cluster component will search when looking for a collector") ).defineInRange( "cluster_search_vertial_neg", 2, 1, 6 );
 
             receiverRequirePowerToOperate = COMMON_BUILDER.comment( "Require RF to operate.  This means a third-party will be required to jump-start power generation." ).define( "receiver_require_power_base", false );
-            receiverRequirePowerToChunkload = COMMON_BUILDER.comment( "Require RF to chunkload transmitter chunks (as necessary)" ).define( "receiver_require_power_chunkloading", false );
+            receiverRequirePowerToChunkload = COMMON_BUILDER.comment( "Require RF to chunkload Transmitter chunks (as necessary)" ).define( "receiver_require_power_chunkloading", false );
 
             receiverPowerCapacity = COMMON_BUILDER.comment( "Receiver RF Capacity.  Only useful if one of the two 'Require RF' options is 'true'" ).defineInRange( "receiver_power_capacity", 100000, 1000, 1000000 );
             receiverPowerConsumptionBase = COMMON_BUILDER.comment( "Receiver baseline power consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_baseline", 1, 1, 1024 );
-            receiverPowerConsumptionChunloading = COMMON_BUILDER.comment( "Receiver chunkloading power conumption.  RF/tick" ).defineInRange( "receiver_power_consumption_chunkloading", 1, 1, 8192 );
+            receiverPowerConsumptionChunloading = COMMON_BUILDER.comment( "Receiver chunkloading power consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_chunkloading", 1, 1, 8192 );
 
         }
 

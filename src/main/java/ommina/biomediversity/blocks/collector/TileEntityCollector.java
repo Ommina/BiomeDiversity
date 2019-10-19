@@ -32,7 +32,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     public static final int WARM = 0;
     public static final int COOL = 1;
 
-    private static final int TANK_COUNT = 12;
+    static final int TANK_COUNT = 12;
     private static final int MINIMUM_DELTA = 300;
 
     final List<BdFluidTank> TANK = new ArrayList<>( TANK_COUNT );
@@ -74,7 +74,10 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
                     TileEntityCollector ter = (TileEntityCollector) tile;
 
-                    //ter.TANK.setFluid( packet.fluid );
+                    for ( int n = 0; n < TANK_COUNT; n++ )
+                        ter.TANK.get( n ).setFluid( packet.fluids[n] );
+
+
                     //ter.collectorPos = packet.collectorPos;
                     //ter.temperature = packet.temperature;
                     //ter.biomeRegistryName = packet.biomeRegistryName;
