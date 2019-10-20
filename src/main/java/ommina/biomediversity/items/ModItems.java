@@ -61,7 +61,7 @@ public class ModItems {
         register( event, "cluster_block_generic", new BlockItem( ModBlocks.CLUSTER_BLOCK_GENERIC, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "cluster_block_tank", new BlockItem( ModBlocks.CLUSTER_BLOCK_TANK, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "cluster_block_sturdy", new BlockItem( ModBlocks.CLUSTER_BLOCK_STURDY, new Item.Properties().group( BiomeDiversity.TAB ) ) );
-        register( event, "cluster_collector", new BlockItem( ModBlocks.CLUSTER_COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        //register( event, "cluster_collector", new BlockItem( ModBlocks.CLUSTER_COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
         register( event, "transmitter", new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "receiver", new BlockItem( ModBlocks.RECEIVER, new Item.Properties().group( BiomeDiversity.TAB ) ) );

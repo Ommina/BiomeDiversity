@@ -9,10 +9,12 @@ public class ClusterBlockTransparent extends ClusterBlock {
     }
 
 //region Overrides
+
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
+
 //endregion Overrides
 
 }

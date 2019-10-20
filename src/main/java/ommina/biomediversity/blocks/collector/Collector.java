@@ -3,13 +3,17 @@ package ommina.biomediversity.blocks.collector;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import ommina.biomediversity.blocks.cluster.ClusterBlockTransparent;
 import ommina.biomediversity.blocks.cluster.IClusterController;
 
-public class Collector extends Block implements IClusterController { // BlockTileEntity<TileEntityCollector> {
+public class Collector extends ClusterBlockTransparent implements IClusterController { // BlockTileEntity<TileEntityCollector> {
 
     public Collector() {
 
@@ -17,7 +21,7 @@ public class Collector extends Block implements IClusterController { // BlockTil
 
     }
 
-//region Overrides
+    //region Overrides
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -28,19 +32,19 @@ public class Collector extends Block implements IClusterController { // BlockTil
         return true;
     }
 
-    //@Override
-    //protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
-    //    builder.add( IS_CONNECTED );
-    //}
-
-    //@Override
-    //public BlockState getStateForPlacement( BlockItemUseContext context ) {
-    //    return this.getDefaultState().with( IS_CONNECTED, true );
-    //}
-
     @Override
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
         return new TileEntityCollector();
+    }
+
+    @Override
+    public void onBlockClicked( BlockState state, World world, BlockPos blockPos, PlayerEntity playerEntity ) {
+
+        world.setBlockState( blockPos, state.cycle( FORMED ) );
+
+        System.out.println( "moo" );
+
+        super.onBlockClicked( state, world, blockPos, playerEntity );
     }
 //endregion Overrides
 

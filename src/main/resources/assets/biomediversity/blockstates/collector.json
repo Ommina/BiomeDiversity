@@ -1,7 +1,6 @@
 {
 	"variants": {
-		"": {
-			"model": "biomediversity:block/collector"
-		}
+		"formed=true":  { "model": "biomediversity:block/collector" },
+		"formed=false": { "model": "biomediversity:block/cluster_collector" }
 	}
 }

@@ -40,7 +40,7 @@ public class ModBlocks {
     @ObjectHolder( "cluster_block_generic" ) public static final Block CLUSTER_BLOCK_GENERIC = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
     @ObjectHolder( "cluster_block_tank" ) public static final Block CLUSTER_BLOCK_TANK = new ClusterBlockTransparent( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
     @ObjectHolder( "cluster_block_sturdy" ) public static final Block CLUSTER_BLOCK_STURDY = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.2f ) );
-    @ObjectHolder( "cluster_collector" ) public static final Block CLUSTER_COLLECTOR = new CollectorController();
+    //@ObjectHolder( "cluster_collector" ) public static final Block CLUSTER_COLLECTOR = new CollectorController();
 
     // Crops
     @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
@@ -82,7 +82,7 @@ public class ModBlocks {
         register( event, "cluster_block_generic", CLUSTER_BLOCK_GENERIC );
         register( event, "cluster_block_tank", CLUSTER_BLOCK_TANK );
         register( event, "cluster_block_sturdy", CLUSTER_BLOCK_STURDY );
-        register( event, "cluster_collector", CLUSTER_COLLECTOR );
+//        register( event, "cluster_collector", CLUSTER_COLLECTOR );
 
         register( event, "colza", COLZA );
         register( event, "pomegranate", POMEGRANATE );
