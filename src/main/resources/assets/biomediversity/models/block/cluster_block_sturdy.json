@@ -1,0 +1,22 @@
+{
+  "textures": {
+    "0": "biomediversity:block/cluster/cluster_block_generic",
+    "1": "biomediversity:block/cluster/cluster_block_sturdy_top",
+    "2": "biomediversity:block/window_nonoise",
+    "particle": "biomediversity:block/cluster/cluster_block_generic"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#0", "cullface": "down" },
+        "up":    { "texture": "#1", "cullface": "up" },
+        "north": { "texture": "#0", "cullface": "north" },
+        "south": { "texture": "#0", "cullface": "south" },
+        "west":  { "texture": "#0", "cullface": "west" },
+        "east":  { "texture": "#0", "cullface": "east" }
+      }
+    }
+  ]
+}

@@ -13,7 +13,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.blocks.BlockNocifiedUndamaged;
-import ommina.biomediversity.blocks.blocks.cluster.BlockTransparent;
+import ommina.biomediversity.blocks.cluster.ClusterBlock;
+import ommina.biomediversity.blocks.cluster.ClusterBlockTransparent;
+import ommina.biomediversity.blocks.cluster.CollectorController;
 import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.crops.ColzaBlock;
 import ommina.biomediversity.blocks.crops.FakePlantBlock;
@@ -35,8 +37,10 @@ public class ModBlocks {
     @ObjectHolder( "nocified_stone_fractured" ) public static final Block STONE_NOCIFIED_FRACTURED = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
 
     // Cluster Blocks
-    @ObjectHolder( "cluster_block_generic" ) public static final Block CLUSTER_BLOCK_GENERIC = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
-    @ObjectHolder( "cluster_block_tank" ) public static final Block CLUSTER_BLOCK_TANK = new BlockTransparent( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
+    @ObjectHolder( "cluster_block_generic" ) public static final Block CLUSTER_BLOCK_GENERIC = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
+    @ObjectHolder( "cluster_block_tank" ) public static final Block CLUSTER_BLOCK_TANK = new ClusterBlockTransparent( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
+    @ObjectHolder( "cluster_block_sturdy" ) public static final Block CLUSTER_BLOCK_STURDY = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.2f ) );
+    @ObjectHolder( "cluster_collector" ) public static final Block CLUSTER_COLLECTOR = new CollectorController();
 
     // Crops
     @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
@@ -77,6 +81,8 @@ public class ModBlocks {
 
         register( event, "cluster_block_generic", CLUSTER_BLOCK_GENERIC );
         register( event, "cluster_block_tank", CLUSTER_BLOCK_TANK );
+        register( event, "cluster_block_sturdy", CLUSTER_BLOCK_STURDY );
+        register( event, "cluster_collector", CLUSTER_COLLECTOR );
 
         register( event, "colza", COLZA );
         register( event, "pomegranate", POMEGRANATE );

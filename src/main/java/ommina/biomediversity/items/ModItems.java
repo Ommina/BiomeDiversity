@@ -33,6 +33,8 @@ public class ModItems {
 
     @ObjectHolder( "cluster_block_generic" ) public static final Item CLUSTER_BLOCK_GENERIC = null;
     @ObjectHolder( "cluster_block_tank" ) public static final Item CLUSTER_BLOCK_TANK = null;
+    @ObjectHolder( "cluster_block_sturdy" ) public static final Item CLUSTER_BLOCK_STURDY = null;
+    @ObjectHolder( "cluster_collector" ) public static final Item CLUSTER_COLLECTOR = null;
 
     @ObjectHolder( "transmitter" ) public static final Item TRANSMITTER = null;
     @ObjectHolder( "receiver" ) public static final Item RECEIVER = null;
@@ -58,6 +60,8 @@ public class ModItems {
 
         register( event, "cluster_block_generic", new BlockItem( ModBlocks.CLUSTER_BLOCK_GENERIC, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "cluster_block_tank", new BlockItem( ModBlocks.CLUSTER_BLOCK_TANK, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "cluster_block_sturdy", new BlockItem( ModBlocks.CLUSTER_BLOCK_STURDY, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "cluster_collector", new BlockItem( ModBlocks.CLUSTER_COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
         register( event, "transmitter", new BlockItem( ModBlocks.TRANSMITTER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "receiver", new BlockItem( ModBlocks.RECEIVER, new Item.Properties().group( BiomeDiversity.TAB ) ) );

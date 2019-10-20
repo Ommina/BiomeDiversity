@@ -1,4 +1,4 @@
-package ommina.biomediversity.blocks.collector;
+package ommina.biomediversity.blocks.cluster;
 
 import net.minecraft.util.math.BlockPos;
 

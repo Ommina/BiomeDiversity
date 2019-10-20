@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "biomediversity:block/cluster_block_tank"
+    }
+  }
+}

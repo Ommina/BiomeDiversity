@@ -57,6 +57,7 @@ public class PacketUpdateCollector {
             if ( fluids[n].isEmpty() )
                 buf.writeBoolean( false );
             else {
+                buf.writeBoolean( true );
                 buf.writeResourceLocation( fluids[n].getFluid().getRegistryName() );
                 buf.writeInt( fluids[n].getAmount() );
             }

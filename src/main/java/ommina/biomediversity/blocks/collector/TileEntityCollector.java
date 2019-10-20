@@ -12,6 +12,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;

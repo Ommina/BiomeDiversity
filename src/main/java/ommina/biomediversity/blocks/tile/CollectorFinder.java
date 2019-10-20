@@ -3,7 +3,7 @@ package ommina.biomediversity.blocks.tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import ommina.biomediversity.blocks.collector.IClusterComponent;
+import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;

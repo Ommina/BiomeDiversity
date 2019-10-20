@@ -1,5 +1,5 @@
 {
-  "parent": "biomediversity:block/transmitter_base",
+  "parent": "biomediversity:block/cluster_block_sturdy",
   "display": {
     "thirdperson_righthand": {
       "rotation": [75, 45, 0],

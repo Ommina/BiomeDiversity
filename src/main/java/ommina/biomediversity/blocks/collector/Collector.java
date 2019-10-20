@@ -7,8 +7,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
+import ommina.biomediversity.blocks.cluster.IClusterController;
 
-public class Collector extends Block { // BlockTileEntity<TileEntityCollector> {
+public class Collector extends Block implements IClusterController { // BlockTileEntity<TileEntityCollector> {
 
     public Collector() {
 
@@ -16,14 +17,15 @@ public class Collector extends Block { // BlockTileEntity<TileEntityCollector> {
 
     }
 
+//region Overrides
     @Override
-    public boolean hasTileEntity( BlockState state ) {
-        return true;
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     @Override
-    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityCollector();
+    public boolean hasTileEntity( BlockState state ) {
+        return true;
     }
 
     //@Override
@@ -37,8 +39,9 @@ public class Collector extends Block { // BlockTileEntity<TileEntityCollector> {
     //}
 
     @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
+    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
+        return new TileEntityCollector();
     }
+//endregion Overrides
 
 }

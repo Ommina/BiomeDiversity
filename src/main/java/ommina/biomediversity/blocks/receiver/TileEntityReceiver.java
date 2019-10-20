@@ -20,7 +20,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
-import ommina.biomediversity.blocks.collector.IClusterComponent;
+import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;

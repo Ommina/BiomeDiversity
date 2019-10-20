@@ -2,39 +2,36 @@
   "parent": "biomediversity:block/collector",
   "display": {
     "thirdperson_righthand": {
-      "rotation": [0, 0, 0],
-      "translation": [11, 17, -2],
-      "scale": [0.5, 0.5, 0.5]
+      "rotation": [75, 45, 0],
+      "translation": [0, 2.5, 0],
+      "scale": [0.15, 0.15, 0.15]
     },
     "thirdperson_lefthand": {
-      "rotation": [0, 0, 0],
-      "translation": [3, 1, 12],
-      "scale": [0.5, 0.5, 0.5]
+      "rotation": [75, 45, 0],
+      "translation": [0, 2.5, 0],
+      "scale": [0.15, 0.15, 0.15]
     },
     "firstperson_righthand": {
-      "rotation": [0, 45, 15],
-      "translation": [3, 1, 1],
-      "scale": [0.3, 0.3, 0.3]
+      "rotation": [0, 45, 0],
+      "scale": [0.15, 0.15, 0.15]
     },
     "firstperson_lefthand": {
-      "rotation": [0, 0, -15],
-      "translation": [-3, 1, 1],
-      "scale": [0.3, 0.3, 0.3]
-    },
-    "gui": {
-      "rotation": [15, -25, 0],
-      "translation": [0, -3, 0],
-      "scale": [0.25, 0.25, 0.25]
-    },
-    "fixed": {
-      "rotation": [0, 180, 0],
-      "translation": [-2, 4, -5],
-      "scale": [0.45, 0.45, 0.45]
+      "rotation": [0, 225, 0],
+      "scale": [0.15, 0.15, 0.15]
     },
     "ground": {
-      "rotation": [0, 0, 0],
-      "translation": [4, 4, 2],
+      "translation": [0, 3, 0],
       "scale": [0.25, 0.25, 0.25]
+    },
+    "gui": {
+      "rotation": [30, 225, 0],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "head": {
+      "scale": [0.43, 0.34, 0.43]
+    },
+    "fixed": {
+      "scale": [0.4, 0.4, 0.4]
     }
   }
 }
