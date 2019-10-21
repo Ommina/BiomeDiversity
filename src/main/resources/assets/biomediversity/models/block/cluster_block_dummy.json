@@ -1,0 +1,21 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "biomediversity:block/cluster/cluster_block_generic",
+    "all": "biomediversity:block/window_nonoise"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "uv": [1,1, 15,15], "texture": "#all", "cullface": "bottom" },
+        "up":    { "uv": [1,1, 15,15], "texture": "#all", "cullface": "up" },
+        "north": { "uv": [1,1, 15,15], "texture": "#all", "cullface": "north" },
+        "south": { "uv": [1,1, 15,15], "texture": "#all", "cullface": "south" },
+        "west":  { "uv": [1,1, 15,15], "texture": "#all", "cullface": "west" },
+        "east":  { "uv": [1,1, 15,15], "texture": "#all", "cullface": "east" }
+      }
+    }
+  ]
+}

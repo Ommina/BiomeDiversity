@@ -19,7 +19,7 @@
   "item.biomediversity.pomegranate": "Pomegranate",
   "item.biomediversity.pomegranate_seeds": "Pomegranate Seeds",
 
-  "block.biomediversity.collector": "Biometic Collector",
+  "block.biomediversity.collector": "Biometic Collector Core",
   "block.biomediversity.nocified_stone_fractured": "Fractured Nocified Stone",
   "block.biomediversity.nocified_stone_undamaged": "Nocified Stone",
   "block.biomediversity.orinocite_ore": "Orinocite Ore",
@@ -27,6 +27,9 @@
   "block.biomediversity.transmitter": "Biometic Transmitter",
   "block.biomediversity.rainbarrel": "Rain Barrel",
   "block.biomediversity.receiver": "Biometic Receiver",
+  "block.biomediversity.cluster_block_generic": "Structure Support",
+  "block.biomediversity.cluster_block_tank": "Structure Tank",
+  "block.biomediversity.cluster_block_sturdy": "Sturdy Structure Support",
 
   "fluid.biomediversity.warmbiometic_still": "Warm Biometic",
   "fluid.biomediversity.coolbiometic_still": "Cool Biometic",

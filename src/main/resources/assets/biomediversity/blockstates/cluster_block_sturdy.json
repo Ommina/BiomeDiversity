@@ -1,7 +1,6 @@
 {
   "variants": {
-    "": {
-      "model": "biomediversity:block/cluster_block_sturdy"
-    }
+    "formed=true":  { "model": "biomediversity:block/cluster_block_dummy" },
+    "formed=false": { "model": "biomediversity:block/cluster_block_sturdy" }
   }
 }
