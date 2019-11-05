@@ -16,10 +16,10 @@ import ommina.biomediversity.config.Config;
 import ommina.biomediversity.world.gen.GeneratorHelper;
 import ommina.biomediversity.world.gen.feature.ModStructurePieceType;
 
+import java.util.List;
 import java.util.Random;
 
 public class FluidWellStructurePiece extends StructurePiece {
-
 
     public FluidWellStructurePiece( BlockPos blockPos, int radius ) {
         super( ModStructurePieceType.FLUID_WELL, 0 );
@@ -32,6 +32,8 @@ public class FluidWellStructurePiece extends StructurePiece {
         super( ModStructurePieceType.FLUID_WELL, nbt );
     }
 
+//region Overrides
+
     /**
      * (abstract) Helper method to read subclass data from NBT
      */
@@ -39,10 +41,19 @@ public class FluidWellStructurePiece extends StructurePiece {
     }
 
 
+    @Override
+    public void buildComponent( StructurePiece structurePiece, List<StructurePiece> structurePieces, Random random ) {
+
+        BiomeDiversity.LOGGER.info( "buildComponent" );
+
+        super.buildComponent( structurePiece, structurePieces, random );
+    }
+
     /**
      * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes Mineshafts at
      * the end, it adds Fences...
      */
+    @Override
     public boolean addComponentParts( IWorld world, Random randomIn, MutableBoundingBox boundingBox, ChunkPos chunkPos ) {
 
         int x = (this.boundingBox.minX + this.boundingBox.maxX) / 2;
@@ -53,23 +64,21 @@ public class FluidWellStructurePiece extends StructurePiece {
         if ( hr.getA() == Integer.MIN_VALUE )
             return false;
 
-        int y = 90;//hr.getA();
+        int y = FluidWellStructure.BASE_HEIGHT;
 
         BlockPos centrePos = new BlockPos( x, y, z );
 
-        createSphere( world, centrePos, hr.getB(), boundingBox );
+        createSphere( world, centrePos, hr.getB(), this.boundingBox );
 
         return false;
 
     }
+//endregion Overrides
 
     private void createSphere( IWorld world, BlockPos centre, int radius, MutableBoundingBox boundingBox ) {
 
         if ( BiomeDiversity.DEBUG )
             BiomeDiversity.LOGGER.info( String.format( "Starting fluid well generation at %s with radius %s", centre.toString(), radius ) );
-
-        //BiomeDiversity.LOGGER.info( " p.bb: " + boundingBox.toString() );
-        //BiomeDiversity.LOGGER.info( " t.bb: " + this.boundingBox.toString() );
 
         for ( int x = -radius; x <= radius; x++ )
             for ( int y = -radius; y <= radius; y++ )
@@ -78,7 +87,10 @@ public class FluidWellStructurePiece extends StructurePiece {
                         BlockPos pos = centre.add( x, y, z );
 
                         if ( isReplaceable( world, pos ) )
-                            this.setBlockState( world, ModBlocks.MINERALWATER.getDefaultState(), pos, this.boundingBox );
+                            setBlockState( world, ModBlocks.MINERALWATER.getDefaultState(), pos, boundingBox );
+                        else
+                            BiomeDiversity.LOGGER.warn( "notReplaceable" );
+
                     }
 
         if ( BiomeDiversity.DEBUG )
@@ -100,14 +112,21 @@ public class FluidWellStructurePiece extends StructurePiece {
 
     protected void setBlockState( IWorld worldIn, BlockState blockstateIn, BlockPos blockpos, MutableBoundingBox boundingboxIn ) {
 
+
         if ( boundingboxIn.isVecInside( blockpos ) ) {
 
-            worldIn.setBlockState( blockpos, blockstateIn, 2 );
+            if ( !worldIn.setBlockState( blockpos, blockstateIn, 2 ) ) {
+                BiomeDiversity.LOGGER.warn( "setBlockstate Failed at " + blockpos.toString() );
+            }
 
             IFluidState ifluidstate = worldIn.getFluidState( blockpos );
             if ( !ifluidstate.isEmpty() ) {
                 worldIn.getPendingFluidTicks().scheduleTick( blockpos, ifluidstate.getFluid(), 0 );
             }
+
+        } else {
+
+            //BiomeDiversity.LOGGER.warn( "isOutside " + blockpos.toString() );
 
         }
     }
@@ -122,7 +141,7 @@ public class FluidWellStructurePiece extends StructurePiece {
             radiusStart++; // bonus of one radius for rainy biomes [swampland, mushroom, jungle in vanilla] -> 13 or 15
 
         for ( int height = FluidWellStructure.BASE_HEIGHT, radius = radiusStart; radius >= 5; height--, radius-- ) {
-            if ( seemsValid( world, x, z, height, radius ) )
+            if ( FluidWellStructure.BASE_HEIGHT == 90 || seemsValid( world, x, z, height, radius ) )
                 return new Tuple<Integer, Integer>( height, radius );
         }
 
@@ -134,7 +153,7 @@ public class FluidWellStructurePiece extends StructurePiece {
 
         for ( int x = -1; x <= 1; x++ )
             for ( int z = -1; z <= 1; z++ )
-                if ( GeneratorHelper.getTopSolidBlock( world, new BlockPos( worldX + x * radius, height, worldZ + z * radius ) ).getY() <= height + radius )
+                if ( GeneratorHelper.getTopSolidBlock( world, new BlockPos( worldX + x * 5, height, worldZ + z * 5 ) ).getY() <= height + radius )
                     return false;
 
         return true;

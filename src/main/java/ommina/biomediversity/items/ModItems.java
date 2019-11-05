@@ -40,6 +40,7 @@ public class ModItems {
     @ObjectHolder( "collector" ) public static final Item COLLECTOR = null;
     @ObjectHolder( "peltier" ) public static final Item PELTIER = null;
     @ObjectHolder( "rainbarrel" ) public static final Item RAIN_BARREL = null;
+    @ObjectHolder( "plug" ) public static final Item PLUG = null;
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Item> event ) {
@@ -66,6 +67,7 @@ public class ModItems {
         register( event, "collector", new BlockItem( ModBlocks.COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "peltier", new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "rainbarrel", new BlockItem( ModBlocks.RAIN_BARREL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "plug", new BlockItem( ModBlocks.PLUG, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
     }
 

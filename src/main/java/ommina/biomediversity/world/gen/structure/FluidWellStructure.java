@@ -5,33 +5,51 @@ import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import ommina.biomediversity.BiomeDiversity;
 
+import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Function;
 
 public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
 
-    private static final int MINIMUM_DISTANCE_TO_STRONGHOLD = 100;
-    private static final int MINIMUM_DISTANCE_TO_MINESHAFT = 16;
-
-    private static final int MAXIMUM_RADIUS = 17;
-
-    public static final int BASE_HEIGHT = 26; // centre of sphere
+    public static final int BASE_HEIGHT = 90; // centre of sphere
     public static final float FREQUENCY_MULTIPLIER = 0.002f;
     public static final float BASE_FREQUENCY = 0.0039f;
+
+    private static final int MINIMUM_DISTANCE_TO_STRONGHOLD = 100;
+    private static final int MINIMUM_DISTANCE_TO_MINESHAFT = 16;
+    private static final int MAXIMUM_RADIUS = 18;
 
     public FluidWellStructure( String name, Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
         super( config );
 
         setRegistryName( BiomeDiversity.getId( name ) );
+    }
+
+//region Overrides
+    @Override
+    public IStartFactory getStartFactory() {
+        return FluidWellStructure.Start::new;
+    }
+
+    @Override
+    public String getStructureName() {
+        return "BiomeDiveristy_Fluid_Well";
+    }
+
+    @Override
+    public int getSize() {
+        return 3; // No idea what this does.  I hope it is something exciting.
     }
 
     @Override
@@ -56,37 +74,57 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 
     @Override
+    protected int getBiomeFeatureDistance( ChunkGenerator<?> chunkGenerator ) {
+        return 24;
+    }
+
+    @Override
+    protected int getBiomeFeatureSeparation( ChunkGenerator<?> chunkGenerator ) {
+        return 8;
+    }
+
+    @Override
     protected int getSeedModifier() {
         return 90210;
     }
-
-    @Override
-    public IStartFactory getStartFactory() {
-        return FluidWellStructure.Start::new;
-    }
-
-    @Override
-    public String getStructureName() {
-        return "BiomeDiveristy_Fluid_Well";
-    }
-
-    @Override
-    public int getSize() {
-        return 3; // No idea what this does.  I hope it is something exciting.
-    }
+//endregion Overrides
 
     public static class Start extends StructureStart {
 
-        public Start( Structure<?> p_i51165_1_, int p_i51165_2_, int p_i51165_3_, Biome p_i51165_4_, MutableBoundingBox p_i51165_5_, int p_i51165_6_, long p_i51165_7_ ) {
-            super( p_i51165_1_, p_i51165_2_, p_i51165_3_, p_i51165_4_, p_i51165_5_, p_i51165_6_, p_i51165_7_ );
+        //public StructureStart(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed) {
+
+
+        public Start( Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int referenceIn, long seed ) {
+            super( structure, chunkX, chunkZ, biome, boundingBox, referenceIn, seed );
         }
 
+        @Override
+        public void generateStructure( IWorld worldIn, Random rand, MutableBoundingBox structurebb, ChunkPos pos) {
+
+            synchronized(this.components) {
+                Iterator<StructurePiece> iterator = this.components.iterator();
+
+                while(iterator.hasNext()) {
+                    StructurePiece structurepiece = iterator.next();
+                    if (structurepiece.getBoundingBox().intersectsWith(structurebb) && !structurepiece.addComponentParts(worldIn, rand, structurebb, pos)) {
+                        iterator.remove();
+                    }
+                }
+
+                this.recalculateStructureSize();
+            }
+        }
+
+
+        //region Overrides
         public void init( ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn ) {
 
             int i = chunkX * 16;
             int j = chunkZ * 16;
 
-            BlockPos blockpos = new BlockPos( i + 9, 90, j + 9 );
+            int weirdOffset = MAXIMUM_RADIUS / 2;//9
+
+            BlockPos blockpos = new BlockPos( i + weirdOffset, BASE_HEIGHT, j + weirdOffset );
 
             this.components.add( new FluidWellStructurePiece( blockpos, MAXIMUM_RADIUS ) );
 
@@ -95,19 +133,14 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
         }
 
         public BlockPos getPos() {
-            return new BlockPos( (this.getChunkPosX() << 4) + 9, 0, (this.getChunkPosZ() << 4) + 9 );
+
+            int weirdOffset = MAXIMUM_RADIUS / 2;//9
+
+
+            return new BlockPos( (this.getChunkPosX() << 4) + weirdOffset, 0, (this.getChunkPosZ() << 4) + weirdOffset );
         }
+//endregion Overrides
 
-    }
-
-    @Override
-    protected int getBiomeFeatureDistance( ChunkGenerator<?> chunkGenerator ) {
-        return 24;
-    }
-
-    @Override
-    protected int getBiomeFeatureSeparation( ChunkGenerator<?> chunkGenerator ) {
-        return 8;
     }
 
 

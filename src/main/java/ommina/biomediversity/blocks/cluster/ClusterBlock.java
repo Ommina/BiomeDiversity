@@ -12,7 +12,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import ommina.biomediversity.BiomeDiversity;
 
 import javax.annotation.Nullable;
 
@@ -26,21 +25,17 @@ public class ClusterBlock extends GlassBlock {
 
     //region Overrides
     @Override
-    public void onPlayerDestroy( IWorld world, BlockPos blockPos, BlockState blockState ) {
-        super.onPlayerDestroy( world, blockPos, blockState );
-
-        if ( !world.isRemote() ) {
-            checkForController( world.getWorld(), blockPos );
-
-            BiomeDiversity.LOGGER.warn( "OPD" );
-        }
-
-
+    public BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
+    public void onPlayerDestroy( IWorld world, BlockPos blockPos, BlockState blockState ) {
+        super.onPlayerDestroy( world, blockPos, blockState );
+
+        if ( !world.isRemote() )
+            checkForController( world.getWorld(), blockPos );
+
     }
 
 /*
