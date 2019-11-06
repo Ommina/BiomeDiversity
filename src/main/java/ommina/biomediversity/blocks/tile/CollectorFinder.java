@@ -12,9 +12,67 @@ import javax.annotation.Nullable;
 
 public class CollectorFinder {
 
-    private int searchAttemptCount = 0;
+    private final GetCollectorResult collectorResult;
 
+    private int searchAttemptCount = 0;
     private BlockPos collectorPos;
+
+    public CollectorFinder() {
+
+        collectorResult = new GetCollectorResult();
+
+    }
+
+    public class GetCollectorResult {
+
+        private boolean isCollectorPosUnloaded;
+        private boolean isCollectorMissing;
+        private TileEntityCollector tileEntityCollector;
+
+        @Nullable
+        public TileEntityCollector getCollector() {
+            return tileEntityCollector;
+        }
+
+        private GetCollectorResult setTileEntityCollector( TileEntityCollector teCollector ) {
+
+            isCollectorPosUnloaded = false;
+            isCollectorMissing = false;
+            tileEntityCollector = teCollector;
+
+            return this;
+
+        }
+
+        public boolean isCollectorMissing() {
+            return isCollectorMissing;
+        }
+
+        private GetCollectorResult setCollectorMissing() {
+
+            isCollectorPosUnloaded = false;
+            isCollectorMissing = true;
+            tileEntityCollector = null;
+
+            return this;
+
+        }
+
+        public boolean isCollectorPosUnloaded() {
+            return isCollectorPosUnloaded;
+        }
+
+        private GetCollectorResult setCollectorPosUnloaded() {
+
+            isCollectorPosUnloaded = true;
+            isCollectorMissing = false;
+            tileEntityCollector = null;
+
+            return this;
+
+        }
+
+    }
 
     @Nullable
     public BlockPos find( @Nullable World world, BlockPos originPos ) {
@@ -52,19 +110,17 @@ public class CollectorFinder {
 
     }
 
-    @Nullable
-    public TileEntityCollector getCollector( @Nullable World world ) {
+    public GetCollectorResult getCollector( @Nullable World world ) {
 
         if ( world == null || collectorPos == null || !world.isBlockLoaded( collectorPos ) )
-            return null;
+            return collectorResult.setCollectorPosUnloaded();
 
         TileEntity tileEntity = world.getTileEntity( this.collectorPos );
 
         if ( tileEntity instanceof TileEntityCollector )
-            return (TileEntityCollector) tileEntity;
+            return collectorResult.setTileEntityCollector( (TileEntityCollector) tileEntity );
 
-
-        return null;
+        return collectorResult.setCollectorMissing();
 
     }
 

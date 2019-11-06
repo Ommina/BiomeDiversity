@@ -121,10 +121,9 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         return this.biomeRegistryName;
     }
 
-    @Nullable
-    public TileEntityCollector getCollector() {
-        return COLLECTOR.getCollector( world );
 
+    public CollectorFinder.GetCollectorResult getCollector() {
+        return COLLECTOR.getCollector( world );
     }
 
     public float getTemperature() {
@@ -165,19 +164,13 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         chunkloadingTimedOut = false;
     }
 
-
-    //public void resetSearchCount() {
-
-    //searchAttemptCount = 0;
-    //}
-
     private void doMainWork() {
 
-        TileEntityCollector coll = getCollector();
+        CollectorFinder.GetCollectorResult collectorResult = getCollector();
 
-        if ( coll == null ) {  // TODO: Can this block be moved inside CollectorFinder?
+        if ( collectorResult.getCollector() == null ) {
 
-            if ( hasWorld() && COLLECTOR.getCollectorPos() != null && world.isBlockLoaded( COLLECTOR.getCollectorPos() ) )
+            if ( collectorResult.isCollectorMissing() )
                 removeCollector();
 
             if ( COLLECTOR.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
@@ -192,6 +185,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         }
 
+        TileEntityCollector collector = collectorResult.getCollector();
+
         if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
 
             world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
@@ -204,7 +199,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                 if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
 
-                    if ( !coll.isCollectorTurnedOff() ) {
+                    if ( !collector.isCollectorTurnedOff() ) {
 
                         if ( !world.isBlockPowered( getPos() ) ) {
 
@@ -215,7 +210,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                             fluidHashCode = pd.fluid.hashCode();
                             power = FluidStrengths.getStrength( fluidHashCode );
 
-                            coll.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
+                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
 
                             pd.drain( drainAmount );
 

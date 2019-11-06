@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import ommina.biomediversity.BiomeDiversity;
 
 import java.awt.*;
 import java.util.EnumSet;
@@ -19,6 +20,12 @@ public class RenderHelper {
         WEST,
         EAST
     }
+
+    public static final EnumSet<RenderHelper.Faces> FACES_FLUID = EnumSet.of( RenderHelper.Faces.TOP, RenderHelper.Faces.NORTH, RenderHelper.Faces.SOUTH, RenderHelper.Faces.WEST, RenderHelper.Faces.EAST );
+    public static final EnumSet<RenderHelper.Faces> FACES_NORTHWEST = EnumSet.of( RenderHelper.Faces.NORTH, RenderHelper.Faces.WEST );
+    public static final EnumSet<RenderHelper.Faces> FACES_NORTHEAST = EnumSet.of( RenderHelper.Faces.NORTH, RenderHelper.Faces.EAST );
+    public static final EnumSet<RenderHelper.Faces> FACES_SOUTHWEST = EnumSet.of( RenderHelper.Faces.SOUTH, RenderHelper.Faces.WEST );
+    public static final EnumSet<RenderHelper.Faces> FACES_SOUTHEAST = EnumSet.of( RenderHelper.Faces.SOUTH, RenderHelper.Faces.EAST );
 
     public static float[] getRGBA( int color ) {
 

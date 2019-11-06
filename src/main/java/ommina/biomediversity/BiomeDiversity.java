@@ -21,6 +21,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import ommina.biomediversity.blocks.plug.FastTesrPlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlug;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
 import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
 import ommina.biomediversity.blocks.receiver.FastTesrReceiver;
@@ -163,6 +165,7 @@ public class BiomeDiversity {
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlug.class, new FastTesrPlug<>() );
 
         }
 

@@ -1,48 +1,42 @@
-package ommina.biomediversity.blocks.receiver;
+package ommina.biomediversity.blocks.plug;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.animation.TileEntityRendererFast;
-import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.RenderHelper;
-import ommina.biomediversity.config.Config;
 
-import java.awt.Color;
+import java.awt.*;
 
 import static ommina.biomediversity.blocks.tile.RenderHelper.*;
 
-public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRendererFast<T> {
+public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFast<T> {
 
     private static final ResourceLocation INTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
     private static final ResourceLocation EXTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_external" );
 
     private static final float WIDTH_FLUID = 14f / 16f;
     private static final float LENGTH_FLUID = 14f / 16f;
-    private static final float HEIGHT_FLUID = 24f / 16f;
+    private static final float HEIGHT_FLUID = 12f / 16f;
 
-    private static final float HEIGHT_CONNECTION = 21f / 16f;
+    private static final float HEIGHT_CONNECTION = 9f / 16f;
 
     private static final float[] COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
     private static final float[] COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
 
     //region Overrides
     @Override
-    public void renderTileEntityFast( TileEntityReceiver te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer ) {
+    public void renderTileEntityFast( TileEntityPlug te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer ) {
 
-        FluidStack fluid = te.getTank( 0 ).getFluid();
+        final double offset = 1f / 16f;
 
-        if ( !fluid.isEmpty() ) {
+        PlugRenderData renderData = te.getPlugRenderData();
 
-            final double offset = 1f / 16f;
+        float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
 
-            float height = (HEIGHT_FLUID * ((float) fluid.getAmount() / (float) Config.transmitterCapacity.get())); // Yes, this IS supposed to be TransmitterCapacity (Receiver and Transmitter must share capacities)
+        RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, COLOUR_CONNECTED, FACES_FLUID );
 
-            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, fluid, FACES_FLUID );
-
-        }
-
-        y += 3f / 16f;
+        y += 2f / 16f;
 
         final float side = 15f / 16f;
 
@@ -64,3 +58,5 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
     }
 
 }
+
+

@@ -6,6 +6,8 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.collector.PacketUpdateCollector;
+import ommina.biomediversity.blocks.plug.PacketUpdatePlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlug;
 import ommina.biomediversity.blocks.receiver.PacketUpdateReceiver;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 
@@ -46,6 +48,12 @@ public class Network {
              .decoder( GenericTilePacketRequest::fromBytes )
              .encoder( GenericTilePacketRequest::toBytes )
              .consumer( GenericTilePacketRequest::handle )
+             .add();
+
+        channel.messageBuilder( PacketUpdatePlug.class, channelId++ )
+             .decoder( PacketUpdatePlug::fromBytes )
+             .encoder( PacketUpdatePlug::toBytes )
+             .consumer( TileEntityPlug::handle )
              .add();
 
     }

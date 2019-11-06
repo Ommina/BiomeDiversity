@@ -10,8 +10,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class PacketUpdateCollector {
 
     public BlockPos tilePos;
-    FluidStack[] fluids = new FluidStack[TileEntityCollector.TANK_COUNT];
+    public int storedEnergy;
 
+    FluidStack[] fluids = new FluidStack[TileEntityCollector.TANK_COUNT];
 
     public PacketUpdateCollector() {
     }
@@ -23,6 +24,7 @@ public class PacketUpdateCollector {
     public PacketUpdateCollector( TileEntityCollector tile ) {
 
         tilePos = tile.getPos();
+        storedEnergy = tile.BATTERY.getEnergyStored();
 
         for ( int n = 0; n < TileEntityCollector.TANK_COUNT; n++ )
             fluids[n] = tile.TANK.get( n ).getFluid();
@@ -34,6 +36,8 @@ public class PacketUpdateCollector {
         PacketUpdateCollector packet = new PacketUpdateCollector();
 
         packet.tilePos = buf.readBlockPos();
+        packet.storedEnergy = buf.readInt();
+
         for ( int n = 0; n < TileEntityCollector.TANK_COUNT; n++ )
             if ( !buf.readBoolean() )
                 packet.fluids[n] = FluidStack.EMPTY;
@@ -52,6 +56,7 @@ public class PacketUpdateCollector {
     public void toBytes( PacketBuffer buf ) {
 
         buf.writeBlockPos( tilePos );
+        buf.writeInt( storedEnergy );
 
         for ( int n = 0; n < TileEntityCollector.TANK_COUNT; n++ )
             if ( fluids[n].isEmpty() )

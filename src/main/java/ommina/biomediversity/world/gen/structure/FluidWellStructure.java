@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
 
-    public static final int BASE_HEIGHT = 90; // centre of sphere
+    public static final int BASE_HEIGHT = 38; // centre of sphere
     public static final float FREQUENCY_MULTIPLIER = 0.002f;
     public static final float BASE_FREQUENCY = 0.0039f;
 

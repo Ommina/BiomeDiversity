@@ -14,7 +14,7 @@ public class Plug extends BlockTileEntity<TileEntityPlug> {
 
     public Plug() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) );
 
     }
 

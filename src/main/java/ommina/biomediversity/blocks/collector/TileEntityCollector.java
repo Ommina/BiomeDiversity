@@ -15,13 +15,14 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
+import ommina.biomediversity.energy.BdEnergyStorage;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
-import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.Pair;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ import java.util.function.Supplier;
 
 public class TileEntityCollector extends TileEntity implements IClusterComponent, ITickableTileEntity, ITankBroadcast {
 
+    public static final int PLUG_CONNECTION_RF = 1;
+
     public static final int WARM = 0;
     public static final int COOL = 1;
 
@@ -37,10 +40,10 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     private static final int MINIMUM_DELTA = 300;
 
     final List<BdFluidTank> TANK = new ArrayList<>( TANK_COUNT );
+    final BdEnergyStorage BATTERY = new BdEnergyStorage( Config.collectorEnergyCapacity.get(), 0, Integer.MAX_VALUE );
 
     private final Reception RECEPTOR = new Reception();
-    private final EnergyStorage BATTERY = new EnergyStorage( Config.collectorEnergyCapacity.get(), 0, Integer.MAX_VALUE );
-    private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
+    private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY );
 
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int storedEnergy;
@@ -59,64 +62,6 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         TANK.forEach( o -> o.setCanDrain( true ).setCanFill( false ) );
 
-    }
-
-    public static void handle( PacketUpdateCollector packet, Supplier<NetworkEvent.Context> ctx ) {
-
-        ctx.get().enqueueWork( () -> {
-
-            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get( ctx.get().getDirection().getReceptionSide() );
-
-            if ( world.get().isBlockLoaded( packet.tilePos ) ) {
-
-                TileEntity tile = world.get().getTileEntity( packet.tilePos );
-
-                if ( tile instanceof TileEntityCollector ) {
-
-                    TileEntityCollector ter = (TileEntityCollector) tile;
-
-                    for ( int n = 0; n < TANK_COUNT; n++ )
-                        ter.TANK.get( n ).setFluid( packet.fluids[n] );
-
-
-                    //ter.collectorPos = packet.collectorPos;
-                    //ter.temperature = packet.temperature;
-                    //ter.biomeRegistryName = packet.biomeRegistryName;
-
-                    //if ( ter.collectorPos != null && world.get().isBlockLoaded( ter.collectorPos ) ) {
-                    //    ter.collector = (TileEntityCollector) world.get().getTileEntity( ter.collectorPos );
-                    //}
-
-                }
-
-            }
-
-        } );
-
-        ctx.get().setPacketHandled( true );
-
-    }
-
-    public boolean canCollectorAcceptEnergyPulse() {
-
-        //Biomediversity.logger.warn( " config: " + Config.collectorSelfThrottleEnabled );
-        //Biomediversity.logger.warn( " batteryStored: " + BATTERY.getEnergyStored() );
-        //Biomediversity.logger.warn( " batteryMax: " + BATTERY.getMaxEnergyStored() );
-        //Biomediversity.logger.warn( " buffer: " + buffer );
-        //Biomediversity.logger.warn( " lastRf: " + lastRfCreated );
-
-        return !Config.collectorIsSelfThrottleEnabled.get() || BATTERY.getEnergyStored() + buffer + lastRfCreated < BATTERY.getMaxEnergyStored();
-
-    }
-
-    public void collect( BlockPos receiverPos, int fluidHash, int power, String biomeRegistryName, float temperature, float rainfall ) {
-
-        RECEPTOR.add( biomeRegistryName, fluidHash, temperature, power );
-
-    }
-
-    public boolean isCollectorTurnedOff() {
-        return getWorld().isBlockPowered( getPos() );
     }
 
     //region Overrides
@@ -221,7 +166,71 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         markDirty();
 
     }
-
 //endregion Overrides
+
+    @Nonnull
+    public EnergyStorage getEnergyStorage() {
+        return BATTERY;
+    }
+
+    public static void handle( PacketUpdateCollector packet, Supplier<NetworkEvent.Context> ctx ) {
+
+        ctx.get().enqueueWork( () -> {
+
+            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get( ctx.get().getDirection().getReceptionSide() );
+
+            if ( world.get().isBlockLoaded( packet.tilePos ) ) {
+
+                TileEntity tile = world.get().getTileEntity( packet.tilePos );
+
+                if ( tile instanceof TileEntityCollector ) {
+
+                    TileEntityCollector ter = (TileEntityCollector) tile;
+
+                    ter.BATTERY.setStoredEnergy( packet.storedEnergy );
+
+                    for ( int n = 0; n < TANK_COUNT; n++ )
+                        ter.TANK.get( n ).setFluid( packet.fluids[n] );
+
+
+                    //ter.collectorPos = packet.collectorPos;
+                    //ter.temperature = packet.temperature;
+                    //ter.biomeRegistryName = packet.biomeRegistryName;
+
+                    //if ( ter.collectorPos != null && world.get().isBlockLoaded( ter.collectorPos ) ) {
+                    //    ter.collector = (TileEntityCollector) world.get().getTileEntity( ter.collectorPos );
+                    //}
+
+                }
+
+            }
+
+        } );
+
+        ctx.get().setPacketHandled( true );
+
+    }
+
+    public boolean canCollectorAcceptEnergyPulse() {
+
+        //Biomediversity.logger.warn( " config: " + Config.collectorSelfThrottleEnabled );
+        //Biomediversity.logger.warn( " batteryStored: " + BATTERY.getEnergyStored() );
+        //Biomediversity.logger.warn( " batteryMax: " + BATTERY.getMaxEnergyStored() );
+        //Biomediversity.logger.warn( " buffer: " + buffer );
+        //Biomediversity.logger.warn( " lastRf: " + lastRfCreated );
+
+        return !Config.collectorIsSelfThrottleEnabled.get() || BATTERY.getEnergyStored() + buffer + lastRfCreated < BATTERY.getMaxEnergyStored();
+
+    }
+
+    public void collect( BlockPos receiverPos, int fluidHash, int power, String biomeRegistryName, float temperature, float rainfall ) {
+
+        RECEPTOR.add( biomeRegistryName, fluidHash, temperature, power );
+
+    }
+
+    public boolean isCollectorTurnedOff() {
+        return getWorld().isBlockPowered( getPos() );
+    }
 
 }

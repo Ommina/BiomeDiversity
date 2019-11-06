@@ -44,47 +44,6 @@ public class Receiver extends Block {
 
     }
 
-    private static void debuggingCarrot( TileEntityReceiver tile ) {
-
-        BiomeDiversity.LOGGER.info( "Receiver identifier: " + tile.getIdentifier().toString() );
-
-        if ( tile.getOwner() != null )
-            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
-
-        if ( tile.getAssociatedIdentifier() != null )
-            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
-
-        if ( tile.getAssociatedPos() != null )
-            BiomeDiversity.LOGGER.info( " Position: " + tile.getAssociatedPos().toString() );
-
-        if ( tile.getTank( 0 ).getFluid() != null )
-            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getRegistryName().toString() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
-
-        if ( tile.getCollector() == null )
-            BiomeDiversity.LOGGER.info( "No Collector stored." );
-        else
-            BiomeDiversity.LOGGER.info( "Collector at " + tile.getCollector().getPos().toString() );
-
-        if ( tile.getOwner() != null && tile.getAssociatedIdentifier() != null ) {
-
-            tile.getWorld().getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
-
-                TransmitterData pd = cap.getTransmitter( tile.getOwner(), tile.getAssociatedIdentifier() );
-
-                BiomeDiversity.LOGGER.info( " TRANSMITTER_NETWORK" );
-                BiomeDiversity.LOGGER.info( "   Biome id : " + pd.biomeId );
-                BiomeDiversity.LOGGER.info( "   Biome temperature : " + pd.temperature );
-
-                if ( pd.fluid != null )
-                    BiomeDiversity.LOGGER.info( "   Fluid: " + pd.fluid.getRegistryName().toString() + " (" + pd.getAmount() + ")" );
-
-
-            } );
-
-        }
-
-    }
-
     //region Overrides
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
@@ -183,5 +142,46 @@ public class Receiver extends Block {
         return new TileEntityReceiver();
     }
 //endregion Overrides
+
+    private static void debuggingCarrot( TileEntityReceiver tile ) {
+
+        BiomeDiversity.LOGGER.info( "Receiver identifier: " + tile.getIdentifier().toString() );
+
+        if ( tile.getOwner() != null )
+            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
+
+        if ( tile.getAssociatedIdentifier() != null )
+            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
+
+        if ( tile.getAssociatedPos() != null )
+            BiomeDiversity.LOGGER.info( " Position: " + tile.getAssociatedPos().toString() );
+
+        if ( tile.getTank( 0 ).getFluid() != null )
+            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getRegistryName().toString() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
+
+        if ( tile.getCollector().getCollector() == null )
+            BiomeDiversity.LOGGER.info( "No Collector stored." );
+        else
+            BiomeDiversity.LOGGER.info( "Collector at " + tile.getCollector().getCollector().getPos().toString() );
+
+        if ( tile.getOwner() != null && tile.getAssociatedIdentifier() != null ) {
+
+            tile.getWorld().getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+                TransmitterData pd = cap.getTransmitter( tile.getOwner(), tile.getAssociatedIdentifier() );
+
+                BiomeDiversity.LOGGER.info( " TRANSMITTER_NETWORK" );
+                BiomeDiversity.LOGGER.info( "   Biome id : " + pd.biomeId );
+                BiomeDiversity.LOGGER.info( "   Biome temperature : " + pd.temperature );
+
+                if ( pd.fluid != null )
+                    BiomeDiversity.LOGGER.info( "   Fluid: " + pd.fluid.getRegistryName().toString() + " (" + pd.getAmount() + ")" );
+
+
+            } );
+
+        }
+
+    }
 
 }

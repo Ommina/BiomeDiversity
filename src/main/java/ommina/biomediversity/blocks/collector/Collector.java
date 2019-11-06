@@ -23,7 +23,7 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     public Collector() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) );
 
     }
 
