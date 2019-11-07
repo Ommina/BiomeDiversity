@@ -81,6 +81,36 @@ public class BiomeDiversity {
         MinecraftForge.EVENT_BUS.register( this );
     }
 
+    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
+    public static class ForgeEvents {
+
+
+    }
+
+    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT )
+    public static class ClientEvents {
+
+        @SubscribeEvent
+        public static void BindTesr( final FMLClientSetupEvent event ) {
+
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlug.class, new FastTesrPlug<>() );
+
+        }
+
+        @SubscribeEvent
+        public static void addSprites( final TextureStitchEvent.Pre event ) {
+
+            event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
+            event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
+            event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
+
+        }
+
+    }
+
     public static ResourceLocation getId( String path ) {
 
         return new ResourceLocation( MODID, path );
@@ -97,26 +127,6 @@ public class BiomeDiversity {
 
         //event.addCapability(new ResourceLocation(MODID, LOADERID), provider);
         //event.addListener(() -> inst.invalidate())
-
-    }
-
-    private void doClientStuff( final FMLClientSetupEvent event ) {
-
-        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
-
-        //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
-        //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
-
-    }
-
-    private void setup( final FMLCommonSetupEvent event ) {
-
-        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
-
-        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
-
-        Network.init();
-        PROXY.init();
 
     }
 
@@ -150,33 +160,25 @@ public class BiomeDiversity {
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
 
-    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
-    public static class ForgeEvents {
+    private void doClientStuff( final FMLClientSetupEvent event ) {
 
+        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
+
+        //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
+        //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
 
     }
 
-    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT )
-    public static class ClientEvents {
+    private void setup( final FMLCommonSetupEvent event ) {
 
-        @SubscribeEvent
-        public static void BindTesr( final FMLClientSetupEvent event ) {
+        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
 
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlug.class, new FastTesrPlug<>() );
+        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
 
-        }
+        Network.init();
+        PROXY.init();
 
-        @SubscribeEvent
-        public static void addSprites( final TextureStitchEvent.Pre event ) {
-
-            event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
-            event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
-            event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
-
-        }
+        Config.parseFluidList();
 
     }
 

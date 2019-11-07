@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.cluster.IClusterController;
@@ -104,7 +105,12 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     @Override
     public boolean hasTileEntity( BlockState state ) {
-        return true;
+
+        boolean b = state.get( FORMED );
+
+        //BiomeDiversity.LOGGER.warn( "Formed: " + b );
+
+        return b;
     }
 
     @Override

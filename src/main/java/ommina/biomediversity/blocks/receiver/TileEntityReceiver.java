@@ -69,231 +69,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         super( ModTileEntities.RECEIVER );
     }
 
-    public static void handle( PacketUpdateReceiver packet, Supplier<NetworkEvent.Context> ctx ) {
-
-        ctx.get().enqueueWork( () -> {
-
-            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get( ctx.get().getDirection().getReceptionSide() );
-
-            if ( world.get().isBlockLoaded( packet.tilePos ) ) {
-
-                TileEntity tile = world.get().getTileEntity( packet.tilePos );
-
-                if ( tile instanceof TileEntityReceiver ) {
-
-                    TileEntityReceiver ter = (TileEntityReceiver) tile;
-
-                    ter.TANK.setFluid( packet.fluid );
-                    ter.COLLECTOR.setCollectorPos( packet.collectorPos );
-                    ter.temperature = packet.temperature;
-                    ter.biomeRegistryName = packet.biomeRegistryName;
-
-                }
-
-            }
-
-        } );
-
-        ctx.get().setPacketHandled( true );
-
-    }
-
-    public EnergyStorage clientGetBattery() {
-        return BATTERY;
-    }
-
-    public void doChunkloading() {
-
-        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null )
-            return;
-
-        chunkloadDurationRemaining--;
-
-        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut && hasEnoughPowerToChunkload() )
-            loadTransmitterChunk();
-
-        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0 || !hasEnoughPowerToChunkload()) )
-            unloadTransmitterChunk();
-
-    }
-
-    public String getBiomeRegistryName() {
-        return this.biomeRegistryName;
-    }
-
-
-    public CollectorFinder.GetCollectorResult getCollector() {
-        return COLLECTOR.getCollector( world );
-    }
-
-    public float getTemperature() {
-        return this.temperature;
-    }
-
-    public void refreshReceiverTankFromTransmitterNetwork() {
-
-        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
-
-            TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getIdentifier() );
-
-            if ( pd.fluid != null ) {
-
-                this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
-
-                lastFluidAmount = pd.getAmount();
-
-                if ( !FluidStrengths.contains( pd.fluid.hashCode() ) ) {
-                    BiomeDiversity.LOGGER.warn( "Fluid network contains a fluid with hash " + pd.fluid.hashCode() + ", but it is not in the config.  Perhaps it was removed?  Setting power to 1.  BiomeId: " + pd.biomeId );
-                    power = 1;
-                } else {
-                    power = FluidStrengths.getStrength( pd.fluid.hashCode() );
-                }
-
-                biomeRegistryName = pd.biomeId.toString();
-                rainfall = pd.rainfall;
-
-            }
-
-        } );
-
-    }
-
-    public void resetChunkloadDuration() {
-
-        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
-        chunkloadingTimedOut = false;
-    }
-
-    private void doMainWork() {
-
-        CollectorFinder.GetCollectorResult collectorResult = getCollector();
-
-        if ( collectorResult.getCollector() == null ) {
-
-            if ( collectorResult.isCollectorMissing() )
-                removeCollector();
-
-            if ( COLLECTOR.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
-                BlockPos pos = COLLECTOR.find( world, getPos() );
-                if ( pos != null ) {
-                    BROADCASTER.forceBroadcast();
-                    markDirty();
-                }
-            }
-
-            return;
-
-        }
-
-        TileEntityCollector collector = collectorResult.getCollector();
-
-        if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
-
-            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
-
-                TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getAssociatedIdentifier() );
-
-                biomeRegistryName = pd.biomeId.toString();
-                temperature = pd.temperature; // + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
-                rainfall = pd.rainfall;
-
-                if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
-
-                    if ( !collector.isCollectorTurnedOff() ) {
-
-                        if ( !world.isBlockPowered( getPos() ) ) {
-
-                            boolean isTransmitterLoaded = false;
-
-                            int drainAmount = Constants.CLUSTER_FLUID_CONSUMPTION;
-
-                            fluidHashCode = pd.fluid.hashCode();
-                            power = FluidStrengths.getStrength( fluidHashCode );
-
-                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
-
-                            pd.drain( drainAmount );
-
-                            isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
-
-                            if ( isTransmitterLoaded ) {
-                                TileEntity te = world.getTileEntity( this.getAssociatedPos() );
-                                if ( te instanceof TileEntityTransmitter ) {
-                                    TileEntityTransmitter tep = (TileEntityTransmitter) te;
-                                    tep.getTank( 0 ).drain_internal( Constants.CLUSTER_FLUID_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
-                                }
-                            }
-
-                            if ( pd.getAmount() + drainAmount - lastFluidAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
-                                resetChunkloadDuration();
-
-                            lastFluidAmount = pd.getAmount();
-
-                        }
-                    }
-
-                    if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION )
-                        this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
-                    else
-                        this.getTank( 0 ).setFluid( FluidStack.EMPTY );
-
-                    world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
-
-                }
-
-
-            } );
-
-            doChunkloading();
-
-        }
-
-        doBroadcast();
-
-        this.markDirty();
-
-    }
-
-    private boolean hasEnoughPowerToChunkload() {
-
-        return !Config.receiverRequirePowerToChunkload.get() || BATTERY.getEnergyStored() >= Config.receiverPowerConsumptionChunloading.get() * Constants.CLUSTER_TICK_DELAY;
-
-    }
-
-    private void loadTransmitterChunk() {
-
-        ChunkLoader.forceSingle( world, this.getAssociatedPos() );
-
-        isChunkloadingTransmitter = true;
-        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
-
-        BiomeDiversity.LOGGER.debug( "Loading transmitter at " + this.getAssociatedPos().toString() );
-
-    }
-
-    private void removeCollector() {
-
-        COLLECTOR.setCollectorPos( null );
-        BROADCASTER.forceBroadcast();
-        doBroadcast();
-        markDirty();
-
-    }
-
-    private void unloadTransmitterChunk() {
-
-        if ( !isChunkloadingTransmitter )
-            return;
-
-        ChunkLoader.releaseSingle( world, this.getAssociatedPos() );
-        isChunkloadingTransmitter = false;
-
-        chunkloadingTimedOut = (chunkloadDurationRemaining == 0);
-
-        BiomeDiversity.LOGGER.debug( "Unloading transmitter at " + this.getAssociatedPos().toString() );
-
-    }
-
     //region Overrides
     @Nullable
     @Override
@@ -395,7 +170,233 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         loop++;
 
     }
-
 //endregion Overrides
+
+    public static void handle( PacketUpdateReceiver packet, Supplier<NetworkEvent.Context> ctx ) {
+
+        ctx.get().enqueueWork( () -> {
+
+            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get( ctx.get().getDirection().getReceptionSide() );
+
+            if ( world.get().isBlockLoaded( packet.tilePos ) ) {
+
+                TileEntity tile = world.get().getTileEntity( packet.tilePos );
+
+                if ( tile instanceof TileEntityReceiver ) {
+
+                    TileEntityReceiver ter = (TileEntityReceiver) tile;
+
+                    ter.TANK.setFluid( packet.fluid );
+                    ter.COLLECTOR.setCollectorPos( packet.collectorPos );
+                    ter.temperature = packet.temperature;
+                    ter.biomeRegistryName = packet.biomeRegistryName;
+
+                }
+
+            }
+
+        } );
+
+        ctx.get().setPacketHandled( true );
+
+    }
+
+    public EnergyStorage clientGetBattery() {
+        return BATTERY;
+    }
+
+    public void doChunkloading() {
+
+        if ( !Config.receiverEnableChunkLoading.get() || this.getAssociatedPos() == null )
+            return;
+
+        chunkloadDurationRemaining--;
+
+        if ( !isChunkloadingTransmitter && (float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() <= CHUNKLOAD_MIN_PERCENTAGE && !chunkloadingTimedOut && hasEnoughPowerToChunkload() )
+            loadTransmitterChunk();
+
+        else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0 || !hasEnoughPowerToChunkload()) )
+            unloadTransmitterChunk();
+
+    }
+
+    public String getBiomeRegistryName() {
+        return this.biomeRegistryName;
+    }
+
+    public CollectorFinder.GetCollectorResult getCollector() {
+        return COLLECTOR.getCollector( world );
+    }
+
+    public float getTemperature() {
+        return this.temperature;
+    }
+
+    public void refreshReceiverTankFromTransmitterNetwork() {
+
+        world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+            TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getIdentifier() );
+
+            if ( pd.fluid != null ) {
+
+                this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+
+                lastFluidAmount = pd.getAmount();
+
+                if ( !FluidStrengths.contains( pd.fluid.hashCode() ) ) {
+                    BiomeDiversity.LOGGER.warn( "Fluid network contains a fluid with hash " + pd.fluid.hashCode() + ", but it is not in the config.  Perhaps it was removed?  Setting power to 1.  BiomeId: " + pd.biomeId );
+                    power = 1;
+                } else {
+                    power = FluidStrengths.getStrength( pd.fluid.hashCode() );
+                }
+
+                biomeRegistryName = pd.biomeId.toString();
+                rainfall = pd.rainfall;
+
+            }
+
+        } );
+
+    }
+
+    public void resetChunkloadDuration() {
+
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+        chunkloadingTimedOut = false;
+    }
+
+    private void doMainWork() {
+
+        CollectorFinder.GetCollectorResult collectorResult = getCollector();
+
+        if ( collectorResult.getCollector() == null ) {
+
+            if ( collectorResult.isCollectorMissing() )
+                removeCollector();
+
+            if ( COLLECTOR.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
+                BlockPos pos = COLLECTOR.find( world, getPos() );
+                if ( pos != null ) {
+                    BROADCASTER.forceBroadcast();
+                    markDirty();
+                }
+            }
+
+            return;
+
+        }
+
+        TileEntityCollector collector = collectorResult.getCollector();
+
+        if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
+
+            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+                TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getAssociatedIdentifier() );
+
+                biomeRegistryName = pd.biomeId.toString();
+                temperature = pd.temperature; // + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
+                rainfall = pd.rainfall;
+
+                if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
+
+                    if ( !collector.isCollectorTurnedOff() ) {
+
+                        if ( !world.isBlockPowered( getPos() ) ) {
+
+                            boolean isTransmitterLoaded = false;
+
+                            int drainAmount = Constants.CLUSTER_FLUID_CONSUMPTION;
+
+                            fluidHashCode = pd.fluid.hashCode();
+                            power = FluidStrengths.getStrength( fluidHashCode );
+
+                            //if ( power != 0 )
+                            //    BiomeDiversity.LOGGER.warn( "power: " + power );
+
+                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
+
+                            pd.drain( drainAmount );
+
+                            isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
+
+                            if ( isTransmitterLoaded ) {
+                                TileEntity te = world.getTileEntity( this.getAssociatedPos() );
+                                if ( te instanceof TileEntityTransmitter ) {
+                                    TileEntityTransmitter tep = (TileEntityTransmitter) te;
+                                    tep.getTank( 0 ).drain_internal( Constants.CLUSTER_FLUID_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
+                                }
+                            }
+
+                            if ( pd.getAmount() + drainAmount - lastFluidAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
+                                resetChunkloadDuration();
+
+                            lastFluidAmount = pd.getAmount();
+
+                        }
+                    }
+
+                    if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION )
+                        this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+                    else
+                        this.getTank( 0 ).setFluid( FluidStack.EMPTY );
+
+                    world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
+
+                }
+
+
+            } );
+
+            doChunkloading();
+
+        }
+
+        doBroadcast();
+
+        this.markDirty();
+
+    }
+
+    private boolean hasEnoughPowerToChunkload() {
+
+        return !Config.receiverRequirePowerToChunkload.get() || BATTERY.getEnergyStored() >= Config.receiverPowerConsumptionChunloading.get() * Constants.CLUSTER_TICK_DELAY;
+
+    }
+
+    private void loadTransmitterChunk() {
+
+        ChunkLoader.forceSingle( world, this.getAssociatedPos() );
+
+        isChunkloadingTransmitter = true;
+        chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
+
+        BiomeDiversity.LOGGER.debug( "Loading transmitter at " + this.getAssociatedPos().toString() );
+
+    }
+
+    private void removeCollector() {
+
+        COLLECTOR.setCollectorPos( null );
+        BROADCASTER.forceBroadcast();
+        doBroadcast();
+        markDirty();
+
+    }
+
+    private void unloadTransmitterChunk() {
+
+        if ( !isChunkloadingTransmitter )
+            return;
+
+        ChunkLoader.releaseSingle( world, this.getAssociatedPos() );
+        isChunkloadingTransmitter = false;
+
+        chunkloadingTimedOut = (chunkloadDurationRemaining == 0);
+
+        BiomeDiversity.LOGGER.debug( "Unloading transmitter at " + this.getAssociatedPos().toString() );
+
+    }
 
 }

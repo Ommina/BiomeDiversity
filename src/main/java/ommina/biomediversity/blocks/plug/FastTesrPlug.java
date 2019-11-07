@@ -32,9 +32,13 @@ public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFa
 
         PlugRenderData renderData = te.getPlugRenderData();
 
-        float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
+        if ( renderData.value > 0 ) {
 
-        RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, COLOUR_CONNECTED, FACES_FLUID );
+            float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
+
+            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, COLOUR_CONNECTED, FACES_FLUID );
+
+        }
 
         y += 2f / 16f;
 

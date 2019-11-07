@@ -1,7 +1,6 @@
 package ommina.biomediversity.energy;
 
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 import ommina.biomediversity.BiomeDiversity;
 
 public class BdEnergyStorage extends EnergyStorage {
@@ -22,12 +21,23 @@ public class BdEnergyStorage extends EnergyStorage {
         super( capacity, maxReceive, maxExtract, energy );
     }
 
-    public void setStoredEnergy( int energy ) {
+    public void setEnergyStored( int energy ) {
 
         BiomeDiversity.LOGGER.info( "Setting energy to " + energy );
 
-        if ( Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER )
-            this.energy = energy;
+        //if ( Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER )
+        this.energy = energy;
+
+    }
+
+    public int receiveEnergyInternal( int maxReceive, boolean simulate ) {
+
+        int energyReceived = Math.min( capacity - energy, maxReceive );
+
+        if ( !simulate )
+            energy += energyReceived;
+
+        return energyReceived;
 
     }
 

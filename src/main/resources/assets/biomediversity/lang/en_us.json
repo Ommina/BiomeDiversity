@@ -31,12 +31,12 @@
   "block.biomediversity.cluster_block_tank": "Structure Tank",
   "block.biomediversity.cluster_block_sturdy": "Sturdy Structure Support",
 
-  "fluid.biomediversity.warmbiometic_still": "Warm Biometic",
-  "fluid.biomediversity.coolbiometic_still": "Cool Biometic",
-  "fluid.biomediversity.neutralbiometic_still": "Neutral Biometic",
-  "fluid.biomediversity.rainwater_still": "Rainwater",
-  "fluid.biomediversity.mineralwater_still": "Mineral Water",
-  "fluid.biomediversity.junglewater_still": "Jungle Water",
-  "fluid.biomediversity.moltenorinocite_still": "Molten Orinocite"
+  "fluid.biomediversity.warmbiometic": "Warm Biometic",
+  "fluid.biomediversity.coolbiometic": "Cool Biometic",
+  "fluid.biomediversity.neutralbiometic": "Neutral Biometic",
+  "fluid.biomediversity.rainwater": "Rainwater",
+  "fluid.biomediversity.mineralwater": "Mineral Water",
+  "fluid.biomediversity.junglewater": "Jungle Water",
+  "fluid.biomediversity.moltenorinocite": "Molten Orinocite"
 
 }

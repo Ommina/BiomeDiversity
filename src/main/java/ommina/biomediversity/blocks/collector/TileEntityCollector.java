@@ -1,5 +1,6 @@
 package ommina.biomediversity.blocks.collector;
 
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +12,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.config.Config;
@@ -18,6 +20,7 @@ import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.energy.BdEnergyStorage;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
+import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.Pair;
@@ -52,6 +55,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     private int releasePerTick = 0;
     private int uniqueBiomeCount;
     private float temperature;
+
+    private boolean firstTick = true;
 
     public TileEntityCollector() {
         super( ModTileEntities.COLLECTOR );
@@ -92,7 +97,28 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     @Override
+    public void read( CompoundNBT nbt ) {
+
+        BATTERY.setEnergyStored( nbt.getInt( "storedenergy" ) );
+
+        super.read( nbt );
+
+    }
+
+    @Override
+    public CompoundNBT write( CompoundNBT nbt ) {
+
+        nbt.putInt( "storedenergy", BATTERY.getEnergyStored() );
+
+        return super.write( nbt );
+
+    }
+
+    @Override
     public void tick() {
+
+        if ( firstTick )
+            doFirstTick();
 
         if ( world.isRemote || isCollectorTurnedOff() )
             return;
@@ -121,7 +147,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 */
 
 
-        buffer -= BATTERY.receiveEnergy( releasePerTick, false );
+        buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
 
         doBroadcast();
 
@@ -143,6 +169,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
             uniqueBiomeCount = miss.getHits();
             temperature = miss.getTemperatureTotal();
         }
+
+        BiomeDiversity.LOGGER.warn( "lastRf: " + lastRfCreated + " at " + pos.toString() );
 
         //int energyStored = BATTERY.receiveEnergyInternal( lastRfCreated, false );
 
@@ -168,6 +196,15 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 //endregion Overrides
 
+    private void doFirstTick() {
+
+        firstTick = false;
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
     @Nonnull
     public EnergyStorage getEnergyStorage() {
         return BATTERY;
@@ -187,7 +224,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
                     TileEntityCollector ter = (TileEntityCollector) tile;
 
-                    ter.BATTERY.setStoredEnergy( packet.storedEnergy );
+                    ter.BATTERY.setEnergyStored( packet.storedEnergy );
 
                     for ( int n = 0; n < TANK_COUNT; n++ )
                         ter.TANK.get( n ).setFluid( packet.fluids[n] );

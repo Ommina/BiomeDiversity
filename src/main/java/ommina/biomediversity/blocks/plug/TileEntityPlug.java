@@ -31,6 +31,8 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
     final CollectorFinder COLLECTOR = new CollectorFinder();
     final PlugRenderData PLUG_RENDER = new PlugRenderData();
 
+    private TileEntityCollector getPlugRenderDataCollector; // GetPlugRenderData is called each frame, so we'll reuse this reference to avoid a bit of GC stress
+
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int loop = 1;
 
@@ -104,12 +106,19 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
     public PlugRenderData getPlugRenderData() {
 
-        if ( plug_connection_type == TileEntityCollector.PLUG_CONNECTION_RF )
-            PLUG_RENDER.value = getCollectorResult().getCollector().getEnergyStorage().getEnergyStored();
+        if ( plug_connection_type == TileEntityCollector.PLUG_CONNECTION_RF ) {
 
-            //PLUG_RENDER.value = Config.collectorEnergyCapacity.get() / 2;
+            getPlugRenderDataCollector = getCollectorResult().getCollector();
+
+            if ( getPlugRenderDataCollector != null )
+                PLUG_RENDER.value = getPlugRenderDataCollector.getEnergyStorage().getEnergyStored();
+            else
+                PLUG_RENDER.value = 0;
+
+        }
 
         return PLUG_RENDER;
+
     }
 
     public void doBroadcast() {

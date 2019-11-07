@@ -1,7 +1,9 @@
 {
   "replace": false,
   "values": [
-    "biomediversity:rainwater_still",
-    "biomediversity:rainwater_flowing"
+    "biomediversity:rainwater",
+    "biomediversity:rainwater_flowing",
+    "biomediversity:mineralwater",
+    "biomediversity:mineralwater_flowing"
   ]
 }

@@ -9,15 +9,15 @@ import ommina.biomediversity.BiomeDiversity;
 @ObjectHolder( BiomeDiversity.MODID )
 public class ModFluids {
 
-    @ObjectHolder( "rainwater_still" ) public static FlowingFluid RAINWATER;                   // Produced by Rain Barrel TE
+    @ObjectHolder( "rainwater" ) public static FlowingFluid RAINWATER;                   // Produced by Rain Barrel TE
 
-    @ObjectHolder( "coolbiometic_still" ) public static FlowingFluid COOLBIOMETIC;             // Produced by Collector (directly)
-    @ObjectHolder( "warmbiometic_still" ) public static FlowingFluid WARMBIOMETIC;
-    @ObjectHolder( "neutralbiometic_still" ) public static FlowingFluid NEUTRALBIOMETIC;       //                       (indirectly by Mixer)
+    @ObjectHolder( "coolbiometic" ) public static FlowingFluid COOLBIOMETIC;             // Produced by Collector (directly)
+    @ObjectHolder( "warmbiometic" ) public static FlowingFluid WARMBIOMETIC;
+    @ObjectHolder( "neutralbiometic" ) public static FlowingFluid NEUTRALBIOMETIC;       //                       (indirectly by Mixer)
 
-    @ObjectHolder( "mineralwater_still" ) public static FlowingFluid MINERALWATER;             // WorldGen Spheres
-    @ObjectHolder( "junglewater_still" ) public static FlowingFluid JUNGLEWATER;               //          Jungle Biome
-    @ObjectHolder( "moltenorinocite_still" ) public static FlowingFluid MOLTENORINOCITE;       //          Melted Ore
+    @ObjectHolder( "mineralwater" ) public static FlowingFluid MINERALWATER;             // WorldGen Spheres
+    @ObjectHolder( "junglewater" ) public static FlowingFluid JUNGLEWATER;               //          Jungle Biome
+    @ObjectHolder( "moltenorinocite" ) public static FlowingFluid MOLTENORINOCITE;       //          Melted Ore
 
 
     //public static BdFluid natural;

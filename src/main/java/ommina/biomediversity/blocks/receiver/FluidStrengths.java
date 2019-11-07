@@ -12,6 +12,32 @@ public class FluidStrengths {
 
     private static final Map<Integer, FluidStrength> fluids = new HashMap<Integer, FluidStrength>();
 
+    public static class FluidStrength {
+
+        final int strength;
+        private final Fluid fluid;
+        private final int hash;
+
+        public FluidStrength( @Nonnull Fluid fluid, int strength ) {
+
+            this.fluid = fluid;
+            this.hash = fluid.hashCode();
+            this.strength = strength;
+
+        }
+
+        public Fluid getFluid() {
+
+            return fluid;
+        }
+
+        public int getHash() {
+
+            return hash;
+        }
+
+    }
+
     public static void add( Fluid fluid, int strength ) {
 
         int hash = fluid.hashCode();
@@ -21,8 +47,14 @@ public class FluidStrengths {
             return;
         }
 
+        BiomeDiversity.LOGGER.info( String.format( "Adding fluid %s with strength %d and hash %d", fluid.getAttributes().toString(), strength, hash ) );
+
         fluids.put( hash, new FluidStrength( fluid, strength ) );
 
+    }
+
+    public static void clear() {
+        fluids.clear();
     }
 
     public static int getStrength( Fluid fluid ) {
@@ -51,32 +83,6 @@ public class FluidStrengths {
     public static boolean contains( int hashCode ) {
 
         return fluids.containsKey( hashCode );
-
-    }
-
-    public static class FluidStrength {
-
-        final int strength;
-        private final Fluid fluid;
-        private final int hash;
-
-        public FluidStrength( @Nonnull Fluid fluid, int strength ) {
-
-            this.fluid = fluid;
-            this.hash = fluid.hashCode();
-            this.strength = strength;
-
-        }
-
-        public Fluid getFluid() {
-
-            return fluid;
-        }
-
-        public int getHash() {
-
-            return hash;
-        }
 
     }
 

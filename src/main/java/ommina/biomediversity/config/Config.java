@@ -2,6 +2,7 @@ package ommina.biomediversity.config;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -10,12 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.receiver.FluidStrengths;
 
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Mod.EventBusSubscriber
 public class Config {
@@ -63,6 +62,7 @@ public class Config {
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationAttempts;
 
     // Power Generation
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> powerFluidWhitelist;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> powerBiomeWhitelist;
     public static Set<String> powerBiomes;
     public static ForgeConfigSpec.IntValue powerMaxBiomeCount;
@@ -97,6 +97,7 @@ public class Config {
 
     static {
 
+
         setupWorldGenConfig();
         setupPowerConfig();
         setupTransmitter();
@@ -108,6 +109,7 @@ public class Config {
         CLIENT_CONFIG = CLIENT_BUILDER.build();
 
         parseBiomeList();
+        //parseFluidList();
 
     }
 
@@ -277,6 +279,7 @@ public class Config {
             COMMON_BUILDER.comment( "Biomes" ).push( SUBCATEGORY_BIOMES );
 
             powerBiomeWhitelist = COMMON_BUILDER.defineList( "biomes", Arrays.asList( "minecraft:*" ), o -> o instanceof String );
+            powerFluidWhitelist = COMMON_BUILDER.defineList( "fluids", Config::getDefaultFluidList, o -> o instanceof String );
             powerMaxBiomeCount = COMMON_BUILDER.comment( "Maximum number of unique biomes that will be counted.  May be useful if there is a biome-adding mod installed, and the ease of finding new biomes sends power production through the roof" ).defineInRange( "max_biome_count", 20, 1, 128 );
             powerBiomeDiversity = COMMON_BUILDER.comment( "Bonus multiplier for each unique biome (from the biome list) with a paired Transmitter.\nUsed in conjunction with fluid stength to determine total power produced." ).defineInRange( "biome_diversity", 1.075d, 1d, 3.0d );
             powerBiomeAdjustment = COMMON_BUILDER.comment( "Value to add to power produced by biome_Diversity.  Applied BEFORE final multiplier" ).defineInRange( "biome_adjustment", -11, -10000, +10000 );
@@ -292,6 +295,25 @@ public class Config {
 
     }
 
+    private static List<String> getDefaultFluidList() {
+
+        List<String> fluids = new ArrayList<>();
+
+        fluids.add( "minecraft:water:10" );
+        fluids.add( BiomeDiversity.MODID + ":rainwater:30" );
+        fluids.add( BiomeDiversity.MODID + ":mineralwater:50" );
+        fluids.add( "minecraft:lava:120" );
+        fluids.add( BiomeDiversity.MODID + ":warmbiometic:540" );
+        fluids.add( BiomeDiversity.MODID + ":coolbiometic:540" );
+        fluids.add( BiomeDiversity.MODID + ":neutralbiometic:1080" );
+
+        // final String[] defaults = new String[] {    "freshwater:128", "murkywater:192", "enrichedwater:256", "natural:300", "paledeliquescent:320",
+        //       "brightdeliquescent:510", "junglewater:640", "sparklingdeliquescent:715", "scintillatingdeliquescent:920",  "dilutenatural:1402" };
+
+        return fluids;
+
+    }
+
     private static void parseBiomeList() {
 
         powerBiomes = new HashSet<String>();
@@ -301,7 +323,7 @@ public class Config {
             String[] s2 = s.split( ":" );
 
             if ( s2.length != 2 ) {
-                BiomeDiversity.LOGGER.warn( "Unable to parse config entry " + s + ", skipping." );
+                BiomeDiversity.LOGGER.warn( "Unable to parse biome whitelist config entry " + s + ", skipping." );
                 continue;
             }
 
@@ -314,6 +336,42 @@ public class Config {
                 }
 
             }
+        }
+
+    }
+
+    public static void parseFluidList() {
+
+        FluidStrengths.clear();
+
+        for ( String s : powerFluidWhitelist.get() ) {
+
+            String[] s2 = s.split( ":" );
+
+            if ( s2.length != 3 ) {
+                BiomeDiversity.LOGGER.warn( "Unable to parse fluid whitelist config entry " + s + ", skipping.  Should be {namespace}:{fluidname}:{energy}" );
+                continue;
+            }
+
+            for ( Fluid f : ForgeRegistries.FLUIDS.getValues() ) {
+
+                ResourceLocation resourceLocation = f.getRegistryName();
+
+                try {
+
+                    if ( s2[0].equals( resourceLocation.getNamespace() ) &&
+                         s2[1].equalsIgnoreCase( resourceLocation.getPath() ) &&
+                         Integer.parseInt( s2[2] ) > 0 && Integer.parseInt( s2[2] ) < 9999 ) {
+                        FluidStrengths.add( f, Integer.parseInt( s2[2] ) );
+                    }
+
+                } catch ( NumberFormatException e ) {
+
+                    BiomeDiversity.LOGGER.warn( "Unable to parse fluid energy value for config entry " + s + ", skipping." );
+
+                }
+            }
+
         }
 
     }
