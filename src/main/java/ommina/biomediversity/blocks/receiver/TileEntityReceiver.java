@@ -56,7 +56,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private int fluidHashCode;
     private int lastFluidAmount = 0;
     private int power;
-    private String biomeRegistryName = "null:null";
     private float temperature;
     private float rainfall;
     private int chunkloadDurationRemaining = 0;
@@ -64,6 +63,9 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int loop = 1;
     private boolean isChunkloadingTransmitter = false;
+
+    private String biomeRegistryName = "null:null";
+    private TileEntityCollector collector;
 
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
@@ -104,8 +106,21 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     }
 
     @Override
+    public void invalidateCollector() {
+        removeCollector();
+    }
+
+    @Override
     public ITextComponent getDisplayName() {
         return new StringTextComponent( getType().getRegistryName().getPath() );
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+
+        if ( collector != null )
+            collector.deregisterComponent( this );
+
     }
 
     @Override
@@ -268,6 +283,26 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     private void doMainWork() {
 
+        if ( collector == null ) {
+
+            if ( loop % Constants.CLUSTER_SEARCH_ON_LOOP == 0 ) {
+
+                BlockPos pos = COLLECTOR.findCollectorPos( world, getPos() );
+
+                if ( pos != null && world.getTileEntity( pos ) instanceof TileEntityCollector ) {
+                    collector = (TileEntityCollector) world.getTileEntity( pos );
+                    collector.registerComponent( this );
+                    doBroadcast();
+                    markDirty();
+                }
+            }
+
+            return;
+
+        }
+
+        /*
+
         CollectorFinder.GetCollectorResult collectorResult = getCollector();
 
         if ( collectorResult.getCollector() == null ) {
@@ -276,7 +311,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                 removeCollector();
 
             if ( COLLECTOR.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
-                BlockPos pos = COLLECTOR.find( world, getPos() );
+                BlockPos pos = COLLECTOR.findCollectorPos( world, getPos() );
                 if ( pos != null ) {
                     BROADCASTER.forceBroadcast();
                     markDirty();
@@ -288,6 +323,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         }
 
         TileEntityCollector collector = collectorResult.getCollector();
+
+        */
 
         if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
 
@@ -301,7 +338,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
                 if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
 
-                    if ( !collector.isCollectorTurnedOff() ) {
+                    if ( !collector.isCollectorTurnedOff() && collector.canAcceptEnergyPulse() ) {
 
                         if ( !world.isBlockPowered( getPos() ) ) {
 
@@ -378,6 +415,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     private void removeCollector() {
 
+        collector = null;
         COLLECTOR.setCollectorPos( null );
         BROADCASTER.forceBroadcast();
         doBroadcast();

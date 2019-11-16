@@ -149,7 +149,7 @@ public class Config {
 
         {
 
-            collectorIsSelfThrottleEnabled = COMMON_BUILDER.comment( "Should the collector turn off automatically when it cannot accept a full round of power, saving the player's fluid.  If false, the player will still be able to automate the shutoff via a comparator and redstone." ).define( "collector_self_throttle", true );
+            collectorIsSelfThrottleEnabled = COMMON_BUILDER.comment( "Should the collector turn off automatically when it cannot accept a full round of energy, saving the player's fluid.  If false, the player will still be able to automate the shutoff via a comparator and redstone." ).define( "collector_self_throttle", true );
             collectorEnergyCapacity = COMMON_BUILDER.comment( "Energy stored by the collector, in FE units.  Energy produced greater than this amount will be discarded." ).defineInRange( "collector_capacity", 1000000, 10, Integer.MAX_VALUE );
 
         }
@@ -257,12 +257,12 @@ public class Config {
             clusterCollectorSearchVerticalPos = COMMON_BUILDER.comment( ("Vertical distance above (+y) itself an unlinked cluster component will search when looking for a collector") ).defineInRange( "cluster_search_vertial_pos", 3, 1, 6 );
             clusterCollectorSearchVerticalNeg = COMMON_BUILDER.comment( ("Vertical distance below (-y) itself an unlinked cluster component will search when looking for a collector") ).defineInRange( "cluster_search_vertial_neg", 2, 1, 6 );
 
-            receiverRequirePowerToOperate = COMMON_BUILDER.comment( "Require RF to operate.  This means a third-party will be required to jump-start power generation." ).define( "receiver_require_power_base", false );
+            receiverRequirePowerToOperate = COMMON_BUILDER.comment( "Require RF to operate.  This means a third-party will be required to jump-start energy generation." ).define( "receiver_require_power_base", false );
             receiverRequirePowerToChunkload = COMMON_BUILDER.comment( "Require RF to chunkload Transmitter chunks (as necessary)" ).define( "receiver_require_power_chunkloading", false );
 
             receiverPowerCapacity = COMMON_BUILDER.comment( "Receiver RF Capacity.  Only useful if one of the two 'Require RF' options is 'true'" ).defineInRange( "receiver_power_capacity", 100000, 1000, 1000000 );
-            receiverPowerConsumptionBase = COMMON_BUILDER.comment( "Receiver baseline power consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_baseline", 1, 1, 1024 );
-            receiverPowerConsumptionChunloading = COMMON_BUILDER.comment( "Receiver chunkloading power consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_chunkloading", 1, 1, 8192 );
+            receiverPowerConsumptionBase = COMMON_BUILDER.comment( "Receiver baseline energy consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_baseline", 1, 1, 1024 );
+            receiverPowerConsumptionChunloading = COMMON_BUILDER.comment( "Receiver chunkloading energy consumption.  RF/tick" ).defineInRange( "receiver_power_consumption_chunkloading", 1, 1, 8192 );
 
         }
 
@@ -280,12 +280,12 @@ public class Config {
 
             powerBiomeWhitelist = COMMON_BUILDER.defineList( "biomes", Arrays.asList( "minecraft:*" ), o -> o instanceof String );
             powerFluidWhitelist = COMMON_BUILDER.defineList( "fluids", Config::getDefaultFluidList, o -> o instanceof String );
-            powerMaxBiomeCount = COMMON_BUILDER.comment( "Maximum number of unique biomes that will be counted.  May be useful if there is a biome-adding mod installed, and the ease of finding new biomes sends power production through the roof" ).defineInRange( "max_biome_count", 20, 1, 128 );
-            powerBiomeDiversity = COMMON_BUILDER.comment( "Bonus multiplier for each unique biome (from the biome list) with a paired Transmitter.\nUsed in conjunction with fluid stength to determine total power produced." ).defineInRange( "biome_diversity", 1.075d, 1d, 3.0d );
-            powerBiomeAdjustment = COMMON_BUILDER.comment( "Value to add to power produced by biome_Diversity.  Applied BEFORE final multiplier" ).defineInRange( "biome_adjustment", -11, -10000, +10000 );
-            powerFinalMultiplier = COMMON_BUILDER.comment( "After all other calculations are done, the result is multiplied by this value.\nValues greater than 1.00 will increase power production dramatically.\nLikewise, less than 1.00 will reduce power produced, and 0 will effectively disable power entirely." ).defineInRange( "final_multiplier", 1d, 0d, 100d );
-            powerMaxReceiversPerFluid = COMMON_BUILDER.comment( "Maximum number of times a fluid can be used before a suffering a power-generation penalty.  Encourages using multiple fluids." ).defineInRange( "max_fluid_receivers", 8, 1, 999 );
-            powerRepeatedFluidPenalty = COMMON_BUILDER.comment( "Power creation penalty for repeated fluids.  A percentage loss multipled by number of receivers over the limit." ).defineInRange( "repeater_fluid_penalty", 0.046d, 0d, 0.5d );
+            powerMaxBiomeCount = COMMON_BUILDER.comment( "Maximum number of unique biomes that will be counted.  May be useful if there is a biome-adding mod installed, and the ease of finding new biomes sends energy production through the roof" ).defineInRange( "max_biome_count", 20, 1, 128 );
+            powerBiomeDiversity = COMMON_BUILDER.comment( "Bonus multiplier for each unique biome (from the biome list) with a paired Transmitter.\nUsed in conjunction with fluid stength to determine total energy produced." ).defineInRange( "biome_diversity", 1.075d, 1d, 3.0d );
+            powerBiomeAdjustment = COMMON_BUILDER.comment( "Value to add to energy produced by biome_diversity.  Applied BEFORE final multiplier" ).defineInRange( "biome_adjustment", -11, -10000, +10000 );
+            powerFinalMultiplier = COMMON_BUILDER.comment( "After all other calculations are done, the result is multiplied by this value.\nValues greater than 1.00 will increase energy production dramatically.\nLikewise, less than 1.00 will reduce energy produced, and 0 will effectively disable energy entirely." ).defineInRange( "final_multiplier", 1d, 0d, 100d );
+            powerMaxReceiversPerFluid = COMMON_BUILDER.comment( "Maximum number of times a fluid can be used before a suffering a energy-generation penalty.  Encourages using multiple fluids." ).defineInRange( "max_fluid_receivers", 8, 1, 999 );
+            powerRepeatedFluidPenalty = COMMON_BUILDER.comment( "Energy creation penalty for repeated fluids.  A percentage loss multipled by number of receivers over the limit." ).defineInRange( "repeater_fluid_penalty", 0.046d, 0d, 0.5d );
 
             COMMON_BUILDER.pop();
 

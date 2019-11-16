@@ -11,4 +11,6 @@ public interface IClusterComponent {
 
     boolean isClusterComponentConnected();
 
+    void invalidateCollector();
+
 }

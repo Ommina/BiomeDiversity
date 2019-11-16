@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "  n",
+    "rsr",
+    "n  "
+  ],
+  "key": {
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "n": {
+      "item": "biomediversity:orinocite_nugget"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "biomediversity:linkstaff",
+    "count": 1
+  }
+}

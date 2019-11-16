@@ -22,6 +22,11 @@ public class ModItems {
     @ObjectHolder( "colza" ) public static final Item COLZA = null;
 
     @ObjectHolder( "orinocite_ingot" ) public static final Item INGOT_ORINOCITE = null;
+    @ObjectHolder( "orinocite_dust" ) public static final Item DUST_ORINOCITE = null;
+    @ObjectHolder( "orinocite_nugget" ) public static final Item NUGGET_ORINOCITE = null;
+    @ObjectHolder( "orinocite_plate" ) public static final Item PLATE_ORINOCITE = null;
+    @ObjectHolder( "orinocite_plate_thin" ) public static final Item PLATE_ORINOCITE_THIN = null;
+
 
     // Cool Items
     @ObjectHolder( "linkstaff" ) public static final Item LINK_STAFF = null;
@@ -51,6 +56,10 @@ public class ModItems {
         register( event, "colza", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
         register( event, "orinocite_ingot", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_dust", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_nugget", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_plate", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_plate_thin", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
         register( event, "linkstaff", new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 

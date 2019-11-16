@@ -15,6 +15,7 @@ public class CollectorFinder {
     private final GetCollectorResult collectorResult;
 
     private int searchAttemptCount = 0;
+
     private BlockPos collectorPos;
 
     public CollectorFinder() {
@@ -75,7 +76,7 @@ public class CollectorFinder {
     }
 
     @Nullable
-    public BlockPos find( @Nullable World world, BlockPos originPos ) {
+    public BlockPos findCollectorPos( @Nullable World world, BlockPos originPos ) {
 
         if ( collectorPos != null && world != null && world.isBlockLoaded( collectorPos ) ) {
             return collectorPos;
@@ -128,6 +129,8 @@ public class CollectorFinder {
     public BlockPos getCollectorPos() {
         return collectorPos;
     }
+
+
 
     public void setCollectorPos( @Nullable BlockPos collectorPos ) {
         this.collectorPos = collectorPos;

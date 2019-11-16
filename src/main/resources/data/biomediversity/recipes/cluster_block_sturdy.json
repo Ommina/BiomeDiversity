@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "pbp",
+    "pip",
+    "pbp"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "p": {
+      "item": "biomediversity:orinocite_plate_thin"
+    },
+    "i": {
+      "item": "biomediversity:orinocite_ingot"
+    }
+  },
+  "result": {
+    "item": "biomediversity:cluster_block_sturdy",
+    "count": 2
+  }
+}

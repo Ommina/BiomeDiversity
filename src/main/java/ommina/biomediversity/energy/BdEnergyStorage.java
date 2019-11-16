@@ -23,14 +23,13 @@ public class BdEnergyStorage extends EnergyStorage {
 
     public void setEnergyStored( int energy ) {
 
-        BiomeDiversity.LOGGER.info( "Setting energy to " + energy );
+        //BiomeDiversity.LOGGER.info( "Setting energy to " + energy );
 
-        //if ( Thread.currentThread().getThreadGroup() != SidedThreadGroups.SERVER )
         this.energy = energy;
 
     }
 
-    public int receiveEnergyInternal( int maxReceive, boolean simulate ) {
+    public int receiveEnergyInternal( int maxReceive, boolean simulate ) { // Ignores the "maxReceive" setting, so the owning-tile can add to the storage, but a connecting tile can not
 
         int energyReceived = Math.min( capacity - energy, maxReceive );
 

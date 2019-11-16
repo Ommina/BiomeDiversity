@@ -1,3 +1,40 @@
 {
-  "parent": "biomediversity:block/peltier_base"
+  "parent": "biomediversity:block/peltier_base",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 0, -2],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 0, 0],
+      "translation": [-2, 0, 0],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, -45, 0],
+      "translation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, -45, 0],
+      "translation": [0, 1, 0],
+      "scale": [0.3, 0.3, 0.3]
+    },
+    "gui": {
+      "rotation": [15, -25, 0],
+      "translation": [0, -3, 0],
+      "scale": [0.44, 0.44, 0.44]
+    },
+    "fixed": {
+      "rotation": [0, 180, 0],
+      "translation": [-2, 4, -5],
+      "scale": [0.45, 0.45, 0.45]
+    },
+    "ground": {
+      "rotation": [0, 0, 0],
+      "translation": [4, 4, 2],
+      "scale": [0.25, 0.25, 0.25]
+    }
+  }
 }

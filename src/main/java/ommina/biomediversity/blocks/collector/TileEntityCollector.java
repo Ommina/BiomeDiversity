@@ -6,7 +6,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -27,9 +29,7 @@ import ommina.biomediversity.util.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class TileEntityCollector extends TileEntity implements IClusterComponent, ITickableTileEntity, ITankBroadcast {
@@ -43,10 +43,13 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     private static final int MINIMUM_DELTA = 300;
 
     final List<BdFluidTank> TANK = new ArrayList<>( TANK_COUNT );
-    final BdEnergyStorage BATTERY = new BdEnergyStorage( Config.collectorEnergyCapacity.get(), 0, Integer.MAX_VALUE );
+    final BdEnergyStorage BATTERY;
+
+    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of( this::createEnergyHandler );
+    private final BroadcastHelper BROADCASTER;
 
     private final Reception RECEPTOR = new Reception();
-    private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY );
+    private final Set<IClusterComponent> components = new HashSet<>();
 
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int storedEnergy;
@@ -54,9 +57,23 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     private int lastRfCreated = 0;
     private int releasePerTick = 0;
     private int uniqueBiomeCount;
+
+    @Override
+    public void invalidateCollector() {
+        //nop
+    }
+
     private float temperature;
 
     private boolean firstTick = true;
+
+    @Override
+    public void onChunkUnloaded() {
+
+        components.forEach( IClusterComponent::invalidateCollector );
+        components.clear();
+
+    }
 
     public TileEntityCollector() {
         super( ModTileEntities.COLLECTOR );
@@ -67,6 +84,18 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         TANK.forEach( o -> o.setCanDrain( true ).setCanFill( false ) );
 
+        BATTERY = (BdEnergyStorage) energyHandler.orElse( null );
+
+        BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY );
+
+    }
+
+    public void registerComponent( IClusterComponent component ) {
+        components.add( component );
+    }
+
+    public void deregisterComponent( IClusterComponent component ) {
+        components.remove( component );
     }
 
     //region Overrides
@@ -99,7 +128,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     @Override
     public void read( CompoundNBT nbt ) {
 
-        BATTERY.setEnergyStored( nbt.getInt( "storedenergy" ) );
+        BATTERY.setEnergyStored( nbt.getInt( "energystored" ) );
 
         super.read( nbt );
 
@@ -108,7 +137,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     @Override
     public CompoundNBT write( CompoundNBT nbt ) {
 
-        nbt.putInt( "storedenergy", BATTERY.getEnergyStored() );
+        nbt.putInt( "energystored", BATTERY.getEnergyStored() );
 
         return super.write( nbt );
 
@@ -146,8 +175,9 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
 */
 
+        BATTERY.receiveEnergyInternal( releasePerTick, false );
 
-        buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
+        //buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
 
         doBroadcast();
 
@@ -158,7 +188,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         delay = Constants.CLUSTER_TICK_DELAY;
 
-        if ( !canCollectorAcceptEnergyPulse() )
+        if ( !canAcceptEnergyPulse() )
             return;
 
         Emission miss = RECEPTOR.emit();
@@ -196,6 +226,14 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 //endregion Overrides
 
+    public LazyOptional<IEnergyStorage> getEnergyHandler() {
+        return energyHandler;
+    }
+
+    private IEnergyStorage createEnergyHandler() {
+        return new BdEnergyStorage( Config.collectorEnergyCapacity.get(), 0, Integer.MAX_VALUE );
+    }
+
     private void doFirstTick() {
 
         firstTick = false;
@@ -229,7 +267,6 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
                     for ( int n = 0; n < TANK_COUNT; n++ )
                         ter.TANK.get( n ).setFluid( packet.fluids[n] );
 
-
                     //ter.collectorPos = packet.collectorPos;
                     //ter.temperature = packet.temperature;
                     //ter.biomeRegistryName = packet.biomeRegistryName;
@@ -248,7 +285,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     }
 
-    public boolean canCollectorAcceptEnergyPulse() {
+    public boolean canAcceptEnergyPulse() {
 
         //Biomediversity.logger.warn( " config: " + Config.collectorSelfThrottleEnabled );
         //Biomediversity.logger.warn( " batteryStored: " + BATTERY.getEnergyStored() );
