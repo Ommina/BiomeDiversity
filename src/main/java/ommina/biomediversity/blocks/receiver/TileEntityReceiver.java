@@ -48,7 +48,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private static final int CHUNKLOAD_MIN_FLUID_INCREASE = 90;
     private static final int MAX_CHUNKLOAD_DURATION = 5 * 60 * 20 / Constants.CLUSTER_TICK_DELAY; // 5min
 
-    final CollectorFinder COLLECTOR = new CollectorFinder();
+    final CollectorFinder FINDER = new CollectorFinder();
     final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
     final EnergyStorage BATTERY = new EnergyStorage( Config.receiverRequirePowerToOperate.get() || Config.receiverRequirePowerToChunkload.get() ? Config.receiverPowerCapacity.get() : 0, Integer.MAX_VALUE, 0 );
@@ -65,7 +65,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private boolean isChunkloadingTransmitter = false;
 
     private String biomeRegistryName = "null:null";
-    private TileEntityCollector collector;
 
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
@@ -97,12 +96,12 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     @Nullable
     public BlockPos getCollectorPos() {
-        return COLLECTOR.getCollectorPos();
+        return FINDER.getCollectorPos();
     }
 
     @Override
     public boolean isClusterComponentConnected() {
-        return (COLLECTOR.getCollectorPos() != null);
+        return (FINDER.getCollectorPos() != null);
     }
 
     @Override
@@ -118,6 +117,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public void onChunkUnloaded() {
 
+        TileEntityCollector collector = FINDER.get( world );
+
         if ( collector != null )
             collector.deregisterComponent( this );
 
@@ -132,7 +133,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public void read( CompoundNBT nbt ) {
 
-        COLLECTOR.setCollectorPos( NbtUtils.getBlockPos( "collectorpos", nbt ) );
+        FINDER.setCollectorPos( NbtUtils.getBlockPos( "collectorpos", nbt ) );
 
         super.read( nbt );
 
@@ -141,8 +142,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public CompoundNBT write( CompoundNBT nbt ) {
 
-        if ( COLLECTOR.getCollectorPos() != null )
-            NbtUtils.putBlockPos( "collectorpos", nbt, COLLECTOR.getCollectorPos() );
+        if ( FINDER.getCollectorPos() != null )
+            NbtUtils.putBlockPos( "collectorpos", nbt, FINDER.getCollectorPos() );
 
         return super.write( nbt );
 
@@ -202,7 +203,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                     TileEntityReceiver ter = (TileEntityReceiver) tile;
 
                     ter.TANK.setFluid( packet.fluid );
-                    ter.COLLECTOR.setCollectorPos( packet.collectorPos );
+                    ter.FINDER.setCollectorPos( packet.collectorPos );
                     ter.temperature = packet.temperature;
                     ter.biomeRegistryName = packet.biomeRegistryName;
 
@@ -240,7 +241,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     }
 
     public CollectorFinder.GetCollectorResult getCollector() {
-        return COLLECTOR.getCollector( world );
+        return FINDER.getCollector( world );
     }
 
     public float getTemperature() {
@@ -283,26 +284,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     private void doMainWork() {
 
-        if ( collector == null ) {
-
-            if ( loop % Constants.CLUSTER_SEARCH_ON_LOOP == 0 ) {
-
-                BlockPos pos = COLLECTOR.findCollectorPos( world, getPos() );
-
-                if ( pos != null && world.getTileEntity( pos ) instanceof TileEntityCollector ) {
-                    collector = (TileEntityCollector) world.getTileEntity( pos );
-                    collector.registerComponent( this );
-                    doBroadcast();
-                    markDirty();
-                }
-            }
-
-            return;
-
-        }
-
-        /*
-
         CollectorFinder.GetCollectorResult collectorResult = getCollector();
 
         if ( collectorResult.getCollector() == null ) {
@@ -310,8 +291,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
             if ( collectorResult.isCollectorMissing() )
                 removeCollector();
 
-            if ( COLLECTOR.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
-                BlockPos pos = COLLECTOR.findCollectorPos( world, getPos() );
+            if ( FINDER.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
+                BlockPos pos = FINDER.find( world, getPos() );
                 if ( pos != null ) {
                     BROADCASTER.forceBroadcast();
                     markDirty();
@@ -323,8 +304,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         }
 
         TileEntityCollector collector = collectorResult.getCollector();
-
-        */
 
         if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
 
@@ -352,7 +331,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                             //if ( power != 0 )
                             //    BiomeDiversity.LOGGER.warn( "power: " + power );
 
-                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall ); //TODO: Make the collector do something
+                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall );
 
                             pd.drain( drainAmount );
 
@@ -415,8 +394,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     private void removeCollector() {
 
-        collector = null;
-        COLLECTOR.setCollectorPos( null );
+        FINDER.setCollectorPos( null );
         BROADCASTER.forceBroadcast();
         doBroadcast();
         markDirty();

@@ -15,6 +15,7 @@ import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.config.Config;
@@ -57,23 +58,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     private int lastRfCreated = 0;
     private int releasePerTick = 0;
     private int uniqueBiomeCount;
-
-    @Override
-    public void invalidateCollector() {
-        //nop
-    }
-
     private float temperature;
-
     private boolean firstTick = true;
-
-    @Override
-    public void onChunkUnloaded() {
-
-        components.forEach( IClusterComponent::invalidateCollector );
-        components.clear();
-
-    }
 
     public TileEntityCollector() {
         super( ModTileEntities.COLLECTOR );
@@ -88,14 +74,6 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY );
 
-    }
-
-    public void registerComponent( IClusterComponent component ) {
-        components.add( component );
-    }
-
-    public void deregisterComponent( IClusterComponent component ) {
-        components.remove( component );
     }
 
     //region Overrides
@@ -122,7 +100,21 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     @Override
     public boolean isClusterComponentConnected() {
-        return true;
+
+        return world.getBlockState( this.getPos() ).getBlock() == ModBlocks.COLLECTOR && world.getBlockState( this.getPos() ).get( Collector.FORMED );
+    }
+
+    @Override
+    public void invalidateCollector() {
+        //nop
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+
+        components.forEach( IClusterComponent::invalidateCollector );
+        components.clear();
+
     }
 
     @Override
@@ -225,6 +217,14 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     }
 //endregion Overrides
+
+    public void registerComponent( IClusterComponent component ) {
+        components.add( component );
+    }
+
+    public void deregisterComponent( IClusterComponent component ) {
+        components.remove( component );
+    }
 
     public LazyOptional<IEnergyStorage> getEnergyHandler() {
         return energyHandler;

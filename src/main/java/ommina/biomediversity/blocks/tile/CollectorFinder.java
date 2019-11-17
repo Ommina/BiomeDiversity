@@ -4,6 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
+import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
@@ -76,7 +77,7 @@ public class CollectorFinder {
     }
 
     @Nullable
-    public BlockPos findCollectorPos( @Nullable World world, BlockPos originPos ) {
+    public BlockPos find( @Nullable World world, BlockPos originPos ) {
 
         if ( collectorPos != null && world != null && world.isBlockLoaded( collectorPos ) ) {
             return collectorPos;
@@ -118,7 +119,7 @@ public class CollectorFinder {
 
         TileEntity tileEntity = world.getTileEntity( this.collectorPos );
 
-        if ( tileEntity instanceof TileEntityCollector )
+        if ( tileEntity instanceof TileEntityCollector && world.getBlockState( collectorPos ).get( Collector.FORMED ) )
             return collectorResult.setTileEntityCollector( (TileEntityCollector) tileEntity );
 
         return collectorResult.setCollectorMissing();
@@ -126,11 +127,19 @@ public class CollectorFinder {
     }
 
     @Nullable
+    public TileEntityCollector get( @Nullable World world ) {
+
+        if ( world != null && collectorPos != null && world.isBlockLoaded( collectorPos ) && world.getTileEntity( collectorPos ) instanceof TileEntityCollector )
+            return (TileEntityCollector) world.getTileEntity( collectorPos );
+
+        return null;
+
+    }
+
+    @Nullable
     public BlockPos getCollectorPos() {
         return collectorPos;
     }
-
-
 
     public void setCollectorPos( @Nullable BlockPos collectorPos ) {
         this.collectorPos = collectorPos;

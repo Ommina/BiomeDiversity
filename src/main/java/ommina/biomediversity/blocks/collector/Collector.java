@@ -8,6 +8,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.ModBlocks;
@@ -105,6 +106,15 @@ public class Collector extends ClusterBlock implements IClusterController {
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public void onPlayerDestroy( IWorld world, BlockPos blockPos, BlockState blockState ) {
+        super.onPlayerDestroy( world, blockPos, blockState );
+
+        if ( !world.isRemote() && world.getTileEntity( blockPos ) instanceof TileEntityCollector )
+            world.getTileEntity( blockPos ).remove();
+
     }
 
     @Override

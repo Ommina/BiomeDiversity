@@ -31,10 +31,11 @@ public class ClusterBlock extends GlassBlock {
 
     @Override
     public void onPlayerDestroy( IWorld world, BlockPos blockPos, BlockState blockState ) {
-        super.onPlayerDestroy( world, blockPos, blockState );
 
         if ( !world.isRemote() )
             checkForController( world.getWorld(), blockPos );
+
+        super.onPlayerDestroy( world, blockPos, blockState );
 
     }
 
