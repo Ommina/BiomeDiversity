@@ -41,10 +41,10 @@ public class ModBlocks {
     @ObjectHolder( "cluster_block_sturdy" ) public static final ClusterBlock CLUSTER_BLOCK_STURDY = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.2f ) );
 
     // Crops
-    @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
-    @ObjectHolder( "pomegranate" ) public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0f ).sound( SoundType.CROP ) );
-    @ObjectHolder( "world_colza" ) public static final Block WORLD_COLZA = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.PLANT ) );
-    @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0f ).sound( SoundType.PLANT ) );
+    @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) );
+    @ObjectHolder( "pomegranate" ) public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) );
+    @ObjectHolder( "world_colza" ) public static final Block WORLD_COLZA = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) );
+    @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) );
 
     // Tile Entity Blocks
     @ObjectHolder( "collector" ) public static ClusterBlock COLLECTOR;

@@ -11,6 +11,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -22,12 +23,14 @@ import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
+import ommina.biomediversity.energy.BdEnergyStorage;
 import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.NbtUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -47,6 +50,31 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
     public TileEntityPlug() {
         super( ModTileEntities.PLUG );
+
+    }
+
+    private void distributeRf() {
+
+        TileEntity tileEntity = world.getTileEntity( getPos().down() );
+
+        if ( tileEntity != null && tileEntity.getCapability( CapabilityEnergy.ENERGY, Direction.UP ).isPresent() ) {
+
+            tileEntity.getCapability( CapabilityEnergy.ENERGY, Direction.UP ).ifPresent( e -> {
+
+                TileEntityCollector collector = FINDER.get( world );
+
+                if ( collector != null ) {
+
+                    BdEnergyStorage battery = collector.getEnergyStorage();
+                    int maxReceive = e.receiveEnergy( Integer.MAX_VALUE, true );
+                    int withdraw = battery.extractEnergy( maxReceive, false );
+                    e.receiveEnergy( withdraw, false );
+
+                }
+
+            } );
+
+        }
 
     }
 
@@ -195,32 +223,6 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
     }
 
-    /*
-    private void doMainWork() {
-
-        CollectorFinder.GetCollectorResult collectorResult = getCollectorResult();
-
-        if ( collectorResult.getCollector() == null ) {
-
-            if ( collectorResult.isCollectorMissing() )
-                removeCollector();
-
-            if ( COLLECTOR.getCollectorPos() == null && (loop % Constants.CLUSTER_SEARCH_ON_LOOP) == 0 ) {
-                BlockPos pos = COLLECTOR.find( world, getPos() );
-                if ( pos != null ) {
-                    doBroadcast();
-                    markDirty();
-                }
-            }
-
-            return;
-
-        }
-
-        TileEntityCollector collector = collectorResult.getCollector();
-
-    }
-*/
     private void doMainWork() {
 
         CollectorFinder.GetCollectorResult collectorResult = FINDER.getCollector( world );
@@ -247,9 +249,6 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
     }
 
 
-    //public CollectorFinder.GetCollectorResult getCollectorResult() {
-    //    return COLLECTOR.getCollector( world );
-    //}
 
     private void doFirstTick() {
 

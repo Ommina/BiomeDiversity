@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "biomediversity",
+  "ingredients": [
+    {
+      "item": "biomediversity:pomegranate"
+    }
+  ],
+  "result": {
+    "item": "biomediversity:pomegranate_seeds",
+    "count": 1
+  }
+}

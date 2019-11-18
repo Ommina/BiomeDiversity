@@ -244,7 +244,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     @Nonnull
-    public EnergyStorage getEnergyStorage() {
+    public BdEnergyStorage getEnergyStorage() {
         return BATTERY;
     }
 

@@ -37,7 +37,7 @@ public class Receiver extends Block {
 
     public Receiver() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) );
 
         this.setDefaultState( this.getDefaultState()
              .with( IS_CONNECTED, false ) );

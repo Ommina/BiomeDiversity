@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "biomediversity",
+  "ingredients": [
+    {
+      "item": "biomediversity:colza"
+    }
+  ],
+  "result": {
+    "item": "biomediversity:colza_seeds",
+    "count": 1
+  }
+}
