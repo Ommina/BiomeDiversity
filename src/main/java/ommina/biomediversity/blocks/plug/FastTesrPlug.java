@@ -1,6 +1,7 @@
 package ommina.biomediversity.blocks.plug;
 
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.animation.TileEntityRendererFast;
 import ommina.biomediversity.BiomeDiversity;
@@ -15,20 +16,20 @@ public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFa
     private static final ResourceLocation INTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
     private static final ResourceLocation EXTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_external" );
 
-    private static final float WIDTH_FLUID = 14f / 16f;
-    private static final float LENGTH_FLUID = 14f / 16f;
+    private static final float WIDTH_FLUID = (16f - (1.001f * 2)) / 16f;
+    private static final float LENGTH_FLUID = (16f - (1.001f * 2)) / 16f;
     private static final float HEIGHT_FLUID = 12f / 16f;
 
     private static final float HEIGHT_CONNECTION = 9f / 16f;
-
     private static final float[] COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
     private static final float[] COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
+    private static final float[] COLOUR_POWER = RenderHelper.getRGBA( new Color( 127, 255, 142, 192 ).getRGB() );
 
     //region Overrides
     @Override
     public void renderTileEntityFast( TileEntityPlug te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer ) {
 
-        final double offset = 1f / 16f;
+        final double offset = 1.001f / 16f;
 
         PlugRenderData renderData = te.getPlugRenderData();
 
@@ -36,7 +37,7 @@ public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFa
 
             float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
 
-            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, COLOUR_CONNECTED, FACES_FLUID );
+            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, COLOUR_POWER, FACES_FLUID );
 
         }
 
@@ -49,6 +50,11 @@ public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFa
         renderLight( buffer, x, y, z, 1f / 16f / 2f, 1f / 16f / 2f, side, INTERNAL_SPRITE, color );
         renderLight( buffer, x, y, z, 0, 1f / 16f, side, EXTERNAL_SPRITE, color );
 
+    }
+
+    @Override
+    public void setRendererDispatcher( TileEntityRendererDispatcher p_147497_1_ ) {
+        super.setRendererDispatcher( p_147497_1_ );
     }
 //endregion Overrides
 

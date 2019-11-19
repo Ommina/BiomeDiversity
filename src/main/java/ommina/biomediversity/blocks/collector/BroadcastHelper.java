@@ -6,13 +6,15 @@ import ommina.biomediversity.network.ITankBroadcast;
 public class BroadcastHelper extends ommina.biomediversity.network.BroadcastHelper {
 
     private final BdEnergyStorage energyStorage;
+    private final int minimumEnergyDelta;
+
     private int energyStored;
 
-    public BroadcastHelper( int tankCount, int minimumDelta, ITankBroadcast tanker, BdEnergyStorage energyStorage ) {
-
-        super( tankCount, minimumDelta, tanker );
+    public BroadcastHelper( int tankCount, int minimumTankDelta, ITankBroadcast tanker, BdEnergyStorage energyStorage, int minimumEnergyDelta ) {
+        super( tankCount, minimumTankDelta, tanker );
 
         this.energyStorage = energyStorage;
+        this.minimumEnergyDelta = minimumEnergyDelta;
 
     }
 
@@ -20,7 +22,7 @@ public class BroadcastHelper extends ommina.biomediversity.network.BroadcastHelp
     @Override
     public boolean needsBroadcast() {
 
-        return super.needsBroadcast() || Math.abs( energyStored - energyStorage.getEnergyStored() ) > 1000;
+        return super.needsBroadcast() || Math.abs( energyStored - energyStorage.getEnergyStored() ) >= minimumEnergyDelta;
 
     }
 

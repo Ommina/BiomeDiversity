@@ -39,7 +39,7 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
     final CollectorFinder FINDER = new CollectorFinder();
     final PlugRenderData PLUG_RENDER = new PlugRenderData();
 
-    private TileEntityCollector getPlugRenderDataCollector; // GetPlugRenderData is called each frame, so we'll reuse this reference to avoid a bit of GC stress
+    //private TileEntityCollector getPlugRenderDataCollector; // GetPlugRenderData is called each frame, so we'll reuse this reference to avoid a bit of GC stress
 
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int loop = 1;
@@ -103,7 +103,10 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
     @Override
     public void invalidateCollector() {
+
+//        getPlugRenderDataCollector = null;
         removeCollector();
+
     }
 
     @Override
@@ -169,7 +172,7 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
             TileEntityCollector collector = FINDER.get( world );
 
-            getPlugRenderDataCollector = collector;
+//            getPlugRenderDataCollector = collector;
 
             if ( collector != null )
                 PLUG_RENDER.value = collector.getEnergyStorage().getEnergyStored();
@@ -217,7 +220,7 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
     private void removeCollector() {
 
         FINDER.setCollectorPos( null );
-        getPlugRenderDataCollector = null;
+        PLUG_RENDER.value = 0;
         doBroadcast();
         markDirty();
 

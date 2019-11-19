@@ -7,7 +7,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -72,7 +71,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         BATTERY = (BdEnergyStorage) energyHandler.orElse( null );
 
-        BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY );
+        BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY, BATTERY.getMaxEnergyStored() / Constants.RF_RENDER_STEP_COUNT );
+        BROADCASTER.forceBroadcast();
 
     }
 
@@ -167,13 +167,9 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
 */
 
-        BATTERY.receiveEnergyInternal( releasePerTick, false );
-
-        //buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
+        buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
 
         doBroadcast();
-
-        //System.out.println( "delay: " + delay + ", " + "buffer: " + buffer + ", lastRfCreatred: " + lastRfCreated + ", releasePerTick: " + releasePerTick );
 
         if ( delay > 0 )
             return;
@@ -192,10 +188,6 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
             temperature = miss.getTemperatureTotal();
         }
 
-        BiomeDiversity.LOGGER.warn( "lastRf: " + lastRfCreated + " at " + pos.toString() );
-
-        //int energyStored = BATTERY.receiveEnergyInternal( lastRfCreated, false );
-
         if ( buffer <= Constants.CLUSTER_TICK_DELAY + 1 ) { // All the energy was stored -- create the fluids.
 
             Pair fluids = miss.getFluidCreated();
@@ -212,6 +204,10 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         buffer += lastRfCreated;
         releasePerTick = buffer / Constants.CLUSTER_TICK_DELAY;
+
+        if ( BiomeDiversity.DEBUG ) {
+            BiomeDiversity.LOGGER.warn( "lastRf: " + lastRfCreated + ", biomes: " + uniqueBiomeCount + ", temp: " + temperature + ", buffer: " + buffer + ", release: " + releasePerTick + ", stored: " + BATTERY.getEnergyStored() );
+        }
 
         markDirty();
 
