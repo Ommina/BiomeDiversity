@@ -32,6 +32,7 @@ public class ModBlocks {
 
     // Generic Blocks
     @ObjectHolder( "orinocite_ore" ) public static final Block ORE_ORINOCITE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
+    @ObjectHolder( "orinocite_block" ) public static final Block BLOCK_ORINOCITE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
     @ObjectHolder( "nocified_stone_undamaged" ) public static final Block STONE_NOCIFIED_UNDAMAGED = new BlockNocifiedUndamaged( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
     @ObjectHolder( "nocified_stone_fractured" ) public static final Block STONE_NOCIFIED_FRACTURED = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
 
@@ -75,6 +76,7 @@ public class ModBlocks {
     public static void register( final RegistryEvent.Register<Block> event ) {
 
         register( event, "orinocite_ore", ORE_ORINOCITE );
+        register( event, "orinocite_block", BLOCK_ORINOCITE );
         register( event, "nocified_stone_fractured", STONE_NOCIFIED_FRACTURED );
         register( event, "nocified_stone_undamaged", STONE_NOCIFIED_UNDAMAGED );
 

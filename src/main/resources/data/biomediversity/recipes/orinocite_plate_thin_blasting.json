@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "biomediversity:orinocite_plate"
+  },
+  "result": "biomediversity:orinocite_plate_thin",
+  "count": 1,
+  "experience": 1.4,
+  "cookingtime": 20
+}

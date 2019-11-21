@@ -1,10 +1,10 @@
 {
-  "type": "minecraft:blasting",
+  "type": "minecraft:smelting",
   "ingredient": {
     "item": "biomediversity:orinocite_plate"
   },
   "result": "biomediversity:orinocite_plate_thin",
-  "count": 2,
-  "experience": 0.7,
-  "cookingtime": 200
+  "count": 1,
+  "experience": 0.4,
+  "cookingtime": 600
 }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "biomediversity:block/orinocite_block"
+    }
+  }
+}

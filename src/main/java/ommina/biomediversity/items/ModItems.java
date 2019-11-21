@@ -27,18 +27,27 @@ public class ModItems {
     @ObjectHolder( "orinocite_plate" ) public static final Item PLATE_ORINOCITE = null;
     @ObjectHolder( "orinocite_plate_thin" ) public static final Item PLATE_ORINOCITE_THIN = null;
 
-
     // Cool Items
     @ObjectHolder( "linkstaff" ) public static final Item LINK_STAFF = null;
 
-    // Block Items
-    @ObjectHolder( "orinocite_ore" ) public static final Item ORE_ORINOCITE = null;
-    @ObjectHolder( "nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = null;
-    @ObjectHolder( "nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = null;
+    // Cluster Parts
+    @ObjectHolder( "machine_antenna" ) public static final Item MACHINE_ANTENNA = null;
+    @ObjectHolder( "machine_base" ) public static final Item MACHINE_BASE = null;
+    @ObjectHolder( "machine_battery" ) public static final Item MACHINE_BATTERY = null;
+    @ObjectHolder( "machine_sensor" ) public static final Item MACHINE_SENSOR = null;
+    @ObjectHolder( "machine_tank" ) public static final Item MACHINE_TANK = null;
 
     @ObjectHolder( "cluster_block_generic" ) public static final Item CLUSTER_BLOCK_GENERIC = null;
     @ObjectHolder( "cluster_block_tank" ) public static final Item CLUSTER_BLOCK_TANK = null;
     @ObjectHolder( "cluster_block_sturdy" ) public static final Item CLUSTER_BLOCK_STURDY = null;
+
+
+    // Block Items
+    @ObjectHolder( "orinocite_ore" ) public static final Item ORE_ORINOCITE = null;
+    @ObjectHolder( "orinocite_block" ) public static final Item BLOCK_ORINOCITE = null;
+    @ObjectHolder( "nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = null;
+    @ObjectHolder( "nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = null;
+
 
     @ObjectHolder( "transmitter" ) public static final Item TRANSMITTER = null;
     @ObjectHolder( "receiver" ) public static final Item RECEIVER = null;
@@ -55,9 +64,10 @@ public class ModItems {
         register( event, "colza_seeds", new BlockNamedItem( ModBlocks.COLZA, (new Item.Properties()).group( BiomeDiversity.TAB ) ) );
         register( event, "colza", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
+        register( event, "orinocite_block", new BlockItem( ModBlocks.BLOCK_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_ingot", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
-        register( event, "orinocite_dust", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_nugget", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_dust", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_plate", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_plate_thin", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
@@ -66,6 +76,12 @@ public class ModItems {
         register( event, "orinocite_ore", new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "nocified_stone_fractured", new BlockItem( ModBlocks.STONE_NOCIFIED_FRACTURED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "nocified_stone_undamaged", new BlockItem( ModBlocks.STONE_NOCIFIED_UNDAMAGED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+
+        register( event, "machine_antenna", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "machine_base", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "machine_battery", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "machine_sensor", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "machine_tank", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
         register( event, "cluster_block_generic", new BlockItem( ModBlocks.CLUSTER_BLOCK_GENERIC, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "cluster_block_tank", new BlockItem( ModBlocks.CLUSTER_BLOCK_TANK, new Item.Properties().group( BiomeDiversity.TAB ) ) );

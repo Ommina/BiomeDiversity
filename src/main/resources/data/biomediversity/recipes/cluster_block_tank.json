@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    " p ",
+    " t ",
+    " p "
+  ],
+  "key": {
+    "p": {
+      "item": "biomediversity:orinocite_plate_thin"
+    },
+    "t": {
+      "item": "biomediversity:machine_tank"
+    }
+  },
+  "result": {
+    "item": "biomediversity:cluster_block_tank",
+    "count": 2
+  }
+}

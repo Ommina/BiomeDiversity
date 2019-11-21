@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "pap",
+    "sas",
+    "pbp"
+  ],
+  "key": {
+    "p": {
+      "item": "biomediversity:orinocite_plate_thin"
+    },
+    "a": {
+      "item": "biomediversity:machine_battery"
+    },
+    "s": {
+      "item": "biomediversity:machine_sensor"
+    },
+    "b": {
+      "item": "biomediversity:machine_base"
+    }
+  },
+  "result": {
+    "item": "biomediversity:collector",
+    "count": 1
+  }
+}

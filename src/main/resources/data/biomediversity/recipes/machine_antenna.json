@@ -2,13 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "group": "biomediversity",
   "pattern": [
-    "r n",
-    " s ",
-    "n r"
+    "n n",
+    "s s",
+    "ipi"
   ],
   "key": {
-    "r": {
-      "item": "minecraft:redstone"
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "biomediversity:orinocite_plate_thin"
     },
     "n": {
       "item": "biomediversity:orinocite_nugget"
@@ -18,7 +21,7 @@
     }
   },
   "result": {
-    "item": "biomediversity:linkstaff",
+    "item": "biomediversity:machine_antenna",
     "count": 1
   }
 }

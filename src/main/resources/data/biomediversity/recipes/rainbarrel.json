@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "psp",
+    "ptp",
+    " b "
+  ],
+  "key": {
+    "b": {
+      "item": "biomediversity:machine_base"
+    },
+    "t": {
+      "item": "biomediversity:machine_tank"
+    },
+    "s": {
+      "item": "biomediversity:machine_sensor"
+    },
+    "p": {
+      "item": "biomediversity:orinocite_plate"
+    }
+  },
+  "result": {
+    "item": "biomediversity:rainbarrel",
+    "count": 1
+  }
+}

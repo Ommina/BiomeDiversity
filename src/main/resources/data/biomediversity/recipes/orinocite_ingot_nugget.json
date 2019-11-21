@@ -2,23 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "group": "biomediversity",
   "pattern": [
-    "r n",
-    " s ",
-    "n r"
+    "nnn",
+    "nnn",
+    "nnn"
   ],
   "key": {
-    "r": {
-      "item": "minecraft:redstone"
-    },
     "n": {
       "item": "biomediversity:orinocite_nugget"
-    },
-    "s": {
-      "item": "minecraft:stick"
     }
   },
   "result": {
-    "item": "biomediversity:linkstaff",
+    "item": "biomediversity:orinocite_ingot",
     "count": 1
   }
 }

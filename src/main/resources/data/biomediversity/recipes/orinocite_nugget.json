@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "biomediversity",
+  "ingredients": [
+    {
+      "item": "biomediversity:orinocite_ingot"
+    }
+  ],
+  "result": {
+    "item": "biomediversity:orinocite_nugget",
+    "count": 9
+  }
+}

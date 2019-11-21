@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "pap",
+    "ptp",
+    "sbs"
+  ],
+  "key": {
+    "p": {
+      "item": "biomediversity:orinocite_plate_thin"
+    },
+    "a": {
+      "item": "biomediversity:machine_antenna"
+    },
+    "t": {
+      "item": "biomediversity:machine_tank"
+    },
+    "b": {
+      "item": "biomediversity:machine_base"
+    },
+    "s": {
+      "item": "biomediversity:machine_sensor"
+    }
+  },
+  "result": {
+    "item": "biomediversity:transmitter",
+    "count": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "nnn",
+    "nnn",
+    "nnn"
+  ],
+  "key": {
+    "n": {
+      "item": "biomediversity:orinocite_ingot"
+    }
+  },
+  "result": {
+    "item": "biomediversity:orinocite_block",
+    "count": 1
+  }
+}
