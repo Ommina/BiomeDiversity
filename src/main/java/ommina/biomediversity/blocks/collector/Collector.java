@@ -14,6 +14,7 @@ import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.cluster.IClusterController;
+import ommina.biomediversity.config.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     public Collector() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
 
     }
 

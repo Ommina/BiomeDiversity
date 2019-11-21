@@ -30,6 +30,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.BlockTileEntity;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
+import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.items.ModItems;
 import ommina.biomediversity.worlddata.TransmitterData;
 
@@ -41,7 +42,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     public Transmitter() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 10f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
 
         this.setDefaultState( this.getDefaultState()
              .with( IS_CONNECTED, true ) );

@@ -19,5 +19,6 @@ public class Constants {
 
     public static final int RF_RENDER_STEP_COUNT = 30; // Used to specifiy how frequently the client is updated with new stored RF values.  maxStored/Step_Count becomes the BroadcastHelper minimumDelta
 
+    public static final float DEFAULT_TILE_ENTITY_HARDNESS = 3.2f;
 
 }

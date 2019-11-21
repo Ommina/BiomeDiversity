@@ -9,12 +9,13 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
+import ommina.biomediversity.config.Constants;
 
 public class Plug extends BlockTileEntity<TileEntityPlug> {
 
     public Plug() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
 
     }
 

@@ -24,6 +24,7 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
+import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.items.ModItems;
 import ommina.biomediversity.worlddata.TransmitterData;
 
@@ -37,7 +38,7 @@ public class Receiver extends Block {
 
     public Receiver() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
 
         this.setDefaultState( this.getDefaultState()
              .with( IS_CONNECTED, false ) );
