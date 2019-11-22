@@ -72,7 +72,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     }
 
-//region Overrides
+
     // Overrides
     @Override
     public BlockRenderLayer getRenderLayer() {
@@ -115,7 +115,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         //player.openGui( Biomediversity.instance, ModGuiHandler.PILLAR, world, pos.getX(), pos.getY(), pos.getZ() );
 
         return true;
-
 
     }
 
@@ -185,6 +184,5 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         return new TileEntityTransmitter();
     }
 //endregion Overrides
-//Overrides
 
 }

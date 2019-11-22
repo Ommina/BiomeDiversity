@@ -47,7 +47,7 @@ public class FluidStrengths {
             return;
         }
 
-        BiomeDiversity.LOGGER.info( String.format( "Adding fluid %s with strength %d and hash %d", fluid.getAttributes().toString(), strength, hash ) );
+        BiomeDiversity.LOGGER.info( String.format( "Adding fluid %s with strength %d and hash %d", fluid.getAttributes(), strength, hash ) );
 
         fluids.put( hash, new FluidStrength( fluid, strength ) );
 

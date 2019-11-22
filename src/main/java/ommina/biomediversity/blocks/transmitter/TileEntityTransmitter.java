@@ -1,6 +1,5 @@
 package ommina.biomediversity.blocks.transmitter;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -27,15 +26,12 @@ import ommina.biomediversity.worlddata.TransmitterData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TileEntityTransmitter extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast {
 
     public static final int LINKING_SOURCE_TRANSMITTER = 1;
     private static final int TANK_COUNT = 1;
     private static final int MINIMUM_DELTA = 200;
-    private static List<Fluid> fluidWhitelist = new ArrayList<Fluid>();
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
 
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
@@ -51,6 +47,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 //endregion Overrides
 
     };
+
     private LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
 
     public TileEntityTransmitter() {
@@ -58,17 +55,100 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
         TANK.setCanDrain( false );
         TANK.setCanFill( true );
-        TANK.addFluidToWhitelist( fluidWhitelist );
 
         this.source = LINKING_SOURCE_TRANSMITTER;
 
     }
 
-    public static void addFluidToWhitelist( Fluid fluid ) {
+//region Overrides
+    @Override
+    public void doBroadcast() {
 
-        fluidWhitelist.add( fluid );
+        if ( BROADCASTER.needsBroadcast() ) {
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
+            BROADCASTER.reset();
+        }
 
     }
+
+    @Override
+    public BdFluidTank getTank( int index ) {
+
+        return TANK;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
+
+        if ( cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY )
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty( cap, handler );
+
+        return super.getCapability( cap, side );
+
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+
+        handler.invalidate();
+
+    }
+
+    @Override
+    public void onLoad() {
+
+        BROADCASTER.reset();
+
+        BiomeDiversity.LOGGER.info( "Transmitter loaded: " + getPos().toString() );
+
+    }
+
+    @Override
+    public boolean hasFastRenderer() {
+
+        return true;
+    }
+
+    @Override
+    public void read( CompoundNBT tag ) {
+
+        TANK.read( tag );
+        super.read( tag );
+    }
+
+    @Override
+    public CompoundNBT write( CompoundNBT tag ) {
+
+        tag = TANK.write( tag );
+        return super.write( tag );
+
+    }
+
+    @Override
+    protected void doFirstTick() {
+        super.doFirstTick();
+
+        if ( world.isRemote )
+            return;
+
+        refreshTransmitterTankFromTransmitterNetwork();
+
+    }
+
+    @Override
+    public void tick() {
+
+        if ( firstTick )
+            doFirstTick();
+
+        if ( world.isRemote )
+            return;
+
+        doBroadcast();
+
+    }
+//endregion Overrides
 
     private static void updateFluidDisplay( World world, BlockPos pos ) {
 
@@ -135,89 +215,5 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
         return TANK;
     }
-
-//region Overrides
-
-    @Override
-    public void doBroadcast() {
-
-        if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
-            BROADCASTER.reset();
-        }
-
-    }
-
-    @Override
-    public BdFluidTank getTank( int index ) {
-
-        return TANK;
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
-
-        if ( cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY )
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty( cap, handler );
-
-        return super.getCapability( cap, side );
-
-    }
-
-    @Override
-    public void onLoad() {
-
-        BROADCASTER.reset();
-
-        BiomeDiversity.LOGGER.info( "Transmitter loaded: " + getPos().toString() );
-
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-
-        return true;
-    }
-
-    @Override
-    public void read( CompoundNBT tag ) {
-
-        TANK.read( tag );
-        super.read( tag );
-    }
-
-    @Override
-    public CompoundNBT write( CompoundNBT tag ) {
-
-        tag = TANK.write( tag );
-        return super.write( tag );
-
-    }
-
-    @Override
-    protected void doFirstTick() {
-        super.doFirstTick();
-
-        if ( world.isRemote )
-            return;
-
-        refreshTransmitterTankFromTransmitterNetwork();
-
-    }
-
-    @Override
-    public void tick() {
-
-        if ( firstTick )
-            doFirstTick();
-
-        if ( world.isRemote )
-            return;
-
-        doBroadcast();
-
-    }
-//endregion Overrides
 
 }

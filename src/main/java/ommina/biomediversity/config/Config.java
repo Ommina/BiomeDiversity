@@ -97,7 +97,6 @@ public class Config {
 
     static {
 
-
         setupWorldGenConfig();
         setupPowerConfig();
         setupTransmitter();
@@ -127,21 +126,26 @@ public class Config {
 
         configData.load();
         spec.setConfig( configData );
+
     }
+
+/*
 
     @SubscribeEvent
     public static void onLoad( final ModConfig.Loading configEvent ) {
 
-        //System.out.println( "hello" );
+        System.out.println( "Config Loaded" );
 
     }
 
     @SubscribeEvent
     public static void onReload( final ModConfig.ConfigReloading configEvent ) {
 
-        //System.out.println( "hello" );
+        System.out.println( "Config REloaded" );
 
     }
+
+*/
 
     public static void setupCollector() {
 
