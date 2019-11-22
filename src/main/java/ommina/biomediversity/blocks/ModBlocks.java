@@ -31,8 +31,8 @@ import ommina.biomediversity.blocks.transmitter.Transmitter;
 public class ModBlocks {
 
     // Generic Blocks
-    @ObjectHolder( "orinocite_ore" ) public static final Block ORE_ORINOCITE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
-    @ObjectHolder( "orinocite_block" ) public static final Block BLOCK_ORINOCITE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
+    @ObjectHolder( "orinocite_ore" ) public static final Block ORINOCITE_ORE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
+    @ObjectHolder( "orinocite_block" ) public static final Block ORINOCITE_BLOCK = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
     @ObjectHolder( "nocified_stone_undamaged" ) public static final Block STONE_NOCIFIED_UNDAMAGED = new BlockNocifiedUndamaged( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
     @ObjectHolder( "nocified_stone_fractured" ) public static final Block STONE_NOCIFIED_FRACTURED = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
 
@@ -75,8 +75,8 @@ public class ModBlocks {
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Block> event ) {
 
-        register( event, "orinocite_ore", ORE_ORINOCITE );
-        register( event, "orinocite_block", BLOCK_ORINOCITE );
+        register( event, "orinocite_ore", ORINOCITE_ORE );
+        register( event, "orinocite_block", ORINOCITE_BLOCK );
         register( event, "nocified_stone_fractured", STONE_NOCIFIED_FRACTURED );
         register( event, "nocified_stone_undamaged", STONE_NOCIFIED_UNDAMAGED );
 

@@ -4,6 +4,12 @@
     "biomediversity:rainwater",
     "biomediversity:rainwater_flowing",
     "biomediversity:mineralwater",
-    "biomediversity:mineralwater_flowing"
+    "biomediversity:mineralwater_flowing",
+    "biomediversity:coolbiometic",
+    "biomediversity:coolbiometic_flowing",
+    "biomediversity:warmbiometic",
+    "biomediversity:warmbiometic_flowing",
+    "biomediversity:neutralbiometic",
+    "biomediversity:neutralbiometic_flowing"
   ]
 }

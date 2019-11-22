@@ -21,11 +21,11 @@ public class ModItems {
     @ObjectHolder( "colza_seeds" ) public static final Item COLZA_SEEDS = null;
     @ObjectHolder( "colza" ) public static final Item COLZA = null;
 
-    @ObjectHolder( "orinocite_ingot" ) public static final Item INGOT_ORINOCITE = null;
-    @ObjectHolder( "orinocite_dust" ) public static final Item DUST_ORINOCITE = null;
-    @ObjectHolder( "orinocite_nugget" ) public static final Item NUGGET_ORINOCITE = null;
-    @ObjectHolder( "orinocite_plate" ) public static final Item PLATE_ORINOCITE = null;
-    @ObjectHolder( "orinocite_plate_thin" ) public static final Item PLATE_ORINOCITE_THIN = null;
+    @ObjectHolder( "orinocite_ingot" ) public static final Item ORINOCITE_INGOT = null;
+    @ObjectHolder( "orinocite_dust" ) public static final Item ORINOCITE_DUST = null;
+    @ObjectHolder( "orinocite_nugget" ) public static final Item ORINOCITE_NUGGET = null;
+    @ObjectHolder( "orinocite_plate" ) public static final Item ORINOCITE_PLATE = null;
+    @ObjectHolder( "orinocite_plate_thin" ) public static final Item ORINOCITE_PLATE_THIN = null;
 
     // Cool Items
     @ObjectHolder( "linkstaff" ) public static final Item LINK_STAFF = null;
@@ -43,8 +43,8 @@ public class ModItems {
 
 
     // Block Items
-    @ObjectHolder( "orinocite_ore" ) public static final Item ORE_ORINOCITE = null;
-    @ObjectHolder( "orinocite_block" ) public static final Item BLOCK_ORINOCITE = null;
+    @ObjectHolder( "orinocite_ore" ) public static final Item ORINOCITE_ORE = null;
+    @ObjectHolder( "orinocite_block" ) public static final Item ORINOCITE_BLOCK = null;
     @ObjectHolder( "nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = null;
     @ObjectHolder( "nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = null;
 
@@ -64,7 +64,7 @@ public class ModItems {
         register( event, "colza_seeds", new BlockNamedItem( ModBlocks.COLZA, (new Item.Properties()).group( BiomeDiversity.TAB ) ) );
         register( event, "colza", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
-        register( event, "orinocite_block", new BlockItem( ModBlocks.BLOCK_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_block", new BlockItem( ModBlocks.ORINOCITE_BLOCK, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_ingot", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_nugget", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "orinocite_dust", new Item( new Item.Properties().group( BiomeDiversity.TAB ) ) );
@@ -73,7 +73,7 @@ public class ModItems {
 
         register( event, "linkstaff", new LinkStaff( new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
-        register( event, "orinocite_ore", new BlockItem( ModBlocks.ORE_ORINOCITE, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "orinocite_ore", new BlockItem( ModBlocks.ORINOCITE_ORE, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "nocified_stone_fractured", new BlockItem( ModBlocks.STONE_NOCIFIED_FRACTURED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "nocified_stone_undamaged", new BlockItem( ModBlocks.STONE_NOCIFIED_UNDAMAGED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 

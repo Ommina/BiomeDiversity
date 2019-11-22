@@ -21,7 +21,7 @@ public class ModWorldGeneration {
         for ( Biome biome : ForgeRegistries.BIOMES ) {
 
             if ( Config.orinociteOreEnabled.get() && biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
-                addOre( biome, ModBlocks.ORE_ORINOCITE, Config.orinociteOreGenerationSizeBase.get() + Config.orinociteOreGenerationSizeVariance.get(), Config.orinociteOreGenerationAttempts.get(), Config.orinociteOreGenerationMinY.get(), Config.orinociteOreGenerationMaxY.get() );
+                addOre( biome, ModBlocks.ORINOCITE_ORE, Config.orinociteOreGenerationSizeBase.get() + Config.orinociteOreGenerationSizeVariance.get(), Config.orinociteOreGenerationAttempts.get(), Config.orinociteOreGenerationMinY.get(), Config.orinociteOreGenerationMaxY.get() );
             }
 
             if ( Config.junglePoolGenerationEnabled.get() && biome.getCategory() == Biome.Category.JUNGLE ) {
