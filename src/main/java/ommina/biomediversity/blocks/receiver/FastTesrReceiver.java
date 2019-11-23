@@ -8,8 +8,6 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.config.Config;
 
-import java.awt.Color;
-
 import static ommina.biomediversity.blocks.tile.RenderHelper.*;
 
 public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRendererFast<T> {
@@ -22,9 +20,6 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
     private static final float HEIGHT_FLUID = 24f / 16f;
 
     private static final float HEIGHT_CONNECTION = 21f / 16f;
-
-    private static final float[] COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
-    private static final float[] COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
 
     //region Overrides
     @Override
@@ -46,7 +41,7 @@ public class FastTesrReceiver<T extends TileEntityReceiver> extends TileEntityRe
 
         final float side = 15f / 16f;
 
-        float[] color = te.isClusterComponentConnected() ? COLOUR_CONNECTED : COLOUR_DISCONNECTED;
+        float[] color = te.getGlowbarColour();
 
         renderLight( buffer, x, y, z, 1f / 16f / 2f, 1f / 16f / 2f, side, INTERNAL_SPRITE, color );
         renderLight( buffer, x, y, z, 0, 1f / 16f, side, EXTERNAL_SPRITE, color );

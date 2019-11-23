@@ -24,6 +24,11 @@ class Reception {
             ReceptionItem ri = RECEPTORS.get( biomeRegistryName );
             ri.temperature += temperature;
 
+            /*
+             NOTE: If multiple transmitters are placed in a given biome, the fluid with the largest power value will be selected.  The lower power value will, however, still be consumed.
+                   It may be worth considering adding the two power values, consuming both, but NOT giving the multi-biome bonus later.
+             */
+
             if ( power > ri.currentPower )
                 ri.currentPower = power;
 
@@ -45,8 +50,6 @@ class Reception {
                 miss.add( ri.currentPower, ri.temperature, ri.fluidHash );
             else
                 miss.add( ri.temperature * 2 );
-
-        //Biomediversity.logger.warn( "emit: " + miss.toString() );
 
         RECEPTORS.clear();
 

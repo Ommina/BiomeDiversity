@@ -23,6 +23,7 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
+import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;
@@ -36,6 +37,7 @@ import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -47,6 +49,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private static final float CHUNKLOAD_MAX_PERCENTAGE = 0.80f;
     private static final int CHUNKLOAD_MIN_FLUID_INCREASE = 90;
     private static final int MAX_CHUNKLOAD_DURATION = 5 * 60 * 20 / Constants.CLUSTER_TICK_DELAY; // 5min
+
+    private static final float[] GLOWBAR_COLOUR_CHUNKLOADING = RenderHelper.getRGBA( new Color(255, 165,0).getRGB() );
+    private static final float[] GLOWBAR_COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
+    private static final float[] GLOWBAR_COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
 
     final CollectorFinder FINDER = new CollectorFinder();
     final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
@@ -206,6 +212,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                     ter.FINDER.setCollectorPos( packet.collectorPos );
                     ter.temperature = packet.temperature;
                     ter.biomeRegistryName = packet.biomeRegistryName;
+                    ter.isChunkloadingTransmitter = packet.isChunkloadingTransmitter;
 
                 }
 
@@ -214,6 +221,18 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         } );
 
         ctx.get().setPacketHandled( true );
+
+    }
+
+    public float[] getGlowbarColour() {
+
+        if ( isChunkloadingTransmitter )
+            return GLOWBAR_COLOUR_CHUNKLOADING;
+
+        if ( isClusterComponentConnected() )
+            return GLOWBAR_COLOUR_CONNECTED;
+
+        return GLOWBAR_COLOUR_DISCONNECTED;
 
     }
 
@@ -246,6 +265,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     public float getTemperature() {
         return this.temperature;
+    }
+
+    public boolean isChunkloadingTransmitter() {
+        return this.isChunkloadingTransmitter;
     }
 
     public void refreshReceiverTankFromTransmitterNetwork() {
@@ -388,6 +411,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         isChunkloadingTransmitter = true;
         chunkloadDurationRemaining = MAX_CHUNKLOAD_DURATION;
 
+        BROADCASTER.forceBroadcast();
+
         BiomeDiversity.LOGGER.debug( "Loading transmitter at " + this.getAssociatedPos().toString() );
 
     }
@@ -410,6 +435,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         isChunkloadingTransmitter = false;
 
         chunkloadingTimedOut = (chunkloadDurationRemaining == 0);
+
+        BROADCASTER.forceBroadcast();
 
         BiomeDiversity.LOGGER.debug( "Unloading transmitter at " + this.getAssociatedPos().toString() );
 

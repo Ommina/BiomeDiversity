@@ -13,6 +13,7 @@ public class PacketUpdateReceiver {
     public BlockPos collectorPos;
     public String biomeRegistryName;
     public float temperature;
+    public boolean isChunkloadingTransmitter;
 
     public PacketUpdateReceiver() {
     }
@@ -28,6 +29,7 @@ public class PacketUpdateReceiver {
         this.temperature = tile.getTemperature();
         this.biomeRegistryName = tile.getBiomeRegistryName();
         this.collectorPos = tile.getCollectorPos();
+        this.isChunkloadingTransmitter = tile.isChunkloadingTransmitter();
 
     }
 
@@ -37,7 +39,8 @@ public class PacketUpdateReceiver {
 
         packet.tilePos = buf.readBlockPos();
         packet.temperature = buf.readFloat();
-        packet.biomeRegistryName = buf.readString();
+        packet.biomeRegistryName = buf.readString(255);
+        packet.isChunkloadingTransmitter = buf.readBoolean();
 
         if ( buf.readBoolean() )
             packet.collectorPos = buf.readBlockPos();
@@ -53,6 +56,7 @@ public class PacketUpdateReceiver {
         buf.writeBlockPos( this.tilePos );
         buf.writeFloat( this.temperature );
         buf.writeString( this.biomeRegistryName );
+        buf.writeBoolean( this.isChunkloadingTransmitter );
 
         if ( this.collectorPos != null ) {
             buf.writeBoolean( true );
