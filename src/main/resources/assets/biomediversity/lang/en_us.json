@@ -28,6 +28,14 @@
   "item.biomediversity.pomegranate": "Pomegranate",
   "item.biomediversity.pomegranate_seeds": "Pomegranate Seeds",
 
+  "item.biomediversity.coolbiometic_bucket": "Cool Biometic Bucket",
+  "item.biomediversity.junglewater_bucket": "Jungle Water Bucket",
+  "item.biomediversity.mineralwater_bucket": "Mineral Water Bucket",
+  "item.biomediversity.moltenorinocite_bucket": "Molten Orinocite Bucket",
+  "item.biomediversity.neutralbiometic_bucket": "Neutral Biometic Bucket",
+  "item.biomediversity.rainwater_bucket": "Rainwater Bucket",
+  "item.biomediversity.warmbiometic_bucket": "Warm Biometic Bucket",
+
   "block.biomediversity.collector": "Biometic Collector Core",
   "block.biomediversity.nocified_stone_fractured": "Fractured Nocified Stone",
   "block.biomediversity.nocified_stone_undamaged": "Nocified Stone",
