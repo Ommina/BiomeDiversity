@@ -37,9 +37,27 @@ public abstract class Control extends AbstractGui {
         innerBlit( x, x + width, y, y + height, offset, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV() );
     }
 
+/*
+
     public static void drawSprite( float x, float y, int minU, int minV, int maxU, int maxV ) {
 
         final float f = 1f / 256f;
+
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder bufferbuilder = tessellator.getBuffer();
+
+        bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_TEX );
+        bufferbuilder.pos( x, y + maxV, 1 ).tex( minU * f, (minV + maxV) * f ).endVertex();
+        bufferbuilder.pos( x + maxU, y + maxV, 1 ).tex( (minU + maxU) * f, (minV + maxV) * f ).endVertex();
+        bufferbuilder.pos( x + maxU, y, 1 ).tex( (minU + maxU) * f, minV * f ).endVertex();
+        bufferbuilder.pos( x, y, 1 ).tex( minU * f, minV * f ).endVertex();
+        tessellator.draw();
+
+    }
+
+*/
+
+    public static void drawSprite( float f, float x, float y, int minU, int minV, int maxU, int maxV ) {
 
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder bufferbuilder = tessellator.getBuffer();

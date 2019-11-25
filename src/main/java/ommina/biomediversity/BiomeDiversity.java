@@ -106,6 +106,8 @@ public class BiomeDiversity {
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
             event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
+            //event.addSprite( BiomeDiversity.getId( "gui/biome" ) );
+            event.addSprite( BiomeDiversity.getId( "gui/log_guage" ) );
 
         }
 
@@ -125,7 +127,6 @@ public class BiomeDiversity {
 
         event.addCapability( BiomeDiversity.getId( "transmitternetwork" ), new TransmitterNetworkProvider() );
 
-        //event.addCapability(new ResourceLocation(MODID, LOADERID), provider);
         //event.addListener(() -> inst.invalidate())
 
     }
@@ -163,9 +164,6 @@ public class BiomeDiversity {
     private void doClientStuff( final FMLClientSetupEvent event ) {
 
         //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
-
-        //Minecraft.getInstance().getItemColors().register( new BucketTinter(), ModFluids.RAINWATER_BUCKET );
-        //Minecraft.getInstance().getBlockColors().register( new WaterTinter(), ModFluids.RAINWATER_BLOCK );
 
     }
 

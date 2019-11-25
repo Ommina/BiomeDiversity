@@ -9,6 +9,7 @@ import ommina.biomediversity.gui.UV;
 import ommina.biomediversity.util.MathUtil;
 import ommina.biomediversity.util.Translator;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class RfGauge extends Control {
 
     private final EnergyStorage BATTERY;
 
-    public RfGauge( EnergyStorage battery ) {
+    public RfGauge( @Nullable final EnergyStorage battery ) {
 
         assignwh();
 
@@ -41,30 +42,26 @@ public class RfGauge extends Control {
 
     }
 
-    private void assignwh() {
-
-        width = WIDTH;
-        height = HEIGHT;
-
-    }
-
     //region Overrides
     @Override
     public void drawBackgroundLayer( int x, int y ) {
 
+        if ( BATTERY == null )
+            return;
+
+        final float f = 1f / 256f;
+
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         if ( BATTERY.getMaxEnergyStored() == 0 ) {
-            drawSprite( (float) position.x + x, (float) position.y + y, BG_UNCHARGEABLE.minU, BG_UNCHARGEABLE.minV, BG_UNCHARGEABLE.sizeU, BG_UNCHARGEABLE.sizeV );
+            drawSprite( f, (float) position.x + x, (float) position.y + y, BG_UNCHARGEABLE.minU, BG_UNCHARGEABLE.minV, BG_UNCHARGEABLE.sizeU, BG_UNCHARGEABLE.sizeV );
             return;
         }
 
-        drawSprite( (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
+        drawSprite( f, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
 
         int h = MathUtil.clamp( HEIGHT - (int) ((float) BATTERY.getEnergyStored() / (float) BATTERY.getMaxEnergyStored() * HEIGHT), 0, HEIGHT );
-
-
-        drawSprite( position.x + x, (float) position.y + y + h, FG.minU, FG.minV + h, FG.sizeU, FG.sizeV - h );
+        drawSprite( f, position.x + x, (float) position.y + y + h, FG.minU, FG.minV + h, FG.sizeU, FG.sizeV - h );
 
     }
 
@@ -86,7 +83,13 @@ public class RfGauge extends Control {
             return Collections.singletonList( format.format( this.BATTERY.getEnergyStored() ) );
 
     }
-
 //endregion Overrides
+
+    private void assignwh() {
+
+        width = WIDTH;
+        height = HEIGHT;
+
+    }
 
 }

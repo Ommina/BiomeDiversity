@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import ommina.biomediversity.IProxy;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
 import ommina.biomediversity.blocks.receiver.ReceiverScreen;
 
 public class ClientProxy implements IProxy {
@@ -16,6 +17,7 @@ public class ClientProxy implements IProxy {
     public void init() {
 
         ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
+        ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
 
     }
 

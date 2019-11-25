@@ -2,12 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "plug",
+      "name": "plug_energy",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "biomediversity:plug"
+          "name": "biomediversity:plug_energy"
         }
       ],
       "conditions": [

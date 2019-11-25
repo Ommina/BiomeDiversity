@@ -19,7 +19,8 @@ import ommina.biomediversity.blocks.crops.ColzaBlock;
 import ommina.biomediversity.blocks.crops.FakePlantBlock;
 import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.peltier.Peltier;
-import ommina.biomediversity.blocks.plug.Plug;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergy;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
 import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
 import ommina.biomediversity.blocks.receiver.Receiver;
 import ommina.biomediversity.blocks.receiver.ReceiverContainer;
@@ -53,10 +54,11 @@ public class ModBlocks {
     @ObjectHolder( "rainbarrel" ) public static RainBarrel RAIN_BARREL;
     @ObjectHolder( "receiver" ) public static Receiver RECEIVER;
     @ObjectHolder( "transmitter" ) public static Transmitter TRANSMITTER;
-    @ObjectHolder( "plug" ) public static Plug PLUG;
+    @ObjectHolder( "plug_energy" ) public static PlugEnergy PLUG_ENERGY;
 
     // Containers
     @ObjectHolder( "receiver" ) public static ContainerType<ReceiverContainer> RECEIVER_CONTAINER;
+    @ObjectHolder( "plug_energy" ) public static ContainerType<PlugEnergyContainer> PLUG_ENERGY_CONTAINER;
 
     // Fluid Blocks  (Only those that we care about)
     @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
@@ -69,6 +71,11 @@ public class ModBlocks {
             BlockPos pos = data.readBlockPos();
             return new ReceiverContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
         } ).setRegistryName( "receiver" ) );
+
+        event.getRegistry().register( IForgeContainerType.create( ( windowId, inv, data ) -> {
+            BlockPos pos = data.readBlockPos();
+            return new PlugEnergyContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
+        } ).setRegistryName( "plug_energy" ) );
 
     }
 
@@ -94,7 +101,7 @@ public class ModBlocks {
         register( event, "rainbarrel", new RainBarrel() );
         register( event, "receiver", new Receiver() );
         register( event, "transmitter", new Transmitter() );
-        register( event, "plug", new Plug() );
+        register( event, "plug_energy", new PlugEnergy() );
 
     }
 

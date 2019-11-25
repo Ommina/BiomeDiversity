@@ -11,6 +11,11 @@ public class PacketUpdateCollector {
 
     public BlockPos tilePos;
     public int storedEnergy;
+    public int uniqueBiomeCount;
+    public float temperature;
+    //public int duplicateBiomeCount;
+    //public int unlistedBiomeCount;
+    public int EnergyPerTick;
 
     FluidStack[] fluids = new FluidStack[TileEntityCollector.TANK_COUNT];
 
@@ -25,6 +30,8 @@ public class PacketUpdateCollector {
 
         tilePos = tile.getPos();
         storedEnergy = tile.BATTERY.getEnergyStored();
+        temperature = tile.getTemperature();
+        uniqueBiomeCount = tile.getUniqueBiomeCount();
 
         for ( int n = 0; n < TileEntityCollector.TANK_COUNT; n++ )
             fluids[n] = tile.TANK.get( n ).getFluid();
@@ -37,6 +44,8 @@ public class PacketUpdateCollector {
 
         packet.tilePos = buf.readBlockPos();
         packet.storedEnergy = buf.readInt();
+        packet.temperature = buf.readFloat();
+        packet.uniqueBiomeCount = buf.readInt();
 
         for ( int n = 0; n < TileEntityCollector.TANK_COUNT; n++ )
             if ( !buf.readBoolean() )
@@ -57,6 +66,8 @@ public class PacketUpdateCollector {
 
         buf.writeBlockPos( tilePos );
         buf.writeInt( storedEnergy );
+        buf.writeFloat( temperature );
+        buf.writeInt( uniqueBiomeCount );
 
         for ( int n = 0; n < TileEntityCollector.TANK_COUNT; n++ )
             if ( fluids[n].isEmpty() )

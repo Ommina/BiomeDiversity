@@ -72,9 +72,11 @@ public class Tank extends Control {
     @Override
     public void drawForegroundLayer() {
 
+        float f = 1f / 256f;
+
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
-        Control.drawSprite( (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
+        Control.drawSprite( f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
 
     }
 

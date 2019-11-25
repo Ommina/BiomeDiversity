@@ -33,6 +33,14 @@ public abstract class DynamicRange extends Control {
 
     }
 
+    public DynamicRange( float value, float min, float max ) {
+
+        setMinMax( min, max );
+        this.value = value;
+        tile = null;
+
+    }
+
     public void setMinMax( float min, float max ) {
 
         if ( min > max )

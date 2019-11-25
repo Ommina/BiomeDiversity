@@ -11,19 +11,15 @@ import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
 import ommina.biomediversity.config.Constants;
 
-public class Plug extends BlockTileEntity<TileEntityPlug> {
+public abstract class PlugBase extends BlockTileEntity<TileEntityPlug> {
 
-    public Plug() {
+    public PlugBase() {
 
         super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
 
     }
 
 //region Overrides
-    @Override
-    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityPlug();
-    }
 
     @Override
     public BlockRenderType getRenderType( BlockState state ) {

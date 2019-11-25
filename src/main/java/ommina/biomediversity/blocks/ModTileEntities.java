@@ -32,7 +32,7 @@ public class ModTileEntities {
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityCollector::new, ModBlocks.COLLECTOR ).build( null ).setRegistryName( "collector" ) );
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityPeltier::new, ModBlocks.PELTIER ).build( null ).setRegistryName( "peltier" ) );
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityRainBarrel::new, ModBlocks.RAIN_BARREL ).build( null ).setRegistryName( "rainbarrel" ) );
-        event.getRegistry().register( TileEntityType.Builder.create( TileEntityPlug::new, ModBlocks.PLUG ).build( null ).setRegistryName( "plug" ) );
+        event.getRegistry().register( TileEntityType.Builder.create( TileEntityPlug::new, ModBlocks.PLUG_ENERGY ).build( null ).setRegistryName( "plug" ) );
 
     }
 

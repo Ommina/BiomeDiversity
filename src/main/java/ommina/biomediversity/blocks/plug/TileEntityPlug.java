@@ -1,17 +1,22 @@
 package ommina.biomediversity.blocks.plug;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -20,6 +25,7 @@ import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
@@ -30,16 +36,13 @@ import ommina.biomediversity.util.NbtUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TileEntityPlug extends TileEntity implements IClusterComponent, ITickableTileEntity {
+public class TileEntityPlug extends TileEntity implements IClusterComponent, ITickableTileEntity, INamedContainerProvider {
 
     final CollectorFinder FINDER = new CollectorFinder();
     final PlugRenderData PLUG_RENDER = new PlugRenderData();
-
-    //private TileEntityCollector getPlugRenderDataCollector; // GetPlugRenderData is called each frame, so we'll reuse this reference to avoid a bit of GC stress
 
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int loop = 1;
@@ -53,32 +56,13 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
     }
 
-    private void distributeRf() {
-
-        TileEntity tileEntity = world.getTileEntity( getPos().down() );
-
-        if ( tileEntity != null && tileEntity.getCapability( CapabilityEnergy.ENERGY, Direction.UP ).isPresent() ) {
-
-            tileEntity.getCapability( CapabilityEnergy.ENERGY, Direction.UP ).ifPresent( e -> {
-
-                TileEntityCollector collector = FINDER.get( world );
-
-                if ( collector != null ) {
-
-                    BdEnergyStorage battery = collector.getEnergyStorage();
-                    int maxReceive = e.receiveEnergy( Integer.MAX_VALUE, true );
-                    int withdraw = battery.extractEnergy( maxReceive, false );
-                    e.receiveEnergy( withdraw, false );
-
-                }
-
-            } );
-
-        }
-
+    //region Overrides
+    @Nullable
+    @Override
+    public Container createMenu( int i, PlayerInventory playerInventory, PlayerEntity playerEntity ) {
+        return new PlugEnergyContainer( i, world, pos, playerInventory, playerEntity );
     }
 
-    //region Overrides
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> capability, @Nullable Direction side ) {
@@ -103,10 +87,12 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
     @Override
     public void invalidateCollector() {
-
-//        getPlugRenderDataCollector = null;
         removeCollector();
+    }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent( getType().getRegistryName().getPath() );
     }
 
     @Override
@@ -163,6 +149,31 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
         doMainWork();
 
         loop++;
+
+    }
+
+    private void distributeRf() {
+
+        TileEntity tileEntity = world.getTileEntity( getPos().down() );
+
+        if ( tileEntity != null && tileEntity.getCapability( CapabilityEnergy.ENERGY, Direction.UP ).isPresent() ) {
+
+            tileEntity.getCapability( CapabilityEnergy.ENERGY, Direction.UP ).ifPresent( e -> {
+
+                TileEntityCollector collector = FINDER.get( world );
+
+                if ( collector != null ) {
+
+                    BdEnergyStorage battery = collector.getEnergyStorage();
+                    int maxReceive = e.receiveEnergy( Integer.MAX_VALUE, true );
+                    int withdraw = battery.extractEnergy( maxReceive, false );
+                    e.receiveEnergy( withdraw, false );
+
+                }
+
+            } );
+
+        }
 
     }
 
@@ -247,11 +258,9 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
         }
 
-        TileEntityCollector collector = collectorResult.getCollector();
+        //TileEntityCollector collector = collectorResult.getCollector();
 
     }
-
-
 
     private void doFirstTick() {
 
@@ -259,7 +268,7 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
 
         Block block = world.getBlockState( this.pos ).getBlock();
 
-        if ( block == ModBlocks.PLUG ) {
+        if ( block == ModBlocks.PLUG_ENERGY ) {
             plug_connection_type = TileEntityCollector.PLUG_CONNECTION_RF;
             PLUG_RENDER.sprite = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
             PLUG_RENDER.maximum = Config.collectorEnergyCapacity.get();
@@ -269,5 +278,49 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
             Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
     }
+
+    public PlugCollectorDetails getCollectorDetails() {
+
+        return new PlugCollectorDetails( FINDER.get( world ) );
+
+    }
+
+    public float getTemperature() {
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector == null )
+            return 0f;
+
+        return collector.getTemperature();
+
+    }
+
+    /*
+
+    public int getUniqueBiomeCount() {
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector == null )
+            return 0;
+
+        return collector.getUniqueBiomeCount();
+
+    }
+
+    @Nullable
+    public EnergyStorage getEnergyStorage() {
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector == null )
+            return null;
+
+        return collector.getEnergyStorage();
+
+    }
+
+*/
 
 }

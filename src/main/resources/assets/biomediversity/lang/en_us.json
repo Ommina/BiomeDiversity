@@ -10,6 +10,7 @@
   "text.biomediversity.linkstaff.copyfrom": "Copy from $$s at $$d, $$d, $$d",
 
   "text.biomediversity.gui.powerdisabled": "RF is neither stored nor consumed",
+  "text.biomediversity.gui.uniquebiomecount": "%d unique biome%s",
 
   "item.biomediversity.colza": "Colza",
   "item.biomediversity.colza_seeds": "Colza Seeds",
@@ -25,6 +26,7 @@
   "item.biomediversity.orinocite_plate_thin": "Thin Orinocite Plate",
   "item.biomediversity.orinocite_dust": "Orinocite Dust",
   "item.biomediversity.orinocite_nugget": "Orinocite Nugget",
+  "item.biomediversity.plug_energy2": "Plug (RF)",
   "item.biomediversity.pomegranate": "Pomegranate",
   "item.biomediversity.pomegranate_seeds": "Pomegranate Seeds",
 
@@ -42,6 +44,7 @@
   "block.biomediversity.orinocite_block": "Orinocite Block",
   "block.biomediversity.orinocite_ore": "Orinocite Ore",
   "block.biomediversity.peltier": "Peltier [Coming Soon!]",
+  "block.biomediversity.plug_energy": "Plug (RF)",
   "block.biomediversity.transmitter": "Biometic Transmitter",
   "block.biomediversity.rainbarrel": "Rain Barrel",
   "block.biomediversity.receiver": "Biometic Receiver",

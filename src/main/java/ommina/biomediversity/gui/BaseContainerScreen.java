@@ -7,10 +7,13 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
 public abstract class BaseContainerScreen<T extends Container> extends ContainerScreen<T> {
+
+    protected static final Point TITLE_TEXT = new Point( 0, 5 );
 
     protected Set<Control> controls = new HashSet<Control>();
     protected ResourceLocation GUI;

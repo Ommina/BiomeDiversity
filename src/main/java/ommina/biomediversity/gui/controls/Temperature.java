@@ -33,11 +33,15 @@ public class Temperature extends DynamicRange {
     }
 
     public Temperature( TileEntity te, String methodName, float min, float max ) {
-
         super( te, methodName, min, max );
 
         width = WIDTH;
         height = HEIGHT;
+
+    }
+
+    public Temperature( float value, float min, float max ) {
+        super( value, min, max);
 
     }
 
@@ -56,9 +60,10 @@ public class Temperature extends DynamicRange {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
+        float f = 1f / 256f;
         final int y = MathUtil.clamp( (height * (1f - (value - min) / range)), GAUGE_BAR_VERTICAL_LENGTH, HEIGHT - GAUGE_BAR_VERTICAL_LENGTH );
 
-        Control.drawSprite( position.x, position.y + y - GAUGE_BAR_VERTICAL_LENGTH, FG.minU, FG.minV, FG.maxU, FG.maxV );
+        Control.drawSprite( f, position.x, position.y + y - GAUGE_BAR_VERTICAL_LENGTH, FG.minU, FG.minV, FG.maxU, FG.maxV );
 
     }
 

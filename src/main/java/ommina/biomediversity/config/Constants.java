@@ -17,7 +17,7 @@ public class Constants {
     public static final int COLLECTOR_OUTER_TANK_CAPACITY = 64000;
     public static final int COLLECTOR_INNER_TANK_CAPACITY = 32000;
 
-    public static final int RF_RENDER_STEP_COUNT = 30; // Used to specifiy how frequently the client is updated with new stored RF values.  maxStored/Step_Count becomes the BroadcastHelper minimumDelta
+    public static final int RF_RENDER_STEP_COUNT = 60; // Used to specifiy how frequently the client is updated with new stored RF values.  maxStored/Step_Count becomes the BroadcastHelper minimumDelta
 
     public static final float DEFAULT_TILE_ENTITY_HARDNESS = 3.2f;
 

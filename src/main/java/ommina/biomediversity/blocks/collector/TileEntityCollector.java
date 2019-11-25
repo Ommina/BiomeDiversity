@@ -76,6 +76,10 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     }
 
+    public void forceBroadcast() {
+        BROADCASTER.forceBroadcast();
+    }
+
     //region Overrides
     @Override
     public void doBroadcast() {
@@ -214,6 +218,14 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 //endregion Overrides
 
+    public int getUniqueBiomeCount() {
+        return uniqueBiomeCount;
+    }
+
+    public float getTemperature() {
+        return temperature;
+    }
+
     public void registerComponent( IClusterComponent component ) {
         components.add( component );
     }
@@ -259,6 +271,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
                     TileEntityCollector ter = (TileEntityCollector) tile;
 
                     ter.BATTERY.setEnergyStored( packet.storedEnergy );
+                    ter.temperature = packet.temperature;
+                    ter.uniqueBiomeCount = packet.uniqueBiomeCount;
 
                     for ( int n = 0; n < TANK_COUNT; n++ )
                         ter.TANK.get( n ).setFluid( packet.fluids[n] );
