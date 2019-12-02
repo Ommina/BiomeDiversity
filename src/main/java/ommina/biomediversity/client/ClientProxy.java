@@ -8,6 +8,7 @@ import ommina.biomediversity.IProxy;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
 import ommina.biomediversity.blocks.receiver.ReceiverScreen;
+import ommina.biomediversity.blocks.transmitter.TransmitterScreen;
 
 public class ClientProxy implements IProxy {
 
@@ -18,6 +19,7 @@ public class ClientProxy implements IProxy {
 
         ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
         ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
+        ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
 
     }
 

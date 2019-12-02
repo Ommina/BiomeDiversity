@@ -70,8 +70,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private int loop = 1;
     private boolean isChunkloadingTransmitter = false;
 
-    private String biomeRegistryName = "null:null";
-
     public TileEntityReceiver() {
         super( ModTileEntities.RECEIVER );
     }
@@ -253,10 +251,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         else if ( isChunkloadingTransmitter && ((float) this.getTank( 0 ).getFluidAmount() / (float) Config.transmitterCapacity.get() >= CHUNKLOAD_MAX_PERCENTAGE || chunkloadDurationRemaining == 0 || !hasEnoughPowerToChunkload()) )
             unloadTransmitterChunk();
 
-    }
-
-    public String getBiomeRegistryName() {
-        return this.biomeRegistryName;
     }
 
     public CollectorFinder.GetCollectorResult getCollector() {

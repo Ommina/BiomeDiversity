@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,6 +26,7 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import ommina.biomediversity.BiomeDiversity;
@@ -112,7 +114,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
             }
         }
 
-        //player.openGui( Biomediversity.instance, ModGuiHandler.PILLAR, world, pos.getX(), pos.getY(), pos.getZ() );
+        NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
         return true;
 

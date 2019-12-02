@@ -23,6 +23,7 @@ public class Text extends Control {
         this.unformattedText = unformattedText;
         this.justification = justification;
         this.containerWidth = containerWidth;
+        this.hasBorder = false;
 
     }
 

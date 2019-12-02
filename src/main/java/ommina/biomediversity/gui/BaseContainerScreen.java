@@ -63,8 +63,10 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
         final int y = (this.height - this.ySize) / 2;
         this.blit( x, y, 0, 0, this.xSize, this.ySize );
 
-        for ( Control ctl : controls )
+        controls.forEach( ctl -> {
+            ctl.drawBorder( x, y );
             ctl.drawBackgroundLayer( x, y );
+        } );
 
     }
 //endregion Overrides

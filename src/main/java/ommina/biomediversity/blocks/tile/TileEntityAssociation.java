@@ -26,9 +26,10 @@ public abstract class TileEntityAssociation extends TileEntity {
     protected UUID owner;
     protected UUID associatedIdentifier = null;
     protected BlockPos associatedPos = null;
-    //protected int hash = 0;
     protected int source = 0;
     protected boolean firstTick = true;
+    protected String biomeRegistryName = "null:null";
+
     private UUID identifier;
 
     public TileEntityAssociation( TileEntityType<?> tile ) {
@@ -38,7 +39,48 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
-    // Overrides
+    //region Overrides
+    @Override
+    public void read( final CompoundNBT compound ) {
+
+        identifier = compound.getUniqueId( "identifier" );
+
+        if ( compound.hasUniqueId( "owner" ) )
+            owner = compound.getUniqueId( "owner" );
+
+        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
+            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
+            associatedPos = NbtUtils.getBlockPos( "associatedpos", compound );
+        }
+
+        super.read( compound );
+
+    }
+
+    @Override
+    public CompoundNBT write( final CompoundNBT compound ) {
+
+        compound.putUniqueId( "identifier", identifier );
+
+        if ( owner != null )
+            compound.putUniqueId( "owner", owner );
+
+        if ( associatedIdentifier != null )
+            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
+
+        if ( associatedPos != null )
+            NbtUtils.putBlockPos( "associatedpos", compound, associatedPos );
+
+        return super.write( compound );
+
+    }
+
+    // End Overrides
+//endregion Overrides
+
+    public String getBiomeRegistryName() {
+        return this.biomeRegistryName;
+    }
 
     public static void createLink( World world, TileEntityAssociation tile, UUID remoteIdentifier, BlockPos remotePos ) {
 
@@ -130,8 +172,6 @@ public abstract class TileEntityAssociation extends TileEntity {
         world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.getTransmitter( owner, identifierTransmitter ).receiver = identifierReceiver );
 
     }
-
-    // End Overrides
 
     private static TileEntityAssociation createLink( World world, TileEntity remoteTE, TileEntityAssociation tile ) {
 
@@ -260,6 +300,8 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
+    // Create Links
+
     @Nullable
     public UUID getAssociatedIdentifier() {
 
@@ -282,12 +324,14 @@ public abstract class TileEntityAssociation extends TileEntity {
         this.associatedPos = pos;
     }
 
-    // Create Links
-
     public UUID getIdentifier() {
 
         return this.identifier;
     }
+
+    // End Create Links
+
+    // PreLinking
 
     public void setIdentifier( final UUID identifier ) {
 
@@ -299,6 +343,15 @@ public abstract class TileEntityAssociation extends TileEntity {
         return this.owner;
     }
 
+    // End PreLinking
+
+    // Remove Links
+
+    //public boolean hasAssociation() {
+
+    //    return this.associatedIdentifier != null;
+    //}
+
     public void setOwner( final UUID owner ) {
 
         this.owner = owner;
@@ -308,10 +361,6 @@ public abstract class TileEntityAssociation extends TileEntity {
 
         return this.source;
     }
-
-    // End Create Links
-
-    // PreLinking
 
     public String getSourceName() {
 
@@ -325,57 +374,11 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     }
 
-    // End PreLinking
-
-    // Remove Links
-
-    //public boolean hasAssociation() {
-
-    //    return this.associatedIdentifier != null;
-    //}
-
     public boolean hasLink() {
 
         return (this.associatedIdentifier != null && this.associatedPos != null);
 
     }
-
-    //region Overrides
-    @Override
-    public void read( final CompoundNBT compound ) {
-
-        identifier = compound.getUniqueId( "identifier" );
-
-        if ( compound.hasUniqueId( "owner" ) )
-            owner = compound.getUniqueId( "owner" );
-
-        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
-            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
-            associatedPos = NbtUtils.getBlockPos( "associatedpos", compound );
-        }
-
-        super.read( compound );
-
-    }
-
-    @Override
-    public CompoundNBT write( final CompoundNBT compound ) {
-
-        compound.putUniqueId( "identifier", identifier );
-
-        if ( owner != null )
-            compound.putUniqueId( "owner", owner );
-
-        if ( associatedIdentifier != null )
-            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
-
-        if ( associatedPos != null )
-            NbtUtils.putBlockPos( "associatedpos", compound, associatedPos );
-
-        return super.write( compound );
-
-    }
-//endregion Overrides
 
     /**
      * This controls whether the tile entity gets replaced whenever the block state is changed. Normally only want this when block actually is replaced.

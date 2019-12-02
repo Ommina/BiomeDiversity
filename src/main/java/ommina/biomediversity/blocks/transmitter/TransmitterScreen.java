@@ -1,11 +1,9 @@
-package ommina.biomediversity.blocks.receiver;
+package ommina.biomediversity.blocks.transmitter;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
@@ -18,21 +16,20 @@ import ommina.biomediversity.util.Translator;
 
 import java.awt.*;
 
-@OnlyIn( Dist.CLIENT )
-public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
+public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer> {
 
     private static final Point POWER_GAUGE = new Point( 160, 15 );
     private static final Point TANK_INPUT = new Point( 8, 15 );
     private static final Point BIOMENAME_TEXT = new Point( 27, 18 );
     private static final Point TEMPERATURE_GAUGE = new Point( 133, 15 );
 
-    public ReceiverScreen( ReceiverContainer container, PlayerInventory inv, ITextComponent name ) {
+    public TransmitterScreen( TransmitterContainer container, PlayerInventory inv, ITextComponent name ) {
         super( container, inv, name );
 
-        TileEntityReceiver receiver = (TileEntityReceiver) container.getTileEntity();
+        TileEntityTransmitter transmitter = (TileEntityTransmitter) container.getTileEntity();
         GUI = BiomeDiversity.getId( "textures/gui/gui_blank.png" );
 
-        Text guiName = new Text( Translator.translateToLocal( ModBlocks.RECEIVER.getTranslationKey() ), Text.Justification.CENTRE, xSize );
+        Text guiName = new Text( Translator.translateToLocal( ModBlocks.TRANSMITTER.getTranslationKey() ), Text.Justification.CENTRE, xSize );
         guiName.setPostion( TITLE_TEXT );
         controls.add( guiName );
 
@@ -40,24 +37,24 @@ public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
         guiInventory.setPostion( new Point( 8, ySize - 94 ) );
         controls.add( guiInventory );
 
-        Temperature temp = new Temperature( receiver, "getTemperature", -2f, 2f );
+        Temperature temp = new Temperature( transmitter, "getTemperature", -2f, 2f );
         temp.setPostion( TEMPERATURE_GAUGE );
         controls.add( temp );
 
-        Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( receiver.getBiomeRegistryName() ) );
+        Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( transmitter.getBiomeRegistryName() ) );
         if ( biome != null ) {
             Text biomeName = new Text( biome.getDisplayName().getString(), Text.Justification.LEFT, xSize );
             biomeName.setPostion( BIOMENAME_TEXT );
             controls.add( biomeName );
         }
 
-        Tank t = new Tank( receiver.getTank( 0 ) );
+        Tank t = new Tank( transmitter.getTank( 0 ) );
         t.setPostion( TANK_INPUT );
         controls.add( t );
 
-        RfGauge rf = new RfGauge( receiver.clientGetBattery() );
-        rf.setPostion( POWER_GAUGE );
-        controls.add( rf );
+        //RfGauge rf = new RfGauge( transmitter.clientGetBattery() );
+        //rf.setPostion( POWER_GAUGE );
+        //controls.add( rf );
 
     }
 

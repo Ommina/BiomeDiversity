@@ -11,6 +11,7 @@
 
   "text.biomediversity.gui.powerdisabled": "RF is neither stored nor consumed",
   "text.biomediversity.gui.uniquebiomecount": "%d unique biome%s",
+  "text.biomediversity.gui.rfpertick": "%d RF/tick",
 
   "item.biomediversity.colza": "Colza",
   "item.biomediversity.colza_seeds": "Colza Seeds",

@@ -50,7 +50,6 @@ public class Tank extends Control {
         if ( fluidStack.isEmpty() || fluidStack.getFluid() == null || fluidStack.getAmount() <= 0 )
             return;
 
-
         GlStateManager.disableBlend();
         Minecraft.getInstance().getTextureManager().bindTexture( AtlasTexture.LOCATION_BLOCKS_TEXTURE );
 
@@ -63,11 +62,12 @@ public class Tank extends Control {
 
         GlStateManager.color4f( rgba[0], rgba[1], rgba[2], rgba[3] );
 
-        Control.drawSprite( x + position.x, y + position.y + height + 1 - heightTexture, 0, width, heightTexture, fluidStillSprite ); //TODO: Needs to be tiled; it's all squishy in the GUI
+        Control.drawSprite( x + position.x, y + position.y + height - heightTexture, 0, width, heightTexture, fluidStillSprite ); //TODO: Needs to be tiled; it's all squishy in the GUI
 
         GlStateManager.color4f( 1f, 1f, 1f, 1f );
 
     }
+
 
     @Override
     public void drawForegroundLayer() {
@@ -77,6 +77,8 @@ public class Tank extends Control {
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         Control.drawSprite( f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
+
+        // super.prepareBackground( 150, 50, 1500, 50 );
 
     }
 

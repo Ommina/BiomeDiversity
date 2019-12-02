@@ -1,10 +1,16 @@
 package ommina.biomediversity.blocks.transmitter;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,7 +33,7 @@ import ommina.biomediversity.worlddata.TransmitterData;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityTransmitter extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast {
+public class TileEntityTransmitter extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, INamedContainerProvider {
 
     public static final int LINKING_SOURCE_TRANSMITTER = 1;
     private static final int TANK_COUNT = 1;
@@ -60,7 +66,13 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     }
 
-//region Overrides
+    //region Overrides
+    @Nullable
+    @Override
+    public Container createMenu( int i, PlayerInventory playerInventory, PlayerEntity playerEntity ) {
+        return new TransmitterContainer( i, world, pos, playerInventory, playerEntity );
+    }
+
     @Override
     public void doBroadcast() {
 
@@ -86,6 +98,11 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
         return super.getCapability( cap, side );
 
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new StringTextComponent( getType().getRegistryName().getPath() );
     }
 
     @Override

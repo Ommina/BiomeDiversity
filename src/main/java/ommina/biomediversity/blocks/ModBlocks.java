@@ -25,6 +25,7 @@ import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
 import ommina.biomediversity.blocks.receiver.Receiver;
 import ommina.biomediversity.blocks.receiver.ReceiverContainer;
 import ommina.biomediversity.blocks.transmitter.Transmitter;
+import ommina.biomediversity.blocks.transmitter.TransmitterContainer;
 
 
 @ObjectHolder( BiomeDiversity.MODID )
@@ -59,6 +60,7 @@ public class ModBlocks {
     // Containers
     @ObjectHolder( "receiver" ) public static ContainerType<ReceiverContainer> RECEIVER_CONTAINER;
     @ObjectHolder( "plug_energy" ) public static ContainerType<PlugEnergyContainer> PLUG_ENERGY_CONTAINER;
+    @ObjectHolder( "transmitter" ) public static ContainerType<TransmitterContainer> TRANSMITTER_CONTAINER;
 
     // Fluid Blocks  (Only those that we care about)
     @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
@@ -71,6 +73,11 @@ public class ModBlocks {
             BlockPos pos = data.readBlockPos();
             return new ReceiverContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
         } ).setRegistryName( "receiver" ) );
+
+        event.getRegistry().register( IForgeContainerType.create( ( windowId, inv, data ) -> {
+            BlockPos pos = data.readBlockPos();
+            return new TransmitterContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
+        } ).setRegistryName( "transmitter" ) );
 
         event.getRegistry().register( IForgeContainerType.create( ( windowId, inv, data ) -> {
             BlockPos pos = data.readBlockPos();
