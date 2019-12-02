@@ -12,6 +12,7 @@ public class PacketUpdateCollector {
     public BlockPos tilePos;
     public int storedEnergy;
     public int uniqueBiomeCount;
+    public int releasePerTick;
     public float temperature;
     //public int duplicateBiomeCount;
     //public int unlistedBiomeCount;
@@ -30,6 +31,7 @@ public class PacketUpdateCollector {
 
         tilePos = tile.getPos();
         storedEnergy = tile.BATTERY.getEnergyStored();
+        releasePerTick = tile.getRfReleasedPerTick();
         temperature = tile.getTemperature();
         uniqueBiomeCount = tile.getUniqueBiomeCount();
 
@@ -44,6 +46,7 @@ public class PacketUpdateCollector {
 
         packet.tilePos = buf.readBlockPos();
         packet.storedEnergy = buf.readInt();
+        packet.releasePerTick = buf.readInt();
         packet.temperature = buf.readFloat();
         packet.uniqueBiomeCount = buf.readInt();
 
@@ -66,6 +69,7 @@ public class PacketUpdateCollector {
 
         buf.writeBlockPos( tilePos );
         buf.writeInt( storedEnergy );
+        buf.writeInt( releasePerTick );
         buf.writeFloat( temperature );
         buf.writeInt( uniqueBiomeCount );
 

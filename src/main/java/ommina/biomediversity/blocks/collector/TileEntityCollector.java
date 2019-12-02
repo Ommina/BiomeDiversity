@@ -16,6 +16,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
@@ -74,10 +75,6 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY, BATTERY.getMaxEnergyStored() / Constants.RF_RENDER_STEP_COUNT );
         BROADCASTER.forceBroadcast();
 
-    }
-
-    public void forceBroadcast() {
-        BROADCASTER.forceBroadcast();
     }
 
     //region Overrides
@@ -150,32 +147,11 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         delay--;
 
-/*
-
-        if ( BATTERY.getEnergyStored() > 0 ) {
-
-            for ( EnumFacing f : energyFacings ) { // This does mean that certain directions (in the order of the enum) will get priority for energy reception
-                TileEntity te = world.getTileEntity( getPos().offset( f ) );
-                if ( te != null && te.hasCapability( CapabilityEnergy.ENERGY, f.getOpposite() ) ) {
-                    int receive = te.getCapability( CapabilityEnergy.ENERGY, f.getOpposite() ).receiveEnergy( BATTERY.getEnergyStored(), true );
-                    if ( receive > 0 ) {
-                        te.getCapability( CapabilityEnergy.ENERGY, f.getOpposite() ).receiveEnergy( receive, false );
-                        BATTERY.extractEnergy( receive, false );
-                    }
-                    if ( BATTERY.getEnergyStored() <= 0 )
-                        break;
-                }
-            }
-
-        }
-
-*/
-
         buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
 
         doBroadcast();
 
-        if ( delay > 0 )
+        if ( delay > 0 || !isCollectorFormed() )
             return;
 
         delay = Constants.CLUSTER_TICK_DELAY;
@@ -218,12 +194,20 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 //endregion Overrides
 
+    public void forceBroadcast() {
+        BROADCASTER.forceBroadcast();
+    }
+
     public int getUniqueBiomeCount() {
         return uniqueBiomeCount;
     }
 
     public float getTemperature() {
         return temperature;
+    }
+
+    public int getRfReleasedPerTick() {
+        return releasePerTick;
     }
 
     public void registerComponent( IClusterComponent component ) {
@@ -271,6 +255,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
                     TileEntityCollector ter = (TileEntityCollector) tile;
 
                     ter.BATTERY.setEnergyStored( packet.storedEnergy );
+                    ter.releasePerTick = packet.releasePerTick;
                     ter.temperature = packet.temperature;
                     ter.uniqueBiomeCount = packet.uniqueBiomeCount;
 
@@ -314,7 +299,15 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     public boolean isCollectorTurnedOff() {
-        return getWorld().isBlockPowered( getPos() );
+
+        return world.isBlockPowered( pos );
+
+    }
+
+    public boolean isCollectorFormed() {
+
+        return world.getBlockState( pos ).get( ClusterBlock.FORMED );
+
     }
 
 }

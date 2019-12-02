@@ -148,9 +148,12 @@ public class Collector extends ClusterBlock implements IClusterController {
                 for ( int z = -1; z <= 1; z++ ) {
                     BlockPos pos = blockPos.add( x, y, z );
                     if ( world.getBlockState( pos ).getBlock() instanceof ClusterBlock )
-                        world.setBlockState( pos, world.getBlockState( pos ).getBlock().getDefaultState().with( FORMED, formed ) );
-
+                        Block.replaceBlock( world.getBlockState( pos ), world.getBlockState( pos ).getBlock().getDefaultState().with( FORMED, formed ), world, pos, 3 );
                 }
+
+        //if ( world.getTileEntity( blockPos ) != null && !formed )
+        //    world.getTileEntity( blockPos ).remove();
+
     }
 
 }
