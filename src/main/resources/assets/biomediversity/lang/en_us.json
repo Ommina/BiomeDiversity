@@ -59,6 +59,8 @@
   "fluid.biomediversity.rainwater": "Rainwater",
   "fluid.biomediversity.mineralwater": "Mineral Water",
   "fluid.biomediversity.junglewater": "Jungle Water",
-  "fluid.biomediversity.moltenorinocite": "Molten Orinocite"
+  "fluid.biomediversity.moltenorinocite": "Molten Orinocite",
+
+  "jei.biomediversity.transmitter": "Transmitter Fluids"
 
 }

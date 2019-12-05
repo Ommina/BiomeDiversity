@@ -20,6 +20,8 @@ public class Text extends Control {
 
     public Text( String unformattedText, Justification justification, int containerWidth ) {
 
+        super( Sizes.EMPTY );
+
         this.unformattedText = unformattedText;
         this.justification = justification;
         this.containerWidth = containerWidth;

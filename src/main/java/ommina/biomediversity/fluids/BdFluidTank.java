@@ -6,7 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import ommina.biomediversity.blocks.receiver.FluidStrengths;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

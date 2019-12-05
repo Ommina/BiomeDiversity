@@ -6,6 +6,7 @@ import ommina.biomediversity.blocks.collector.TileEntityCollector;
 public class PlugCollectorDetails {
 
     private final int uniqueBiomeCount;
+    private final int releasePerTick;
     private final float temperature;
     private final EnergyStorage energyStorage;
 
@@ -14,6 +15,7 @@ public class PlugCollectorDetails {
         this.temperature = collector.getTemperature();
         this.uniqueBiomeCount = collector.getUniqueBiomeCount();
         this.energyStorage = collector.getEnergyStorage();
+        this.releasePerTick = collector.getRfReleasedPerTick();
 
     }
 
@@ -27,6 +29,10 @@ public class PlugCollectorDetails {
 
     public EnergyStorage getEnergyStorage() {
         return energyStorage;
+    }
+
+    public int getRfReleasedPerTick() {
+        return releasePerTick;
     }
 
 }

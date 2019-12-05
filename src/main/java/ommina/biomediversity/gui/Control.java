@@ -33,14 +33,27 @@ public abstract class Control extends AbstractGui {
     protected static final NumberFormat format = NumberFormat.getInstance( Locale.getDefault() );
     protected static FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
-    protected Point position = new Point( 42, 42 );
+    protected Point position = new Point( 0, 0 );
 
     protected boolean hasBorder = true;
-    protected int height = 0;
-    protected int width = 0;
+    protected int height;
+    protected int width;
 
-    public static void drawSprite( int x, int y, int offset, int width, int height, TextureAtlasSprite sprite ) {
-        innerBlit( x, x + width, y, y + height, offset, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV() );
+    public Control( Size size ) {
+
+        this.height = size.height;
+        this.width = size.width;
+
+    }
+
+    public static class Sizes {
+
+        public static final Size EMPTY = new Size( 0, 0 );
+        public static final Size RF_GUAGE = new Size( 8, 52 );
+        public static final Size SPRITE = new Size( 16, 16 );
+        public static final Size TANK = new Size( 16, 52 );
+        public static final Size TEMPERATURE = new Size( 17, 53 );
+
     }
 
 /*
@@ -63,6 +76,10 @@ public abstract class Control extends AbstractGui {
 
 */
 
+    public static void drawSprite( int x, int y, int offset, int width, int height, TextureAtlasSprite sprite ) {
+        innerBlit( x, x + width, y, y + height, offset, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV() );
+    }
+
     public static void drawSprite( float f, float x, float y, int minU, int minV, int maxU, int maxV ) {
 
         final Tessellator tessellator = Tessellator.getInstance();
@@ -77,27 +94,9 @@ public abstract class Control extends AbstractGui {
 
     }
 
-
     public abstract void drawBackgroundLayer( int x, int y );
 
     public abstract void drawForegroundLayer();
-
-/*
-
-    public void prepareBackground( int x, int y, int width, int height ) {
-
-        int c = Color.GREEN.getRGB();
-
-        horizontalLine( 10, 10, 20, c );
-        verticalLine( 10, 10, 20, c );
-
-        //drawBorder( 30, 30, 20, 20, RenderHelper.getRGBA( c ) );
-
-        hLine( 50, 100, 50, c );
-
-    }
-
-*/
 
     public static void horizontalLine( int x, int y, int length, int colour ) {
 
@@ -116,6 +115,9 @@ public abstract class Control extends AbstractGui {
         if ( !hasBorder )
             return;
 
+        y += position.y;
+        x += position.x;
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
 
@@ -124,13 +126,13 @@ public abstract class Control extends AbstractGui {
         GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
 
         bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
-        fill( bufferbuilder, position.x + x, position.y + y, position.x + x + width, position.y + y + height, BACKGROUND_COLOUR );
-        fill( bufferbuilder, position.x + x + width, position.y + y, position.x + x + width + 1, position.y + y + height, HIGHLIGHT_COLOUR );
-        fill( bufferbuilder, position.x + x, position.y + y + height, position.x + x + width + 1, position.y + y + height + 1, HIGHLIGHT_COLOUR );
-        fill( bufferbuilder, position.x + x - 1, position.y + y - 1, position.x + x, position.y + y + height, LOWLIGHT_COLOUR );
-        fill( bufferbuilder, position.x + x, position.y + y - 1, position.x + x + width, position.y + y, LOWLIGHT_COLOUR );
-        fill( bufferbuilder, position.x + x + width, position.y + y - 1, position.x + x + width + 1, position.y + y, BACKGROUND_COLOUR );
-        fill( bufferbuilder, position.x + x - 1, position.y + y + height, position.x + x, position.y + y + height + 1, BACKGROUND_COLOUR );
+        fill( bufferbuilder, x, y, x + width, y + height, BACKGROUND_COLOUR );
+        fill( bufferbuilder, x + width, y, x + width + 1, y + height, HIGHLIGHT_COLOUR );
+        fill( bufferbuilder, x, y + height, x + width + 1, y + height + 1, HIGHLIGHT_COLOUR );
+        fill( bufferbuilder, x - 1, y - 1, x, y + height, LOWLIGHT_COLOUR );
+        fill( bufferbuilder, x, y - 1, x + width, y, LOWLIGHT_COLOUR );
+        fill( bufferbuilder, x + width, y - 1, x + width + 1, y, BACKGROUND_COLOUR );
+        fill( bufferbuilder, x - 1, y + height, x, y + height + 1, BACKGROUND_COLOUR );
         tessellator.draw();
 
         GlStateManager.enableTexture();
@@ -184,10 +186,6 @@ public abstract class Control extends AbstractGui {
         hasBorder = border;
         return this;
 
-    }
-
-    public Control setSize( Dimension size ) {
-        return setWidth( size.width ).setHeight( size.height );
     }
 
 }

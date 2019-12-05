@@ -22,18 +22,16 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
 
     private static final Point POWER_GAUGE = new Point( 160, 15 );
     private static final Point SPRITE_BIOME = new Point( 8, 15 );
-    private static final Point UNIQUE_BIOMECOUNT_TEXT = new Point( 27, 15 );
+    private static final Point UNIQUE_BIOMECOUNT_TEXT = new Point( 29, 15 );
+    private static final Point RF_PER_TICK_TEXT = new Point( 29, 33 );
     private static final Point RF = new Point( 160, 15 );
-
-    //private static final Point TANK_INPUT = new Point( 8, 15 );
-    //private static final Point BIOMENAME_TEXT = new Point( 27, 18 );
     private static final Point TEMPERATURE_GAUGE = new Point( 133, 15 );
 
     public PlugEnergyScreen( PlugEnergyContainer container, PlayerInventory inv, ITextComponent name ) {
         super( container, inv, name );
 
         TileEntityPlug tile = (TileEntityPlug) container.getTileEntity();
-        GUI = BiomeDiversity.getId( "textures/gui/plug_energy.png" );
+        GUI = BiomeDiversity.getId( "textures/gui/gui_blank.png" );
 
         PlugCollectorDetails collectorDetails = tile.getCollectorDetails();
 
@@ -54,7 +52,7 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
         controls.add( rf );
 
         Sprite biome = new Sprite( BiomeDiversity.getId( "textures/gui/biome.png" ) );
-        biome.setPostion( SPRITE_BIOME );
+        biome.setPostion( SPRITE_BIOME ).setWidth( 16 ).setHeight( 16 );
         controls.add( biome );
 
         int n = collectorDetails.getUniqueBiomeCount();
@@ -65,25 +63,9 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
             controls.add( uniqueBiomeCount );
         }
 
-/*
-
-
-        Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( receiver.getBiomeRegistryName() ) );
-        if ( biome != null ) {
-            Text biomeName = new Text( biome.getDisplayName().getString(), Text.Justification.LEFT, xSize );
-            biomeName.setPostion( BIOMENAME_TEXT );
-            controls.add( biomeName );
-        }
-
-        Tank t = new Tank( receiver.getTank( 0 ) );
-        t.setPostion( TANK_INPUT );
-        controls.add( t );
-
-        RfGauge rf = new RfGauge( receiver.clientGetBattery() );
-        rf.setPostion( POWER_GAUGE );
-        controls.add( rf );
-
-        */
+        Text rfReleasedPerTick = new Text( Translator.translateToLocalFormatted( "text.biomediversity.gui.rfpertick", collectorDetails.getRfReleasedPerTick() ), Text.Justification.LEFT, xSize );
+        rfReleasedPerTick.setPostion( RF_PER_TICK_TEXT );
+        controls.add( rfReleasedPerTick );
 
     }
 

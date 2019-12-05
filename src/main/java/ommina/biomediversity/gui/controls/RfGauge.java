@@ -16,18 +16,15 @@ import java.util.List;
 @OnlyIn( Dist.CLIENT )
 public class RfGauge extends Control {
 
-    private static final int WIDTH = 8;
-    private static final int HEIGHT = 53;
-
-    private static final UV BG = new UV( 41, 0, 41 + WIDTH, HEIGHT );
-    private static final UV BG_UNCHARGEABLE = new UV( 49, 0, 49 + WIDTH, HEIGHT );
-    private static final UV FG = new UV( 33, 0, 33 + WIDTH, HEIGHT );
+    private static final UV BG = new UV( 41, 0, 41 + Sizes.RF_GUAGE.width, Sizes.RF_GUAGE.height );
+    private static final UV BG_UNCHARGEABLE = new UV( 49, 0, 49 + Sizes.RF_GUAGE.width, Sizes.RF_GUAGE.height );
+    private static final UV FG = new UV( 33, 0, 33 + Sizes.RF_GUAGE.width, Sizes.RF_GUAGE.height );
 
     private final EnergyStorage BATTERY;
 
     public RfGauge( @Nullable final EnergyStorage battery ) {
 
-        assignwh();
+        super( Sizes.RF_GUAGE );
 
         this.BATTERY = battery;
 
@@ -35,7 +32,7 @@ public class RfGauge extends Control {
 
     public RfGauge( int energy, int maxEnergy ) {
 
-        assignwh();
+        super( Sizes.RF_GUAGE );
 
         this.BATTERY = new EnergyStorage( maxEnergy, 0, 0 );
         this.BATTERY.receiveEnergy( energy, false );
@@ -60,7 +57,7 @@ public class RfGauge extends Control {
 
         drawSprite( f, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
 
-        int h = MathUtil.clamp( HEIGHT - (int) ((float) BATTERY.getEnergyStored() / (float) BATTERY.getMaxEnergyStored() * HEIGHT), 0, HEIGHT );
+        int h = MathUtil.clamp( height - (int) ((float) BATTERY.getEnergyStored() / (float) BATTERY.getMaxEnergyStored() * height), 0, height );
         drawSprite( f, position.x + x, (float) position.y + y + h, FG.minU, FG.minV + h, FG.sizeU, FG.sizeV - h );
 
     }
@@ -84,12 +81,5 @@ public class RfGauge extends Control {
 
     }
 //endregion Overrides
-
-    private void assignwh() {
-
-        width = WIDTH;
-        height = HEIGHT;
-
-    }
 
 }

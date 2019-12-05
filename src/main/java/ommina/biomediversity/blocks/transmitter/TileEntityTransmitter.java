@@ -36,8 +36,10 @@ import javax.annotation.Nullable;
 public class TileEntityTransmitter extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, INamedContainerProvider {
 
     public static final int LINKING_SOURCE_TRANSMITTER = 1;
+
     private static final int TANK_COUNT = 1;
     private static final int MINIMUM_DELTA = 200;
+
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
 
     private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
@@ -63,6 +65,12 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
         TANK.setCanFill( true );
 
         this.source = LINKING_SOURCE_TRANSMITTER;
+
+    }
+
+    public float getTemperature() {
+
+        return world.getBiome( pos ).getTemperature( pos );
 
     }
 
@@ -117,7 +125,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
         BROADCASTER.reset();
 
-        BiomeDiversity.LOGGER.info( "Transmitter loaded: " + getPos().toString() );
+        //BiomeDiversity.LOGGER.info( "Transmitter loaded: " + getPos().toString() );
 
     }
 

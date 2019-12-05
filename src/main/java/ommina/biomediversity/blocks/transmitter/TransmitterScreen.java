@@ -8,7 +8,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.gui.BaseContainerScreen;
-import ommina.biomediversity.gui.controls.RfGauge;
 import ommina.biomediversity.gui.controls.Tank;
 import ommina.biomediversity.gui.controls.Temperature;
 import ommina.biomediversity.gui.controls.Text;

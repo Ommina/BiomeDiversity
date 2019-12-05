@@ -15,15 +15,12 @@ import java.util.List;
 @OnlyIn( Dist.CLIENT )
 public class Temperature extends DynamicRange {
 
-    private static final int WIDTH = 17;
-    private static final int HEIGHT = 53;
-
     private static final int GAUGE_BAR_VERTICAL_LENGTH = 2;
 
     private static final int startColour;
     private static final int endColour;
 
-    private static final UV FG = new UV( 16, 0, WIDTH, 0 + 5 );
+    private static final UV FG = new UV( 16, 0, Sizes.TEMPERATURE.width, 5 );
 
     static {
 
@@ -33,16 +30,11 @@ public class Temperature extends DynamicRange {
     }
 
     public Temperature( TileEntity te, String methodName, float min, float max ) {
-        super( te, methodName, min, max );
-
-        width = WIDTH;
-        height = HEIGHT;
-
+        super( Sizes.TEMPERATURE, te, methodName, min, max );
     }
 
     public Temperature( float value, float min, float max ) {
-        super( value, min, max);
-
+        super( Sizes.TEMPERATURE, value, min, max );
     }
 
     //region Overrides
@@ -61,7 +53,7 @@ public class Temperature extends DynamicRange {
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         float f = 1f / 256f;
-        final int y = MathUtil.clamp( (height * (1f - (value - min) / range)), GAUGE_BAR_VERTICAL_LENGTH, HEIGHT - GAUGE_BAR_VERTICAL_LENGTH );
+        final int y = MathUtil.clamp( (height * (1f - (value - min) / range)), GAUGE_BAR_VERTICAL_LENGTH, height - GAUGE_BAR_VERTICAL_LENGTH );
 
         Control.drawSprite( f, position.x, position.y + y - GAUGE_BAR_VERTICAL_LENGTH, FG.minU, FG.minV, FG.maxU, FG.maxV );
 

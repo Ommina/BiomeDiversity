@@ -6,12 +6,10 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.receiver.FluidStrengths;
+import ommina.biomediversity.fluids.FluidStrengths;
 
 import java.nio.file.Path;
 import java.util.*;

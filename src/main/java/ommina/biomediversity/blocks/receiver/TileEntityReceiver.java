@@ -29,6 +29,7 @@ import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
+import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;

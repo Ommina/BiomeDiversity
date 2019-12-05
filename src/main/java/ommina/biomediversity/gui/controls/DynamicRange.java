@@ -3,6 +3,7 @@ package ommina.biomediversity.gui.controls;
 import net.minecraft.tileentity.TileEntity;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.gui.Control;
+import ommina.biomediversity.gui.Size;
 import ommina.biomediversity.util.MathUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,7 +18,9 @@ public abstract class DynamicRange extends Control {
     protected float value = 0f;
     protected float range = 0f;
 
-    public DynamicRange( TileEntity te, String methodName, float min, float max ) {
+    public DynamicRange( Size size, TileEntity te, String methodName, float min, float max ) {
+
+        super( size );
 
         tile = te;
 
@@ -33,7 +36,9 @@ public abstract class DynamicRange extends Control {
 
     }
 
-    public DynamicRange( float value, float min, float max ) {
+    public DynamicRange( Size size, float value, float min, float max ) {
+
+        super( size );
 
         setMinMax( min, max );
         this.value = value;

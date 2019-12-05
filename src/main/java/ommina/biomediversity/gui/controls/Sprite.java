@@ -12,16 +12,16 @@ import java.util.List;
 @OnlyIn( Dist.CLIENT )
 public class Sprite extends Control {
 
-    private static final int WIDTH = 16;
-    private static final int HEIGHT = 16;
-
-    private static final UV FG = new UV( 0, 0, WIDTH, HEIGHT );
-
+    private final UV FG;
     private final ResourceLocation sprite;
 
     public Sprite( final ResourceLocation sprite ) {
 
+        super( Sizes.SPRITE );
+
         this.sprite = sprite;
+
+        FG = new UV( 0, 0, width, height );
 
     }
 
@@ -40,7 +40,7 @@ public class Sprite extends Control {
 
         //Control.drawSprite( position.x,  position.y , 0, 16, 16, sprite ); //TODO: Needs to be tiled; it's all squishy in the GUI
 
-        Control.drawSprite( 16f/256f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
+        Control.drawSprite( 16f / 256f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
 
 
         // this.minecraft.getTextureManager().bindTexture( GUI );

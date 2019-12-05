@@ -22,19 +22,16 @@ import java.util.List;
 @OnlyIn( Dist.CLIENT )
 public class Tank extends Control {
 
-    public static final int WIDTH = 16;
-    public static final int HEIGHT = 52;
-
-    public static UV FG = new UV( 0, 0, WIDTH, HEIGHT );
+    public static UV FG;
 
     private final BdFluidTank tank;
 
     public Tank( BdFluidTank tank ) {
+        super( Sizes.TANK );
 
         this.tank = tank;
 
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        FG = new UV( 0, 0, width, height );
 
     }
 
@@ -77,8 +74,6 @@ public class Tank extends Control {
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         Control.drawSprite( f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
-
-        // super.prepareBackground( 150, 50, 1500, 50 );
 
     }
 

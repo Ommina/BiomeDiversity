@@ -1,12 +1,15 @@
-package ommina.biomediversity.blocks.receiver;
+package ommina.biomediversity.fluids;
 
 import net.minecraft.fluid.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FluidStrengths {
 
@@ -65,10 +68,8 @@ public class FluidStrengths {
 
     public static int getStrength( int hashCode ) {
 
-        if ( !fluids.containsKey( hashCode ) ) {
-            //BiomeDiversity.LOGGER.info( "FluidStrength hash not found.  Returning 0" );
+        if ( !fluids.containsKey( hashCode ) )
             return 0;
-        }
 
         return fluids.get( hashCode ).strength;
 
@@ -77,6 +78,18 @@ public class FluidStrengths {
     public static Collection<FluidStrength> getAll() {
 
         return fluids.values();
+
+    }
+
+    public static List<FluidStack> getAllFluids() {
+
+        return fluids.values().stream().map( f -> new FluidStack( f.getFluid(), 1 ) ).collect( Collectors.toList() );
+
+    }
+
+    public static Collection<Recipe> getRecipes() {
+
+        return fluids.values().stream().map( f -> new Recipe( f.fluid, f.strength ) ).collect( Collectors.toList() );
 
     }
 
