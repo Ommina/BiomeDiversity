@@ -21,7 +21,7 @@ import java.awt.*;
 @OnlyIn( Dist.CLIENT )
 public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
 
-    private static final Point POWER_GAUGE = new Point( 160, 15 );
+    private static final Point RF_GAUGE = new Point( 160, 15 );
     private static final Point TANK_INPUT = new Point( 8, 15 );
     private static final Point BIOMENAME_TEXT = new Point( 27, 18 );
     private static final Point TEMPERATURE_GAUGE = new Point( 133, 15 );
@@ -56,7 +56,7 @@ public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
         controls.add( t );
 
         RfGauge rf = new RfGauge( receiver.clientGetBattery() );
-        rf.setPostion( POWER_GAUGE );
+        rf.setPostion( RF_GAUGE );
         controls.add( rf );
 
     }

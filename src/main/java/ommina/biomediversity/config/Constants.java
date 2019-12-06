@@ -21,4 +21,7 @@ public class Constants {
 
     public static final float DEFAULT_TILE_ENTITY_HARDNESS = 3.2f;
 
+    public static final int MIN_FLUID_STRENGTH = 1;
+    public static final int MAX_FLUID_STRENGTH = 8192;
+
 }

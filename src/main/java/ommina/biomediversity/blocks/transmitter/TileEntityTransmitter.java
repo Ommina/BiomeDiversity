@@ -24,6 +24,7 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
+import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankUpdatePacket;
 import ommina.biomediversity.network.ITankBroadcast;
@@ -71,6 +72,15 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     public float getTemperature() {
 
         return world.getBiome( pos ).getTemperature( pos );
+
+    }
+
+    public float getStrength() {
+
+        if (TANK.isEmpty() )
+            return 0;
+
+        return (float) FluidStrengths.getStrength( TANK.getFluid().getFluid() );
 
     }
 

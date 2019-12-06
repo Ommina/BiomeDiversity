@@ -49,6 +49,7 @@ public abstract class Control extends AbstractGui {
     public static class Sizes {
 
         public static final Size EMPTY = new Size( 0, 0 );
+        public static final Size LOW_HIGH = new Size( 8, 53 );
         public static final Size RF_GUAGE = new Size( 8, 52 );
         public static final Size SPRITE = new Size( 16, 16 );
         public static final Size TANK = new Size( 16, 52 );

@@ -22,7 +22,7 @@ import java.util.List;
 @OnlyIn( Dist.CLIENT )
 public class Tank extends Control {
 
-    public static UV FG;
+    public static UV FG = new UV( 0, 0, Sizes.TANK.width, Sizes.TANK.height );
 
     private final BdFluidTank tank;
 
@@ -30,8 +30,6 @@ public class Tank extends Control {
         super( Sizes.TANK );
 
         this.tank = tank;
-
-        FG = new UV( 0, 0, width, height );
 
     }
 

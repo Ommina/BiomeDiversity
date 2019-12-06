@@ -52,15 +52,6 @@ public class JustEnoughItems implements IModPlugin {
 
         registration.addRecipes( FluidStrengths.getRecipes(), TransmitterCategory.ID );
 
-        //registration.addRecipes( Collections.singletonList(  ) );
-
-        //Ingredient.f
-
-        //reg.addRecipes( Collections.singletonList( new TransmitterCategory.Recipe( Ingredient.fromItems( PatchBlockChangerItem.PURIFYING_POWDER.get() ) ) ), TRANSMITTER );
-
-
-        //registration.addRecipes( getRecipesOfType( IRecipeType.CRAFTING ), VanillaRecipeCategoryUid.CRAFTING );
-
         //addInfoPage( registration, PressCraftingCategory.BASE_ITEM.getItem() );
 
     }
@@ -93,9 +84,7 @@ public class JustEnoughItems implements IModPlugin {
     }
 
     private static List<IRecipe> getRecipesOfType( IRecipeType<?> recipeType ) {
-
         return Minecraft.getInstance().world.getRecipeManager().getRecipes().stream().filter( r -> r.getType() == recipeType ).collect( Collectors.toList() );
-
     }
 
     private static String getDescKey( ResourceLocation name ) {
@@ -103,5 +92,3 @@ public class JustEnoughItems implements IModPlugin {
     }
 
 }
-
-

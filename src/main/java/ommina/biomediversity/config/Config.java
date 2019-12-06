@@ -363,7 +363,7 @@ public class Config {
 
                     if ( s2[0].equals( resourceLocation.getNamespace() ) &&
                          s2[1].equalsIgnoreCase( resourceLocation.getPath() ) &&
-                         Integer.parseInt( s2[2] ) > 0 && Integer.parseInt( s2[2] ) < 9999 ) {
+                         Integer.parseInt( s2[2] ) > 0 && Integer.parseInt( s2[2] ) < Constants.MAX_FLUID_STRENGTH ) {
                         FluidStrengths.add( f, Integer.parseInt( s2[2] ) );
                     }
 

@@ -43,14 +43,11 @@ public class RfGauge extends Control {
     @Override
     public void drawBackgroundLayer( int x, int y ) {
 
-        if ( BATTERY == null )
-            return;
-
         final float f = 1f / 256f;
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
-        if ( BATTERY.getMaxEnergyStored() == 0 ) {
+        if ( BATTERY == null || BATTERY.getMaxEnergyStored() == 0 ) {
             drawSprite( f, (float) position.x + x, (float) position.y + y, BG_UNCHARGEABLE.minU, BG_UNCHARGEABLE.minV, BG_UNCHARGEABLE.sizeU, BG_UNCHARGEABLE.sizeV );
             return;
         }
@@ -71,7 +68,7 @@ public class RfGauge extends Control {
     @Override
     public List<String> getTooltip( boolean isShiftKeyDown ) {
 
-        if ( this.BATTERY.getEnergyStored() == 0 )
+        if ( BATTERY == null || BATTERY.getEnergyStored() == 0 )
             if ( isShiftKeyDown )
                 return Collections.singletonList( Translator.translateToLocal( "text.biomediversity.gui.powerdisabled" ) );
             else

@@ -7,20 +7,21 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.gui.BaseContainerScreen;
-import ommina.biomediversity.gui.controls.Tank;
-import ommina.biomediversity.gui.controls.Temperature;
-import ommina.biomediversity.gui.controls.Text;
+import ommina.biomediversity.gui.controls.*;
 import ommina.biomediversity.util.Translator;
 
 import java.awt.*;
 
 public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer> {
 
+    private static final Point LOW_HIGH = new Point( 119, 15 );
     private static final Point POWER_GAUGE = new Point( 160, 15 );
     private static final Point TANK_INPUT = new Point( 8, 15 );
     private static final Point BIOMENAME_TEXT = new Point( 27, 18 );
     private static final Point TEMPERATURE_GAUGE = new Point( 133, 15 );
+    private static final Point RF_GAUGE = new Point( 160, 15 );
 
     public TransmitterScreen( TransmitterContainer container, PlayerInventory inv, ITextComponent name ) {
         super( container, inv, name );
@@ -40,6 +41,10 @@ public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer>
         temp.setPostion( TEMPERATURE_GAUGE );
         controls.add( temp );
 
+        LowHigh lowHigh = new LowHigh( transmitter, "getStrength", LowHigh.ScaleMode.MIXED, 20, Constants.MAX_FLUID_STRENGTH );
+        lowHigh.setPostion( LOW_HIGH );
+        controls.add( lowHigh );
+
         Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( transmitter.getBiomeRegistryName() ) );
         if ( biome != null ) {
             Text biomeName = new Text( biome.getDisplayName().getString(), Text.Justification.LEFT, xSize );
@@ -51,9 +56,9 @@ public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer>
         t.setPostion( TANK_INPUT );
         controls.add( t );
 
-        //RfGauge rf = new RfGauge( transmitter.clientGetBattery() );
-        //rf.setPostion( POWER_GAUGE );
-        //controls.add( rf );
+        RfGauge rf = new RfGauge( null );
+        rf.setPostion( RF_GAUGE );
+        controls.add( rf );
 
     }
 

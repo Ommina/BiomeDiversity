@@ -86,9 +86,7 @@ public class TransmitterCategory implements IRecipeCategory<Recipe> {
 
     @Override
     public void draw( Recipe recipe, double mouseX, double mouseY ) {
-
         TANK_FLUID.drawBackgroundLayer( 0, 0 );
-
     }
 
 //endregion Overrides
