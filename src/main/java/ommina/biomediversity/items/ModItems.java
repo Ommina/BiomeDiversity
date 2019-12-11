@@ -41,20 +41,19 @@ public class ModItems {
     @ObjectHolder( "cluster_block_tank" ) public static final Item CLUSTER_BLOCK_TANK = null;
     @ObjectHolder( "cluster_block_sturdy" ) public static final Item CLUSTER_BLOCK_STURDY = null;
 
-
     // Block Items
     @ObjectHolder( "orinocite_ore" ) public static final Item ORINOCITE_ORE = null;
     @ObjectHolder( "orinocite_block" ) public static final Item ORINOCITE_BLOCK = null;
     @ObjectHolder( "nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = null;
     @ObjectHolder( "nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = null;
 
-
+    // Has Tile Entities
+    @ObjectHolder( "rainbarrel" ) public static final Item RAIN_BARREL = null;
     @ObjectHolder( "transmitter" ) public static final Item TRANSMITTER = null;
     @ObjectHolder( "receiver" ) public static final Item RECEIVER = null;
     @ObjectHolder( "collector" ) public static final Item COLLECTOR = null;
-    @ObjectHolder( "peltier" ) public static final Item PELTIER = null;
-    @ObjectHolder( "rainbarrel" ) public static final Item RAIN_BARREL = null;
     @ObjectHolder( "plug_energy" ) public static final Item PLUG_ENERGY = null;
+    @ObjectHolder( "peltier" ) public static final Item PELTIER = null;
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Item> event ) {

@@ -3,10 +3,12 @@ package ommina.biomediversity.blocks.collector;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -21,11 +23,16 @@ import java.util.Map;
 
 public class Collector extends ClusterBlock implements IClusterController {
 
+    private static final Vec3d TUBE_WIDTH_X = new Vec3d( 4, 0, 0 );
+    private static final Vec3d TUBE_WIDTH_Z = new Vec3d( 0, 0, 4 );
+    private static final Vec3d TUBE_HEIGHT = new Vec3d( 0, 37, 0 );
+
+    private final Rectangles rectangles = new Rectangles();
     private Map<String, ClusterBlock> multiblock;
-
     public Collector() {
-
         super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
+
+        addRectangles();
 
     }
 
@@ -138,8 +145,28 @@ public class Collector extends ClusterBlock implements IClusterController {
 
         return super.isSideInvisible( state, adjacentState, side );
     }
-
 //endregion Overrides
+
+    private void addRectangles() {
+
+        final int y = -13;
+
+        rectangles.add( 5, new Vec3d( 16.5, y, 27.5f ), TUBE_WIDTH_X, TUBE_HEIGHT );
+        rectangles.add( 5, new Vec3d( 16, y, 23.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
+        rectangles.add( 5, new Vec3d( 16.5, y, 23f ), TUBE_WIDTH_X, TUBE_HEIGHT );
+        rectangles.add( 5, new Vec3d( 20.5, y, 23.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
+
+
+        rectangles.add( 8, new Vec3d( 16.5, y, -12f ), TUBE_WIDTH_X, TUBE_HEIGHT );
+        rectangles.add( 8, new Vec3d( 20.5, y, -11.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
+        rectangles.add( 8, new Vec3d( 16.5, y, -7.5f ), TUBE_WIDTH_X, TUBE_HEIGHT );
+        rectangles.add( 8, new Vec3d( 16, y, -11.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
+
+    }
+
+    public int getTankActivated( PlayerEntity player, Vec3d hitVec, Vec3d collector ) {
+        return rectangles.getTank( player, hitVec, collector );
+    }
 
     private void updateClusterBlockStates( World world, BlockPos blockPos, boolean formed ) {
 

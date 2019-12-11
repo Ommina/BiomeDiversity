@@ -50,7 +50,7 @@ public class ModBlocks {
     @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) );
 
     // Tile Entity Blocks
-    @ObjectHolder( "collector" ) public static ClusterBlock COLLECTOR;
+    @ObjectHolder( "collector" ) public static Collector COLLECTOR;
     @ObjectHolder( "peltier" ) public static Peltier PELTIER;
     @ObjectHolder( "rainbarrel" ) public static RainBarrel RAIN_BARREL;
     @ObjectHolder( "receiver" ) public static Receiver RECEIVER;

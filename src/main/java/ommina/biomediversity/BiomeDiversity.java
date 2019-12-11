@@ -1,9 +1,13 @@
 package ommina.biomediversity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -21,6 +25,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.plug.FastTesrPlug;
 import ommina.biomediversity.blocks.plug.TileEntityPlug;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
@@ -108,6 +113,29 @@ public class BiomeDiversity {
             event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
             //event.addSprite( BiomeDiversity.getId( "gui/biome" ) );
             event.addSprite( BiomeDiversity.getId( "gui/log_guage" ) );
+
+        }
+
+    }
+
+    @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.FORGE )
+    public static class ClientForgeEvents {
+
+        @SubscribeEvent
+        public static void onBlockHighlight( final DrawBlockHighlightEvent event ) {
+
+            //event.getInfo().getBlockPos()
+            if ( event.getTarget().getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec() ) ).getBlock() instanceof ClusterBlock ) {
+                //BiomeDiversity.LOGGER.info( "blk: " + Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec().x, event.getTarget().getHitVec().y, event.getTarget().getHitVec().z ) ).getBlock().toString() );
+                //BiomeDiversity.LOGGER.info( "tpos: " + event.getTarget().getHitVec().x + " " + event.getTarget().getHitVec().y + " " + event.getTarget().getHitVec().z );
+                //BiomeDiversity.LOGGER.info( "tpos: " + event.getTarget().getHitVec().toString() );
+                event.setCanceled( true );
+            } else {
+                //BiomeDiversity.LOGGER.info( "blk: " + Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec().x, event.getTarget().getHitVec().y, event.getTarget().getHitVec().z ) ).getBlock().toString() );
+                //BiomeDiversity.LOGGER.info( "fpos: " + event.getTarget().getHitVec().x + " " + event.getTarget().getHitVec().y + " " + event.getTarget().getHitVec().z );
+                //BiomeDiversity.LOGGER.info( "fpos: " + event.getTarget().getHitVec().toString() );
+
+            }
 
         }
 

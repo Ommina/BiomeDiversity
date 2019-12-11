@@ -36,7 +36,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     private final BdFluidTank TANK = new BdFluidTank( Config.rainbarrelCapacity.get() );
 
-    private LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
+    private final LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
     private int delay = DELAY_NO_RAIN;
 
     public TileEntityRainBarrel() {
@@ -47,14 +47,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
     }
 
-    @Override
-    public void onLoad() {
-
-        doBroadcast();
-        super.onLoad();
-
-    }
-
+//region Overrides
     @Override
     public void doBroadcast() {
 
@@ -68,6 +61,25 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     @Override
     public BdFluidTank getTank( int index ) {
         return TANK;
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
+
+        if ( cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY )
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.orEmpty( cap, handler );
+
+        return super.getCapability( cap, side );
+
+    }
+
+    @Override
+    public void onLoad() {
+
+        doBroadcast();
+        super.onLoad();
+
     }
 
     @Override
@@ -91,26 +103,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
         tag = TANK.write( tag );
         return super.write( tag );
-
-    }
-
-    public FluidStack getFluid() {
-        return TANK.getFluid();
-    }
-
-    private IFluidHandler createHandler() {
-        return TANK;
-    }
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
-
-        if ( cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ) {
-            return handler.cast();
-        }
-
-        return super.getCapability( cap, side );
 
     }
 
@@ -139,6 +131,15 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
         this.markDirty();
 
+    }
+//endregion Overrides
+
+    public FluidStack getFluid() {
+        return TANK.getFluid();
+    }
+
+    private IFluidHandler createHandler() {
+        return TANK;
     }
 
 }

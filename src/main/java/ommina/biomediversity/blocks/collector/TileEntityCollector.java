@@ -185,9 +185,11 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         buffer += lastRfCreated;
         releasePerTick = buffer / Constants.CLUSTER_TICK_DELAY;
 
+        /*
         if ( BiomeDiversity.DEBUG ) {
             BiomeDiversity.LOGGER.warn( "lastRf: " + lastRfCreated + ", biomes: " + uniqueBiomeCount + ", temp: " + temperature + ", buffer: " + buffer + ", release: " + releasePerTick + ", stored: " + BATTERY.getEnergyStored() );
         }
+        */
 
         markDirty();
 

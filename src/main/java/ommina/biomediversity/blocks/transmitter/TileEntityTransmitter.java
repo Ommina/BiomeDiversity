@@ -69,21 +69,6 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     }
 
-    public float getTemperature() {
-
-        return world.getBiome( pos ).getTemperature( pos );
-
-    }
-
-    public float getStrength() {
-
-        if (TANK.isEmpty() )
-            return 0;
-
-        return (float) FluidStrengths.getStrength( TANK.getFluid().getFluid() );
-
-    }
-
     //region Overrides
     @Nullable
     @Override
@@ -184,6 +169,21 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     }
 //endregion Overrides
+
+    public float getTemperature() {
+
+        return world.getBiome( pos ).getTemperature( pos );
+
+    }
+
+    public float getStrength() {
+
+        if ( TANK.isEmpty() )
+            return 0;
+
+        return (float) FluidStrengths.getStrength( TANK.getFluid().getFluid() );
+
+    }
 
     private static void updateFluidDisplay( World world, BlockPos pos ) {
 

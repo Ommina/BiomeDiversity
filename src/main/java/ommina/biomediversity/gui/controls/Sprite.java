@@ -16,7 +16,6 @@ public class Sprite extends Control {
     private final ResourceLocation sprite;
 
     public Sprite( final ResourceLocation sprite ) {
-
         super( Sizes.SPRITE );
 
         this.sprite = sprite;

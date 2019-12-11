@@ -74,7 +74,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     }
 
-
     // Overrides
     @Override
     public BlockRenderLayer getRenderLayer() {
