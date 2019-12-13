@@ -13,6 +13,7 @@ public class ModFluids {
 
     @ObjectHolder( "coolbiometic" ) public static FlowingFluid COOLBIOMETIC;             // Produced by Collector (directly)
     @ObjectHolder( "warmbiometic" ) public static FlowingFluid WARMBIOMETIC;
+    @ObjectHolder( "byproduct" ) public static FlowingFluid BYPRODUCT;
     @ObjectHolder( "neutralbiometic" ) public static FlowingFluid NEUTRALBIOMETIC;       //                       (indirectly by Mixer)
 
     @ObjectHolder( "mineralwater" ) public static FlowingFluid MINERALWATER;             // WorldGen Spheres

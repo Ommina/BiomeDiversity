@@ -9,6 +9,8 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -23,12 +25,11 @@ import java.util.Map;
 
 public class Collector extends ClusterBlock implements IClusterController {
 
-    private static final Vec3d TUBE_WIDTH_X = new Vec3d( 4, 0, 0 );
-    private static final Vec3d TUBE_WIDTH_Z = new Vec3d( 0, 0, 4 );
-    private static final Vec3d TUBE_HEIGHT = new Vec3d( 0, 37, 0 );
+    private static final VoxelShape RENDER_SHAPE = Block.makeCuboidShape( -16f, -16f, -16f, 32f, 32f, 32f );
 
     private final Rectangles rectangles = new Rectangles();
     private Map<String, ClusterBlock> multiblock;
+
     public Collector() {
         super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
 
@@ -117,6 +118,11 @@ public class Collector extends ClusterBlock implements IClusterController {
     }
 
     @Override
+    public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
+        return RENDER_SHAPE;
+    }
+
+    @Override
     public void onPlayerDestroy( IWorld world, BlockPos blockPos, BlockState blockState ) {
         super.onPlayerDestroy( world, blockPos, blockState );
 
@@ -149,18 +155,29 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     private void addRectangles() {
 
+        addRectangle( TileEntityCollector.UNUSED0, -4.5f, -12f );
+        addRectangle( TileEntityCollector.UNUSED1, -11.5f, -5f );
+        addRectangle( TileEntityCollector.UNUSED2, -11.5f, 16f );
+        addRectangle( TileEntityCollector.COOL, -4.5f, 23f );
+        addRectangle( TileEntityCollector.WARM, 16.5f, 23f );
+        addRectangle( TileEntityCollector.UNUSED5, 23.5f, 16f );
+        addRectangle( TileEntityCollector.UNUSED6, 23.5f, -5f );
+        addRectangle( TileEntityCollector.BYPRODUCT, 16.5f, -12 );
+
+    }
+
+    private void addRectangle( int tank, float x, float z ) {
+
+        final Vec3d width_x = new Vec3d( 4, 0, 0 );
+        final Vec3d width_z = new Vec3d( 0, 0, 4 );
+        final Vec3d height = new Vec3d( 0, 37, 0 );
+
         final int y = -13;
 
-        rectangles.add( 5, new Vec3d( 16.5, y, 27.5f ), TUBE_WIDTH_X, TUBE_HEIGHT );
-        rectangles.add( 5, new Vec3d( 16, y, 23.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
-        rectangles.add( 5, new Vec3d( 16.5, y, 23f ), TUBE_WIDTH_X, TUBE_HEIGHT );
-        rectangles.add( 5, new Vec3d( 20.5, y, 23.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
-
-
-        rectangles.add( 8, new Vec3d( 16.5, y, -12f ), TUBE_WIDTH_X, TUBE_HEIGHT );
-        rectangles.add( 8, new Vec3d( 20.5, y, -11.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
-        rectangles.add( 8, new Vec3d( 16.5, y, -7.5f ), TUBE_WIDTH_X, TUBE_HEIGHT );
-        rectangles.add( 8, new Vec3d( 16, y, -11.5f ), TUBE_WIDTH_Z, TUBE_HEIGHT );
+        rectangles.add( tank, new Vec3d( x, y, z ), width_x, height );
+        rectangles.add( tank, new Vec3d( x + 4f, y, z + 0.5 ), width_z, height );
+        rectangles.add( tank, new Vec3d( x, y, z + 4.5 ), width_x, height );
+        rectangles.add( tank, new Vec3d( x - 0.5, y, z + 0.5 ), width_z, height );
 
     }
 

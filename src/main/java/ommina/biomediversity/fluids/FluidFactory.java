@@ -18,6 +18,7 @@ public class FluidFactory {
 
         wrapper.add( new FluidWrapper( "coolbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 5 ).setColour( new Color( 43, 168, 226, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "warmbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 15 ).setColour( new Color( 249, 79, 105, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
+        wrapper.add( new FluidWrapper( "byproduct", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 3 ).setColour( new Color( 236,14,231,192 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "neutralbiometic", "fluid_blank" ).setViscosity( 1000 ).setLuminosity( 7 ).setColour( new Color( 255, 244, 182, 255 ) ).setRarity( Rarity.EPIC ).build() );
 
         wrapper.add( new FluidWrapper( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 68, 126, 129, 224 ) ).setRarity( Rarity.RARE ).build() );
@@ -27,7 +28,6 @@ public class FluidFactory {
     }
 
 /*
-
 
         natural = (BdFluid) register( "natural", "viscous_blank" ).setViscosity( 30000 ).setLuminosity( 2 ).setColor( new Color( 142, 110, 41, 249 ) ).setRarity( EnumRarity.COMMON );
         diluteNatural = (BdFluid) register( "dilutenatural", "fluid_blank" ).setViscosity( 10000 ).setLuminosity( 2 ).setColor( new Color( 180, 142, 25, 128 ) ).setRarity( EnumRarity.UNCOMMON );
@@ -52,24 +52,6 @@ public class FluidFactory {
         diluteScintillatingMix = mix( scintillatingDeliquescent, diluteNatural, "fluid_blank" );
 
  */
-
-/*
-
-    }
-
-public static Collection<Fluid> getFluids(){
-     return fluids.values();
-     }
-
-public static Collection<Item> getItems(){
-     return items.values();
-     }
-
-public static Collection<Block> getBlocks(){
-     return blocks.values();
-     }
-
-*/
 
     public static final class FluidItem {
 

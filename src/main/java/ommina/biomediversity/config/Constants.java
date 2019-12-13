@@ -11,7 +11,8 @@ public class Constants {
     public static final float FLUID_ADJUSTMENT = 0;    //       although as a negative, instead of a positive
 
     public static final float COLLECTOR_EQUILIBRIUM_THRESHOLD = 0.25f;
-    public static final float COLLECTOR_POWER_TO_FLUID_MULTIPLIER = 0.0001f;  // 1mb of Collector Fluid produced per rf/cycle * this value.  Maybe move it to Config also.
+    public static final float COLLECTOR_ENERGY_TO_FLUID_MULTIPLIER = 0.0001f;       // 1mb of Collector Fluid (warm/cool) produced per rf/cycle * this value.  Affected by temperature balance.  Maybe move it to Config also.
+    public static final float COLLECTOR_ENERGY_TO_BYPRODUCT_MULTIPLIER = 0.000083f; // 1mb of Collector Fluid (byproduct) produced per rf/cycle * this value.
     public static final int COLLECTOR_MINIMUM_ENERGY_TO_PRODUCE_FLUID = 500;
     public static final int COLLECTOR_EQUILIBRIUM_BONUS_BUCKET = 3;
     public static final int COLLECTOR_OUTER_TANK_CAPACITY = 64000;

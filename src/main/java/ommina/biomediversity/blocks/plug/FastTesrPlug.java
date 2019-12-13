@@ -52,10 +52,10 @@ public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFa
 
     }
 
-    @Override
-    public void setRendererDispatcher( TileEntityRendererDispatcher p_147497_1_ ) {
-        super.setRendererDispatcher( p_147497_1_ );
-    }
+    //@Override
+    //public void setRendererDispatcher( TileEntityRendererDispatcher p_147497_1_ ) {
+    //    super.setRendererDispatcher( p_147497_1_ );
+    //}
 //endregion Overrides
 
     private static void renderLight( BufferBuilder buffer, double x, double y, double z, float offset, float size, float side, ResourceLocation spriteResource, float[] color ) {

@@ -29,7 +29,7 @@ public class ClusterBlock extends GlassBlock {
 
     public static final BooleanProperty FORMED = BooleanProperty.create( "formed" );
 
-    public static final VoxelShape SHAPE = Block.makeCuboidShape( 0.03125D, 0.03125D, 0.03125D, 16.0D - 0.03125D, 16.0D - 0.03125D, 16.0D - 0.03125D );
+    public static final VoxelShape SHAPE = Block.makeCuboidShape( 0.03125D, 0d, 0.03125D, 16.0D - 0.03125D, 16d, 16.0D - 0.03125D );
 
     public ClusterBlock( Properties properties ) {
         super( properties );
@@ -46,20 +46,6 @@ public class ClusterBlock extends GlassBlock {
 
         return SHAPE;
     }
-
-/*
-
-    @Override
-    public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
-        return SHAPE;
-    }
-
-    @Override
-    public VoxelShape getRenderShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {
-        return SHAPE;
-    }
-
-*/
 
     @Override
     public VoxelShape getRaytraceShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {
@@ -82,10 +68,7 @@ public class ClusterBlock extends GlassBlock {
         if ( player.isSneaking() )
             return super.onBlockActivated( state, world, pos, player, hand, hit );
 
-        if ( world.isRemote )
-            return true;
-
-        if ( player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
+        if ( !world.isRemote && player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
 
             BlockPos cpos = checkForController( world, pos );
 
@@ -104,24 +87,6 @@ public class ClusterBlock extends GlassBlock {
         return true;
 
     }
-/*
-
-    @Override
-    public void harvestBlock( World world, PlayerEntity playerEntity, BlockPos blockPos, BlockState blockState, @Nullable TileEntity tileEntity, ItemStack itemStack ) {
-
-        if ( !world.isRemote ) {
-
-            checkForController( world, blockPos );
-
-            BiomeDiversity.LOGGER.warn( "HB" );
-
-        }
-
-        super.harvestBlock( world, playerEntity, blockPos, blockState, tileEntity, itemStack );
-
-    }
-
-*/
 
     @Override
     public BlockState getStateForPlacement( BlockItemUseContext context ) {

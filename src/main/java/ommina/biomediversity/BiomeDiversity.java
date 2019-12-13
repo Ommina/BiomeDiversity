@@ -26,6 +26,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
+import ommina.biomediversity.blocks.collector.FastTesrCollector;
+import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.FastTesrPlug;
 import ommina.biomediversity.blocks.plug.TileEntityPlug;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
@@ -98,6 +100,7 @@ public class BiomeDiversity {
         @SubscribeEvent
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityCollector.class, new FastTesrCollector<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
@@ -124,18 +127,8 @@ public class BiomeDiversity {
         @SubscribeEvent
         public static void onBlockHighlight( final DrawBlockHighlightEvent event ) {
 
-            //event.getInfo().getBlockPos()
-            if ( event.getTarget().getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec() ) ).getBlock() instanceof ClusterBlock ) {
-                //BiomeDiversity.LOGGER.info( "blk: " + Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec().x, event.getTarget().getHitVec().y, event.getTarget().getHitVec().z ) ).getBlock().toString() );
-                //BiomeDiversity.LOGGER.info( "tpos: " + event.getTarget().getHitVec().x + " " + event.getTarget().getHitVec().y + " " + event.getTarget().getHitVec().z );
-                //BiomeDiversity.LOGGER.info( "tpos: " + event.getTarget().getHitVec().toString() );
+            if ( event.getTarget().getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec() ) ).getBlock() instanceof ClusterBlock )
                 event.setCanceled( true );
-            } else {
-                //BiomeDiversity.LOGGER.info( "blk: " + Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec().x, event.getTarget().getHitVec().y, event.getTarget().getHitVec().z ) ).getBlock().toString() );
-                //BiomeDiversity.LOGGER.info( "fpos: " + event.getTarget().getHitVec().x + " " + event.getTarget().getHitVec().y + " " + event.getTarget().getHitVec().z );
-                //BiomeDiversity.LOGGER.info( "fpos: " + event.getTarget().getHitVec().toString() );
-
-            }
 
         }
 

@@ -15,12 +15,13 @@ public class Rectangles {
 
     private final List<Rectangle> recs = new ArrayList<>( 32 );
 
-    public class Rectangle implements Comparable<Rectangle> {
+    public class Rectangle {
 
         private final int tank;
         private final Vec3d S1;
         private final Vec3d S2;
         private final Vec3d S3;
+
         public Rectangle( final int tank, final Vec3d S1, final Vec3d S2, final Vec3d S3 ) {
 
             this.tank = tank;
@@ -30,21 +31,19 @@ public class Rectangles {
 
         }
 
-//region Overrides
-        @Override
-        public int compareTo( Rectangle rectangle ) {
-            return 0;
-        }
-//endregion Overrides
-
         /**
          * Euclidean distance between this and the specified vector, returned as double.
          */
-        public double distanceTo( Vec3d vec ) {
-            double d0 = vec.x - this.S1.x;
-            double d1 = vec.y - this.S1.y;
-            double d2 = vec.z - this.S1.z;
+        public double distanceTo( Vec3d vec, Vec3d collector ) {
+
+            Vec3d S4 = S1.add( collector );
+
+            double d0 = vec.x - S4.x;
+            double d1 = vec.y - S4.y;
+            double d2 = vec.z - S4.z;
+
             return (double) MathHelper.sqrt( d0 * d0 + d1 * d1 + d2 * d2 );
+
         }
 
     }
@@ -63,19 +62,26 @@ public class Rectangles {
 
         List<Rectangle> list = recs.stream().filter( r -> MathUtil.intersectsRayWithSquare( playerVec, hitVector, r.S1.add( collector ), r.S2.add( collector ), r.S3.add( collector ) ) ).collect( Collectors.toList() );
 
-        if ( list.size() == 1 )
-            return list.get( 0 ).tank;
-
         int tank = -1;
         double distance = Double.MAX_VALUE;
 
-        for ( Rectangle rectangle : list )
-            if ( rectangle.distanceTo( playerVec ) < distance ) {
+        for ( Rectangle rectangle : list ) {
+
+            double distanceTo = rectangle.distanceTo( playerVec, collector );
+
+            if ( distanceTo < distance ) {
                 tank = rectangle.tank;
-                distance = rectangle.distanceTo( playerVec );
+                distance = distanceTo;
             }
 
-        return tank;
+        }
+
+        if ( distance <= 2.18f )
+            return tank;
+
+        //BiomeDiversity.LOGGER.info( " distance too far " + distance );
+
+        return -1;
 
     }
 

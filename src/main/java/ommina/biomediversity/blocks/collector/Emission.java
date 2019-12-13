@@ -2,7 +2,6 @@ package ommina.biomediversity.blocks.collector;
 
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
-import ommina.biomediversity.util.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +17,15 @@ class Emission {
     public Emission() {
 
     }
+
+    //region Overrides
+    @Override
+    public String toString() {
+
+        return String.format( "hits: %d, temperatureTotal: %f ", hits, getTemperatureTotal() );
+
+    }
+//endregion Overrides
 
     public void add( int power, float temperature, int fluidHash ) {
 
@@ -41,18 +49,27 @@ class Emission {
 
     }
 
-    public Pair getFluidCreated() {
+    public FluidProduct getFluidCreated() {
 
         int power = getEnergy();
 
         if ( power < Constants.COLLECTOR_MINIMUM_ENERGY_TO_PRODUCE_FLUID )
-            return Pair.EMPTY;
+            return FluidProduct.EMPTY;
 
-        float base = power * Constants.COLLECTOR_POWER_TO_FLUID_MULTIPLIER;
+        float base = power * Constants.COLLECTOR_ENERGY_TO_FLUID_MULTIPLIER;
         float equib = isOutOfEquilibrium() ? 0f : 1 - getTemperatureTotal() / Constants.COLLECTOR_EQUILIBRIUM_THRESHOLD;
 
-        return new Pair( (int) (warmTotal / getAbsoluteTemperatureTotal() * base + (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))), (int) (-coolTotal / getAbsoluteTemperatureTotal() * base +
-             (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))) );
+        FluidProduct product = new FluidProduct();
+
+        product
+             .setWarm( (int) (warmTotal / getAbsoluteTemperatureTotal() * base + (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))) )
+             .setCool( (int) (-coolTotal / getAbsoluteTemperatureTotal() * base + (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))) )
+             .setByproduct( (int) (power * Constants.COLLECTOR_ENERGY_TO_BYPRODUCT_MULTIPLIER) );
+
+        return product;
+
+        //return new Pair( (int) (warmTotal / getAbsoluteTemperatureTotal() * base + (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))), (int) (-coolTotal / getAbsoluteTemperatureTotal() * base +
+        //     (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))) );
 
     }
 
@@ -94,14 +111,5 @@ class Emission {
 
         return 0 - coolTotal + warmTotal;
     }
-
-    //region Overrides
-    @Override
-    public String toString() {
-
-        return String.format( "hits: %d, temperatureTotal: %f ", hits, getTemperatureTotal() );
-
-    }
-//endregion Overrides
 
 }

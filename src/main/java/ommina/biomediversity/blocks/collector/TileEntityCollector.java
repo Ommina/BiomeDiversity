@@ -3,6 +3,7 @@ package ommina.biomediversity.blocks.collector;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -13,7 +14,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
@@ -26,7 +26,6 @@ import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
-import ommina.biomediversity.util.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,8 +36,18 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     public static final int PLUG_CONNECTION_RF = 1;
 
-    public static final int WARM = 0;
-    public static final int COOL = 1;
+    public static final int UNUSED0 = 0;      // No, I'm not going to make this an Enum.  Deal with it.  Probably.
+    public static final int UNUSED1 = 1;
+    public static final int UNUSED2 = 2;
+    public static final int COOL = 3;
+    public static final int WARM = 4;
+    public static final int UNUSED5 = 5;
+    public static final int UNUSED6 = 6;
+    public static final int BYPRODUCT = 7;
+    public static final int UNUSED8 = 8;
+    public static final int UNUSED9 = 9;
+    public static final int UNUSED10 = 10;
+    public static final int UNUSED11 = 11;
 
     static final int TANK_COUNT = 12;
     private static final int MINIMUM_DELTA = 300;
@@ -119,6 +128,11 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     @Override
+    public boolean hasFastRenderer() {
+        return true;
+    }
+
+    @Override
     public void read( CompoundNBT nbt ) {
 
         BATTERY.setEnergyStored( nbt.getInt( "energystored" ) );
@@ -170,13 +184,16 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         if ( buffer <= Constants.CLUSTER_TICK_DELAY + 1 ) { // All the energy was stored -- create the fluids.
 
-            Pair fluids = miss.getFluidCreated();
+            FluidProduct products = miss.getFluidCreated();
 
-            if ( fluids.a > 0 )
-                TANK.get( WARM ).fill( new FluidStack( ModFluids.WARMBIOMETIC, fluids.a ), IFluidHandler.FluidAction.EXECUTE );
+            if ( products.getWarm() > 0 )
+                TANK.get( WARM ).fill( new FluidStack( ModFluids.WARMBIOMETIC, products.getWarm() ), IFluidHandler.FluidAction.EXECUTE );
 
-            if ( fluids.b > 0 )
-                TANK.get( COOL ).fill( new FluidStack( ModFluids.COOLBIOMETIC, fluids.b ), IFluidHandler.FluidAction.EXECUTE );
+            if ( products.getCool() > 0 )
+                TANK.get( COOL ).fill( new FluidStack( ModFluids.COOLBIOMETIC, products.getCool() ), IFluidHandler.FluidAction.EXECUTE );
+
+            if ( products.getByproduct() > 0 )
+                TANK.get( BYPRODUCT ).fill( new FluidStack( ModFluids.JUNGLEWATER, products.getByproduct() ), IFluidHandler.FluidAction.EXECUTE );
 
         } else {
             //System.out.println( "buffer: " + buffer + ", lastRfCreatred: " + lastRfCreated );
