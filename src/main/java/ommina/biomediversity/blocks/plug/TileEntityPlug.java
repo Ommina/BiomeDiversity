@@ -67,8 +67,11 @@ public class TileEntityPlug extends TileEntity implements IClusterComponent, ITi
     @Override
     public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> capability, @Nullable Direction side ) {
 
-        if ( capability == CapabilityEnergy.ENERGY && (side == null || side == Direction.DOWN) )
-            return FINDER.getCollector( world ).getCollector().getEnergyHandler().cast();
+        if ( capability == CapabilityEnergy.ENERGY && (side == null || side == Direction.DOWN) ) {
+            TileEntityCollector te = FINDER.getCollector( world ).getCollector();
+            if ( te != null )
+                return te.getEnergyHandler().cast();
+        }
 
         return super.getCapability( capability, side );
 

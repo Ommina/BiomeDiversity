@@ -2,11 +2,21 @@ package ommina.biomediversity.blocks.collector;
 
 public class FluidProduct {
 
-    public static final FluidProduct EMPTY = new FluidProduct();
+    public static final FluidProduct EMPTY = new FluidProduct(true);
+
+    private final boolean isEmpty;
 
     private int warm;
     private int cool;
     private int byproduct;
+
+    public FluidProduct() {
+        this( false );
+    }
+
+    public FluidProduct( boolean isEmpty ) {
+        this.isEmpty = isEmpty;
+    }
 
     public int getWarm() {
         return warm;
@@ -39,6 +49,10 @@ public class FluidProduct {
         this.byproduct = byproduct;
         return this;
 
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
     }
 
 }

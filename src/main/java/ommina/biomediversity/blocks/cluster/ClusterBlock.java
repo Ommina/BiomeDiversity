@@ -65,7 +65,7 @@ public class ClusterBlock extends GlassBlock {
     @Override
     public boolean onBlockActivated( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) {
 
-        if ( player.isSneaking() )
+        if ( player.isSneaking() || !state.get( FORMED ) )
             return super.onBlockActivated( state, world, pos, player, hand, hit );
 
         if ( !world.isRemote && player.getHeldItem( hand ).getItem() == Items.BUCKET ) {

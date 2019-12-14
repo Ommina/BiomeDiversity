@@ -3,7 +3,6 @@ package ommina.biomediversity.blocks.collector;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
@@ -36,6 +35,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     public static final int PLUG_CONNECTION_RF = 1;
 
+    /*
+
     public static final int UNUSED0 = 0;      // No, I'm not going to make this an Enum.  Deal with it.  Probably.
     public static final int UNUSED1 = 1;
     public static final int UNUSED2 = 2;
@@ -48,6 +49,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     public static final int UNUSED9 = 9;
     public static final int UNUSED10 = 10;
     public static final int UNUSED11 = 11;
+
+    */
 
     static final int TANK_COUNT = 12;
     private static final int MINIMUM_DELTA = 300;
@@ -186,14 +189,18 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
             FluidProduct products = miss.getFluidCreated();
 
-            if ( products.getWarm() > 0 )
-                TANK.get( WARM ).fill( new FluidStack( ModFluids.WARMBIOMETIC, products.getWarm() ), IFluidHandler.FluidAction.EXECUTE );
+            if ( !products.isEmpty() ) {
 
-            if ( products.getCool() > 0 )
-                TANK.get( COOL ).fill( new FluidStack( ModFluids.COOLBIOMETIC, products.getCool() ), IFluidHandler.FluidAction.EXECUTE );
+                if ( products.getWarm() > 0 )
+                    TANK.get( Tubes.Warm.tank ).add( new FluidStack( ModFluids.WARMBIOMETIC, products.getWarm() ), IFluidHandler.FluidAction.EXECUTE );
 
-            if ( products.getByproduct() > 0 )
-                TANK.get( BYPRODUCT ).fill( new FluidStack( ModFluids.JUNGLEWATER, products.getByproduct() ), IFluidHandler.FluidAction.EXECUTE );
+                if ( products.getCool() > 0 )
+                    TANK.get( Tubes.Cool.tank ).add( new FluidStack( ModFluids.COOLBIOMETIC, products.getCool() ), IFluidHandler.FluidAction.EXECUTE );
+
+                if ( products.getByproduct() > 0 )
+                    TANK.get( Tubes.Byproduct.tank ).add( new FluidStack( ModFluids.BYPRODUCT, products.getByproduct() ), IFluidHandler.FluidAction.EXECUTE );
+
+            }
 
         } else {
             //System.out.println( "buffer: " + buffer + ", lastRfCreatred: " + lastRfCreated );

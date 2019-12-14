@@ -51,12 +51,12 @@ class Emission {
 
     public FluidProduct getFluidCreated() {
 
-        int power = getEnergy();
+        int energy = getEnergy();
 
-        if ( power < Constants.COLLECTOR_MINIMUM_ENERGY_TO_PRODUCE_FLUID )
+        if ( energy < Constants.COLLECTOR_MINIMUM_ENERGY_TO_PRODUCE_FLUID )
             return FluidProduct.EMPTY;
 
-        float base = power * Constants.COLLECTOR_ENERGY_TO_FLUID_MULTIPLIER;
+        float base = energy * Constants.COLLECTOR_ENERGY_TO_FLUID_MULTIPLIER;
         float equib = isOutOfEquilibrium() ? 0f : 1 - getTemperatureTotal() / Constants.COLLECTOR_EQUILIBRIUM_THRESHOLD;
 
         FluidProduct product = new FluidProduct();
@@ -64,7 +64,7 @@ class Emission {
         product
              .setWarm( (int) (warmTotal / getAbsoluteTemperatureTotal() * base + (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))) )
              .setCool( (int) (-coolTotal / getAbsoluteTemperatureTotal() * base + (base * (Constants.COLLECTOR_EQUILIBRIUM_BONUS_BUCKET * equib))) )
-             .setByproduct( (int) (power * Constants.COLLECTOR_ENERGY_TO_BYPRODUCT_MULTIPLIER) );
+             .setByproduct( (int) (energy * Constants.COLLECTOR_ENERGY_TO_BYPRODUCT_MULTIPLIER) );
 
         return product;
 

@@ -155,15 +155,19 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     private void addRectangles() {
 
-        addRectangle( TileEntityCollector.UNUSED0, -4.5f, -12f );
-        addRectangle( TileEntityCollector.UNUSED1, -11.5f, -5f );
-        addRectangle( TileEntityCollector.UNUSED2, -11.5f, 16f );
-        addRectangle( TileEntityCollector.COOL, -4.5f, 23f );
-        addRectangle( TileEntityCollector.WARM, 16.5f, 23f );
-        addRectangle( TileEntityCollector.UNUSED5, 23.5f, 16f );
-        addRectangle( TileEntityCollector.UNUSED6, 23.5f, -5f );
-        addRectangle( TileEntityCollector.BYPRODUCT, 16.5f, -12 );
+        addRectangle( Tubes.Unused0 );
+        addRectangle( Tubes.Unused1 );
+        addRectangle( Tubes.Unused2 );
+        addRectangle( Tubes.Cool );
+        addRectangle( Tubes.Warm );
+        addRectangle( Tubes.Unused5 );
+        addRectangle( Tubes.Unused6 );
+        addRectangle( Tubes.Byproduct );
 
+    }
+
+    private void addRectangle( final Tubes tube ) {
+        addRectangle( tube.tank, tube.location.x, tube.location.y );
     }
 
     private void addRectangle( int tank, float x, float z ) {

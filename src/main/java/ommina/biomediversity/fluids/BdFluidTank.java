@@ -45,18 +45,21 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     @Override
     public int fill( FluidStack resource, FluidAction action ) {
 
-        if ( this.canFill ) {
-
-            int amount = super.fill( resource, action );
-
-            if ( amount > 0 )
-                onFill( amount );
-
-            return amount;
-
-        }
+        if ( this.canFill )
+            return add( resource, action );
 
         return 0;
+
+    }
+
+    public int add( FluidStack resource, FluidAction action ) {
+
+        int amount = super.fill( resource, action );
+
+        if ( amount > 0 )
+            onFill( amount );
+
+        return amount;
 
     }
 
