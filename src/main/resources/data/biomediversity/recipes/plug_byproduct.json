@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "biomediversity",
+  "pattern": [
+    "pap",
+    "ptp",
+    "bbb"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:glass_pane"
+    },
+    "p": {
+      "item": "biomediversity:orinocite_plate_thin"
+    },
+    "b": {
+      "item": "biomediversity:byproduct_bucket"
+    },
+    "t": {
+      "item": "biomediversity:machine_tank"
+    }
+  },
+  "result": {
+    "item": "minecraft:stick",
+    "count": 5
+  }
+}

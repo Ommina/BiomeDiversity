@@ -7,7 +7,7 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.collector.PacketUpdateCollector;
 import ommina.biomediversity.blocks.plug.PacketUpdatePlug;
-import ommina.biomediversity.blocks.plug.TileEntityPlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.blocks.receiver.PacketUpdateReceiver;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 
@@ -53,7 +53,7 @@ public class Network {
         channel.messageBuilder( PacketUpdatePlug.class, channelId++ )
              .decoder( PacketUpdatePlug::fromBytes )
              .encoder( PacketUpdatePlug::toBytes )
-             .consumer( TileEntityPlug::handle )
+             .consumer( TileEntityPlugBase::handle )
              .add();
 
     }

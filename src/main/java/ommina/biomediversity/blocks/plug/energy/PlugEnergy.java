@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.PlugBase;
-import ommina.biomediversity.blocks.plug.TileEntityPlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 
 public class PlugEnergy extends PlugBase {
 
@@ -25,7 +25,7 @@ public class PlugEnergy extends PlugBase {
     //region Overrides
     @Override
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityPlug();
+        return new TileEntityPlugEnergy();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PlugEnergy extends PlugBase {
         if ( world.isRemote )
             return true;
 
-        TileEntityPlug tile = (TileEntityPlug) world.getTileEntity( pos );
+        TileEntityPlugBase tile = (TileEntityPlugBase) world.getTileEntity( pos );
 
         if ( tile == null )
             return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
@@ -62,7 +62,7 @@ public class PlugEnergy extends PlugBase {
     }
 //endregion Overrides
 
-    private void debuggingCarrot( TileEntityPlug tileEntityPlug ) {
+    private void debuggingCarrot( TileEntityPlugBase tileEntityPlugBase ) {
 
         //nop
 

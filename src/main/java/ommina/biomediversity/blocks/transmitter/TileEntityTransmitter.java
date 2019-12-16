@@ -43,7 +43,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
 
-    private final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() ) {
+    private final BdFluidTank TANK = new BdFluidTank(0, Config.transmitterCapacity.get() ) {
 
         //region Overrides
         @Override

@@ -33,21 +33,21 @@ import ommina.biomediversity.blocks.transmitter.TransmitterContainer;
 public class ModBlocks {
 
     // Generic Blocks
-    @ObjectHolder( "orinocite_ore" ) public static final Block ORINOCITE_ORE = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
-    @ObjectHolder( "orinocite_block" ) public static final Block ORINOCITE_BLOCK = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) );
-    @ObjectHolder( "nocified_stone_undamaged" ) public static final Block STONE_NOCIFIED_UNDAMAGED = new BlockNocifiedUndamaged( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
-    @ObjectHolder( "nocified_stone_fractured" ) public static final Block STONE_NOCIFIED_FRACTURED = new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) );
+    @ObjectHolder( "orinocite_ore" ) public static Block ORINOCITE_ORE;
+    @ObjectHolder( "orinocite_block" ) public static Block ORINOCITE_BLOCK;
+    @ObjectHolder( "nocified_stone_undamaged" ) public static Block STONE_NOCIFIED_UNDAMAGED;
+    @ObjectHolder( "nocified_stone_fractured" ) public static Block STONE_NOCIFIED_FRACTURED;
 
     // Cluster Blocks
-    @ObjectHolder( "cluster_block_generic" ) public static final ClusterBlock CLUSTER_BLOCK_GENERIC = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
-    @ObjectHolder( "cluster_block_tank" ) public static final ClusterBlock CLUSTER_BLOCK_TANK = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) );
-    @ObjectHolder( "cluster_block_sturdy" ) public static final ClusterBlock CLUSTER_BLOCK_STURDY = new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.2f ) );
+    @ObjectHolder( "cluster_block_generic" ) public static ClusterBlock CLUSTER_BLOCK_GENERIC;
+    @ObjectHolder( "cluster_block_tank" ) public static ClusterBlock CLUSTER_BLOCK_TANK;
+    @ObjectHolder( "cluster_block_sturdy" ) public static ClusterBlock CLUSTER_BLOCK_STURDY;
 
     // Crops
-    @ObjectHolder( "colza" ) public static final Block COLZA = new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) );
-    @ObjectHolder( "pomegranate" ) public static final Block POMEGRANATE = new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) );
-    @ObjectHolder( "world_colza" ) public static final Block WORLD_COLZA = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) );
-    @ObjectHolder( "world_pomegranate" ) public static final Block WORLD_POMEGRANATE = new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) );
+    @ObjectHolder( "colza" ) public static Block COLZA;
+    @ObjectHolder( "pomegranate" ) public static Block POMEGRANATE;
+    @ObjectHolder( "world_colza" ) public static Block WORLD_COLZA;
+    @ObjectHolder( "world_pomegranate" ) public static Block WORLD_POMEGRANATE;
 
     // Tile Entity Blocks
     @ObjectHolder( "collector" ) public static Collector COLLECTOR;
@@ -89,19 +89,19 @@ public class ModBlocks {
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Block> event ) {
 
-        register( event, "orinocite_ore", ORINOCITE_ORE );
-        register( event, "orinocite_block", ORINOCITE_BLOCK );
-        register( event, "nocified_stone_fractured", STONE_NOCIFIED_FRACTURED );
-        register( event, "nocified_stone_undamaged", STONE_NOCIFIED_UNDAMAGED );
+        register( event, "orinocite_ore", new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) ) );
+        register( event, "orinocite_block", new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.0f ) ) );
+        register( event, "nocified_stone_undamaged", new BlockNocifiedUndamaged( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) ) );
+        register( event, "nocified_stone_fractured", new Block( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 15f ) ) );
 
-        register( event, "cluster_block_generic", CLUSTER_BLOCK_GENERIC );
-        register( event, "cluster_block_tank", CLUSTER_BLOCK_TANK );
-        register( event, "cluster_block_sturdy", CLUSTER_BLOCK_STURDY );
+        register( event, "cluster_block_generic", new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) ) );
+        register( event, "cluster_block_tank", new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 2.8f ) ) );
+        register( event, "cluster_block_sturdy", new ClusterBlock( Block.Properties.create( Material.ROCK ).hardnessAndResistance( 3.2f ) ) );
 
-        register( event, "colza", COLZA );
-        register( event, "pomegranate", POMEGRANATE );
-        register( event, "world_colza", WORLD_COLZA );
-        register( event, "world_pomegranate", WORLD_POMEGRANATE );
+        register( event, "colza", new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) ) );
+        register( event, "pomegranate", new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) ) );
+        register( event, "world_colza", new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) ) );
+        register( event, "world_pomegranate", new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) ) );
 
         register( event, "collector", new Collector() );
         register( event, "peltier", new Peltier() );

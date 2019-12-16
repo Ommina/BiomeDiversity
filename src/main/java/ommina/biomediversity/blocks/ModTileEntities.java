@@ -8,7 +8,8 @@ import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.peltier.TileEntityPeltier;
-import ommina.biomediversity.blocks.plug.TileEntityPlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
+import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
 import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
@@ -22,7 +23,7 @@ public class ModTileEntities {
     @ObjectHolder( "collector" ) public static TileEntityType<TileEntityCollector> COLLECTOR;
     @ObjectHolder( "peltier" ) public static TileEntityType<TileEntityPeltier> PELTIER;
     @ObjectHolder( "rainbarrel" ) public static TileEntityType<TileEntityRainBarrel> RAIN_BARREL;
-    @ObjectHolder( "plug" ) public static TileEntityType<TileEntityPlug> PLUG;
+    @ObjectHolder( "plug_energy" ) public static TileEntityType<TileEntityPlugBase> PLUG;
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<TileEntityType<?>> event ) {
@@ -32,7 +33,7 @@ public class ModTileEntities {
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityCollector::new, ModBlocks.COLLECTOR ).build( null ).setRegistryName( "collector" ) );
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityPeltier::new, ModBlocks.PELTIER ).build( null ).setRegistryName( "peltier" ) );
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityRainBarrel::new, ModBlocks.RAIN_BARREL ).build( null ).setRegistryName( "rainbarrel" ) );
-        event.getRegistry().register( TileEntityType.Builder.create( TileEntityPlug::new, ModBlocks.PLUG_ENERGY ).build( null ).setRegistryName( "plug" ) );
+        event.getRegistry().register( TileEntityType.Builder.create( TileEntityPlugEnergy::new, ModBlocks.PLUG_ENERGY ).build( null ).setRegistryName( "plug_energy" ) );
 
     }
 

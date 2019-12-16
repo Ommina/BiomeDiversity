@@ -4,14 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
 import ommina.biomediversity.config.Constants;
 
-public abstract class PlugBase extends BlockTileEntity<TileEntityPlug> {
+public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
 
     public PlugBase() {
 

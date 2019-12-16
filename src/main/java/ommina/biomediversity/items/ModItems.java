@@ -15,48 +15,47 @@ import ommina.biomediversity.blocks.ModBlocks;
 public class ModItems {
 
     // Generic Items
-    @ObjectHolder( "pomegranate_seeds" ) public static final Item POMEGRANATE_SEEDS = null;
-    @ObjectHolder( "pomegranate" ) public static final Item POMEGRANATE = null;
+    @ObjectHolder( "pomegranate_seeds" ) public static Item POMEGRANATE_SEEDS;
+    @ObjectHolder( "pomegranate" ) public static Item POMEGRANATE;
 
-    @ObjectHolder( "colza_seeds" ) public static final Item COLZA_SEEDS = null;
-    @ObjectHolder( "colza" ) public static final Item COLZA = null;
+    @ObjectHolder( "colza_seeds" ) public static Item COLZA_SEEDS;
+    @ObjectHolder( "colza" ) public static Item COLZA;
 
-    @ObjectHolder( "orinocite_ingot" ) public static final Item ORINOCITE_INGOT = null;
-    @ObjectHolder( "orinocite_dust" ) public static final Item ORINOCITE_DUST = null;
-    @ObjectHolder( "orinocite_nugget" ) public static final Item ORINOCITE_NUGGET = null;
-    @ObjectHolder( "orinocite_plate" ) public static final Item ORINOCITE_PLATE = null;
-    @ObjectHolder( "orinocite_plate_thin" ) public static final Item ORINOCITE_PLATE_THIN = null;
-
-    // Cool Items
-    @ObjectHolder( "linkstaff" ) public static final Item LINK_STAFF = null;
-
-    // Cluster Parts
-    @ObjectHolder( "machine_antenna" ) public static final Item MACHINE_ANTENNA = null;
-    @ObjectHolder( "machine_base" ) public static final Item MACHINE_BASE = null;
-    @ObjectHolder( "machine_battery" ) public static final Item MACHINE_BATTERY = null;
-    @ObjectHolder( "machine_sensor" ) public static final Item MACHINE_SENSOR = null;
-    @ObjectHolder( "machine_tank" ) public static final Item MACHINE_TANK = null;
-
-    @ObjectHolder( "cluster_block_generic" ) public static final Item CLUSTER_BLOCK_GENERIC = null;
-    @ObjectHolder( "cluster_block_tank" ) public static final Item CLUSTER_BLOCK_TANK = null;
-    @ObjectHolder( "cluster_block_sturdy" ) public static final Item CLUSTER_BLOCK_STURDY = null;
+    @ObjectHolder( "orinocite_ingot" ) public static Item ORINOCITE_INGOT;
+    @ObjectHolder( "orinocite_dust" ) public static Item ORINOCITE_DUST;
+    @ObjectHolder( "orinocite_nugget" ) public static Item ORINOCITE_NUGGET;
+    @ObjectHolder( "orinocite_plate" ) public static Item ORINOCITE_PLATE;
 
     // Block Items
-    @ObjectHolder( "orinocite_ore" ) public static final Item ORINOCITE_ORE = null;
-    @ObjectHolder( "orinocite_block" ) public static final Item ORINOCITE_BLOCK = null;
-    @ObjectHolder( "nocified_stone_fractured" ) public static final Item NOCIFIED_STONE_FRACTURED = null;
-    @ObjectHolder( "nocified_stone_undamaged" ) public static final Item NOCIFIED_STONE_UNDAMAGED = null;
+    @ObjectHolder( "orinocite_ore" ) public static Item ORINOCITE_ORE;
+    @ObjectHolder( "orinocite_block" ) public static Item ORINOCITE_BLOCK;
+    @ObjectHolder( "nocified_stone_fractured" ) public static Item NOCIFIED_STONE_FRACTURED;
+    @ObjectHolder( "nocified_stone_undamaged" ) public static Item NOCIFIED_STONE_UNDAMAGED;
 
     // Has Tile Entities
-    @ObjectHolder( "rainbarrel" ) public static final Item RAIN_BARREL = null;
-    @ObjectHolder( "transmitter" ) public static final Item TRANSMITTER = null;
-    @ObjectHolder( "receiver" ) public static final Item RECEIVER = null;
-    @ObjectHolder( "collector" ) public static final Item COLLECTOR = null;
-    @ObjectHolder( "plug_energy" ) public static final Item PLUG_ENERGY = null;
-    @ObjectHolder( "peltier" ) public static final Item PELTIER = null;
+    @ObjectHolder( "rainbarrel" ) public static Item RAIN_BARREL;
+    @ObjectHolder( "transmitter" ) public static Item TRANSMITTER;
+    @ObjectHolder( "receiver" ) public static Item RECEIVER;
+    @ObjectHolder( "collector" ) public static Item COLLECTOR;
+    @ObjectHolder( "plug_energy" ) public static Item PLUG_ENERGY;
+    @ObjectHolder( "peltier" ) public static Item PELTIER;
+
+    // Cool Items
+    @ObjectHolder( "linkstaff" ) public static Item LINK_STAFF;
+    @ObjectHolder( "cluster_block_generic" ) public static Item CLUSTER_BLOCK_GENERIC;
+    @ObjectHolder( "cluster_block_tank" ) public static Item CLUSTER_BLOCK_TANK;
+    @ObjectHolder( "cluster_block_sturdy" ) public static Item CLUSTER_BLOCK_STURDY;
+    @ObjectHolder( "orinocite_plate_thin" ) public static Item ORINOCITE_PLATE_THIN;
+
+    // Cluster Parts
+    @ObjectHolder( "machine_antenna" ) public static Item MACHINE_ANTENNA;
+    @ObjectHolder( "machine_base" ) public static Item MACHINE_BASE;
+    @ObjectHolder( "machine_battery" ) public static Item MACHINE_BATTERY;
+    @ObjectHolder( "machine_sensor" ) public static Item MACHINE_SENSOR;
+    @ObjectHolder( "machine_tank" ) public static Item MACHINE_TANK;
 
     @SubscribeEvent
-    public static void register( final RegistryEvent.Register<Item> event ) {
+    public static void register( RegistryEvent.Register<Item> event ) {
 
         register( event, "pomegranate_seeds", new BlockNamedItem( ModBlocks.POMEGRANATE, (new Item.Properties()).group( BiomeDiversity.TAB ) ) );
         register( event, "pomegranate", new Item( new Item.Properties().food( ModFoods.POMEGRANATE ).group( BiomeDiversity.TAB ) ) );
@@ -95,7 +94,7 @@ public class ModItems {
 
     }
 
-    private static void register( final RegistryEvent.Register<Item> event, String name, Item item ) {
+    private static void register( RegistryEvent.Register<Item> event, String name, Item item ) {
 
         item.setRegistryName( BiomeDiversity.getId( name ) );
 

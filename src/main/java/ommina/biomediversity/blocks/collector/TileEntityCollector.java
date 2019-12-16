@@ -77,7 +77,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         super( ModTileEntities.COLLECTOR );
 
         for ( int i = 0; i < TANK_COUNT; i++ ) {
-            TANK.add( i, new BdFluidTank( i < 8 ? Constants.COLLECTOR_OUTER_TANK_CAPACITY : Constants.COLLECTOR_INNER_TANK_CAPACITY ) );
+            TANK.add( i, new BdFluidTank( i, i < 8 ? Constants.COLLECTOR_OUTER_TANK_CAPACITY : Constants.COLLECTOR_INNER_TANK_CAPACITY ) );
         }
 
         TANK.forEach( o -> o.setCanDrain( true ).setCanFill( false ) );
@@ -140,6 +140,9 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         BATTERY.setEnergyStored( nbt.getInt( "energystored" ) );
 
+        for ( int n = 0; n < TANK_COUNT; n++ )
+            TANK.get( n ).read( nbt );
+
         super.read( nbt );
 
     }
@@ -148,6 +151,9 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     public CompoundNBT write( CompoundNBT nbt ) {
 
         nbt.putInt( "energystored", BATTERY.getEnergyStored() );
+
+        for ( int n = 0; n < TANK_COUNT; n++ )
+            TANK.get( n ).write( nbt );
 
         return super.write( nbt );
 

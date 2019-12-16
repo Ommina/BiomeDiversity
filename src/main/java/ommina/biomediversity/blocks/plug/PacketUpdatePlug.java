@@ -13,10 +13,10 @@ public class PacketUpdatePlug {
     }
 
     public PacketUpdatePlug( TileEntity tile ) {
-        this( (TileEntityPlug) tile );
+        this( (TileEntityPlugBase) tile );
     }
 
-    public PacketUpdatePlug( TileEntityPlug tile ) {
+    public PacketUpdatePlug( TileEntityPlugBase tile ) {
 
         this.tilePos = tile.getPos();
         this.collectorPos = tile.getCollectorPos();

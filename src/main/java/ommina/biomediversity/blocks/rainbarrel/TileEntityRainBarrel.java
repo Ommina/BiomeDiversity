@@ -34,7 +34,7 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
     private static final int MINIMUM_DELTA = 200;
 
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
-    private final BdFluidTank TANK = new BdFluidTank( Config.rainbarrelCapacity.get() );
+    private final BdFluidTank TANK = new BdFluidTank( 0, Config.rainbarrelCapacity.get() );
 
     private final LazyOptional<IFluidHandler> handler = LazyOptional.of( this::createHandler );
     private int delay = DELAY_NO_RAIN;

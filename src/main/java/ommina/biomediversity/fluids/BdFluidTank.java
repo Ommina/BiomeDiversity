@@ -14,25 +14,31 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     //private final ObjectArrayList<Integer> fluidWhitelist = new ObjectArrayList<Integer>();
 
-    private int index = 0;
+    private final int index;
+
     private boolean canFill = false;
     private boolean canDrain = false;
 
-    public BdFluidTank( int capacity ) {
+    public BdFluidTank( int index, int capacity ) {
         super( capacity );
+
+        this.index = index;
+
     }
 
-    public BdFluidTank( @Nullable FluidStack fluidStack, int capacity ) {
+    public BdFluidTank( int index, @Nullable FluidStack fluidStack, int capacity ) {
         super( capacity );
 
         this.setFluid( fluidStack );
+        this.index = index;
 
     }
 
-    public BdFluidTank( Fluid fluid, int amount, int capacity ) {
+    public BdFluidTank( int index, Fluid fluid, int amount, int capacity ) {
         super( capacity );
 
         this.setFluid( new FluidStack( fluid, amount ) );
+        this.index = index;
 
     }
 
@@ -92,10 +98,10 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     public void read( CompoundNBT nbt ) {
 
-        if ( !nbt.contains( "index" + index ) )
+        if ( !nbt.contains( "tank" + index ) )
             return;
 
-        FluidStack fs = FluidStack.loadFluidStackFromNBT( nbt.getCompound( "index" + index ) );
+        FluidStack fs = FluidStack.loadFluidStackFromNBT( nbt.getCompound( "tank" + index ) );
 
         if ( !fs.isEmpty() )
             this.setFluid( fs );
@@ -105,7 +111,7 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     public CompoundNBT write( CompoundNBT nbt ) {
 
         if ( this.getFluid().isEmpty() ) {
-            nbt.remove( "index" + index );
+            nbt.remove( "tank" + index );
             return nbt;
         }
 
@@ -113,7 +119,7 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
         this.getFluid().writeToNBT( indexNbt );
 
-        nbt.put( "index" + index, indexNbt );
+        nbt.put( "tank" + index, indexNbt );
 
         return nbt;
 

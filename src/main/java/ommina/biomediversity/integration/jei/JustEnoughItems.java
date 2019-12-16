@@ -47,11 +47,25 @@ public class JustEnoughItems implements IModPlugin {
 
     }
 
+    /*
+
+    @Override
+    public void registerVanillaCategoryExtensions( IVanillaCategoryExtensionRegistration registration ) {
+
+        IExtendableRecipeCategory<ICraftingRecipe, ICraftingCategoryExtension> category = registration.getCraftingCategory();
+
+        category.addCategoryExtension( PlugCraftingRecipe.class, PlugCraftingCategory::new );
+
+    }
+
+    */
+
     @Override
     public void registerRecipes( IRecipeRegistration registration ) {
 
         registration.addRecipes( FluidStrengths.getRecipes(), TransmitterCategory.ID );
 
+        //registration.addRecipes( getRecipesOfType( PlugCraftingRecipe.RECIPE_TYPE ), VanillaRecipeCategoryUid.CRAFTING );
         //addInfoPage( registration, PressCraftingCategory.BASE_ITEM.getItem() );
 
     }

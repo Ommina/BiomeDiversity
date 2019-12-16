@@ -1,7 +1,6 @@
 package ommina.biomediversity.blocks.plug;
 
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.animation.TileEntityRendererFast;
 import ommina.biomediversity.BiomeDiversity;
@@ -11,7 +10,7 @@ import java.awt.*;
 
 import static ommina.biomediversity.blocks.tile.RenderHelper.*;
 
-public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFast<T> {
+public class FastTesrPlug<T extends TileEntityPlugBase> extends TileEntityRendererFast<T> {
 
     private static final ResourceLocation INTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
     private static final ResourceLocation EXTERNAL_SPRITE = BiomeDiversity.getId( "block/cluster/cluster_glow_external" );
@@ -27,7 +26,7 @@ public class FastTesrPlug<T extends TileEntityPlug> extends TileEntityRendererFa
 
     //region Overrides
     @Override
-    public void renderTileEntityFast( TileEntityPlug te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer ) {
+    public void renderTileEntityFast( TileEntityPlugBase te, double x, double y, double z, float partialTicks, int destroyStage, BufferBuilder buffer ) {
 
         final double offset = 1.001f / 16f;
 

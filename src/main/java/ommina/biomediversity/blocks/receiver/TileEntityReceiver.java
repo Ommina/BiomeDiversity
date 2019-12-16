@@ -57,7 +57,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     final CollectorFinder FINDER = new CollectorFinder();
     final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
-    final BdFluidTank TANK = new BdFluidTank( Config.transmitterCapacity.get() );
+    final BdFluidTank TANK = new BdFluidTank( 0, Config.transmitterCapacity.get() );
     final EnergyStorage BATTERY = new EnergyStorage( Config.receiverRequirePowerToOperate.get() || Config.receiverRequirePowerToChunkload.get() ? Config.receiverPowerCapacity.get() : 0, Integer.MAX_VALUE, 0 );
 
     private int fluidHashCode;

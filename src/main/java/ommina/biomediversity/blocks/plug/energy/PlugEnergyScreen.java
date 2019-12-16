@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.plug.PlugCollectorDetails;
-import ommina.biomediversity.blocks.plug.TileEntityPlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.RfGauge;
 import ommina.biomediversity.gui.controls.Sprite;
@@ -30,7 +30,7 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
     public PlugEnergyScreen( PlugEnergyContainer container, PlayerInventory inv, ITextComponent name ) {
         super( container, inv, name );
 
-        TileEntityPlug tile = (TileEntityPlug) container.getTileEntity();
+        TileEntityPlugBase tile = (TileEntityPlugBase) container.getTileEntity();
         GUI = BiomeDiversity.getId( "textures/gui/gui_blank.png" );
 
         PlugCollectorDetails collectorDetails = tile.getCollectorDetails();

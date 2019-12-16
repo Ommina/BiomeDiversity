@@ -29,7 +29,7 @@ import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.collector.FastTesrCollector;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.FastTesrPlug;
-import ommina.biomediversity.blocks.plug.TileEntityPlug;
+import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
 import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
 import ommina.biomediversity.blocks.receiver.FastTesrReceiver;
@@ -104,7 +104,7 @@ public class BiomeDiversity {
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
             ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlug.class, new FastTesrPlug<>() );
+            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugBase.class, new FastTesrPlug<>() );
 
         }
 
