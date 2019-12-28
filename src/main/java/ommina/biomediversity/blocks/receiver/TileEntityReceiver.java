@@ -117,7 +117,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         CollectorFinder.GetCollectorResult result = FINDER.getCollector( world );
 
         if ( result.getCollector() != null ) {
-            result.getCollector().registerComponent2( this );
+            result.getCollector().registerComponent( this );
             FINDER.markAsRegistered();
         } else
             BiomeDiversity.LOGGER.error( "Component is marked as ShouldRegister, but Collector TileEntity is null" );

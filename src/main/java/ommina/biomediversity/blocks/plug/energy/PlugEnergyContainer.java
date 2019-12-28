@@ -2,6 +2,7 @@ package ommina.biomediversity.blocks.plug.energy;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,9 +18,14 @@ public class PlugEnergyContainer extends ModContainer {
 
     //region Overrides
     @Override
+    public ItemStack transferStackInSlot( PlayerEntity playerIn, int index ) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
     public boolean canInteractWith( PlayerEntity playerIn ) {
         return isWithinUsableDistance( IWorldPosCallable.of( this.tileEntity.getWorld(), tileEntity.getPos() ), playerEntity, ModBlocks.PLUG_ENERGY );
     }
-//endregion Overrides
+    //endregion Overrides
 
 }

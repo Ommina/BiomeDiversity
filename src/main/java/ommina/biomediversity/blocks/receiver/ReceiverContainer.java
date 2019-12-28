@@ -2,6 +2,7 @@ package ommina.biomediversity.blocks.receiver;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,12 +17,15 @@ public class ReceiverContainer extends ModContainer {
     }
 
 //region Overrides
+    @Override
+    public ItemStack transferStackInSlot( PlayerEntity playerIn, int index ) {
+        return ItemStack.EMPTY;
+    }
 
     @Override
     public boolean canInteractWith( PlayerEntity playerIn ) {
         return isWithinUsableDistance( IWorldPosCallable.of( this.tileEntity.getWorld(), tileEntity.getPos() ), playerEntity, ModBlocks.RECEIVER );
     }
-
 //endregion Overrides
 
 }

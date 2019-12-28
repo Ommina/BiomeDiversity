@@ -226,7 +226,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         return releasePerTick;
     }
 
-    public void registerComponent2( IClusterComponent component ) {
+    public void registerComponent( IClusterComponent component ) {
         components.add( component );
     }
 
