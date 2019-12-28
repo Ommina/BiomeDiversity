@@ -21,6 +21,7 @@ import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.peltier.Peltier;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergy;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
+import ommina.biomediversity.blocks.plug.fluid.PlugFluidByproduct;
 import ommina.biomediversity.blocks.rainbarrel.RainBarrel;
 import ommina.biomediversity.blocks.receiver.Receiver;
 import ommina.biomediversity.blocks.receiver.ReceiverContainer;
@@ -56,6 +57,7 @@ public class ModBlocks {
     @ObjectHolder( "receiver" ) public static Receiver RECEIVER;
     @ObjectHolder( "transmitter" ) public static Transmitter TRANSMITTER;
     @ObjectHolder( "plug_energy" ) public static PlugEnergy PLUG_ENERGY;
+    @ObjectHolder( "plug_fluid_byproduct" ) public static PlugFluidByproduct PLUG_FLUID_BYPRODUCT;
 
     // Containers
     @ObjectHolder( "receiver" ) public static ContainerType<ReceiverContainer> RECEIVER_CONTAINER;
@@ -109,6 +111,7 @@ public class ModBlocks {
         register( event, "receiver", new Receiver() );
         register( event, "transmitter", new Transmitter() );
         register( event, "plug_energy", new PlugEnergy() );
+        register( event, "plug_fluid_byproduct", new PlugFluidByproduct() );
 
     }
 

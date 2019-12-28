@@ -4,21 +4,64 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.LogicalSidedProvider;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.PlugRenderData;
 import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
+import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.energy.BdEnergyStorage;
 import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.Network;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.Optional;
+import java.util.function.Supplier;
+
 public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickableTileEntity {
 
+    private BdEnergyStorage battery;
+
+    private final LazyOptional<IEnergyStorage> handlerEnergy = LazyOptional.of( this::createEnergyHandler );
+
+    public TileEntityPlugEnergy() {
+        super( ModTileEntities.PLUG_ENERGY );
+    }
+
     //region Overrides
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> capability, @Nullable Direction side ) {
+
+        if ( capability == CapabilityEnergy.ENERGY && (side == null || side == Direction.DOWN) )
+            return handlerEnergy.cast();
+
+        return super.getCapabilitySuper( capability, side );
+
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+
+        handlerEnergy.invalidate();
+        super.onChunkUnloaded();
+
+    }
+
     @Override
     public PlugRenderData getPlugRenderData() {
 
@@ -28,7 +71,6 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
             PLUG_RENDER.value = collector.getEnergyStorage().getEnergyStored();
         else
             PLUG_RENDER.value = 0;
-
 
         return PLUG_RENDER;
 
@@ -55,7 +97,14 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
         loop++;
 
     }
-//endregion Overrides
+    @Override
+    public void doBroadcast() {
+        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PlugEnergyPacketUpdate( this ) );
+    }
+
+    private IEnergyStorage createEnergyHandler() {
+        return battery;
+    }
 
     private void doMainWork() {
 
@@ -78,6 +127,9 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
 
         }
 
+        if ( FINDER.shouldRegister() )
+            registerSelf();
+
         //TileEntityCollector collector = collectorResult.getCollector();
 
     }
@@ -86,13 +138,30 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
 
         firstTick = false;
 
-        //Block block = world.getBlockState( this.pos ).getBlock();
+        /* Block block = world.getBlockState( this.pos ).getBlock(); */
 
+        PLUG_RENDER.colour = RenderHelper.getRGBA( new Color( 127, 255, 142, 192 ).getRGB() );
         PLUG_RENDER.sprite = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
         PLUG_RENDER.maximum = Config.collectorEnergyCapacity.get();
 
         if ( world.isRemote )
             Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
+    private boolean isBatteryOk() {
+
+        if ( battery != null )
+            return true;
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector != null ) {
+            battery = collector.getEnergyStorage();
+            return true;
+        }
+
+        return false;
 
     }
 
@@ -122,6 +191,33 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
         }
 
     }
+
+    public static void handle( PlugEnergyPacketUpdate packet, Supplier<NetworkEvent.Context> ctx ) {
+
+        ctx.get().enqueueWork( () -> {
+
+            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get( ctx.get().getDirection().getReceptionSide() );
+
+            if ( world.get().isBlockLoaded( packet.tilePos ) ) {
+
+                TileEntity tile = world.get().getTileEntity( packet.tilePos );
+
+                if ( tile instanceof TileEntityPlugEnergy ) {
+
+                    TileEntityPlugEnergy plug = (TileEntityPlugEnergy) tile;
+
+                    plug.FINDER.setCollectorPos( packet.collectorPos );
+
+                }
+
+            }
+
+        } );
+
+        ctx.get().setPacketHandled( true );
+
+    }
+//endregion Overrides
 
 
 }

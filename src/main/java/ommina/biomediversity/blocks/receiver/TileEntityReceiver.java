@@ -50,16 +50,13 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     private static final float CHUNKLOAD_MAX_PERCENTAGE = 0.80f;
     private static final int CHUNKLOAD_MIN_FLUID_INCREASE = 90;
     private static final int MAX_CHUNKLOAD_DURATION = 5 * 60 * 20 / Constants.CLUSTER_TICK_DELAY; // 5min
-
-    private static final float[] GLOWBAR_COLOUR_CHUNKLOADING = RenderHelper.getRGBA( new Color(255, 165,0).getRGB() );
+    private static final float[] GLOWBAR_COLOUR_CHUNKLOADING = RenderHelper.getRGBA( new Color( 255, 165, 0 ).getRGB() );
     private static final float[] GLOWBAR_COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
     private static final float[] GLOWBAR_COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
-
     final CollectorFinder FINDER = new CollectorFinder();
     final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
     final BdFluidTank TANK = new BdFluidTank( 0, Config.transmitterCapacity.get() );
     final EnergyStorage BATTERY = new EnergyStorage( Config.receiverRequirePowerToOperate.get() || Config.receiverRequirePowerToChunkload.get() ? Config.receiverPowerCapacity.get() : 0, Integer.MAX_VALUE, 0 );
-
     private int fluidHashCode;
     private int lastFluidAmount = 0;
     private int power;
@@ -112,6 +109,19 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public void invalidateCollector() {
         removeCollector();
+    }
+
+    @Override
+    public void registerSelf() {
+
+        CollectorFinder.GetCollectorResult result = FINDER.getCollector( world );
+
+        if ( result.getCollector() != null ) {
+            result.getCollector().registerComponent2( this );
+            FINDER.markAsRegistered();
+        } else
+            BiomeDiversity.LOGGER.error( "Component is marked as ShouldRegister, but Collector TileEntity is null" );
+
     }
 
     @Override
@@ -319,6 +329,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
             return;
 
+        }
+
+        if ( FINDER.shouldRegister() ) {
+            registerSelf();
         }
 
         TileEntityCollector collector = collectorResult.getCollector();

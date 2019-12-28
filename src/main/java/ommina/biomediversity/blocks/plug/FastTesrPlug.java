@@ -22,7 +22,6 @@ public class FastTesrPlug<T extends TileEntityPlugBase> extends TileEntityRender
     private static final float HEIGHT_CONNECTION = 9f / 16f;
     private static final float[] COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
     private static final float[] COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
-    private static final float[] COLOUR_POWER = RenderHelper.getRGBA( new Color( 127, 255, 142, 192 ).getRGB() );
 
     //region Overrides
     @Override
@@ -36,7 +35,7 @@ public class FastTesrPlug<T extends TileEntityPlugBase> extends TileEntityRender
 
             float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
 
-            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, COLOUR_POWER, FACES_FLUID );
+            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, renderData.colour, FACES_FLUID );
 
         }
 

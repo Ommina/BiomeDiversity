@@ -9,8 +9,10 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.collector.PacketUpdateCollector;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
-import ommina.biomediversity.blocks.plug.PacketUpdatePlug;
-import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergyPacketUpdate;
+import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
+import ommina.biomediversity.blocks.plug.fluid.PlugFluidPacketUpdate;
+import ommina.biomediversity.blocks.plug.fluid.TileEntityPlugFluid;
 import ommina.biomediversity.blocks.receiver.PacketUpdateReceiver;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 
@@ -54,8 +56,10 @@ public class GenericTilePacketRequest {
 
                 if ( tile instanceof TileEntityReceiver ) {
                     Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PacketUpdateReceiver( tile ) );
-                } else if ( tile instanceof TileEntityPlugBase ) {
-                    Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PacketUpdatePlug( tile ) );
+                } else if ( tile instanceof TileEntityPlugEnergy ) {
+                    Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PlugEnergyPacketUpdate( tile ) );
+                } else if ( tile instanceof TileEntityPlugFluid ) {
+                    Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PlugFluidPacketUpdate( tile ) );
                 } else if ( tile instanceof TileEntityCollector ) {
                     Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PacketUpdateCollector( tile ) );
                 } else if ( tile instanceof ITankBroadcast ) {

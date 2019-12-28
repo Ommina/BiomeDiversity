@@ -33,32 +33,12 @@ import java.util.function.Supplier;
 
 public class TileEntityCollector extends TileEntity implements IClusterComponent, ITickableTileEntity, ITankBroadcast {
 
-    public static final int PLUG_CONNECTION_RF = 1;
-
-    /*
-
-    public static final int UNUSED0 = 0;      // No, I'm not going to make this an Enum.  Deal with it.  Probably.
-    public static final int UNUSED1 = 1;
-    public static final int UNUSED2 = 2;
-    public static final int COOL = 3;
-    public static final int WARM = 4;
-    public static final int UNUSED5 = 5;
-    public static final int UNUSED6 = 6;
-    public static final int BYPRODUCT = 7;
-    public static final int UNUSED8 = 8;
-    public static final int UNUSED9 = 9;
-    public static final int UNUSED10 = 10;
-    public static final int UNUSED11 = 11;
-
-    */
-
     static final int TANK_COUNT = 12;
     private static final int MINIMUM_DELTA = 300;
 
     final List<BdFluidTank> TANK = new ArrayList<>( TANK_COUNT );
     final BdEnergyStorage BATTERY;
 
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of( this::createEnergyHandler );
     private final BroadcastHelper BROADCASTER;
 
     private final Reception RECEPTOR = new Reception();
@@ -82,7 +62,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
         TANK.forEach( o -> o.setCanDrain( true ).setCanFill( false ) );
 
-        BATTERY = (BdEnergyStorage) energyHandler.orElse( null );
+        BATTERY = new BdEnergyStorage( Config.collectorEnergyCapacity.get(), 0, Integer.MAX_VALUE );
 
         BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this, BATTERY, BATTERY.getMaxEnergyStored() / Constants.RF_RENDER_STEP_COUNT );
         BROADCASTER.forceBroadcast();
@@ -113,13 +93,17 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     @Override
     public boolean isClusterComponentConnected() {
-
         return world.getBlockState( this.getPos() ).getBlock() == ModBlocks.COLLECTOR && world.getBlockState( this.getPos() ).get( Collector.FORMED );
     }
 
     @Override
     public void invalidateCollector() {
-        //nop
+        //nop -- can't invalidate self
+    }
+
+    @Override
+    public void registerSelf() {
+        //nop -- can't register self
     }
 
     @Override
@@ -204,7 +188,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
                     TANK.get( Tubes.Cool.tank ).add( new FluidStack( ModFluids.COOLBIOMETIC, products.getCool() ), IFluidHandler.FluidAction.EXECUTE );
 
                 if ( products.getByproduct() > 0 )
-                    TANK.get( Tubes.Byproduct.tank ).add( new FluidStack( ModFluids.BYPRODUCT, products.getByproduct() ), IFluidHandler.FluidAction.EXECUTE );
+                    TANK.get( Tubes.Byproduct.tank ).add( new FluidStack( ModFluids.BYPRODUCT, products.getByproduct() * 100), IFluidHandler.FluidAction.EXECUTE );
 
             }
 
@@ -242,7 +226,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         return releasePerTick;
     }
 
-    public void registerComponent( IClusterComponent component ) {
+    public void registerComponent2( IClusterComponent component ) {
         components.add( component );
     }
 
@@ -250,13 +234,13 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         components.remove( component );
     }
 
-    public LazyOptional<IEnergyStorage> getEnergyHandler() {
-        return energyHandler;
-    }
+    //public LazyOptional<IEnergyStorage> getEnergyHandler() {
+    //    return energyHandler;
+    //}
 
-    private IEnergyStorage createEnergyHandler() {
-        return new BdEnergyStorage( Config.collectorEnergyCapacity.get(), 0, Integer.MAX_VALUE );
-    }
+    //private IEnergyStorage createEnergyHandler() {
+    //    return BATTERY;
+    //}
 
     private void doFirstTick() {
 
@@ -325,21 +309,15 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     public void collect( BlockPos receiverPos, int fluidHash, int power, String biomeRegistryName, float temperature, float rainfall ) {
-
         RECEPTOR.add( biomeRegistryName, fluidHash, temperature, power );
-
     }
 
     public boolean isCollectorTurnedOff() {
-
         return world.isBlockPowered( pos );
-
     }
 
     public boolean isCollectorFormed() {
-
         return world.getBlockState( pos ).get( ClusterBlock.FORMED );
-
     }
 
 }

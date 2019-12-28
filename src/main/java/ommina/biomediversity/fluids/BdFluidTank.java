@@ -12,8 +12,6 @@ import javax.annotation.Nullable;
 
 public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler {
 
-    //private final ObjectArrayList<Integer> fluidWhitelist = new ObjectArrayList<Integer>();
-
     private final int index;
 
     private boolean canFill = false;
@@ -127,7 +125,7 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     public boolean canFillFluidType( FluidStack fluidStack ) {
 
-        if ( fluidStack.getFluid().getAttributes().isLighterThanAir() || !FluidStrengths.contains( fluidStack.getFluid().hashCode() ) )
+        if ( fluidStack.getFluid().getAttributes().isLighterThanAir() ) // || !FluidStrengths.contains( fluidStack.getFluid().hashCode() ) )
             return false;
 
         return true;
@@ -139,8 +137,11 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     }
 
     public BdFluidTank setCanFill( boolean canFill ) {
+
         this.canFill = canFill;
+
         return this;
+
     }
 
     public boolean getCanDrain() {
@@ -153,9 +154,7 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
     }
 
     public FluidStack drain_internal( int maxDrain, FluidAction action ) {
-
         return super.drain( maxDrain, action );
-
     }
 
     protected void onFill( int amount ) {

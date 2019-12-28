@@ -4,10 +4,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.collector.PacketUpdateCollector;
-import ommina.biomediversity.blocks.plug.PacketUpdatePlug;
-import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
+import ommina.biomediversity.blocks.collector.TileEntityCollector;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergyPacketUpdate;
+import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
+import ommina.biomediversity.blocks.plug.fluid.PlugFluidPacketUpdate;
+import ommina.biomediversity.blocks.plug.fluid.TileEntityPlugFluid;
 import ommina.biomediversity.blocks.receiver.PacketUpdateReceiver;
 import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
 
@@ -50,10 +52,16 @@ public class Network {
              .consumer( GenericTilePacketRequest::handle )
              .add();
 
-        channel.messageBuilder( PacketUpdatePlug.class, channelId++ )
-             .decoder( PacketUpdatePlug::fromBytes )
-             .encoder( PacketUpdatePlug::toBytes )
-             .consumer( TileEntityPlugBase::handle )
+        channel.messageBuilder( PlugEnergyPacketUpdate.class, channelId++ )
+             .decoder( PlugEnergyPacketUpdate::fromBytes )
+             .encoder( PlugEnergyPacketUpdate::toBytes )
+             .consumer( TileEntityPlugEnergy::handle )
+             .add();
+
+        channel.messageBuilder( PlugFluidPacketUpdate.class, channelId++ )
+             .decoder( PlugFluidPacketUpdate::fromBytes )
+             .encoder( PlugFluidPacketUpdate::toBytes )
+             .consumer( TileEntityPlugFluid::handle )
              .add();
 
     }

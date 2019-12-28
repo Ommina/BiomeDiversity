@@ -6,31 +6,23 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fml.LogicalSidedProvider;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
-import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
 import ommina.biomediversity.config.Constants;
-import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.NbtUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 public abstract class TileEntityPlugBase extends TileEntity implements IClusterComponent, INamedContainerProvider {
 
@@ -42,8 +34,8 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
 
     protected boolean firstTick = true;
 
-    public TileEntityPlugBase() {
-        super( ModTileEntities.PLUG );
+    public TileEntityPlugBase( TileEntityType<?> tileEntityTypeIn ) {
+        super( tileEntityTypeIn );
 
     }
 
@@ -54,19 +46,8 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
         return new PlugEnergyContainer( i, world, pos, playerInventory, playerEntity );
     }
 
-    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> capability, @Nullable Direction side ) {
-
-        if ( capability == CapabilityEnergy.ENERGY && (side == null || side == Direction.DOWN) ) {
-            TileEntityCollector te = FINDER.getCollector( world ).getCollector();
-            if ( te != null )
-                return te.getEnergyHandler().cast();
-        }
-
-        return super.getCapability( capability, side );
-
-    }
+    public abstract <T> LazyOptional<T> getCapability( @Nonnull Capability<T> capability, @Nullable Direction side );
 
     @Override
     @Nullable
@@ -82,6 +63,19 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
     @Override
     public void invalidateCollector() {
         removeCollector();
+    }
+
+    @Override
+    public void registerSelf() {
+
+        CollectorFinder.GetCollectorResult result = FINDER.getCollector( world );
+
+        if ( result.getCollector() != null ) {
+            result.getCollector().registerComponent2( this );
+            FINDER.markAsRegistered();
+        } else
+            BiomeDiversity.LOGGER.error( "Component is marked as ShouldRegister, but Collector TileEntity is null" );
+
     }
 
     @Override
@@ -101,7 +95,6 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
 
     @Override
     public boolean hasFastRenderer() {
-
         return true;
     }
 
@@ -124,40 +117,13 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
 
     }
 
+    public <T> LazyOptional<T> getCapabilitySuper( @Nonnull Capability<T> capability, @Nullable Direction side ) {
+        return super.getCapability( capability, side );
+    }
 
     public abstract PlugRenderData getPlugRenderData();
 
-    public void doBroadcast() {
-
-        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PacketUpdatePlug( this ) );
-
-    }
-
-    public static void handle( PacketUpdatePlug packet, Supplier<NetworkEvent.Context> ctx ) {
-
-        ctx.get().enqueueWork( () -> {
-
-            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get( ctx.get().getDirection().getReceptionSide() );
-
-            if ( world.get().isBlockLoaded( packet.tilePos ) ) {
-
-                TileEntity tile = world.get().getTileEntity( packet.tilePos );
-
-                if ( tile instanceof TileEntityPlugBase ) {
-
-                    TileEntityPlugBase plug = (TileEntityPlugBase) tile;
-
-                    plug.FINDER.setCollectorPos( packet.collectorPos );
-
-                }
-
-            }
-
-        } );
-
-        ctx.get().setPacketHandled( true );
-
-    }
+    public abstract void doBroadcast();
 
     protected void removeCollector() {
 
@@ -169,9 +135,7 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
     }
 
     public PlugCollectorDetails getCollectorDetails() {
-
         return new PlugCollectorDetails( FINDER.get( world ) );
-
     }
 
     public float getTemperature() {
@@ -184,6 +148,7 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
         return collector.getTemperature();
 
     }
+
 
     /*
 

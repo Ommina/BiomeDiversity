@@ -13,4 +13,6 @@ public interface IClusterComponent {
 
     void invalidateCollector();
 
+    void registerSelf();
+
 }

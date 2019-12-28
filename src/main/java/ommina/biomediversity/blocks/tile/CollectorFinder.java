@@ -3,6 +3,7 @@ package ommina.biomediversity.blocks.tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
@@ -18,6 +19,7 @@ public class CollectorFinder {
     private int searchAttemptCount = 0;
 
     private BlockPos collectorPos;
+    private RegistrationState registrationState = RegistrationState.NEVER;
 
     public CollectorFinder() {
 
@@ -102,6 +104,8 @@ public class CollectorFinder {
                             IClusterComponent tecc = (IClusterComponent) te;
                             if ( tecc.isClusterComponentConnected() ) {
                                 collectorPos = tecc.getCollectorPos();
+                                if ( registrationState == RegistrationState.NEVER )
+                                    registrationState = RegistrationState.UNREGISTERED;
                                 return collectorPos;
                             }
                         }
@@ -109,6 +113,21 @@ public class CollectorFinder {
                 }
 
         return null;
+
+    }
+
+    public boolean shouldRegister() {
+        return registrationState == RegistrationState.UNREGISTERED;
+    }
+
+    public void markAsRegistered() {
+
+        if ( registrationState == RegistrationState.UNREGISTERED ) {
+            registrationState = RegistrationState.REGISTERED;
+            return;
+        }
+
+        BiomeDiversity.LOGGER.error( "Tried to set a ClusterComponent to REGISTERED when it is in state: " + registrationState.toString() );
 
     }
 
@@ -143,6 +162,14 @@ public class CollectorFinder {
 
     public void setCollectorPos( @Nullable BlockPos collectorPos ) {
         this.collectorPos = collectorPos;
+    }
+
+    private enum RegistrationState {
+
+        NEVER,
+        REGISTERED,
+        UNREGISTERED
+
     }
 
 }

@@ -1,33 +1,37 @@
-package ommina.biomediversity.blocks.plug;
+package ommina.biomediversity.blocks.plug.fluid;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class PacketUpdatePlug {
+public class PlugFluidPacketUpdate {
+
+    public int collectorTank;
 
     public BlockPos tilePos;
     public BlockPos collectorPos;
 
-    public PacketUpdatePlug() {
+    public PlugFluidPacketUpdate() {
     }
 
-    public PacketUpdatePlug( TileEntity tile ) {
-        this( (TileEntityPlugBase) tile );
+    public PlugFluidPacketUpdate( TileEntity tile ) {
+        this( (TileEntityPlugFluid) tile );
     }
 
-    public PacketUpdatePlug( TileEntityPlugBase tile ) {
+    public PlugFluidPacketUpdate( TileEntityPlugFluid tile ) {
 
         this.tilePos = tile.getPos();
         this.collectorPos = tile.getCollectorPos();
+        this.collectorTank = tile.collectorTank;
 
     }
 
-    public static PacketUpdatePlug fromBytes( PacketBuffer buf ) {
+    public static PlugFluidPacketUpdate fromBytes( PacketBuffer buf ) {
 
-        PacketUpdatePlug packet = new PacketUpdatePlug();
+        PlugFluidPacketUpdate packet = new PlugFluidPacketUpdate();
 
         packet.tilePos = buf.readBlockPos();
+        packet.collectorTank = buf.readInt();
 
         if ( buf.readBoolean() )
             packet.collectorPos = buf.readBlockPos();
@@ -39,6 +43,7 @@ public class PacketUpdatePlug {
     public void toBytes( PacketBuffer buf ) {
 
         buf.writeBlockPos( this.tilePos );
+        buf.writeInt( this.collectorTank );
 
         if ( this.collectorPos != null ) {
             buf.writeBoolean( true );

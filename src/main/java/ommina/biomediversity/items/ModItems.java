@@ -38,6 +38,7 @@ public class ModItems {
     @ObjectHolder( "receiver" ) public static Item RECEIVER;
     @ObjectHolder( "collector" ) public static Item COLLECTOR;
     @ObjectHolder( "plug_energy" ) public static Item PLUG_ENERGY;
+    @ObjectHolder( "plug_fluid" ) public static Item PLUG_FLUID;
     @ObjectHolder( "peltier" ) public static Item PELTIER;
 
     // Cool Items
@@ -91,6 +92,7 @@ public class ModItems {
         register( event, "peltier", new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "rainbarrel", new BlockItem( ModBlocks.RAIN_BARREL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "plug_energy", new BlockItem( ModBlocks.PLUG_ENERGY, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "plug_fluid_byproduct", new BlockItem( ModBlocks.PLUG_FLUID_BYPRODUCT, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
     }
 

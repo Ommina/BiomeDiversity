@@ -3,6 +3,7 @@ package ommina.biomediversity.blocks.collector;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -25,7 +27,7 @@ import java.util.Map;
 
 public class Collector extends ClusterBlock implements IClusterController {
 
-    private static final VoxelShape RENDER_SHAPE = Block.makeCuboidShape( -16f, -16f, -16f, 32f, 32f, 32f );
+    private static final VoxelShape RENDER_SHAPE_FORMED = Block.makeCuboidShape( -16f, -16f, -16f, 32f, 32f, 32f );
 
     private final Rectangles rectangles = new Rectangles();
     private Map<String, ClusterBlock> multiblock;
@@ -119,7 +121,7 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
-        return RENDER_SHAPE;
+        return state.get( FORMED ) ? RENDER_SHAPE_FORMED : VoxelShapes.fullCube();
     }
 
     @Override
