@@ -1,6 +1,5 @@
 package ommina.biomediversity.blocks.collector;
 
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -13,18 +12,18 @@ import java.util.stream.Collectors;
 
 public enum Tubes {
 
-    Unused0( 0, new Point2f( -4.5f, -12f ), null ),
-    Unused1( 1, new Point2f( -11.5f, -5 ), null ),
-    Unused2( 2, new Point2f( -11.5f, 16f ), null ),
-    Cool( 3, new Point2f( -4.5f, 23f ), "coolbiometic" ),
-    Warm( 4, new Point2f( 16.5f, 23f ), "warmbiometic" ),
-    Unused5( 5, new Point2f( 23.5f, 16f ), null ),
-    Unused6( 6, new Point2f( 23.5f, -5f ), null ),
-    Byproduct( 7, new Point2f( 16.5f, -12f ), "byproduct" ),
-    Unused8( 8, new Point2f( 6.5f, -8f ), null ),
-    Unused9( 9, new Point2f( -7.5f, 6f ), null ),
-    Unused10( 10, new Point2f( 6.5f, 20f ), null ),
-    Unused11( 11, new Point2f( 20.5f, 6f ), null );
+    Unused0( 0, new Point2f( -4.5f, -11.5f ), null ),
+    Unused1( 1, new Point2f( -11.5f, -4.5f ), null ),
+    Unused2( 2, new Point2f( -11.5f, 16.5f ), null ),
+    Cool( 3, new Point2f( -4.5f, 23.5f ), "coolbiometic" ),
+    Warm( 4, new Point2f( 16.5f, 23.5f ), "warmbiometic" ),
+    Unused5( 5, new Point2f( 23.5f, 16.5f ), null ),
+    Unused6( 6, new Point2f( 23.5f, -4.5f ), null ),
+    Byproduct( 7, new Point2f( 16.5f, -11.5f ), "byproduct" ),
+    Unused8( 8, new Point2f( 6.5f, -7.5f ), null ),
+    Unused9( 9, new Point2f( -7.5f, 6.5f ), null ),
+    Unused10( 10, new Point2f( 6.5f, 20.5f ), null ),
+    Unused11( 11, new Point2f( 20.5f, 6.5f ), null );
 
     final int tank;
     final Point2f location;

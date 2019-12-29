@@ -41,7 +41,7 @@ public class FastTesrCollector<T extends TileEntityCollector> extends TileEntity
 
         final float BASE = 0.1f;
         final float MODEL_ELEMENT_HEIGHT = 37f / 16f;
-        final float SIZE_OUTER = 3.75f / 16f;   // Tubes are square, so width and length are equal
+        final float SIZE_OUTER = 3.95f / 16f;   // Tubes are square, so width and length are equal
 
         y -= 13f / 16f;
 
