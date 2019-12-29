@@ -61,11 +61,6 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
     }
 
     @Override
-    public void invalidateCollector() {
-        removeCollector();
-    }
-
-    @Override
     public void registerSelf() {
 
         CollectorFinder.GetCollectorResult result = FINDER.getCollector( world );

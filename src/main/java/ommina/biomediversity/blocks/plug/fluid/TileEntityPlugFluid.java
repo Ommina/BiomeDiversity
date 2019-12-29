@@ -30,7 +30,6 @@ import ommina.biomediversity.network.Network;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -105,6 +104,15 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
     }
 
     @Override
+    public void invalidateCollector() {
+
+        fluidhandler.invalidate();
+        tank = null;
+        removeCollector();
+
+    }
+
+    @Override
     public void tick() {
 
         if ( firstTick )
@@ -128,7 +136,19 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
 //endregion Overrides
 
     private IFluidHandler createFluidHandler() {
+
+        if ( tank != null )
+            return tank;
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector == null )
+            return BdFluidTank.EMPTY;
+
+        tank = collector.getTank( collectorTank );
+
         return tank;
+
     }
 
     private void doMainWork() {

@@ -77,6 +77,20 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
     }
 
     @Override
+    public void doBroadcast() {
+        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PlugEnergyPacketUpdate( this ) );
+    }
+
+    @Override
+    public void invalidateCollector() {
+
+        handlerEnergy.invalidate();
+        battery = null;
+        removeCollector();
+
+    }
+
+    @Override
     public void tick() {
 
         if ( firstTick )
@@ -97,13 +111,22 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
         loop++;
 
     }
-    @Override
-    public void doBroadcast() {
-        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PlugEnergyPacketUpdate( this ) );
-    }
+//endregion Overrides
 
     private IEnergyStorage createEnergyHandler() {
+
+        if ( battery != null )
+            return battery;
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector == null )
+            return BdEnergyStorage.EMPTY;
+
+        battery = collector.getEnergyStorage();
+
         return battery;
+
     }
 
     private void doMainWork() {
@@ -137,8 +160,6 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
     private void doFirstTick() {
 
         firstTick = false;
-
-        /* Block block = world.getBlockState( this.pos ).getBlock(); */
 
         PLUG_RENDER.colour = RenderHelper.getRGBA( new Color( 127, 255, 142, 192 ).getRGB() );
         PLUG_RENDER.sprite = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
@@ -217,7 +238,5 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
         ctx.get().setPacketHandled( true );
 
     }
-//endregion Overrides
-
 
 }

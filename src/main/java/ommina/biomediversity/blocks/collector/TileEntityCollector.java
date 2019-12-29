@@ -234,14 +234,6 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         components.remove( component );
     }
 
-    //public LazyOptional<IEnergyStorage> getEnergyHandler() {
-    //    return energyHandler;
-    //}
-
-    //private IEnergyStorage createEnergyHandler() {
-    //    return BATTERY;
-    //}
-
     private void doFirstTick() {
 
         firstTick = false;

@@ -12,6 +12,8 @@ import javax.annotation.Nullable;
 
 public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler {
 
+    public static final BdFluidTank EMPTY = new BdFluidTank( 0, 1 );
+
     private final int index;
 
     private boolean canFill = false;
@@ -56,17 +58,6 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     }
 
-    public int add( FluidStack resource, FluidAction action ) {
-
-        int amount = super.fill( resource, action );
-
-        if ( amount > 0 )
-            onFill( amount );
-
-        return amount;
-
-    }
-
     @Nonnull
     @Override
     public FluidStack drain( FluidStack resource, FluidAction action ) {
@@ -89,6 +80,17 @@ public class BdFluidTank extends FluidTank implements IFluidTank, IFluidHandler 
 
     }
 //endregion Overrides
+
+    public int add( FluidStack resource, FluidAction action ) {
+
+        int amount = super.fill( resource, action );
+
+        if ( amount > 0 )
+            onFill( amount );
+
+        return amount;
+
+    }
 
     public int getIndex() {
         return index;

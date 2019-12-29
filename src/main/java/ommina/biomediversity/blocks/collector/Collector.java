@@ -201,9 +201,6 @@ public class Collector extends ClusterBlock implements IClusterController {
                         Block.replaceBlock( world.getBlockState( pos ), world.getBlockState( pos ).getBlock().getDefaultState().with( FORMED, formed ), world, pos, 3 );
                 }
 
-        //if ( world.getTileEntity( blockPos ) != null && !formed )
-        //    world.getTileEntity( blockPos ).remove();
-
     }
 
 }

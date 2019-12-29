@@ -145,6 +145,11 @@ public class CollectorFinder {
 
     }
 
+    /**
+    *   Returns the Collector at the stored BlockPos.  Ensures pos is not null, chunk is loaded, and the Tile is, in fact, a Collector
+    *
+    *   @return Collector TileEntity.  Null is checks fail
+    */
     @Nullable
     public TileEntityCollector get( @Nullable World world ) {
 

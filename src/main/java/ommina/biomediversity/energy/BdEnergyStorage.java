@@ -1,9 +1,10 @@
 package ommina.biomediversity.energy;
 
 import net.minecraftforge.energy.EnergyStorage;
-import ommina.biomediversity.BiomeDiversity;
 
 public class BdEnergyStorage extends EnergyStorage {
+
+    public static final BdEnergyStorage EMPTY = new BdEnergyStorage( 1, 0, 0, 0 );
 
     public BdEnergyStorage( int capacity ) {
         super( capacity, capacity, capacity, 0 );
