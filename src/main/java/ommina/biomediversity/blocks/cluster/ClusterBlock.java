@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +21,13 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import ommina.biomediversity.BiomeDiversity;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.blocks.collector.TileEntityCollector;
+import ommina.biomediversity.fluids.BdFluidTank;
 
 import javax.annotation.Nullable;
 
@@ -70,21 +76,38 @@ public class ClusterBlock extends GlassBlock {
 
         if ( !world.isRemote && player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
 
-            BlockPos cpos = checkForController( world, pos );
+            BlockPos controllerPos = checkForController( world, pos );
 
-            if ( cpos != null ) {
+            if ( controllerPos == null )
+                return false;
 
-                Vec3d coll = new Vec3d( cpos.getX(), cpos.getY(), cpos.getZ() );
+            Vec3d collectorVector = new Vec3d( controllerPos.getX(), controllerPos.getY(), controllerPos.getZ() );
+            int tankActivated = ModBlocks.COLLECTOR.getTankActivated( player, hit.getHitVec(), collectorVector );
 
-                int result = ModBlocks.COLLECTOR.getTankActivated( player, hit.getHitVec(), coll );
+            //BiomeDiversity.LOGGER.info( "  tankActivated: " + tankActivated );
 
-                BiomeDiversity.LOGGER.info( "  result: " + result );
+            if ( tankActivated == -1 )
+                return super.onBlockActivated( state, world, pos, player, hand, hit );
 
-            }
+            TileEntity controller = world.getTileEntity( controllerPos );
+
+            if ( !(controller instanceof TileEntityCollector) )
+                return false;
+
+            ItemStack heldItem = player.getHeldItem( hand );
+            BdFluidTank tank = ((TileEntityCollector) controller).getTank( tankActivated );
+            IItemHandler playerInv = new InvWrapper( player.inventory );
+
+            FluidActionResult far = FluidUtil.tryFillContainerAndStow( heldItem, tank, playerInv, 1000, player, true );
+
+            if ( far.isSuccess() )
+                player.setHeldItem( hand, far.getResult() );
+
+            return true;
 
         }
 
-        return true;
+        return super.onBlockActivated( state, world, pos, player, hand, hit );
 
     }
 

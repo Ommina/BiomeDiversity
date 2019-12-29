@@ -110,6 +110,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
                     player.setHeldItem( hand, far.getResult() );
 
                 return true;
+
             }
         }
 
