@@ -51,7 +51,6 @@ public class ClusterBlock extends GlassBlock {
 
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
-
         return SHAPE;
     }
 
@@ -107,11 +106,9 @@ public class ClusterBlock extends GlassBlock {
                 player.setHeldItem( hand, far.getResult() );
             }
 
-            return true;
-
         }
 
-        return super.onBlockActivated( state, world, pos, player, hand, hit );
+        return true;
 
     }
 

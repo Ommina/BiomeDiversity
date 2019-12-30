@@ -22,6 +22,7 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
 
     private static final Point POWER_GAUGE = new Point( 160, 15 );
     private static final Point SPRITE_BIOME = new Point( 8, 15 );
+    private static final Point SPRITE_GAUGE = new Point( 8, 33 );
     private static final Point UNIQUE_BIOMECOUNT_TEXT = new Point( 29, 15 );
     private static final Point RF_PER_TICK_TEXT = new Point( 29, 33 );
     private static final Point RF = new Point( 160, 15 );
@@ -54,6 +55,11 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
         Sprite biome = new Sprite( BiomeDiversity.getId( "textures/gui/biome.png" ) );
         biome.setPostion( SPRITE_BIOME ).setWidth( 16 ).setHeight( 16 );
         controls.add( biome );
+
+        Sprite rfMeter = new Sprite( BiomeDiversity.getId( "textures/gui/log_gauge_meter.png" ) );
+        rfMeter.setPostion( SPRITE_GAUGE ).setWidth( 16 ).setHeight( 16 );
+        controls.add( rfMeter );
+
 
         int n = collectorDetails.getUniqueBiomeCount();
 

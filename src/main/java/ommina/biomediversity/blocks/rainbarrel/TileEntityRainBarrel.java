@@ -47,7 +47,12 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
     }
 
-//region Overrides
+    @Override
+    public void onChunkUnloaded() {
+        handler.invalidate();
+    }
+
+    //region Overrides
     @Override
     public void doBroadcast() {
 
