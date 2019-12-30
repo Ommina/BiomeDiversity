@@ -3,11 +3,10 @@ package ommina.biomediversity.blocks.collector;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -25,6 +24,7 @@ import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
+import ommina.biomediversity.sounds.ModSounds;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -149,16 +149,19 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         if ( firstTick )
             doFirstTick();
 
-        if ( world.isRemote || isCollectorTurnedOff() )
+        if ( isCollectorTurnedOff() || !isCollectorFormed() )
             return;
 
         delay--;
+
+        if ( world.isRemote && delay % 5 == 0 )
+            world.playSound( pos.getX(), pos.getY(), pos.getZ(), ModSounds.COLLECTOR_RUNNING, SoundCategory.BLOCKS, 0.2f, 1f, false );
 
         buffer -= BATTERY.receiveEnergyInternal( releasePerTick, false );
 
         doBroadcast();
 
-        if ( delay > 0 || !isCollectorFormed() )
+        if ( delay > 0 )
             return;
 
         delay = Constants.CLUSTER_TICK_DELAY;
@@ -188,7 +191,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
                     TANK.get( Tubes.Cool.tank ).add( new FluidStack( ModFluids.COOLBIOMETIC, products.getCool() ), IFluidHandler.FluidAction.EXECUTE );
 
                 if ( products.getByproduct() > 0 )
-                    TANK.get( Tubes.Byproduct.tank ).add( new FluidStack( ModFluids.BYPRODUCT, products.getByproduct() * 100), IFluidHandler.FluidAction.EXECUTE );
+                    TANK.get( Tubes.Byproduct.tank ).add( new FluidStack( ModFluids.BYPRODUCT, products.getByproduct() * 1000 ), IFluidHandler.FluidAction.EXECUTE );
 
             }
 

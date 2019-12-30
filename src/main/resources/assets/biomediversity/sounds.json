@@ -1,0 +1,7 @@
+{
+  "collector_running": {
+    "category": "block",
+    "subtitle": "biomediversity.subtitle.collector_running",
+    "sounds": [ "biomediversity:collector_running" ]
+  }
+}

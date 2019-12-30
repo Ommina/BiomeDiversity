@@ -14,6 +14,8 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
@@ -106,8 +108,10 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
                 FluidActionResult far = FluidUtil.tryEmptyContainerAndStow( heldItem, tfi, playerInv, 1000, player, true );
 
-                if ( far.isSuccess() )
+                if ( far.isSuccess() ) {
+                    world.playSound( null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 0F );
                     player.setHeldItem( hand, far.getResult() );
+                }
 
                 return true;
 
