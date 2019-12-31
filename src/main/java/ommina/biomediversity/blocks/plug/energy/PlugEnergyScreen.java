@@ -9,10 +9,7 @@ import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.plug.PlugCollectorDetails;
 import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.gui.BaseContainerScreen;
-import ommina.biomediversity.gui.controls.RfGauge;
-import ommina.biomediversity.gui.controls.Sprite;
-import ommina.biomediversity.gui.controls.Temperature;
-import ommina.biomediversity.gui.controls.Text;
+import ommina.biomediversity.gui.controls.*;
 import ommina.biomediversity.util.Translator;
 
 import java.awt.*;
@@ -22,7 +19,7 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
 
     private static final Point POWER_GAUGE = new Point( 160, 15 );
     private static final Point SPRITE_BIOME = new Point( 8, 15 );
-    private static final Point SPRITE_GAUGE = new Point( 8, 33 );
+    private static final Point METER_GAUGE = new Point( 8, 33 );
     private static final Point UNIQUE_BIOMECOUNT_TEXT = new Point( 29, 15 );
     private static final Point RF_PER_TICK_TEXT = new Point( 29, 33 );
     private static final Point RF = new Point( 160, 15 );
@@ -56,8 +53,8 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
         biome.setPostion( SPRITE_BIOME ).setWidth( 16 ).setHeight( 16 );
         controls.add( biome );
 
-        Sprite rfMeter = new Sprite( BiomeDiversity.getId( "textures/gui/log_gauge_meter.png" ) );
-        rfMeter.setPostion( SPRITE_GAUGE ).setWidth( 16 ).setHeight( 16 );
+        LogMeter rfMeter = new LogMeter( 30000 );
+        rfMeter.setPostion( METER_GAUGE ).setWidth( 16 ).setHeight( 16 );
         controls.add( rfMeter );
 
 

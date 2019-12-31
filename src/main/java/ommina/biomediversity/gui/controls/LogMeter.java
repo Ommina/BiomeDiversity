@@ -3,43 +3,50 @@ package ommina.biomediversity.gui.controls;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.energy.EnergyStorage;
+import ommina.biomediversity.fluids.ModFluids;
 import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.gui.UV;
-import ommina.biomediversity.util.MathUtil;
-import ommina.biomediversity.util.Translator;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 
 @OnlyIn( Dist.CLIENT )
-public class RfGauge extends Control {
+public class LogMeter extends Control {
 
-    private static final UV BG = new UV( 41, 0, 41 + Sizes.RF_GAUGE.width, Sizes.RF_GAUGE.height );
-    private static final UV BG_UNCHARGEABLE = new UV( 49, 0, 49 + Sizes.RF_GAUGE.width, Sizes.RF_GAUGE.height );
-    private static final UV FG = new UV( 33, 0, 33 + Sizes.RF_GAUGE.width, Sizes.RF_GAUGE.height );
+    private static final int startColour;
+    private static final int endColour;
 
-    private final EnergyStorage BATTERY;
+    private static final UV BG = new UV( 16, 8, 16 + Sizes.LOG_GAUGE.width, 8 + Sizes.LOG_GAUGE.height );
 
-    public RfGauge( @Nullable final EnergyStorage battery ) {
-        super( Sizes.RF_GAUGE );
+    static {
 
-        this.BATTERY = battery;
+        startColour = ModFluids.WARMBIOMETIC.getAttributes().getColor();
+        endColour = ModFluids.COOLBIOMETIC.getAttributes().getColor();
 
     }
 
-    public RfGauge( int energy, int maxEnergy ) {
-        super( Sizes.RF_GAUGE );
+    private final int value;
 
-        this.BATTERY = new EnergyStorage( maxEnergy, 0, 0 );
-        this.BATTERY.receiveEnergy( energy, false );
+    public LogMeter( final int value ) {
+        super( Sizes.LOG_GAUGE );
+
+        this.value = value;
 
     }
 
     //region Overrides
     @Override
     public void drawBackgroundLayer( int x, int y ) {
+
+        this.fillGradientHorizontal( position.x + x, position.y + y, position.x + x + this.width, position.y + y + this.height, startColour, endColour );
+
+        final float f = 1f / 256f;
+
+        Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
+
+        drawSprite( f, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
+
+
+        /*
 
         final float f = 1f / 256f;
 
@@ -55,6 +62,8 @@ public class RfGauge extends Control {
         int h = MathUtil.clamp( height - (int) ((float) BATTERY.getEnergyStored() / (float) BATTERY.getMaxEnergyStored() * height), 0, height );
         drawSprite( f, position.x + x, (float) position.y + y + h, FG.minU, FG.minV + h, FG.sizeU, FG.sizeV - h );
 
+        */
+
     }
 
     @Override
@@ -66,6 +75,8 @@ public class RfGauge extends Control {
     @Override
     public List<String> getTooltip( boolean isShiftKeyDown ) {
 
+        /*
+
         if ( BATTERY == null || BATTERY.getEnergyStored() == 0 )
             if ( isShiftKeyDown )
                 return Collections.singletonList( Translator.translateToLocal( "text.biomediversity.gui.powerdisabled" ) );
@@ -73,6 +84,10 @@ public class RfGauge extends Control {
                 return null;
         else
             return Collections.singletonList( format.format( this.BATTERY.getEnergyStored() ) );
+
+        */
+
+        return null;
 
     }
 //endregion Overrides

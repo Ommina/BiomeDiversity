@@ -52,6 +52,7 @@ public abstract class Control extends AbstractGui {
         public static final Size LOW_HIGH = new Size( 8, 53 );
         public static final Size RF_GAUGE = new Size( 8, 52 );
         public static final Size SPRITE = new Size( 16, 16 );
+        public static final Size LOG_GAUGE = new Size( 16, 16 );
         public static final Size TANK = new Size( 16, 52 );
         public static final Size TEMPERATURE = new Size( 17, 53 );
 
@@ -95,20 +96,54 @@ public abstract class Control extends AbstractGui {
 
     }
 
+    protected void fillGradientVertical( int p_fillGradient_1_, int p_fillGradient_2_, int p_fillGradient_3_, int p_fillGradient_4_, int startColour, int endColour ) {
+        super.fillGradient( p_fillGradient_1_, p_fillGradient_2_, p_fillGradient_3_, p_fillGradient_4_, startColour, endColour );
+    }
+
+    protected void fillGradientHorizontal( int p_fillGradient_1_, int p_fillGradient_2_, int p_fillGradient_3_, int p_fillGradient_4_, int startColour, int endColour ) {
+
+        float f = (float) (startColour >> 24 & 255) / 255.0F;
+        float f1 = (float) (startColour >> 16 & 255) / 255.0F;
+        float f2 = (float) (startColour >> 8 & 255) / 255.0F;
+        float f3 = (float) (startColour & 255) / 255.0F;
+        float f4 = (float) (endColour >> 24 & 255) / 255.0F;
+        float f5 = (float) (endColour >> 16 & 255) / 255.0F;
+        float f6 = (float) (endColour >> 8 & 255) / 255.0F;
+        float f7 = (float) (endColour & 255) / 255.0F;
+
+        GlStateManager.disableTexture();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlphaTest();
+        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+        GlStateManager.shadeModel( 7425 );
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
+
+        bufferbuilder.pos( (double) p_fillGradient_3_, (double) p_fillGradient_2_, (double) this.blitOffset ).color( f1, f2, f3, f ).endVertex();
+        bufferbuilder.pos( (double) p_fillGradient_1_, (double) p_fillGradient_2_, (double) this.blitOffset ).color( f5, f6, f7, f4 ).endVertex();
+        bufferbuilder.pos( (double) p_fillGradient_1_, (double) p_fillGradient_4_, (double) this.blitOffset ).color( f5, f6, f7, f4 ).endVertex();
+        bufferbuilder.pos( (double) p_fillGradient_3_, (double) p_fillGradient_4_, (double) this.blitOffset ).color( f1, f2, f3, f ).endVertex();
+        tessellator.draw();
+
+        GlStateManager.shadeModel( 7424 );
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableTexture();
+
+    }
+
     public abstract void drawBackgroundLayer( int x, int y );
 
     public abstract void drawForegroundLayer();
 
     public static void horizontalLine( int x, int y, int length, int colour ) {
-
         fill( x, y, length + x, y + 1, colour );
-
     }
 
     public static void verticalLine( int x, int y, int length, int colour ) {
-
         fill( x, y, x + 1, length + y, colour );
-
     }
 
     public void drawBorder( int x, int y ) {
@@ -154,11 +189,7 @@ public abstract class Control extends AbstractGui {
     public abstract List<String> getTooltip( boolean isShiftKeyDown );
 
     public boolean ownsMousePoint( int mouseX, int mouseY ) {
-
-        //System.out.println( "mouse: " + mouseX + ", " + mouseY );
-
         return mouseX >= position.x && mouseX <= position.x + width && mouseY >= position.y && mouseY <= position.y + height;
-
     }
 
     public Control setHeight( int h ) {
