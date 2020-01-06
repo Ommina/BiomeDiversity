@@ -20,6 +20,8 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+
 @OnlyIn( Dist.CLIENT )
 public abstract class Control extends AbstractGui {
 
@@ -77,6 +79,66 @@ public abstract class Control extends AbstractGui {
     }
 
 */
+
+    public static void fill( double x1, double y1, double x2, double y2, int colour ) {
+
+        if ( x1 < x2 ) {
+            double i = x1;
+            x1 = x2;
+            x2 = i;
+        }
+
+        if ( y1 < y2 ) {
+            double j = y1;
+            y1 = y2;
+            y2 = j;
+        }
+
+        float f3 = (float) (colour >> 24 & 255) / 255.0F;
+        float f = (float) (colour >> 16 & 255) / 255.0F;
+        float f1 = (float) (colour >> 8 & 255) / 255.0F;
+        float f2 = (float) (colour & 255) / 255.0F;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture();
+        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+
+        bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
+        bufferbuilder.pos( x1, y2, 0.0D ).color( f, f1, f2, f3 ).endVertex();
+        bufferbuilder.pos( x2, y2, 0.0D ).color( f, f1, f2, f3 ).endVertex();
+        bufferbuilder.pos( x2, y1, 0.0D ).color( f, f1, f2, f3 ).endVertex();
+        bufferbuilder.pos( x1, y1, 0.0D ).color( f, f1, f2, f3 ).endVertex();
+        tessellator.draw();
+
+        GlStateManager.enableTexture();
+        GlStateManager.disableBlend();
+    }
+
+
+    public static void drawLine( double x1, double y1, double x2, double y2, int colour ) {
+
+        float f3 = (float) (colour >> 24 & 255) / 255.0F;
+        float f = (float) (colour >> 16 & 255) / 255.0F;
+        float f1 = (float) (colour >> 8 & 255) / 255.0F;
+        float f2 = (float) (colour & 255) / 255.0F;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture();
+        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+
+        bufferbuilder.begin( GL_LINES, DefaultVertexFormats.POSITION_COLOR );
+        bufferbuilder.pos( x1, y1, 0.0D ).color( f, f1, f2, f3 ).endVertex();
+        bufferbuilder.pos( x2, y2, 0.0D ).color( f, f1, f2, f3 ).endVertex();
+        tessellator.draw();
+
+        GlStateManager.enableTexture();
+        GlStateManager.disableBlend();
+
+    }
 
     public static void drawSprite( int x, int y, int offset, int width, int height, TextureAtlasSprite sprite ) {
         innerBlit( x, x + width, y, y + height, offset, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV() );

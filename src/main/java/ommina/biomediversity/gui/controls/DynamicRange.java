@@ -19,7 +19,6 @@ public abstract class DynamicRange extends Control {
     protected float range = 0f;
 
     public DynamicRange( Size size, TileEntity te, String methodName, float min, float max ) {
-
         super( size );
 
         tile = te;
@@ -37,7 +36,6 @@ public abstract class DynamicRange extends Control {
     }
 
     public DynamicRange( Size size, float value, float min, float max ) {
-
         super( size );
 
         setMinMax( min, max );

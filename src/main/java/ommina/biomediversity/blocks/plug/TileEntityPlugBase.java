@@ -144,6 +144,16 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
 
     }
 
+    public int getRfReleasedPerTick() {
+
+        TileEntityCollector collector = FINDER.get( world );
+
+        if ( collector == null )
+            return 0;
+
+        return collector.getRfReleasedPerTick();
+
+    }
 
     /*
 

@@ -1,6 +1,7 @@
 package ommina.biomediversity.blocks.plug.energy;
 
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,11 +20,13 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
 
     private static final Point POWER_GAUGE = new Point( 160, 15 );
     private static final Point SPRITE_BIOME = new Point( 8, 15 );
-    private static final Point METER_GAUGE = new Point( 8, 33 );
-    private static final Point UNIQUE_BIOMECOUNT_TEXT = new Point( 29, 15 );
-    private static final Point RF_PER_TICK_TEXT = new Point( 29, 33 );
+    private static final Point UNIQUE_BIOMECOUNT_TEXT = new Point( 29, (int) SPRITE_BIOME.getY() );
+    private static final Point METER_GAUGE = new Point( 8, 35 );
+    private static final Point RF_PER_TICK_TEXT = new Point( 29, (int) METER_GAUGE.getY() );
     private static final Point RF = new Point( 160, 15 );
     private static final Point TEMPERATURE_GAUGE = new Point( 133, 15 );
+
+    IntReferenceHolder rfPerTick = IntReferenceHolder.single();
 
     public PlugEnergyScreen( PlugEnergyContainer container, PlayerInventory inv, ITextComponent name ) {
         super( container, inv, name );
@@ -53,10 +56,9 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
         biome.setPostion( SPRITE_BIOME ).setWidth( 16 ).setHeight( 16 );
         controls.add( biome );
 
-        LogMeter rfMeter = new LogMeter( 30000 );
+        RfMeter rfMeter = new RfMeter( tile, "getRfReleasedPerTick" );
         rfMeter.setPostion( METER_GAUGE ).setWidth( 16 ).setHeight( 16 );
         controls.add( rfMeter );
-
 
         int n = collectorDetails.getUniqueBiomeCount();
 
