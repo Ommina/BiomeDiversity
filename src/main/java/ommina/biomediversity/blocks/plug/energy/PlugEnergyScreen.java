@@ -1,7 +1,6 @@
 package ommina.biomediversity.blocks.plug.energy;
 
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,8 +24,6 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
     private static final Point RF_PER_TICK_TEXT = new Point( 29, (int) METER_GAUGE.getY() );
     private static final Point RF = new Point( 160, 15 );
     private static final Point TEMPERATURE_GAUGE = new Point( 133, 15 );
-
-    IntReferenceHolder rfPerTick = IntReferenceHolder.single();
 
     public PlugEnergyScreen( PlugEnergyContainer container, PlayerInventory inv, ITextComponent name ) {
         super( container, inv, name );

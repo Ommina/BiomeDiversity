@@ -67,6 +67,8 @@ public class ModBlocks {
     // Fluid Blocks  (Only those that we care about)
     @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
     @ObjectHolder( "junglewater" ) public static FlowingFluidBlock JUNGLEWATER;
+    @ObjectHolder( "moltenorinocite" ) public static FlowingFluidBlock MOLTEN_ORINOCITE;
+    @ObjectHolder( "byproduct" ) public static FlowingFluidBlock BYPRODUCT;
 
     @SubscribeEvent
     public static void onContainerRegistry( final RegistryEvent.Register<ContainerType<?>> event ) {

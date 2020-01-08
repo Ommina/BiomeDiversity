@@ -11,12 +11,14 @@ import ommina.biomediversity.BiomeDiversity;
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModSounds {
 
-    @ObjectHolder( "collector_running" ) public static SoundEvent COLLECTOR_RUNNING;
+    @ObjectHolder( "collector_running_loop" ) public static SoundEvent COLLECTOR_RUNNING;
+    @ObjectHolder( "fluid_hardening" ) public static SoundEvent FLUID_HARDENING;
 
     @SubscribeEvent
     public static void register( RegistryEvent.Register<SoundEvent> event ) {
 
-        event.getRegistry().register( new SoundEvent( BiomeDiversity.getId( "collector_running" ) ).setRegistryName( "collector_running" ) );
+        event.getRegistry().register( new SoundEvent( BiomeDiversity.getId( "collector_running_loop" ) ).setRegistryName( "collector_running_loop" ) );
+        event.getRegistry().register( new SoundEvent( BiomeDiversity.getId( "fluid_hardening" ) ).setRegistryName( "fluid_hardening" ) );
 
     }
 

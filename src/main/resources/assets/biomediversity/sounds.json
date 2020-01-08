@@ -1,7 +1,12 @@
 {
-  "collector_running": {
+  "collector_running_loop": {
     "category": "block",
-    "subtitle": "biomediversity.subtitle.collector_running",
-    "sounds": [ "biomediversity:collector_running" ]
+    "subtitle": "biomediversity.subtitle.collector_running_loop",
+    "sounds": [ "biomediversity:collector_running_loop" ]
+  },
+  "fluid_hardening": {
+    "category": "block",
+    "subtitle": "biomediversity.subtitle.fluid_hardening",
+    "sounds": [ "biomediversity:fluid_hardening" ]
   }
 }

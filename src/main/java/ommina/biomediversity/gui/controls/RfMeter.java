@@ -30,7 +30,7 @@ public class RfMeter extends Control {
 
     }
 
-    private TileEntity tile;
+    private final TileEntity tile;
     private Method method;
 
     private int value;
@@ -101,11 +101,9 @@ public class RfMeter extends Control {
 
         this.fillGradientHorizontal( position.x + x, position.y + y, position.x + x + this.width, position.y + y + this.height, startColour, endColour );
 
-        final float f = 1f / 256f;
-
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
-        drawSprite( f, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
+        drawSprite( 1f / 256f, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
 
     }
 

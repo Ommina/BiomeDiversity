@@ -32,4 +32,5 @@ Block Models were created with [Blockbench](https://blockbench.net/); twitter: [
 
 #### Sounds
 
-"Collector Running" is adapted from [Alient Ship Idle.wav](https://freesound.org/people/Ch0cchi/sounds/15347/).  Used under [_CC BY 3.0_](https://creativecommons.org/licenses/by/3.0/#) license.
+"Collector Running Loop" is adapted from [Alient Ship Idle.wav](https://freesound.org/people/Ch0cchi/sounds/15347/).  Used under [_CC BY 3.0_](https://creativecommons.org/licenses/by/3.0/#) license.
+"Fluid Hardening" is adapted from [Water dripping on hot plate making steam](https://freesound.org/people/jorickhoofd/sounds/170736/).  Used under [_CC BY 3.0_](https://creativecommons.org/licenses/by/3.0/#) license.
