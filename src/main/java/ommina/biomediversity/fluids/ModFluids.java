@@ -1,6 +1,7 @@
 package ommina.biomediversity.fluids;
 
 import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
@@ -12,7 +13,7 @@ public class ModFluids {
     @ObjectHolder( "rainwater" ) public static FlowingFluid RAINWATER;                   // Produced by Rain Barrel TE
 
     @ObjectHolder( "coolbiometic" ) public static FlowingFluid COOLBIOMETIC;             // Produced by Collector (directly)
-    @ObjectHolder( "warmbiometic" ) public static FlowingFluid WARMBIOMETIC;
+    @ObjectHolder( "warmbiometic" ) public static BdFlowingFluid WARMBIOMETIC;
     @ObjectHolder( "byproduct" ) public static FlowingFluid BYPRODUCT;
     @ObjectHolder( "neutralbiometic" ) public static FlowingFluid NEUTRALBIOMETIC;       //                       (indirectly by Mixer)
 

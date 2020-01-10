@@ -8,6 +8,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import ommina.biomediversity.blocks.ModBlocks;
@@ -41,10 +42,10 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
             //BiomeDiversity.LOGGER.info( "Direction: " + direction.toString() );
             //BiomeDiversity.LOGGER.info( "Offset: " + worldIn.getBlockState( pos.offset( direction ) ).getBlock().toString() );
             //BiomeDiversity.LOGGER.info( "BlockStateIn: " + blockStateIn.toString() );
-            //BiomeDiversity.LOGGER.info( "FluidStateIn: " + fluidStateIn.getFluid().toString() );
+            //BiomeDiversity.LOGGER.info( "FluidStateIn: " + fluidStateIn.getFluid().getRegistryName().toString() );
 
-            if ( worldIn.getBlockState( pos.offset( direction ) ).getBlock() == ModBlocks.BYPRODUCT ) {
-                worldIn.setBlockState( pos, ModBlocks.ORINOCITE_ORE.getDefaultState(), 3 );
+            if ( fluidStateIn.getBlockState().getBlock() == ModBlocks.NEUTRAL_BIOMETIC && worldIn.getBlockState( pos.offset( direction ) ).getBlock() == ModBlocks.BYPRODUCT ) {
+                worldIn.setBlockState( pos, ModBlocks.PROGRESSIVE1.getDefaultState(), 3 );
                 worldIn.playSound( null, pos, ModSounds.FLUID_HARDENING, SoundCategory.BLOCKS, 1.0f, 1.0f );
                 return;
             }
@@ -55,21 +56,20 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
 
     }
 
-/*
 
     @Override
     protected boolean canFlow( IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, IFluidState toFluidState, Fluid fluidIn ) {
 
         //BiomeDiversity.LOGGER.info( "fromPos: " + fromPos.toString() + ", toPos: " + toPos.toString() + ", fromBlockState: " + fromBlockState.toString() + ", toBlockState: " + toBlockState.toString() + " toFluidState: " + toFluidState.toString() + " fluidIn: " + fluidIn.toString() );
 
-        //if ( fromBlockState.getBlock() == ModBlocks.MOLTEN_ORINOCITE && toBlockState.getBlock() == ModBlocks.BYPRODUCT )
-        //    return true;
+        if ( fromBlockState.getBlock() == ModBlocks.NEUTRAL_BIOMETIC && toBlockState.getBlock() == ModBlocks.BYPRODUCT )
+            return true;
 
         return super.canFlow( worldIn, fromPos, fromBlockState, direction, toPos, toBlockState, toFluidState, fluidIn );
 
     }
 
-*/
+
 //endregion Overrides
 
     public static class Flowing extends BdFlowingFluid {

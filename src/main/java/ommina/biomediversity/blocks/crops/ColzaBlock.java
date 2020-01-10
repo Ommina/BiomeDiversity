@@ -47,6 +47,7 @@ public class ColzaBlock extends CropsBlock {
         return MathHelper.nextInt( worldIn.rand, 1, 2 );
     }
 
+    @Override
     @OnlyIn( Dist.CLIENT )
     protected IItemProvider getSeedsItem() {
         return ModItems.COLZA_SEEDS;

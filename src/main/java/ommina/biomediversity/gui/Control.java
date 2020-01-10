@@ -96,11 +96,6 @@ public abstract class Control extends AbstractGui {
 
         float[] f = RenderHelper.getRGBA( colour );
 
-        //float f3 = (float) (colour >> 24 & 255) / 255.0F;
-        //float f = (float) (colour >> 16 & 255) / 255.0F;
-        //float f1 = (float) (colour >> 8 & 255) / 255.0F;
-        //float f2 = (float) (colour & 255) / 255.0F;
-
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         GlStateManager.enableBlend();
@@ -122,11 +117,6 @@ public abstract class Control extends AbstractGui {
     public static void drawLine( double x1, double y1, double x2, double y2, int colour ) {
 
         float[] f = RenderHelper.getRGBA( colour );
-
-        //float f3 = (float) (colour >> 24 & 255) / 255.0F;
-        //float f = (float) (colour >> 16 & 255) / 255.0F;
-        //float f1 = (float) (colour >> 8 & 255) / 255.0F;
-        //float f2 = (float) (colour & 255) / 255.0F;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();

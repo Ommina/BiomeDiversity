@@ -6,9 +6,11 @@ import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.blocks.blocks.BlockProgressive;
 
 @ObjectHolder( BiomeDiversity.MODID )
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
@@ -93,6 +95,9 @@ public class ModItems {
         register( event, "rainbarrel", new BlockItem( ModBlocks.RAIN_BARREL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "plug_energy", new BlockItem( ModBlocks.PLUG_ENERGY, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "plug_fluid_byproduct", new BlockItem( ModBlocks.PLUG_FLUID_BYPRODUCT, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+
+        for ( int n = 1; n <= 12; n++ )
+            register( event, BlockProgressive.PREFIX + n, new BlockItem( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( BlockProgressive.PREFIX + n ) ), new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
     }
 
