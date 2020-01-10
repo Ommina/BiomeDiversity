@@ -41,7 +41,7 @@ public class BlockProgressive extends Block {
     @Override
     public int getWeakPower( BlockState state, IBlockReader blockAccess, BlockPos pos, Direction side ) {
 
-        if ( canBePromoted( getStage( state ), (IWorldReader) blockAccess, pos ) )
+        if ( canBePromoted( getStage( state ), blockAccess, pos ) )
             return 15;
 
         return 0;
@@ -71,11 +71,11 @@ public class BlockProgressive extends Block {
         return this.getDefaultState().with( this.getStageProperty(), stage );
     }
 
-    private boolean canBePromoted( int stage, IWorldReader blockAccess, BlockPos pos ) {
+    private boolean canBePromoted( int stage, IBlockReader blockAccess, BlockPos pos ) {
         return hasVerticalMatch( stage, blockAccess, pos ) && hasHorizontalMatch( stage, blockAccess, pos );
     }
 
-    private boolean hasVerticalMatch( int stage, IWorldReader world, BlockPos pos ) {
+    private boolean hasVerticalMatch( int stage, IBlockReader world, BlockPos pos ) {
 
         for ( Direction direction : Direction.Plane.VERTICAL ) {
 
@@ -95,13 +95,13 @@ public class BlockProgressive extends Block {
 
     }
 
-    private boolean hasHorizontalMatch( int stage, IWorldReader world, BlockPos pos ) {
+    private boolean hasHorizontalMatch( int stage, IBlockReader world, BlockPos pos ) {
 
         for ( Direction direction : Direction.Plane.HORIZONTAL ) {
 
             BlockPos p = pos.offset( direction );
 
-            if ( !World.isValid( p ) || !world.isBlockLoaded( p ) )
+            if ( !World.isValid( p ) || (world instanceof IWorldReader) && !((IWorldReader) world).isBlockLoaded( p ) )
                 continue;
 
             BlockState s = world.getBlockState( p );
