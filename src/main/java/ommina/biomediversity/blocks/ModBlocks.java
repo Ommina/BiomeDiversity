@@ -120,8 +120,8 @@ public class ModBlocks {
         register( event, "plug_fluid_byproduct", new PlugFluidByproduct() );
 
         for ( int n = 1; n <= 11; n++ )
-            register( event, BlockProgressive.PREFIX + n, new BlockProgressive( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).tickRandomly().hardnessAndResistance( 3.3f - (float) n / 10 ), n ) );
-        register( event, BlockProgressive.PREFIX + "12", new FallingBlock( Block.Properties.create( Material.SAND ).harvestTool( ToolType.SHOVEL ).hardnessAndResistance( 1.7f ) ) );
+            register( event, BlockProgressive.PREFIX + n, new BlockProgressive( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).sound( SoundType.STONE ).tickRandomly().hardnessAndResistance( 3.3f - (float) n / 10 ), n ) );
+        register( event, BlockProgressive.PREFIX + "12", new FallingBlock( Block.Properties.create( Material.SAND ).harvestTool( ToolType.SHOVEL ).sound( SoundType.SAND ).hardnessAndResistance( 1.7f ) ) );
 
     }
 

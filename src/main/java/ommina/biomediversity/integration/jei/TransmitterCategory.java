@@ -9,6 +9,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.fluids.Recipe;
@@ -71,6 +72,8 @@ public class TransmitterCategory implements IRecipeCategory<Recipe> {
 
         iIngredients.setInputs( VanillaTypes.FLUID, FluidStrengths.getAllFluids() );
 
+        //iIngredients.setOutputLists(  );
+
     }
 
     @Override
@@ -80,7 +83,7 @@ public class TransmitterCategory implements IRecipeCategory<Recipe> {
 
         fluidStacks.init( 0, true, TANK_LOCATION.x, TANK_LOCATION.y, Control.Sizes.TANK.width, Control.Sizes.TANK.height, 1, true, null );
 
-        fluidStacks.set( 0, FluidStrengths.getAllFluids() );
+        fluidStacks.set( 0, new FluidStack( recipe.getFluid(), 1 ) );
 
     }
 

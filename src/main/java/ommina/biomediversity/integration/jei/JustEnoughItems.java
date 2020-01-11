@@ -4,6 +4,8 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -47,7 +49,18 @@ public class JustEnoughItems implements IModPlugin {
 
     }
 
-    /*
+/*
+
+    @Override
+    public void registerIngredients( IModIngredientRegistration registration) {
+
+        registration.register( ModIngredientTypes.INTEGER,   );
+
+    }
+
+*/
+
+/*
 
     @Override
     public void registerVanillaCategoryExtensions( IVanillaCategoryExtensionRegistration registration ) {
@@ -58,7 +71,7 @@ public class JustEnoughItems implements IModPlugin {
 
     }
 
-    */
+*/
 
     @Override
     public void registerRecipes( IRecipeRegistration registration ) {
