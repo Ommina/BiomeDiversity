@@ -4,8 +4,6 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
-import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -78,8 +76,11 @@ public class JustEnoughItems implements IModPlugin {
 
         registration.addRecipes( FluidStrengths.getRecipes(), TransmitterCategory.ID );
 
+
+        addInfoPage( registration, ModItems.TRANSMITTER );
+        addInfoPage( registration, ModItems.RECEIVER );
+
         //registration.addRecipes( getRecipesOfType( PlugCraftingRecipe.RECIPE_TYPE ), VanillaRecipeCategoryUid.CRAFTING );
-        //addInfoPage( registration, PressCraftingCategory.BASE_ITEM.getItem() );
 
     }
 

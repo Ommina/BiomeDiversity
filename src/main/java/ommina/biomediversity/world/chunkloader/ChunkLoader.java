@@ -33,7 +33,9 @@ public class ChunkLoader {
 
         ServerWorld serverworld = server.getWorld( DimensionType.OVERWORLD ); //TODO: Can DimensionManager somehow let us use other dimensions as well?
 
-        serverworld.forceChunk( pos.x, pos.z, doForceLoad );
+        serverworld.getChunkProvider().forceChunk( pos, doForceLoad );
+
+        //serverworld.forceChunk( pos.x, pos.z, doForceLoad );
 
     }
 

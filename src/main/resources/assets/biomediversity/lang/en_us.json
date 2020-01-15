@@ -31,7 +31,7 @@
   "item.biomediversity.pomegranate": "Pomegranate",
   "item.biomediversity.pomegranate_seeds": "Pomegranate Seeds",
 
-  "item.biomediversity.byproduct_bucket": "Collector aRtiFact Bucket",
+  "item.biomediversity.byproduct_bucket": "Collector Artifact Bucket",
   "item.biomediversity.coolbiometic_bucket": "Cool Biometic Bucket",
   "item.biomediversity.junglewater_bucket": "Jungle Water Bucket",
   "item.biomediversity.mineralwater_bucket": "Mineral Water Bucket",
@@ -57,12 +57,15 @@
   "fluid.biomediversity.warmbiometic": "Warm Biometic",
   "fluid.biomediversity.coolbiometic": "Cool Biometic",
   "fluid.biomediversity.neutralbiometic": "Neutral Biometic",
-  "fluid.biomediversity.byproduct": "Collector aRtiFact",
+  "fluid.biomediversity.byproduct": "Collector Artifact",
   "fluid.biomediversity.rainwater": "Rainwater",
   "fluid.biomediversity.mineralwater": "Mineral Water",
   "fluid.biomediversity.junglewater": "Jungle Water",
   "fluid.biomediversity.moltenorinocite": "Molten Orinocite",
 
-  "jei.biomediversity.transmitter": "Transmitter Fluids"
+  "jei.biomediversity.transmitter": "Transmitter Fluids",
+
+  "jei.biomediversity.transmitter.desc": "Pair with a Receiver by right-clicking each with a Linking Staff",
+  "jei.biomediversity.receiver.desc": "Pair with a Transmitter by right-clicking each with a Linking Staff"
 
 }
