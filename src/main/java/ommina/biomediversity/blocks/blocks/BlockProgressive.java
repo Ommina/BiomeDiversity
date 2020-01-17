@@ -32,7 +32,6 @@ public class BlockProgressive extends Block {
     public void randomTick( BlockState state, World world, BlockPos pos, Random random ) {
 
         int stage = getStage( state );
-        world.getBlockState( pos );
 
         if ( canBePromoted( stage, world, pos ) )
             promote( stage, world, pos );

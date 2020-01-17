@@ -1,8 +1,9 @@
-package ommina.biomediversity.integration.jei;
+package ommina.biomediversity.integration.jei.controls;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.gui.Control;
+import ommina.biomediversity.gui.UV;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -12,20 +13,16 @@ public class JeiTank extends Control {
 
     public JeiTank() {
         super( Sizes.TANK );
-
     }
 
     //region Overrides
     @Override
     public void drawBackgroundLayer( int x, int y ) {
-
         drawBorder( x, y );
-
     }
 
     @Override
     public void drawForegroundLayer() {
-
     }
 
     @Nullable
@@ -33,6 +30,7 @@ public class JeiTank extends Control {
     public List<String> getTooltip( boolean isShiftKeyDown ) {
         return null;
     }
+
 //endregion Overrides
 
 }

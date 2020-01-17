@@ -18,17 +18,14 @@ import java.util.function.Supplier;
 
 public class FluidWrapper {
 
+    private final String name;
+    private final ResourceLocation stillTexture;
+    private final ResourceLocation flowingTexture;
     private Supplier<FlowingFluid> fluid_still;
     private Supplier<FlowingFluid> fluid_flowing;
     private Supplier<FlowingFluidBlock> block;
     private Supplier<Item> bucket;
-
     private ForgeFlowingFluid.Properties fluid_properties;
-
-    private final String name;
-    private final ResourceLocation stillTexture;
-    private final ResourceLocation flowingTexture;
-
     private int luminosity = 0;
     private int density = 1000;
     private int temperature = 300;

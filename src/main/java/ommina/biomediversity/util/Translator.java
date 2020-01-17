@@ -38,4 +38,5 @@ public class Translator {
         }
         return Locale.getDefault();
     }
+
 }

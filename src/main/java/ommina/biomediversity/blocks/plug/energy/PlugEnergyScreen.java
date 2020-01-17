@@ -8,6 +8,7 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.plug.PlugCollectorDetails;
 import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
+import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.*;
 import ommina.biomediversity.util.Translator;
@@ -33,11 +34,11 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
 
         PlugCollectorDetails collectorDetails = tile.getCollectorDetails();
 
-        Text guiName = new Text( Translator.translateToLocal( ModBlocks.PLUG_ENERGY.getTranslationKey() ), Text.Justification.CENTRE, xSize );
+        Text guiName = new Text( Translator.translateToLocal( ModBlocks.PLUG_ENERGY.getTranslationKey() ), RenderHelper.Justification.CENTRE, xSize );
         guiName.setPostion( TITLE_TEXT );
         controls.add( guiName );
 
-        Text guiInventory = new Text( inv.getName().getString(), Text.Justification.LEFT, xSize );
+        Text guiInventory = new Text( inv.getName().getString(), RenderHelper.Justification.LEFT, xSize );
         guiInventory.setPostion( new Point( 8, ySize - 94 ) );
         controls.add( guiInventory );
 
@@ -60,12 +61,12 @@ public class PlugEnergyScreen extends BaseContainerScreen<PlugEnergyContainer> {
         int n = collectorDetails.getUniqueBiomeCount();
 
         if ( n > 0 ) {
-            Text uniqueBiomeCount = new Text( Translator.translateToLocalFormatted( "text.biomediversity.gui.uniquebiomecount", n, n > 1 ? "s" : "" ), Text.Justification.LEFT, xSize );
+            Text uniqueBiomeCount = new Text( Translator.translateToLocalFormatted( "text.biomediversity.gui.uniquebiomecount", n, n > 1 ? "s" : "" ), RenderHelper.Justification.LEFT, xSize );
             uniqueBiomeCount.setPostion( UNIQUE_BIOMECOUNT_TEXT );
             controls.add( uniqueBiomeCount );
         }
 
-        Text rfReleasedPerTick = new Text( Translator.translateToLocalFormatted( "text.biomediversity.gui.rfpertick", collectorDetails.getRfReleasedPerTick() ), Text.Justification.LEFT, xSize );
+        Text rfReleasedPerTick = new Text( Translator.translateToLocalFormatted( "text.biomediversity.gui.rfpertick", collectorDetails.getRfReleasedPerTick() ), RenderHelper.Justification.LEFT, xSize );
         rfReleasedPerTick.setPostion( RF_PER_TICK_TEXT );
         controls.add( rfReleasedPerTick );
 

@@ -3,23 +3,21 @@ package ommina.biomediversity.gui.controls;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.gui.Control;
 
 import java.util.List;
+
+import static ommina.biomediversity.config.Constants.DEFAULT_TEXT_COLOUR;
 
 @OnlyIn( Dist.CLIENT )
 public class Text extends Control {
 
     private final String unformattedText;
-    private final Justification justification;
+    private final RenderHelper.Justification justification;
     private final int containerWidth;
 
-    public enum Justification {
-        LEFT, CENTRE, RIGHT
-    }
-
-    public Text( String unformattedText, Justification justification, int containerWidth ) {
-
+    public Text( String unformattedText, RenderHelper.Justification justification, int containerWidth ) {
         super( Sizes.EMPTY );
 
         this.unformattedText = unformattedText;
@@ -30,39 +28,25 @@ public class Text extends Control {
     }
 
     public Text( int value, int containerWidth ) {
-
-        this( format.format( value ), Justification.RIGHT, containerWidth );
-
+        this( format.format( value ), RenderHelper.Justification.RIGHT, containerWidth );
     }
 
     //region Overrides
     @Override
     public void drawBackgroundLayer( int x, int y ) {
-
         //None
     }
 
     @Override
     public void drawForegroundLayer() {
-
-        String text = I18n.format( unformattedText );
-
-        int left = position.x;
-
-        if ( justification == Justification.CENTRE )
-            left = containerWidth / 2 - fontRenderer.getStringWidth( text ) / 2;
-
-        fontRenderer.drawString( text, left, position.y, 0x404040 );
-
+        RenderHelper.drawText( I18n.format( unformattedText ), position.x, position.y, containerWidth, justification, DEFAULT_TEXT_COLOUR );
     }
 
     @Override
     public List<String> getTooltip( boolean isShiftKeyDown ) {
-
-        // Lines of text don't get tooltips.
-        return null;
-
+        return null; // Lines of text don't get tooltips.  Not yet, anyway
     }
+
 //endregion Overrides
 
 }

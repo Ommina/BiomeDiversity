@@ -1,6 +1,8 @@
 package ommina.biomediversity.blocks.tile;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +26,10 @@ public class RenderHelper {
         SOUTH,
         WEST,
         EAST
+    }
+
+    public enum Justification {
+        LEFT, CENTRE, RIGHT
     }
 
     public static float[] getRGBA( int color ) {
@@ -119,7 +125,23 @@ public class RenderHelper {
             buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMaxV() ).lightmap( 0, 176 ).endVertex();
         }
 
-        //buffer.sortVertexData( Minecraft.getInstance().player.posX, Minecraft.getInstance().player.posY, Minecraft.getInstance().player.posZ);
+    }
+
+    public static void drawText( String text, int left, int top, int width, Justification justification, int colour ) {
+
+        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+
+        //GlStateManager.pushMatrix();
+        //GlStateManager.scalef( 0.9f, 0.9f, 0.9f );
+
+        if ( justification == Justification.CENTRE ) {
+            left = width / 2 - fontRenderer.getStringWidth( text ) / 2;
+        } else if ( justification == Justification.RIGHT ) {
+            left = left + width - fontRenderer.getStringWidth( text );
+        }
+
+        fontRenderer.drawString( text, left, top, colour );
+        //GlStateManager.popMatrix();
 
     }
 

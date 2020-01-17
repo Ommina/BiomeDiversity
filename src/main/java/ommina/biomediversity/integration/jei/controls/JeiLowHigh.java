@@ -1,34 +1,35 @@
-package ommina.biomediversity.gui.controls;
+package ommina.biomediversity.integration.jei.controls;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
+import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.gui.Control;
+import ommina.biomediversity.gui.controls.AbstractLowHigh;
 
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class LowHigh extends AbstractLowHigh {
+public class JeiLowHigh extends AbstractLowHigh {
 
-    public LowHigh( TileEntity te, String methodName, ScaleMode scaleMode, float min, float max ) {
-        super( te, methodName, scaleMode, min, max );
+    public JeiLowHigh() {
+        super( ScaleMode.LINEAR, 0f, Constants.MIN_FLUID_STRENGTH, Constants.MAX_FLUID_STRENGTH );
     }
 
     //region Overrides
     @Override
     public void drawBackgroundLayer( int x, int y ) {
 
+        drawBorder( x, y );
+
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         float f = 1f / 256f;
 
-        Control.drawSprite( f, position.x + x, position.y + y, BG.minU, BG.minV, BG.maxU, BG.maxV );
+        Control.drawSprite( f, position.x, position.y, BG.minU, BG.minV, BG.maxU, BG.maxV );
 
     }
 
     @Override
     public void drawForegroundLayer() {
-
-        setValue();
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
@@ -38,11 +39,12 @@ public class LowHigh extends AbstractLowHigh {
 
     }
 
+    @Nullable
     @Override
     public List<String> getTooltip( boolean isShiftKeyDown ) {
-
-        return (isShiftKeyDown ? Collections.singletonList( format.format( value ) ) : null);
+        return null;
     }
 //endregion Overrides
+
 
 }

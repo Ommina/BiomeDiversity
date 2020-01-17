@@ -77,4 +77,8 @@ public abstract class DynamicRange extends Control {
 
     }
 
+    public void setValue( float value ) {
+        this.value = MathUtil.clamp( MathUtil.round( value, 1 ), min, max );
+    }
+
 }

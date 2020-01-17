@@ -305,12 +305,14 @@ public class Config {
         fluids.add( BiomeDiversity.MODID + ":rainwater:30" );
         fluids.add( BiomeDiversity.MODID + ":mineralwater:50" );
         fluids.add( "minecraft:lava:120" );
+        fluids.add( BiomeDiversity.MODID + ":byproduct:120" );
         fluids.add( BiomeDiversity.MODID + ":warmbiometic:540" );
         fluids.add( BiomeDiversity.MODID + ":coolbiometic:540" );
+        fluids.add( BiomeDiversity.MODID + ":junglewater:640" );
         fluids.add( BiomeDiversity.MODID + ":neutralbiometic:1080" );
 
         // final String[] defaults = new String[] {    "freshwater:128", "murkywater:192", "enrichedwater:256", "natural:300", "paledeliquescent:320",
-        //       "brightdeliquescent:510", "junglewater:640", "sparklingdeliquescent:715", "scintillatingdeliquescent:920",  "dilutenatural:1402" };
+        //       "brightdeliquescent:510", "sparklingdeliquescent:715", "scintillatingdeliquescent:920",  "dilutenatural:1402" };
 
         return fluids;
 

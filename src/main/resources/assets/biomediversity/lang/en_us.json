@@ -64,6 +64,7 @@
   "fluid.biomediversity.moltenorinocite": "Molten Orinocite",
 
   "jei.biomediversity.transmitter": "Transmitter Fluids",
+  "jei.biomediversity.transmitter.text.energy": "%d/tick",
 
   "jei.biomediversity.transmitter.desc": "Pair with a Receiver by right-clicking each with a Linking Staff",
   "jei.biomediversity.receiver.desc": "Pair with a Transmitter by right-clicking each with a Linking Staff"

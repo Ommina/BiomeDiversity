@@ -1,5 +1,7 @@
 package ommina.biomediversity.config;
 
+import java.awt.*;
+
 public class Constants {
 
     public static final int CLUSTER_FLUID_CONSUMPTION = 20; // Combined with delay, it is effectively 1mb / tick
@@ -24,5 +26,7 @@ public class Constants {
 
     public static final int MIN_FLUID_STRENGTH = 1;
     public static final int MAX_FLUID_STRENGTH = 8192;
+
+    public static final int DEFAULT_TEXT_COLOUR = new Color( 64, 64, 64, 255 ).getRGB();
 
 }

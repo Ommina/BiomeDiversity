@@ -7,6 +7,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
+import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.*;
@@ -29,11 +30,11 @@ public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer>
         TileEntityTransmitter transmitter = (TileEntityTransmitter) container.getTileEntity();
         GUI = BiomeDiversity.getId( "textures/gui/gui_blank.png" );
 
-        Text guiName = new Text( Translator.translateToLocal( ModBlocks.TRANSMITTER.getTranslationKey() ), Text.Justification.CENTRE, xSize );
+        Text guiName = new Text( Translator.translateToLocal( ModBlocks.TRANSMITTER.getTranslationKey() ), RenderHelper.Justification.CENTRE, xSize );
         guiName.setPostion( TITLE_TEXT );
         controls.add( guiName );
 
-        Text guiInventory = new Text( inv.getName().getString(), Text.Justification.LEFT, xSize );
+        Text guiInventory = new Text( inv.getName().getString(), RenderHelper.Justification.LEFT, xSize );
         guiInventory.setPostion( new Point( 8, ySize - 94 ) );
         controls.add( guiInventory );
 
@@ -47,7 +48,7 @@ public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer>
 
         Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( transmitter.getBiomeRegistryName() ) );
         if ( biome != null ) {
-            Text biomeName = new Text( biome.getDisplayName().getString(), Text.Justification.LEFT, xSize );
+            Text biomeName = new Text( biome.getDisplayName().getString(), RenderHelper.Justification.LEFT, xSize );
             biomeName.setPostion( BIOMENAME_TEXT );
             controls.add( biomeName );
         }
