@@ -1,13 +1,19 @@
 package ommina.biomediversity.blocks.collector;
 
+import net.minecraft.fluid.EmptyFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.fluids.SingleFluidRecipe;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Point2f;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public enum Tubes {
@@ -52,12 +58,36 @@ public enum Tubes {
 
     @Nullable
     public Fluid fluid() {
-        return ForgeRegistries.FLUIDS.getValue( fluid );
+
+        Fluid f = ForgeRegistries.FLUIDS.getValue( fluid );
+
+        if ( f instanceof EmptyFluid )
+            return null;
+
+        return f;
+
     }
 
     @Nullable
     public static Fluid fluid( int tank ) {
         return Arrays.stream( Tubes.values() ).filter( tube -> tube.tank == tank ).collect( Collectors.toList() ).get( 0 ).fluid();
+    }
+
+    public static Collection<SingleFluidRecipe> getRecipes() {
+        return getAllFluids().stream().map( f -> new SingleFluidRecipe( f.getFluid() ) ).collect( Collectors.toList() );
+    }
+
+
+    public static List<FluidStack> getAllFluids() {
+
+        List<FluidStack> stacks = new ArrayList<FluidStack>();
+
+        for ( int n = 0; n <= 7; n++ )
+            if ( Tubes.fluid( n ) != null )
+                stacks.add( new FluidStack( Tubes.fluid( n ), 1 ) );
+
+        return stacks;
+
     }
 
 }

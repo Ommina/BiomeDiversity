@@ -63,8 +63,10 @@
   "fluid.biomediversity.junglewater": "Jungle Water",
   "fluid.biomediversity.moltenorinocite": "Molten Orinocite",
 
-  "jei.biomediversity.transmitter": "Transmitter Fluids",
+  "jei.biomediversity.transmitter.title": "Transmitter Fluids",
   "jei.biomediversity.transmitter.text.energy": "%d/tick",
+
+  "jei.biomediversity.collector.output.title": "Collector Outputs",
 
   "jei.biomediversity.transmitter.desc": "Pair with a Receiver by right-clicking each with a Linking Staff",
   "jei.biomediversity.receiver.desc": "Pair with a Transmitter by right-clicking each with a Linking Staff"

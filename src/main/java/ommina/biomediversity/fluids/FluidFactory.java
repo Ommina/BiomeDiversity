@@ -2,7 +2,6 @@ package ommina.biomediversity.fluids;
 
 
 import net.minecraft.item.Rarity;
-import net.minecraftforge.fluids.FluidAttributes;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class FluidFactory {
 
         wrapper.add( new FluidWrapper( "coolbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 5 ).setColour( new Color( 43, 168, 226, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "warmbiometic", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 15 ).setColour( new Color( 249, 79, 105, 255 ) ).setRarity( Rarity.UNCOMMON ).build() );
-        wrapper.add( new FluidWrapper( "byproduct", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 3 ).setColour( new Color( 236,14,231,192 ) ).setRarity( Rarity.UNCOMMON ).build() );
+        wrapper.add( new FluidWrapper( "byproduct", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 3 ).setColour( new Color( 236, 14, 231, 192 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "neutralbiometic", "fluid_blank" ).setViscosity( 1000 ).setLuminosity( 7 ).setColour( new Color( 255, 244, 182, 255 ) ).setRarity( Rarity.EPIC ).build() );
 
         wrapper.add( new FluidWrapper( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 68, 126, 129, 224 ) ).setRarity( Rarity.RARE ).build() );
@@ -53,6 +52,8 @@ public class FluidFactory {
 
  */
 
+/*
+
     public static final class FluidItem {
 
         private String name;
@@ -69,5 +70,7 @@ public class FluidFactory {
         }
 
     }
+
+    */
 
 }

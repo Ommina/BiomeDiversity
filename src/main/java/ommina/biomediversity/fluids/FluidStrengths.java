@@ -76,27 +76,19 @@ public class FluidStrengths {
     }
 
     public static Collection<FluidStrength> getAll() {
-
         return fluids.values();
-
     }
 
     public static List<FluidStack> getAllFluids() {
-
         return fluids.values().stream().map( f -> new FluidStack( f.getFluid(), 1 ) ).collect( Collectors.toList() );
-
     }
 
-    public static Collection<Recipe> getRecipes() {
-
-        return fluids.values().stream().map( f -> new Recipe( f.fluid, f.strength ) ).collect( Collectors.toList() );
-
+    public static Collection<TransmitterFluidRecipe> getRecipes() {
+        return fluids.values().stream().map( f -> new TransmitterFluidRecipe( f.fluid, f.strength ) ).collect( Collectors.toList() );
     }
 
     public static boolean contains( int hashCode ) {
-
         return fluids.containsKey( hashCode );
-
     }
 
 }

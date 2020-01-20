@@ -15,6 +15,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.blocks.collector.Tubes;
 import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.items.ModItems;
 
@@ -42,7 +43,8 @@ public class JustEnoughItems implements IModPlugin {
         IGuiHelper guiHelper = reg.getJeiHelpers().getGuiHelper();
 
         reg.addRecipeCategories(
-             new TransmitterCategory( guiHelper )
+             new TransmitterCategory( guiHelper ),
+             new CollectorOutputCategory( guiHelper )
         );
 
     }
@@ -75,7 +77,7 @@ public class JustEnoughItems implements IModPlugin {
     public void registerRecipes( IRecipeRegistration registration ) {
 
         registration.addRecipes( FluidStrengths.getRecipes(), TransmitterCategory.ID );
-
+        registration.addRecipes( Tubes.getRecipes(), CollectorOutputCategory.ID );
 
         addInfoPage( registration, ModItems.TRANSMITTER );
         addInfoPage( registration, ModItems.RECEIVER );
