@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -26,18 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
-import ommina.biomediversity.blocks.collector.FastTesrCollector;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
-import ommina.biomediversity.blocks.plug.FastTesrPlug;
-import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
-import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
-import ommina.biomediversity.blocks.plug.fluid.TileEntityPlugFluid;
-import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
-import ommina.biomediversity.blocks.rainbarrel.TileEntityRainBarrel;
-import ommina.biomediversity.blocks.receiver.FastTesrReceiver;
-import ommina.biomediversity.blocks.receiver.TileEntityReceiver;
-import ommina.biomediversity.blocks.transmitter.FastTesrTransmitter;
-import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.DeferredRegistration;
@@ -102,12 +91,14 @@ public class BiomeDiversity {
         @SubscribeEvent
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityCollector.class, new FastTesrCollector<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugEnergy.class, new FastTesrPlug<>() );
-            ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugFluid.class, new FastTesrPlug<>() );
+            ClientRegistry.bindTileEntityRenderer( TileEntityCollector.class, );
+
+            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityCollector.class, new FastTesrCollector<>() );
+            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
+            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
+            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
+            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugEnergy.class, new FastTesrPlug<>() );
+            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugFluid.class, new FastTesrPlug<>() );
 
         }
 
@@ -128,7 +119,7 @@ public class BiomeDiversity {
     public static class ClientForgeEvents {
 
         @SubscribeEvent
-        public static void onBlockHighlight( final DrawBlockHighlightEvent event ) {
+        public static void onBlockHighlight( final DrawHighlightEvent event ) {
 
             if ( event.getTarget().getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().world.getBlockState( new BlockPos( event.getTarget().getHitVec() ) ).getBlock() instanceof ClusterBlock )
                 event.setCanceled( true );

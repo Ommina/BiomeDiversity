@@ -12,7 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -53,40 +53,12 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     }
 
-    private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
-
-        BiomeDiversity.LOGGER.info( "Transmitter identifier: " + tile.getIdentifier().toString() );
-        BiomeDiversity.LOGGER.info( " Position: " + tile.getPos().toString() );
-
-        if ( tile.getOwner() != null )
-            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
-
-        if ( tile.getAssociatedIdentifier() != null )
-            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
-
-        if ( tile.getAssociatedPos() != null )
-            BiomeDiversity.LOGGER.info( "  Position  : " + tile.getAssociatedPos().toString() );
-
-        if ( tile.getTank( 0 ).getFluid() != null )
-            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
-
-        Biome b = world.getBiome( pos );
-
-        BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
-
-    }
-
-    // Overrides
+    //region Overrides
     @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public boolean onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+    public ActionResultType func_225533_a_( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return true;
+            return ActionResultType.PASS;
 
         TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
         ItemStack heldItem = player.getHeldItem( hand );
@@ -95,9 +67,9 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
             if ( heldItem.getItem() == Items.CARROT ) {
                 debuggingCarrot( world, pos, tile );
-                return true;
+                return ActionResultType.CONSUME;
             } else if ( heldItem.getItem() == ModItems.LINK_STAFF )
-                return false;
+                return ActionResultType.PASS;
 
             LazyOptional<IFluidHandler> capability = tile.getCapability( CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null );
 
@@ -113,14 +85,14 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
                     player.setHeldItem( hand, far.getResult() );
                 }
 
-                return true;
+                return ActionResultType.PASS;
 
             }
         }
 
         NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
-        return true;
+        return ActionResultType.PASS;
 
     }
 
@@ -137,7 +109,10 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
             PlayerEntity player = (PlayerEntity) livingEntity;
             TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( blockPos );
-            Biome biome = world.getBiome( blockPos );
+
+            Biome biome = world.func_226691_t_( blockPos );
+
+            //Biome biome = world.getBiome( blockPos );
 
             tile.setOwner( player.getUniqueID() );
 
@@ -188,6 +163,36 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     @Override
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
         return new TileEntityTransmitter();
+    }
+//endregion Overrides
+
+    // Overrides
+    //@Override
+    //public BlockRenderLayer getRenderLayer() {
+    //    return BlockRenderLayer.CUTOUT;
+    //}
+
+    private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
+
+        BiomeDiversity.LOGGER.info( "Transmitter identifier: " + tile.getIdentifier().toString() );
+        BiomeDiversity.LOGGER.info( " Position: " + tile.getPos().toString() );
+
+        if ( tile.getOwner() != null )
+            BiomeDiversity.LOGGER.info( " Owner: " + tile.getOwner().toString() );
+
+        if ( tile.getAssociatedIdentifier() != null )
+            BiomeDiversity.LOGGER.info( " Associated: " + tile.getAssociatedIdentifier().toString() );
+
+        if ( tile.getAssociatedPos() != null )
+            BiomeDiversity.LOGGER.info( "  Position  : " + tile.getAssociatedPos().toString() );
+
+        if ( tile.getTank( 0 ).getFluid() != null )
+            BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
+
+        Biome b = world.func_226691_t_( pos );// world.getBiome( pos );
+
+        BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
+
     }
 //endregion Overrides
 

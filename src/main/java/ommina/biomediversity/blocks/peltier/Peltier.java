@@ -2,9 +2,7 @@ package ommina.biomediversity.blocks.peltier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.common.ToolType;
-import ommina.biomediversity.blocks.BlockTileEntity;
 import ommina.biomediversity.config.Constants;
 
 public class Peltier extends Block { //BlockTileEntity<TileEntityPeltier> {
@@ -41,9 +39,9 @@ public class Peltier extends Block { //BlockTileEntity<TileEntityPeltier> {
 
     */
 
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+    //@Override
+    //public BlockRenderLayer getRenderLayer() {
+    //    return BlockRenderLayer.CUTOUT;
+    //}
 
 }

@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -27,27 +27,27 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
 
     }
 
-//region Overrides
+    //region Overrides
     @Override
     public BlockRenderType getRenderType( BlockState state ) {
         return BlockRenderType.MODEL;
     }
 
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+    //@Override
+    //public BlockRenderLayer getRenderLayer() {
+    //    return BlockRenderLayer.CUTOUT;
+    //}
 
     @Override
-    public boolean onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+    public ActionResultType func_225533_a_( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return true;
+            return ActionResultType.PASS;
 
         TileEntityPlugBase tile = (TileEntityPlugBase) world.getTileEntity( pos );
 
         if ( tile == null )
-            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
+            return super.func_225533_a_( blockState, world, pos, player, hand, rayTraceResult );
 
         BlockPos collectorPos = tile.getCollectorPos();
 
@@ -60,14 +60,14 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
 
             if ( heldItem.getItem() == Items.CARROT ) {
                 debuggingCarrot( tile );
-                return true;
+                return ActionResultType.SUCCESS;
             }
 
         }
 
         NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
-        return true;
+        return ActionResultType.SUCCESS;
 
     }
 //endregion Overrides

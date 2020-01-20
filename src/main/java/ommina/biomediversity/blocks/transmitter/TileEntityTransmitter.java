@@ -43,7 +43,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
 
-    private final BdFluidTank TANK = new BdFluidTank(0, Config.transmitterCapacity.get() ) {
+    private final BdFluidTank TANK = new BdFluidTank( 0, Config.transmitterCapacity.get() ) {
 
         //region Overrides
         @Override
@@ -172,7 +172,9 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     public float getTemperature() {
 
-        return world.getBiome( pos ).getTemperature( pos );
+        return world.func_226691_t_( pos ).getTemperature( pos );
+
+        //return world.getBiome( pos ).getTemperature( pos );
 
     }
 

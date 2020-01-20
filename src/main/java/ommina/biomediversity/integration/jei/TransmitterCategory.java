@@ -93,8 +93,6 @@ public class TransmitterCategory implements IRecipeCategory<TransmitterFluidReci
 
         fluidStacks.set( 0, new FluidStack( recipe.getFluid(), 1 ) );
 
-        BiomeDiversity.LOGGER.info( "setRecipe: " + recipe.getFluid().toString() );
-
     }
 
     @Override

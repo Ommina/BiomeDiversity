@@ -5,7 +5,6 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
@@ -19,7 +18,7 @@ public class RainBarrel extends BlockTileEntity<TileEntityRainBarrel> {
         super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
     }
 
-//region Overrides
+    //region Overrides
     @Override
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
         return new TileEntityRainBarrel();
@@ -30,10 +29,10 @@ public class RainBarrel extends BlockTileEntity<TileEntityRainBarrel> {
         return BlockRenderType.MODEL;
     }
 
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+    //@Override
+    //public BlockRenderLayer getRenderLayer() {
+    //    return BlockRenderLayer.CUTOUT;
+    //}
 //endregion Overrides
 
 }

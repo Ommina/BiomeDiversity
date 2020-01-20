@@ -11,7 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -44,10 +44,10 @@ public class ClusterBlock extends GlassBlock {
     }
 
     //region Overrides
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+    //@Override
+    //public BlockRenderLayer getRenderLayer() {
+    //    return BlockRenderLayer.CUTOUT;
+    //}
 
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
@@ -70,17 +70,17 @@ public class ClusterBlock extends GlassBlock {
     }
 
     @Override
-    public boolean onBlockActivated( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) {
+    public ActionResultType func_225533_a_( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) { // onBlockActivated
 
-        if ( player.isSneaking() || !state.get( FORMED ) )
-            return super.onBlockActivated( state, world, pos, player, hand, hit );
+        if ( player.isCrouching() || !state.get( FORMED ) )
+            return super.func_225533_a_( state, world, pos, player, hand, hit );
 
         if ( !world.isRemote && player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
 
             BlockPos controllerPos = checkForController( world, pos );
 
             if ( controllerPos == null )
-                return false;
+                return ActionResultType.PASS;
 
             Vec3d collectorVector = new Vec3d( controllerPos.getX(), controllerPos.getY(), controllerPos.getZ() );
             int tankActivated = ModBlocks.COLLECTOR.getTankActivated( player, hit.getHitVec(), collectorVector );
@@ -88,12 +88,12 @@ public class ClusterBlock extends GlassBlock {
             //BiomeDiversity.LOGGER.info( "  tankActivated: " + tankActivated );
 
             if ( tankActivated == -1 )
-                return super.onBlockActivated( state, world, pos, player, hand, hit );
+                return super.func_225533_a_( state, world, pos, player, hand, hit );
 
             TileEntity controller = world.getTileEntity( controllerPos );
 
             if ( !(controller instanceof TileEntityCollector) )
-                return false;
+                return ActionResultType.PASS;
 
             ItemStack heldItem = player.getHeldItem( hand );
             BdFluidTank tank = ((TileEntityCollector) controller).getTank( tankActivated );
@@ -108,7 +108,7 @@ public class ClusterBlock extends GlassBlock {
 
         }
 
-        return true;
+        return ActionResultType.SUCCESS;
 
     }
 

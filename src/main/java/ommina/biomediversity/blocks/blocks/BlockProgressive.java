@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
@@ -29,7 +30,7 @@ public class BlockProgressive extends Block {
 
     //region Overrides
     @Override
-    public void randomTick( BlockState state, World world, BlockPos pos, Random random ) {
+    public void func_225534_a_( BlockState state, ServerWorld world, BlockPos pos, Random random ) { // randomTicks
 
         int stage = getStage( state );
 

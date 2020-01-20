@@ -12,7 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -53,35 +53,35 @@ public class Receiver extends Block {
     }
 
     @Override
+    public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
+        return this.blocksMovement ? state.getShape( worldIn, pos ) : VoxelShapes.empty();
+    }
+
+    @Override
+    public VoxelShape getRenderShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {
+        return state.getShape( worldIn, pos );
+    }
+
+    @Override
     public VoxelShape getRaytraceShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {
         return SHAPE;
     }
 
-    @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return this.blocksMovement ? state.getShape(worldIn, pos) : VoxelShapes.empty();
-    }
+    //@Override
+    //public BlockRenderLayer getRenderLayer() {
+    //    return BlockRenderLayer.CUTOUT;
+    //}
 
     @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.getShape(worldIn, pos);
-    }
-
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public boolean onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+    public ActionResultType func_225533_a_( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return true;
+            return ActionResultType.PASS;
 
         TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
 
         if ( tile == null )
-            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
+            return super.func_225533_a_( blockState, world, pos, player, hand, rayTraceResult );
 
         ItemStack heldItem = player.getHeldItem( hand );
 
@@ -89,15 +89,15 @@ public class Receiver extends Block {
 
             if ( heldItem.getItem() == Items.CARROT ) {
                 debuggingCarrot( tile );
-                return true;
+                return ActionResultType.SUCCESS;
             } else if ( heldItem.getItem() == ModItems.LINK_STAFF )
-                return false;
+                return ActionResultType.PASS;
 
         }
 
         NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
-        return true;
+        return ActionResultType.PASS;
 
     }
 
