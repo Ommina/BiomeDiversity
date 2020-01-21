@@ -25,8 +25,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
-import ommina.biomediversity.blocks.collector.TileEntityCollector;
+import ommina.biomediversity.blocks.collector.FastTesrCollector;
+import ommina.biomediversity.blocks.plug.FastTesrPlug;
+import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
+import ommina.biomediversity.blocks.receiver.FastTesrReceiver;
+import ommina.biomediversity.blocks.transmitter.FastTesrTransmitter;
 import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.DeferredRegistration;
@@ -91,14 +96,12 @@ public class BiomeDiversity {
         @SubscribeEvent
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
-            ClientRegistry.bindTileEntityRenderer( TileEntityCollector.class, );
-
-            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityCollector.class, new FastTesrCollector<>() );
-            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityRainBarrel.class, new FastTesrRainBarrel<>() );
-            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityTransmitter.class, new FastTesrTransmitter<>() );
-            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityReceiver.class, new FastTesrReceiver<>() );
-            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugEnergy.class, new FastTesrPlug<>() );
-            //ClientRegistry.bindTileEntitySpecialRenderer( TileEntityPlugFluid.class, new FastTesrPlug<>() );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, FastTesrCollector::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, new FastTesrRainBarrel<>() );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, new FastTesrTransmitter<>() );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, new FastTesrReceiver<>() );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, new FastTesrPlug<>() );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, new FastTesrPlug<>() );
 
         }
 

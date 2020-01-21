@@ -30,7 +30,7 @@ public class BlockProgressive extends Block {
 
     //region Overrides
     @Override
-    public void func_225534_a_( BlockState state, ServerWorld world, BlockPos pos, Random random ) { // randomTicks
+    public void func_225534_a_( BlockState state, ServerWorld world, BlockPos pos, Random random ) { // randomTick
 
         int stage = getStage( state );
 

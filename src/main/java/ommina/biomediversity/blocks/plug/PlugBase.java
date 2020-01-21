@@ -39,7 +39,7 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
     //}
 
     @Override
-    public ActionResultType func_225533_a_( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+    public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
             return ActionResultType.PASS;
@@ -47,7 +47,7 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
         TileEntityPlugBase tile = (TileEntityPlugBase) world.getTileEntity( pos );
 
         if ( tile == null )
-            return super.func_225533_a_( blockState, world, pos, player, hand, rayTraceResult );
+            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
 
         BlockPos collectorPos = tile.getCollectorPos();
 
