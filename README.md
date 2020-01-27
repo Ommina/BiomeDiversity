@@ -13,7 +13,7 @@ BiomeDiveristy is a Minecraft Forge power (RF) generation mod, primarily designe
 
 ## Downloads
 
-* 1.14.4 version can be found on [CurseForge - BiomeDiversity](https://www.curseforge.com/minecraft/mc-mods/biomediversity)
+* 1.15.2 version can be found on [CurseForge - BiomeDiversity](https://www.curseforge.com/minecraft/mc-mods/biomediversity)
 
 ## Issues
 
