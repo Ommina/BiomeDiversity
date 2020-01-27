@@ -24,6 +24,46 @@ public class LinkStaff extends Item {
         super( properties );
     }
 
+    //region Overrides
+    @Override
+    public ActionResultType onItemUse( ItemUseContext context ) {
+
+        if ( context.getWorld().isRemote )
+            return ActionResultType.SUCCESS;
+
+        TileEntity te = context.getWorld().getTileEntity( context.getPos() );
+
+        if ( !(te instanceof TileEntityAssociation) )
+            return ActionResultType.SUCCESS;
+
+        ItemStack item = context.getPlayer().getHeldItem( context.getHand() );
+
+        TileEntityAssociation tile = (TileEntityAssociation) te;
+
+        if ( isAlreadyCopying( item, tile ) )
+            return ActionResultType.SUCCESS;
+
+        if ( !context.getPlayer().isCrouching() )
+            return useUnSneaking( context, tile, item );
+
+        return useSneaking( context, tile, item );
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick( World world, PlayerEntity player, Hand hand ) {
+
+        if ( player.isCrouching() ) {
+
+            removeCopiedSettings( player.getHeldItem( hand ) );
+            player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.cleared" ) ), true );
+
+        }
+
+        return ActionResult.func_226248_a_( player.getHeldItem( hand ) );
+
+    }
+//endregion Overrides
+
     private void copy( ItemStack item, TileEntityAssociation tile, PlayerEntity player ) {
 
         CompoundNBT compound;
@@ -120,45 +160,5 @@ public class LinkStaff extends Item {
         return ActionResultType.SUCCESS;
 
     }
-
-    //region Overrides
-    @Override
-    public ActionResultType onItemUse( ItemUseContext context ) {
-
-        if ( context.getWorld().isRemote )
-            return ActionResultType.SUCCESS;
-
-        TileEntity te = context.getWorld().getTileEntity( context.getPos() );
-
-        if ( !(te instanceof TileEntityAssociation) )
-            return ActionResultType.SUCCESS;
-
-        ItemStack item = context.getPlayer().getHeldItem( context.getHand() );
-
-        TileEntityAssociation tile = (TileEntityAssociation) te;
-
-        if ( isAlreadyCopying( item, tile ) )
-            return ActionResultType.SUCCESS;
-
-        if ( !context.getPlayer().isSneaking() )
-            return useUnSneaking( context, tile, item );
-
-        return useSneaking( context, tile, item );
-    }
-
-    @Override
-    public ActionResult<ItemStack> onItemRightClick( World world, PlayerEntity player, Hand hand ) {
-
-        if ( player.isSneaking() ) {
-
-            removeCopiedSettings( player.getHeldItem( hand ) );
-            player.sendStatusMessage( new StringTextComponent( Translator.translateToLocal( "text.biomediversity.linkstaff.cleared" ) ), true );
-
-        }
-
-        return ActionResult.newResult( ActionResultType.SUCCESS, player.getHeldItem( hand ) );
-
-    }
-//endregion Overrides
 
 }

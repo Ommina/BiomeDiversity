@@ -28,7 +28,7 @@ public class BlockNocifiedUndamaged extends Block {
         player.addStat( Stats.BLOCK_MINED.get( this ) );
         player.addExhaustion( 0.015F );
 
-        if ( player.getHeldItemMainhand().getItem() == Items.DIAMOND_PICKAXE ) {
+        if ( player.getHeldItemMainhand().getItem() == Items.DIAMOND_PICKAXE ) { //TODO: This needs the correct custom tool, not the random diamond pickaxe.  Possibly move it to the loot table
             Block.spawnAsEntity( worldIn, pos, new ItemStack( ModItems.NOCIFIED_STONE_UNDAMAGED, 1 ) );
         } else {
             Block.spawnAsEntity( worldIn, pos, new ItemStack( ModItems.NOCIFIED_STONE_FRACTURED, 1 ) );

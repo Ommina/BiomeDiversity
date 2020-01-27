@@ -1,6 +1,5 @@
 package ommina.biomediversity.blocks.tile;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -39,8 +38,7 @@ public class RenderHelper {
     }
 
     public static TextureAtlasSprite getSprite( ResourceLocation resourceLocation ) {
-
-        return Minecraft.getInstance().getTextureMap().getSprite( resourceLocation );
+        return Minecraft.getInstance().getTextureGetter( resourceLocation ).apply( resourceLocation ); //TODO: One of these RL's must mean something else.
 
     }
 
@@ -88,7 +86,8 @@ public class RenderHelper {
         double texX = Math.min( 16, w * 16f );
         double texZ = Math.min( 16, w * 16f );
 
-        buffer.setTranslation( x, y, z );
+
+        //buffer.setTranslation( x, y, z );
 
         if ( faces.contains( Faces.NORTH ) ) {
             buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();

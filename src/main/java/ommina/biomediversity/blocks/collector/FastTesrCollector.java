@@ -65,7 +65,7 @@ public class FastTesrCollector<T extends TileEntityCollector> extends TileEntity
 
                 float height = BASE + (MODEL_ELEMENT_HEIGHT * ((float) fluid.getAmount() / (float) Constants.COLLECTOR_OUTER_TANK_CAPACITY));
 
-                RenderHelper.renderCube( buffer, x + tubeLocation[i].x, y, z + tubeLocation[i].y, SIZE_OUTER, height, SIZE_OUTER, fluid, RenderHelper.FACES_FLUID );
+                //RenderHelper.renderCube( buffer, x + tubeLocation[i].x, y, z + tubeLocation[i].y, SIZE_OUTER, height, SIZE_OUTER, fluid, RenderHelper.FACES_FLUID );
 
             }
 
@@ -74,7 +74,7 @@ public class FastTesrCollector<T extends TileEntityCollector> extends TileEntity
     }
 
     @Override
-    public boolean isGlobalRenderer( final TileEntityCollector te ) {
+    public boolean isGlobalRenderer( final T te ) {
         return true;
     }
 

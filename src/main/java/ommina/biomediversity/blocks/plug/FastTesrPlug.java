@@ -6,9 +6,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.animation.TileEntityRendererFast;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.RenderHelper;
 
 import javax.annotation.Nonnull;
@@ -45,18 +43,18 @@ public class FastTesrPlug<T extends TileEntityPlugBase> extends TileEntityRender
 
             float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
 
-            RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, renderData.colour, FACES_FLUID );
+            //RenderHelper.renderCube( buffer, x + offset, y + offset, z + offset, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, renderData.colour, FACES_FLUID );
 
         }
 
-        y += 2f / 16f;
+        //y += 2f / 16f;
 
         final float side = 15f / 16f;
 
         float[] color = tile.isClusterComponentConnected() ? COLOUR_CONNECTED : COLOUR_DISCONNECTED;
 
-        renderLight( buffer, x, y, z, 1f / 16f / 2f, 1f / 16f / 2f, side, INTERNAL_SPRITE, color );
-        renderLight( buffer, x, y, z, 0, 1f / 16f, side, EXTERNAL_SPRITE, color );
+        //renderLight( buffer, x, y, z, 1f / 16f / 2f, 1f / 16f / 2f, side, INTERNAL_SPRITE, color );
+        //renderLight( buffer, x, y, z, 0, 1f / 16f, side, EXTERNAL_SPRITE, color );
 
     }
 

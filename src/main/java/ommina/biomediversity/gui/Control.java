@@ -99,12 +99,9 @@ public abstract class Control extends AbstractGui {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
 
-
-
-
         GlStateManager.enableBlend();
         GlStateManager.disableTexture();
-        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+        //GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
 
         bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
         bufferbuilder.pos( x1, y2, 0.0D ).color( f[0], f[1], f[2], f[3] ).endVertex();
@@ -126,7 +123,7 @@ public abstract class Control extends AbstractGui {
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture();
-        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+        //GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
 
         bufferbuilder.begin( GL_LINES, DefaultVertexFormats.POSITION_COLOR );
         bufferbuilder.pos( x1, y1, 0.0D ).color( f[0], f[1], f[2], f[3] ).endVertex();
@@ -174,17 +171,17 @@ public abstract class Control extends AbstractGui {
         GlStateManager.disableTexture();
         GlStateManager.enableBlend();
         GlStateManager.disableAlphaTest();
-        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+        //GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
         GlStateManager.shadeModel( 7425 );
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
 
-        bufferbuilder.pos( (double) p_fillGradient_3_, (double) p_fillGradient_2_, (double) this.blitOffset ).color( f1, f2, f3, f ).endVertex();
-        bufferbuilder.pos( (double) p_fillGradient_1_, (double) p_fillGradient_2_, (double) this.blitOffset ).color( f5, f6, f7, f4 ).endVertex();
-        bufferbuilder.pos( (double) p_fillGradient_1_, (double) p_fillGradient_4_, (double) this.blitOffset ).color( f5, f6, f7, f4 ).endVertex();
-        bufferbuilder.pos( (double) p_fillGradient_3_, (double) p_fillGradient_4_, (double) this.blitOffset ).color( f1, f2, f3, f ).endVertex();
+        //bufferbuilder.pos( (double) p_fillGradient_3_, (double) p_fillGradient_2_, (double) this.blitOffset ).color( f1, f2, f3, f ).endVertex();
+        //bufferbuilder.pos( (double) p_fillGradient_1_, (double) p_fillGradient_2_, (double) this.blitOffset ).color( f5, f6, f7, f4 ).endVertex();
+        //bufferbuilder.pos( (double) p_fillGradient_1_, (double) p_fillGradient_4_, (double) this.blitOffset ).color( f5, f6, f7, f4 ).endVertex();
+        //bufferbuilder.pos( (double) p_fillGradient_3_, (double) p_fillGradient_4_, (double) this.blitOffset ).color( f1, f2, f3, f ).endVertex();
         tessellator.draw();
 
         GlStateManager.shadeModel( 7424 );
@@ -219,7 +216,7 @@ public abstract class Control extends AbstractGui {
 
         GlStateManager.enableBlend();
         GlStateManager.disableTexture();
-        GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
+        //GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
 
         bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
         fill( bufferbuilder, x, y, x + width, y + height, BACKGROUND_COLOUR );

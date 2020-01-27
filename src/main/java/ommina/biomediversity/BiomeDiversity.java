@@ -97,11 +97,11 @@ public class BiomeDiversity {
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, FastTesrCollector::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, new FastTesrRainBarrel<>() );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, new FastTesrTransmitter<>() );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, new FastTesrReceiver<>() );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, new FastTesrPlug<>() );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, new FastTesrPlug<>() );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, FastTesrRainBarrel::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, FastTesrTransmitter::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, FastTesrReceiver::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, FastTesrPlug::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, FastTesrPlug::new );
 
         }
 

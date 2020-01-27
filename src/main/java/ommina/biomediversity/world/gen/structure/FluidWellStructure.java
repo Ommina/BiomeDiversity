@@ -5,18 +5,14 @@ import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.MarginedStructureStart;
 import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import ommina.biomediversity.BiomeDiversity;
 
-import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -30,13 +26,11 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
     private static final int MINIMUM_DISTANCE_TO_MINESHAFT = 16;
     private static final int MAXIMUM_RADIUS = 18;
 
-    public FluidWellStructure( String name, Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
+    public FluidWellStructure( Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
         super( config );
-
-        setRegistryName( BiomeDiversity.getId( name ) );
     }
 
-//region Overrides
+    //region Overrides
     @Override
     public IStartFactory getStartFactory() {
         return FluidWellStructure.Start::new;
@@ -89,34 +83,14 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 //endregion Overrides
 
-    public static class Start extends StructureStart {
+    public static class Start extends MarginedStructureStart {
 
-        //public StructureStart(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed) {
-
-
-        public Start( Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int referenceIn, long seed ) {
-            super( structure, chunkX, chunkZ, biome, boundingBox, referenceIn, seed );
+        public Start( Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int referenceIn, long seed ) {
+            super( structure, chunkX, chunkZ, boundingBox, referenceIn, seed );
         }
-
-        @Override
-        public void generateStructure( IWorld worldIn, Random rand, MutableBoundingBox structurebb, ChunkPos pos) {
-
-            synchronized(this.components) {
-                Iterator<StructurePiece> iterator = this.components.iterator();
-
-                while(iterator.hasNext()) {
-                    StructurePiece structurepiece = iterator.next();
-                    if (structurepiece.getBoundingBox().intersectsWith(structurebb) && !structurepiece.addComponentParts(worldIn, rand, structurebb, pos)) {
-                        iterator.remove();
-                    }
-                }
-
-                this.recalculateStructureSize();
-            }
-        }
-
 
         //region Overrides
+        @Override
         public void init( ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn ) {
 
             int i = chunkX * 16;
@@ -131,17 +105,39 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
             this.recalculateStructureSize();
 
         }
-
-        public BlockPos getPos() {
-
-            int weirdOffset = MAXIMUM_RADIUS / 2;//9
-
-
-            return new BlockPos( (this.getChunkPosX() << 4) + weirdOffset, 0, (this.getChunkPosZ() << 4) + weirdOffset );
-        }
 //endregion Overrides
 
     }
 
+/*
+
+    public BlockPos getPos() {
+
+        int weirdOffset = MAXIMUM_RADIUS / 2;//9
+
+        return new BlockPos( (this.getChunkPosX() << 4) + weirdOffset, 0, (this.getChunkPosZ() << 4) + weirdOffset );
+
+    }
+
+    @Override
+    public void generateStructure( IWorld worldIn, Random rand, MutableBoundingBox structurebb, ChunkPos pos ) {
+
+        synchronized( this.components ) {
+            Iterator<StructurePiece> iterator = this.components.iterator();
+
+            while ( iterator.hasNext() ) {
+                StructurePiece structurepiece = iterator.next();
+                if ( structurepiece.getBoundingBox().intersectsWith( structurebb ) && !structurepiece.addComponentParts( worldIn, rand, structurebb, pos ) ) {
+                    iterator.remove();
+                }
+            }
+
+            this.recalculateStructureSize();
+        }
+    }
+
+}
+
+*/
 
 }

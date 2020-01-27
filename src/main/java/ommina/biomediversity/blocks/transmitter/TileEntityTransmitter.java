@@ -171,11 +171,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 //endregion Overrides
 
     public float getTemperature() {
-
-        return world.func_226691_t_( pos ).getTemperature( pos );
-
-        //return world.getBiome( pos ).getTemperature( pos );
-
+        return world.getBiome( pos ).getTemperature( pos );
     }
 
     public float getStrength() {

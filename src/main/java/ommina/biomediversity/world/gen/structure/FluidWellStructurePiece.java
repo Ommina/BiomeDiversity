@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import ommina.biomediversity.BiomeDiversity;
@@ -34,9 +35,8 @@ public class FluidWellStructurePiece extends StructurePiece {
 
 //region Overrides
 
-    /**
-     * (abstract) Helper method to read subclass data from NBT
-     */
+
+    @Override
     protected void readAdditional( CompoundNBT tagCompound ) {
     }
 
@@ -54,12 +54,13 @@ public class FluidWellStructurePiece extends StructurePiece {
      * the end, it adds Fences...
      */
     @Override
-    public boolean addComponentParts( IWorld world, Random randomIn, MutableBoundingBox boundingBox, ChunkPos chunkPos ) {
+    public boolean func_225577_a_( IWorld world, ChunkGenerator<?> p_225577_2_, Random random, MutableBoundingBox boundingBox, ChunkPos chunkPos ) {
+
 
         int x = (this.boundingBox.minX + this.boundingBox.maxX) / 2;
         int z = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2;
 
-        Tuple<Integer, Integer> hr = findHeightAndRadius( world, randomIn, x, z );
+        Tuple<Integer, Integer> hr = findHeightAndRadius( world, random, x, z );
 
         if ( hr.getA() == Integer.MIN_VALUE )
             return false;
@@ -94,6 +95,9 @@ public class FluidWellStructurePiece extends StructurePiece {
                     }
 
         if ( BiomeDiversity.DEBUG )
+            BiomeDiversity.LOGGER.info( String.format( "Starting fluid well generation at %s with radius %s", centre.toString(), radius ) );
+
+        if ( BiomeDiversity.DEBUG )
             BiomeDiversity.LOGGER.info( "  and done." );
 
     }
@@ -112,7 +116,6 @@ public class FluidWellStructurePiece extends StructurePiece {
 
     protected void setBlockState( IWorld worldIn, BlockState blockstateIn, BlockPos blockpos, MutableBoundingBox boundingboxIn ) {
 
-
         if ( boundingboxIn.isVecInside( blockpos ) ) {
 
             if ( !worldIn.setBlockState( blockpos, blockstateIn, 2 ) ) {
@@ -126,7 +129,7 @@ public class FluidWellStructurePiece extends StructurePiece {
 
         } else {
 
-            //BiomeDiversity.LOGGER.warn( "isOutside " + blockpos.toString() );
+            BiomeDiversity.LOGGER.warn( "isOutside " + blockpos.toString() );
 
         }
     }

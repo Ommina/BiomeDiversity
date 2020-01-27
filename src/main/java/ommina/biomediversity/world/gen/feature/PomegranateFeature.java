@@ -10,7 +10,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.crops.FakePlantBlock;
 
@@ -21,13 +20,12 @@ public class PomegranateFeature extends Feature<NoFeatureConfig> {
 
     private static final FakePlantBlock POMEGRANATE_BLOCK = (FakePlantBlock) ModBlocks.WORLD_POMEGRANATE;
 
-    public PomegranateFeature( String name, Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
+    public PomegranateFeature( Function<Dynamic<?>, ? extends NoFeatureConfig> config ) {
         super( config );
-
-        setRegistryName( BiomeDiversity.getId( name ) );
-
     }
 
+    //region Overrides
+    @Override
     public boolean place( IWorld worldIn, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config ) {
 
         for ( BlockState blockstate = worldIn.getBlockState( pos ); (blockstate.isAir( worldIn, pos ) || blockstate.isIn( BlockTags.LEAVES )) && pos.getY() > 0; blockstate = worldIn.getBlockState( pos ) ) {
@@ -45,5 +43,6 @@ public class PomegranateFeature extends Feature<NoFeatureConfig> {
 
         return true;
     }
+//endregion Overrides
 
 }

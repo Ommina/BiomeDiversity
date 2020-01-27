@@ -55,7 +55,18 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     //region Overrides
     @Override
-    public ActionResultType func_225533_a_( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+    public boolean hasTileEntity( BlockState state ) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
+        return new TileEntityTransmitter();
+    }
+
+    @Override
+    public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
             return ActionResultType.PASS;
@@ -110,9 +121,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
             PlayerEntity player = (PlayerEntity) livingEntity;
             TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( blockPos );
 
-            Biome biome = world.func_226691_t_( blockPos );
-
-            //Biome biome = world.getBiome( blockPos );
+            Biome biome = world.getBiome( blockPos );
 
             tile.setOwner( player.getUniqueID() );
 
@@ -153,17 +162,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
         builder.add( IS_CONNECTED );
     }
-
-    @Override
-    public boolean hasTileEntity( BlockState state ) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityTransmitter();
-    }
 //endregion Overrides
 
     // Overrides
@@ -189,7 +187,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         if ( tile.getTank( 0 ).getFluid() != null )
             BiomeDiversity.LOGGER.info( " Fluid: " + tile.getTank( 0 ).getFluid().getFluid().getAttributes().getTranslationKey() + " (" + tile.getTank( 0 ).getFluid().getAmount() + ")" );
 
-        Biome b = world.func_226691_t_( pos );// world.getBiome( pos );
+        Biome b = world.getBiome( pos );
 
         BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
 

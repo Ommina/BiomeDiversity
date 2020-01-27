@@ -10,7 +10,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.world.gen.GeneratorHelper;
 
@@ -22,12 +21,11 @@ public class JunglePoolFeature extends Feature<NoFeatureConfig> {
     private final int MINIMUM_Y = 40;
     private final int ATTEMPTS_PER_CHUNK = 4;
 
-    public JunglePoolFeature( String name, Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn ) {
+    public JunglePoolFeature( Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn ) {
         super( configFactoryIn );
-
-        setRegistryName( BiomeDiversity.getId( name ) );
     }
 
+    //region Overrides
     @Override
     public boolean place( IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config ) {
 
@@ -43,6 +41,7 @@ public class JunglePoolFeature extends Feature<NoFeatureConfig> {
         return true;
 
     }
+//endregion Overrides
 
     private static boolean isSuitableLocation( BlockPos pos, IWorld world ) {
 

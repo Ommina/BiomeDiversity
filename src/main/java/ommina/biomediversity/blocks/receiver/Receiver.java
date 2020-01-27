@@ -73,7 +73,7 @@ public class Receiver extends Block {
     //}
 
     @Override
-    public ActionResultType func_225533_a_( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
+    public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
             return ActionResultType.PASS;
@@ -81,7 +81,7 @@ public class Receiver extends Block {
         TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
 
         if ( tile == null )
-            return super.func_225533_a_( blockState, world, pos, player, hand, rayTraceResult );
+            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
 
         ItemStack heldItem = player.getHeldItem( hand );
 

@@ -22,10 +22,10 @@ public class ModFeatures {
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<Feature<?>> event ) {
 
-        event.getRegistry().register( new JunglePoolFeature( "jungle_pool", NoFeatureConfig::deserialize ) );
-        event.getRegistry().register( new FluidWellStructure( "fluid_well", NoFeatureConfig::deserialize ) );
-        event.getRegistry().register( new PomegranateFeature( "pomegranate", NoFeatureConfig::deserialize ) );
-        event.getRegistry().register( new ColzaFeature( "colza", NoFeatureConfig::deserialize ) );
+        event.getRegistry().register( new JunglePoolFeature( NoFeatureConfig::deserialize ).setRegistryName( "jungle_pool" ) );
+        event.getRegistry().register( new FluidWellStructure( NoFeatureConfig::deserialize ).setRegistryName( "fluid_well" ) );
+        event.getRegistry().register( new PomegranateFeature( NoFeatureConfig::deserialize ).setRegistryName( "pomegranate" ) );
+        event.getRegistry().register( new ColzaFeature( NoFeatureConfig::deserialize ).setRegistryName( "colza" ) );
 
         ModStructurePieceType.init();
 

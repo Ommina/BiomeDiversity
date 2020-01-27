@@ -70,10 +70,10 @@ public class ClusterBlock extends GlassBlock {
     }
 
     @Override
-    public ActionResultType func_225533_a_( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) { // onBlockActivated
+    public ActionResultType onBlockActivated( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) { // onBlockActivated
 
         if ( player.isCrouching() || !state.get( FORMED ) )
-            return super.func_225533_a_( state, world, pos, player, hand, hit );
+            return super.onBlockActivated( state, world, pos, player, hand, hit );
 
         if ( !world.isRemote && player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
 
@@ -88,7 +88,7 @@ public class ClusterBlock extends GlassBlock {
             //BiomeDiversity.LOGGER.info( "  tankActivated: " + tankActivated );
 
             if ( tankActivated == -1 )
-                return super.func_225533_a_( state, world, pos, player, hand, hit );
+                return super.onBlockActivated( state, world, pos, player, hand, hit );
 
             TileEntity controller = world.getTileEntity( controllerPos );
 

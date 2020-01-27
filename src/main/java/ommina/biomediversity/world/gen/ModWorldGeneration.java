@@ -6,6 +6,7 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.FrequencyConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.blocks.ModBlocks;
@@ -49,31 +50,51 @@ public class ModWorldGeneration {
 
     private static void addOre( Biome biome, Block block, int size, int chances, int minHeight, int maxHeight ) {
 
-        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(
-             ORE_FEATURE_CONFIG,
-             new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), size ),
-             Placement.COUNT_RANGE,
-             new CountRangeConfig( chances, minHeight, 0, maxHeight )
-        ) );
+        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES,
+             Feature.ORE.func_225566_b_(
+                  new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), size ) )
+                  .func_227228_a_( Placement.COUNT_RANGE.func_227446_a_( new CountRangeConfig( chances, minHeight, 0, maxHeight ) ) ) );
 
     }
 
     private static void addJunglePools( Biome biome ) {
 
-        biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION, Biome.createDecoratedFeature( ModFeatures.JUNGLE_POOL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
+        biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION,
+             ModFeatures.JUNGLE_POOL.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ).func_227228_a_( Placement.NOPE.func_227446_a_( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
 
     }
 
     private static void addFluidWells( Biome biome ) {
 
-        biome.addStructure( ModFeatures.FLUID_WELL, IFeatureConfig.NO_FEATURE_CONFIG );
-        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature( ModFeatures.FLUID_WELL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
+        biome.addStructure( ModFeatures.FLUID_WELL.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ) );
+        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
+             ModFeatures.FLUID_WELL.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ).func_227228_a_( Placement.NOPE.func_227446_a_( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
+
+
+//        biomeIn.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
+//             Feature.WOODLAND_MANSION.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+
+
+        //       biomeIn.addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Feature.BURIED_TREASURE.func_225566_b_(new BuriedTreasureConfig(0.01F)).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+        //      biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature( ModFeatures.FLUID_WELL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
 
     }
 
     private static void addPlant( Feature<NoFeatureConfig> feature, Biome biome ) {
 
-        biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature( feature, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 4 ) ) );
+        biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION,
+             feature.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ).func_227228_a_( Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_( new FrequencyConfig( 4 ) ) ) );
+
+//             Feature.field_227248_z_.func_225566_b_(  )
+        //            );
+
+
+        //     biomeIn.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.BAMBOO.func_225566_b_(new ProbabilityConfig(0.0F)).func_227228_a_(Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_(new FrequencyConfig(16))));
+
+        //   biomeIn.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.field_227248_z_.func_225566_b_(field_226718_F_).func_227228_a_(Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_(new FrequencyConfig(1))));
+
+
+        //biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature( feature, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 4 ) ) );
 
     }
 
