@@ -97,12 +97,6 @@ public class ModBlocks {
             return new PlugEnergyContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
         } ).setRegistryName( "plug_energy" ) );
 
-        //event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> {
-        //    BlockPos pos = data.readBlockPos();
-        //    return new FirstBlockContainer(windowId, MyTutorial.proxy.getClientWorld(), pos, inv, MyTutorial.proxy.getClientPlayer());
-        //}).setRegistryName("firstblock"));
-        //}
-
     }
 
     @SubscribeEvent
