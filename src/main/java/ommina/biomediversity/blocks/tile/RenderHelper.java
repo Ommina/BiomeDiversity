@@ -3,7 +3,9 @@ package ommina.biomediversity.blocks.tile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -38,7 +40,7 @@ public class RenderHelper {
     }
 
     public static TextureAtlasSprite getSprite( ResourceLocation resourceLocation ) {
-        return Minecraft.getInstance().getTextureGetter( resourceLocation ).apply( resourceLocation ); //TODO: One of these RL's must mean something else.
+        return Minecraft.getInstance().getAtlasSpriteGetter( PlayerContainer.LOCATION_BLOCKS_TEXTURE ).apply( resourceLocation );
 
     }
 

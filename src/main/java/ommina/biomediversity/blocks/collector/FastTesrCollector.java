@@ -55,7 +55,7 @@ public class FastTesrCollector<T extends TileEntityCollector> extends TileEntity
 
         y -= 13f / 16f;
 
-        IVertexBuilder buffer = renderer.getBuffer( RenderType.translucent() );
+        IVertexBuilder buffer = renderer.getBuffer( RenderType.getTranslucent() );
 
         for ( int i = 0; i <= 7; i++ ) {
 

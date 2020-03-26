@@ -121,7 +121,11 @@ dependencies {
     //    transitive = false
     //})
 
-    //deobfCompile "mcjty.theoneprobe:theoneprobe-1.14-1.4.37"
+    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}:api")
+    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}")
+    
+    
+    //deobfCompile "mcjty.theoneprobe:theoneprobe-1.15-2.0.0-3"
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

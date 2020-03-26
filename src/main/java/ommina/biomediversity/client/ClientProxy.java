@@ -15,15 +15,6 @@ public class ClientProxy implements IProxy {
 //region Overrides
 
     @Override
-    public void init() {
-
-        ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
-        ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
-        ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
-
-    }
-
-    @Override
     public World getClientWorld() {
         return Minecraft.getInstance().world;
     }

@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JeiPlugin
+@SuppressWarnings( "unused" )
 public class JustEnoughItems implements IModPlugin {
 
     static final ResourceLocation GUI_TEXTURE = BiomeDiversity.getId( "textures/gui/gui_blank.png" );

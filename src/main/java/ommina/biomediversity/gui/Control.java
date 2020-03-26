@@ -1,5 +1,6 @@
 package ommina.biomediversity.gui;
 
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -17,7 +18,6 @@ import ommina.biomediversity.blocks.tile.RenderHelper;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.Locale;
 
 import static org.lwjgl.opengl.GL11.GL_LINES;
@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL11.GL_LINES;
 @OnlyIn( Dist.CLIENT )
 public abstract class Control extends AbstractGui {
 
-    public static final TextureAtlasSprite OVERLAY_SPRITE = RenderHelper.getSprite( BiomeDiversity.getId( "gui/overlay" ) );
+    public static final TextureAtlasSprite OVERLAY_SPRITE = RenderHelper.getSprite( BiomeDiversity.getId( "textures/gui/overlay" ) );
     public static final ResourceLocation OVERLAY_RESOURCE = BiomeDiversity.getId( "textures/gui/overlay.png" );
 
     public static final float[] BACKGROUND_COLOUR = RenderHelper.getRGBA( new Color( 139, 139, 139, 255 ).getRGB() );
@@ -243,7 +243,7 @@ public abstract class Control extends AbstractGui {
     }
 
     @Nullable
-    public abstract List<String> getTooltip( boolean isShiftKeyDown );
+    public abstract java.util.List<String> getTooltip( boolean isShiftKeyDown );
 
     public boolean ownsMousePoint( int mouseX, int mouseY ) {
         return mouseX >= position.x && mouseX <= position.x + width && mouseY >= position.y && mouseY <= position.y + height;

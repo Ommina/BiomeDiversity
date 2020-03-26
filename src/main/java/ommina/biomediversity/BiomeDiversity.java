@@ -1,6 +1,7 @@
 package ommina.biomediversity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -25,13 +26,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.collector.FastTesrCollector;
 import ommina.biomediversity.blocks.plug.FastTesrPlug;
+import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
 import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
 import ommina.biomediversity.blocks.receiver.FastTesrReceiver;
+import ommina.biomediversity.blocks.receiver.ReceiverScreen;
 import ommina.biomediversity.blocks.transmitter.FastTesrTransmitter;
+import ommina.biomediversity.blocks.transmitter.TransmitterScreen;
 import ommina.biomediversity.client.ClientProxy;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.DeferredRegistration;
@@ -67,7 +72,7 @@ public class BiomeDiversity {
         ModLoadingContext.get().registerConfig( ModConfig.Type.CLIENT, Config.CLIENT_CONFIG );
         ModLoadingContext.get().registerConfig( ModConfig.Type.COMMON, Config.COMMON_CONFIG );
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::setup );
+        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::CommonSetup );
 
         Config.loadConfig( Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-client.toml" ) );
         Config.loadConfig( Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-common.toml" ) );
@@ -78,7 +83,7 @@ public class BiomeDiversity {
         //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::processIMC );
 
         // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::doClientStuff );
+        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::ClientSetup );
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register( this );
@@ -179,20 +184,23 @@ public class BiomeDiversity {
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
 
-    private void doClientStuff( final FMLClientSetupEvent event ) {
+    private void ClientSetup( final FMLClientSetupEvent event ) {
+
+        ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
+        ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
+        ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
 
         //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
 
     }
 
-    private void setup( final FMLCommonSetupEvent event ) {
+    private void CommonSetup( final FMLCommonSetupEvent event ) {
 
         DeferredWorkQueue.runLater( ModWorldGeneration::generate );
 
         CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
 
         Network.init();
-        PROXY.init();
 
         Config.parseFluidList();
 

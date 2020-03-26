@@ -3,7 +3,6 @@ package ommina.biomediversity.integration.jei.controls;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.gui.Control;
-import ommina.biomediversity.gui.UV;
 
 import javax.annotation.Nullable;
 import java.util.List;

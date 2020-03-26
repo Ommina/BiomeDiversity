@@ -31,7 +31,7 @@ public class Collector extends ClusterBlock implements IClusterController {
     private Map<String, ClusterBlock> multiblock;
 
     public Collector() {
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ).notSolid() );
 
         addRectangles();
 

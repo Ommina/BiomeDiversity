@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResultType;
@@ -42,7 +43,7 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
     public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return ActionResultType.PASS;
+            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
 
         TileEntityPlugBase tile = (TileEntityPlugBase) world.getTileEntity( pos );
 
@@ -51,7 +52,7 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
 
         BlockPos collectorPos = tile.getCollectorPos();
 
-        if ( collectorPos != null && world.getTileEntity( collectorPos ) instanceof TileEntityCollector )
+        if ( collectorPos != null && world.getTileEntity( collectorPos ) instanceof TileEntityCollector && world.getTileEntity( pos ) instanceof INamedContainerProvider )
             ((TileEntityCollector) world.getTileEntity( collectorPos )).forceBroadcast();
 
         ItemStack heldItem = player.getHeldItem( hand );

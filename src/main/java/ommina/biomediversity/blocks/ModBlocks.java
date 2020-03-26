@@ -5,6 +5,8 @@ import net.minecraft.block.FallingBlock;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ToolType;
@@ -12,6 +14,8 @@ import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.blocks.BlockNocifiedUndamaged;
@@ -31,6 +35,7 @@ import ommina.biomediversity.blocks.receiver.ReceiverContainer;
 import ommina.biomediversity.blocks.transmitter.Transmitter;
 import ommina.biomediversity.blocks.transmitter.TransmitterContainer;
 
+import java.util.Arrays;
 
 @ObjectHolder( BiomeDiversity.MODID )
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
@@ -92,6 +97,12 @@ public class ModBlocks {
             return new PlugEnergyContainer( windowId, BiomeDiversity.PROXY.getClientWorld(), pos, inv, BiomeDiversity.PROXY.getClientPlayer() );
         } ).setRegistryName( "plug_energy" ) );
 
+        //event.getRegistry().register(IForgeContainerType.create((windowId, inv, data) -> {
+        //    BlockPos pos = data.readBlockPos();
+        //    return new FirstBlockContainer(windowId, MyTutorial.proxy.getClientWorld(), pos, inv, MyTutorial.proxy.getClientPlayer());
+        //}).setRegistryName("firstblock"));
+        //}
+
     }
 
     @SubscribeEvent
@@ -102,14 +113,14 @@ public class ModBlocks {
         register( event, "nocified_stone_undamaged", new BlockNocifiedUndamaged( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 15f ) ) );
         register( event, "nocified_stone_fractured", new Block( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 15f ) ) );
 
-        register( event, "cluster_block_generic", new ClusterBlock( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 2.8f ) ) );
-        register( event, "cluster_block_tank", new ClusterBlock( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 2.8f ) ) );
-        register( event, "cluster_block_sturdy", new ClusterBlock( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ) ) );
+        register( event, "cluster_block_generic", new ClusterBlock( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 2.8f ).notSolid() ) );
+        register( event, "cluster_block_tank", new ClusterBlock( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 2.8f ).notSolid() ) );
+        register( event, "cluster_block_sturdy", new ClusterBlock( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 3.2f ).notSolid() ) );
 
-        register( event, "colza", new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) ) );
-        register( event, "pomegranate", new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ) ) );
-        register( event, "world_colza", new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) ) );
-        register( event, "world_pomegranate", new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ) ) );
+        register( event, "colza", new ColzaBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ).notSolid() ) );
+        register( event, "pomegranate", new PomegranateBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().tickRandomly().hardnessAndResistance( 0.05f ).sound( SoundType.CROP ).notSolid() ) );
+        register( event, "world_colza", new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ).notSolid() ) );
+        register( event, "world_pomegranate", new FakePlantBlock( Block.Properties.create( Material.PLANTS ).doesNotBlockMovement().hardnessAndResistance( 0.05f ).sound( SoundType.PLANT ).notSolid() ) );
 
         register( event, "collector", new Collector() );
         register( event, "peltier", new Peltier() );
@@ -122,6 +133,24 @@ public class ModBlocks {
         for ( int n = 1; n <= 11; n++ )
             register( event, BlockProgressive.PREFIX + n, new BlockProgressive( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).sound( SoundType.STONE ).tickRandomly().hardnessAndResistance( 3.3f - (float) n / 10 ), n ) );
         register( event, BlockProgressive.PREFIX + "12", new FallingBlock( Block.Properties.create( Material.SAND ).harvestTool( ToolType.SHOVEL ).sound( SoundType.SAND ).hardnessAndResistance( 1.7f ) ) );
+
+    }
+
+    @SubscribeEvent
+    public static void clientSetupEvent( final FMLClientSetupEvent event ) {
+
+        final RenderType translucentRenderType = RenderType.getTranslucent();
+        final String[] transparent = new String[]
+             { "colza", "pomegranate", "world_colza", "world_pomegrante",
+                  "collector", "receiver", "transmitter", "plug_energy", "plug_fluid_byproduct" };
+
+        Arrays.stream( transparent ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), translucentRenderType ) );
+
+        final RenderType cutoutRenderType = RenderType.getCutout();
+        final String[] cutout = new String[]
+             { "cluster_block_generic", "cluster_block_tank", "cluster_block_sturdy" };
+
+        Arrays.stream( cutout ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), cutoutRenderType ) );
 
     }
 

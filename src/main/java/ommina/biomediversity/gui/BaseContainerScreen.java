@@ -6,11 +6,14 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@OnlyIn( Dist.CLIENT )
 public abstract class BaseContainerScreen<T extends Container> extends ContainerScreen<T> {
 
     protected static final Point TITLE_TEXT = new Point( 0, 5 );

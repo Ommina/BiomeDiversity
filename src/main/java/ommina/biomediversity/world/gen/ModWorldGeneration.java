@@ -51,24 +51,24 @@ public class ModWorldGeneration {
     private static void addOre( Biome biome, Block block, int size, int chances, int minHeight, int maxHeight ) {
 
         biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES,
-             Feature.ORE.func_225566_b_(
+             Feature.ORE.withConfiguration(
                   new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), size ) )
-                  .func_227228_a_( Placement.COUNT_RANGE.func_227446_a_( new CountRangeConfig( chances, minHeight, 0, maxHeight ) ) ) );
+                  .withPlacement( Placement.COUNT_RANGE.configure( new CountRangeConfig( chances, minHeight, 0, maxHeight ) ) ) );
 
     }
 
     private static void addJunglePools( Biome biome ) {
 
         biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION,
-             ModFeatures.JUNGLE_POOL.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ).func_227228_a_( Placement.NOPE.func_227446_a_( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
+             ModFeatures.JUNGLE_POOL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
 
     }
 
     private static void addFluidWells( Biome biome ) {
 
-        biome.addStructure( ModFeatures.FLUID_WELL.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ) );
+        biome.addStructure( ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ) );
         biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
-             ModFeatures.FLUID_WELL.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ).func_227228_a_( Placement.NOPE.func_227446_a_( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
+             ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
 
 
 //        biomeIn.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
@@ -83,7 +83,7 @@ public class ModWorldGeneration {
     private static void addPlant( Feature<NoFeatureConfig> feature, Biome biome ) {
 
         biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION,
-             feature.func_225566_b_( IFeatureConfig.NO_FEATURE_CONFIG ).func_227228_a_( Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_( new FrequencyConfig( 4 ) ) ) );
+             feature.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.COUNT_HEIGHTMAP_DOUBLE.configure( new FrequencyConfig( 4 ) ) ) );
 
 //             Feature.field_227248_z_.func_225566_b_(  )
         //            );
