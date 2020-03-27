@@ -146,7 +146,7 @@ public class ModBlocks {
 
         Arrays.stream( cutout ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), cutoutRenderType ) );
 
-        ForgeRegistries.FLUIDS.getValues().forEach( fluid -> RenderTypeLookup.setRenderLayer( fluid, translucentRenderType ) );
+        ForgeRegistries.FLUIDS.getValues().stream().filter( fluid -> fluid.getRegistryName().getNamespace().equals( BiomeDiversity.MODID ) ).forEach( fluid -> RenderTypeLookup.setRenderLayer( fluid, translucentRenderType ) );
 
     }
 

@@ -93,35 +93,34 @@ public class RenderHelper {
         matrix.push();
         matrix.translate( 1f / 16f, 0, 1f / 16f );
 
-
         //buffer.setTranslation( x, y, z );
 
         if ( faces.contains( Faces.NORTH ) ) {
-            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
         }
 
         if ( faces.contains( Faces.SOUTH ) ) {
-            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
         }
 
         if ( faces.contains( Faces.WEST ) ) {
-            builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
         }
 
         if ( faces.contains( Faces.EAST ) ) {
-            builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            builder.pos( matrix.getLast().getMatrix(), l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
         }
 
         if ( faces.contains( Faces.TOP ) ) {
@@ -139,9 +138,6 @@ public class RenderHelper {
 
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
-        //GlStateManager.pushMatrix();
-        //GlStateManager.scalef( 0.9f, 0.9f, 0.9f );
-
         if ( justification == Justification.CENTRE ) {
             left = width / 2 - fontRenderer.getStringWidth( text ) / 2;
         } else if ( justification == Justification.RIGHT ) {
@@ -149,7 +145,6 @@ public class RenderHelper {
         }
 
         fontRenderer.drawString( text, left, top, colour );
-        //GlStateManager.popMatrix();
 
     }
 

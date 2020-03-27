@@ -25,10 +25,7 @@ import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.FluidStrengths;
-import ommina.biomediversity.network.BroadcastHelper;
-import ommina.biomediversity.network.GenericTankUpdatePacket;
-import ommina.biomediversity.network.ITankBroadcast;
-import ommina.biomediversity.network.Network;
+import ommina.biomediversity.network.*;
 import ommina.biomediversity.worlddata.TransmitterData;
 
 import javax.annotation.Nonnull;
@@ -110,24 +107,15 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     @Override
     public void onChunkUnloaded() {
-
         handler.invalidate();
-
     }
 
     @Override
     public void onLoad() {
 
-        BROADCASTER.reset();
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
-        //BiomeDiversity.LOGGER.info( "Transmitter loaded: " + getPos().toString() );
-
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-
-        return true;
     }
 
     @Override
