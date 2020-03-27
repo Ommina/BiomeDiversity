@@ -31,6 +31,7 @@ import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.network.BroadcastHelper;
+import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
 import ommina.biomediversity.util.NbtUtils;
@@ -91,9 +92,8 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     @Override
     public BdFluidTank getTank( int index ) {
-
         return TANK;
-    }
+   }
 
     @Override
     @Nullable
@@ -137,12 +137,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
         if ( collector != null )
             collector.deregisterComponent( this );
 
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-
-        return true;
     }
 
     @Override
@@ -202,6 +196,14 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 //endregion Overrides
+
+    @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
 
     public static void handle( PacketUpdateReceiver packet, Supplier<NetworkEvent.Context> ctx ) {
 

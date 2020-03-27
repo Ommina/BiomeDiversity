@@ -134,13 +134,14 @@ public class ModBlocks {
     public static void clientSetupEvent( final FMLClientSetupEvent event ) {
 
         final RenderType translucentRenderType = RenderType.getTranslucent();
+        final RenderType cutoutRenderType = RenderType.getCutout();
+
         final String[] transparent = new String[]
              { "colza", "pomegranate", "world_colza", "world_pomegrante",
                   "collector", "receiver", "transmitter", "plug_energy", "plug_fluid_byproduct" };
 
-        Arrays.stream( transparent ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), translucentRenderType ) );
+        Arrays.stream( transparent ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), cutoutRenderType ) );
 
-        final RenderType cutoutRenderType = RenderType.getCutout();
         final String[] cutout = new String[]
              { "cluster_block_generic", "cluster_block_tank", "cluster_block_sturdy" };
 

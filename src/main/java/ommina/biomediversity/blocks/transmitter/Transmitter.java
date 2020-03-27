@@ -46,7 +46,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
     public Transmitter() {
 
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ) );
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ).notSolid() );
 
         this.setDefaultState( this.getDefaultState()
              .with( IS_CONNECTED, true ) );
@@ -68,8 +68,8 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     @Override
     public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
-        if ( world.isRemote )
-            return ActionResultType.PASS;
+        //if ( world.isRemote )
+        //    return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
 
         TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
         ItemStack heldItem = player.getHeldItem( hand );
@@ -96,7 +96,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
                     player.setHeldItem( hand, far.getResult() );
                 }
 
-                return ActionResultType.PASS;
+                return ActionResultType.CONSUME;
 
             }
         }

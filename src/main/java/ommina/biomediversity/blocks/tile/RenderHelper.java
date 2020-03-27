@@ -65,10 +65,6 @@ public class RenderHelper {
         render( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
     }
 
-    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, BlockPos pos, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
-        renderCube( buffer, matrix, pos.getX(), pos.getY(), pos.getZ(), w, h, l, fluid, faces );
-    }
-
     public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
         renderCube( buffer, matrix, x, y, z, w, h, l, fluid.getFluid().getAttributes().getStillTexture(), fluid.getFluid().getAttributes().getColor(), faces );
     }
@@ -88,12 +84,10 @@ public class RenderHelper {
         double texX = Math.min( 16, w * 16f );
         double texZ = Math.min( 16, w * 16f );
 
-        IVertexBuilder builder = buffer.getBuffer( RenderType.getTranslucent() );
+        IVertexBuilder builder = buffer.getBuffer( RenderType.getTranslucentNoCrumbling() );
 
         matrix.push();
-        matrix.translate( 1f / 16f, 0, 1f / 16f );
-
-        //buffer.setTranslation( x, y, z );
+        matrix.translate( x, y, z );
 
         if ( faces.contains( Faces.NORTH ) ) {
             builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();

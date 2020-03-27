@@ -14,6 +14,7 @@ import java.util.EnumSet;
 public class RendererTransmitter extends TileEntityRenderer<TileEntityTransmitter> {
 
     private static final EnumSet<RenderHelper.Faces> faces = EnumSet.of( RenderHelper.Faces.TOP, RenderHelper.Faces.NORTH, RenderHelper.Faces.SOUTH, RenderHelper.Faces.WEST, RenderHelper.Faces.EAST );
+
     private static final float WIDTH = 14f / 16f;
     private static final float LENGTH = 14f / 16f;
     private static final float HEIGHT = 10f / 16f;
@@ -26,19 +27,17 @@ public class RendererTransmitter extends TileEntityRenderer<TileEntityTransmitte
     @Override
     public void render( TileEntityTransmitter tile, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay ) {
 
-        final double offset = 1f / 16f;
-
-        //x += offset;
-        //y += offset;
-        //z += offset;
-
         FluidStack fluid = tile.getTank( 0 ).getFluid();
 
         if ( !fluid.isEmpty() ) {
 
+            final float xTranslate = 1f / 16f;
+            final float yTranslate = 1f / 16f;
+            final float zTranslate = 1f / 16f;
+
             float height = (HEIGHT * ((float) fluid.getAmount() / (float) Config.transmitterCapacity.get()));
 
-            RenderHelper.renderCube( buffer, matrix, tile.getPos(), WIDTH, height, LENGTH, fluid, faces );
+            RenderHelper.renderCube( buffer, matrix, xTranslate, yTranslate, zTranslate, WIDTH, height, LENGTH, fluid, faces );
 
         }
 
