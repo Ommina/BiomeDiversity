@@ -102,7 +102,6 @@ public class BiomeDiversity {
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, FastTesrCollector::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, RendererTransmitter::new );
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, FastTesrReceiver::new );
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, FastTesrPlug::new );
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, FastTesrPlug::new );
@@ -191,6 +190,7 @@ public class BiomeDiversity {
 
 
         ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, RendererRainBarrel::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, RendererTransmitter::new );
 
 
         //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
