@@ -31,8 +31,8 @@ public class GenericTankUpdatePacket {
         if ( !(tile instanceof ITankBroadcast) )
             throw new RuntimeException( "Tried to create a generic tank packet for a tile without a tank" );
 
-        this.fluid = ((ITankBroadcast) tile).getTank( 0 ).getFluid();
-        this.pos = tile.getPos();
+        fluid = ((ITankBroadcast) tile).getTank( 0 ).getFluid();
+        pos = tile.getPos();
 
     }
 

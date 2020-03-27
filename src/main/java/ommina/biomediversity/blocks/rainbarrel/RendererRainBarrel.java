@@ -8,18 +8,17 @@ import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.blocks.tile.RenderHelper;
 import ommina.biomediversity.config.Config;
 
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
-public class FastTesrRainBarrel<T extends TileEntityRainBarrel> extends TileEntityRenderer<T> {
+public class RendererRainBarrel extends TileEntityRenderer<TileEntityRainBarrel> {
 
-    public FastTesrRainBarrel( final TileEntityRendererDispatcher tileEntityRendererDispatcher ) {
+    public RendererRainBarrel( TileEntityRendererDispatcher tileEntityRendererDispatcher ) {
         super( tileEntityRendererDispatcher );
     }
 
-    //region Overrides
+//region Overrides
     @Override
-    public void render( @Nonnull T tile, float partialTick, @Nonnull MatrixStack matrix, @Nonnull IRenderTypeBuffer renderer, int light, int overlayLight ) {
+    public void render( TileEntityRainBarrel tile, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay ) {
 
         final float BASE = 0.1f;
         float HEIGHT = 13f / 16f;
@@ -35,7 +34,7 @@ public class FastTesrRainBarrel<T extends TileEntityRainBarrel> extends TileEnti
 
             float posY = BASE + (HEIGHT * ((float) fluid.getAmount() / (float) Config.rainbarrelCapacity.get()));
 
-            //RenderHelper.renderCube( buffer, x, y, z, 1f / 16f, posY, high, fluid, faces );
+            RenderHelper.renderCube( buffer, matrix, tile.getPos(), 14f / 16f, posY, high, fluid, faces );
 
         }
 

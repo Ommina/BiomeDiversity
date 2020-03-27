@@ -1,12 +1,15 @@
 package ommina.biomediversity.blocks.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
@@ -34,97 +37,101 @@ public class RenderHelper {
     }
 
     public static float[] getRGBA( int color ) {
-
         return new float[]{ ((color >> 16) & 0xFF) / 255f, ((color >> 8) & 0xFF) / 255f, ((color) & 0xFF) / 255f, ((color >> 24) & 0xFF) / 255f };
-
     }
 
     public static TextureAtlasSprite getSprite( ResourceLocation resourceLocation ) {
         return Minecraft.getInstance().getAtlasSpriteGetter( PlayerContainer.LOCATION_BLOCKS_TEXTURE ).apply( resourceLocation );
-
     }
 
-    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, int color, EnumSet<Faces> faces ) {
+    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, int color, EnumSet<Faces> faces ) {
 
         final TextureAtlasSprite sprite = getSprite( resourceLocation );
         final float[] rgba = getRGBA( color );
 
-        renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+        renderCube( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
 
     }
 
-    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, float[] rgba, EnumSet<Faces> faces ) {
+    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, float[] rgba, EnumSet<Faces> faces ) {
 
         final TextureAtlasSprite sprite = getSprite( resourceLocation );
 
-        renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+        renderCube( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
 
     }
 
-    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {
-
-        render( buffer, x, y, z, w, h, l, sprite, rgba, faces );
-
+    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {
+        render( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
     }
 
-    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
-
-        renderCube( buffer, x, y, z, w, h, l, fluid.getFluid().getAttributes().getStillTexture(), fluid.getFluid().getAttributes().getColor(), faces );
-
+    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, BlockPos pos, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
+        renderCube( buffer, matrix, pos.getX(), pos.getY(), pos.getZ(), w, h, l, fluid, faces );
     }
 
-    public static void renderCube( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, Color color, EnumSet<Faces> faces ) {
+    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, FluidStack fluid, EnumSet<Faces> faces ) {
+        renderCube( buffer, matrix, x, y, z, w, h, l, fluid.getFluid().getAttributes().getStillTexture(), fluid.getFluid().getAttributes().getColor(), faces );
+    }
+
+    public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, Color color, EnumSet<Faces> faces ) {
 
         final TextureAtlasSprite sprite = getSprite( resourceLocation );
         final float[] rgba = getRGBA( color.getRGB() );
 
-        renderCube( buffer, x, y, z, w, h, l, sprite, rgba, faces );
+        renderCube( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
 
     }
 
-    private static void render( BufferBuilder buffer, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {
+    private static void render( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {
 
         double texY = Math.min( 16, h * 16f );
         double texX = Math.min( 16, w * 16f );
         double texZ = Math.min( 16, w * 16f );
 
+        IVertexBuilder builder = buffer.getBuffer( RenderType.getTranslucent() );
+
+        matrix.push();
+        matrix.translate( 1f / 16f, 0, 1f / 16f );
+
 
         //buffer.setTranslation( x, y, z );
 
         if ( faces.contains( Faces.NORTH ) ) {
-            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.SOUTH ) ) {
-            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.WEST ) ) {
-            buffer.pos( 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.EAST ) ) {
-            buffer.pos( l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, 0, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texX ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
         }
 
         if ( faces.contains( Faces.TOP ) ) {
-            buffer.pos( 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMaxV() ).lightmap( 0, 176 ).endVertex();
-            buffer.pos( l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMaxV() ).lightmap( 0, 176 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), 0, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, w ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMaxU(), sprite.getMaxV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+            builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMaxV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
         }
+
+        matrix.pop();
 
     }
 

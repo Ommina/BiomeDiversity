@@ -32,7 +32,7 @@ import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.collector.FastTesrCollector;
 import ommina.biomediversity.blocks.plug.FastTesrPlug;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
-import ommina.biomediversity.blocks.rainbarrel.FastTesrRainBarrel;
+import ommina.biomediversity.blocks.rainbarrel.RendererRainBarrel;
 import ommina.biomediversity.blocks.receiver.FastTesrReceiver;
 import ommina.biomediversity.blocks.receiver.ReceiverScreen;
 import ommina.biomediversity.blocks.transmitter.FastTesrTransmitter;
@@ -102,7 +102,6 @@ public class BiomeDiversity {
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, FastTesrCollector::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, FastTesrRainBarrel::new );
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, FastTesrTransmitter::new );
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, FastTesrReceiver::new );
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, FastTesrPlug::new );
@@ -189,6 +188,10 @@ public class BiomeDiversity {
         ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
         ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
         ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
+
+
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, RendererRainBarrel::new );
+
 
         //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
 

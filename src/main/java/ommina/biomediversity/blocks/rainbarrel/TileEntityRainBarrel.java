@@ -15,10 +15,7 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.fluids.ModFluids;
-import ommina.biomediversity.network.BroadcastHelper;
-import ommina.biomediversity.network.GenericTankUpdatePacket;
-import ommina.biomediversity.network.ITankBroadcast;
-import ommina.biomediversity.network.Network;
+import ommina.biomediversity.network.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -79,20 +76,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
     }
 
-    @Override
-    public void onLoad() {
-
-        doBroadcast();
-        super.onLoad();
-
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-
-        return true;
-    }
-
     @SuppressWarnings( "unchecked" )
     @Override
     public void read( CompoundNBT tag ) {
@@ -108,6 +91,14 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
         tag = TANK.write( tag );
         return super.write( tag );
+
+    }
+
+    @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
     }
 
