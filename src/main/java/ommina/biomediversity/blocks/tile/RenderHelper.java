@@ -54,11 +54,7 @@ public class RenderHelper {
     }
 
     public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, float[] rgba, EnumSet<Faces> faces ) {
-
-        final TextureAtlasSprite sprite = getSprite( resourceLocation );
-
-        renderCube( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
-
+        renderCube( buffer, matrix, x, y, z, w, h, l, getSprite( resourceLocation ), rgba, faces );
     }
 
     public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba, EnumSet<Faces> faces ) {

@@ -71,6 +71,12 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
         if ( world.isRemote )
             Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
+        FluidAttributes fluidAttributes = Tubes.fluid( collectorTank ).getAttributes();
+
+        PLUG_RENDER.spriteLocation = fluidAttributes.getStillTexture();
+        PLUG_RENDER.colour = RenderHelper.getRGBA( fluidAttributes.getColor() );
+        PLUG_RENDER.maximum = collectorTank > 7 ? Constants.COLLECTOR_INNER_TANK_CAPACITY : Constants.COLLECTOR_OUTER_TANK_CAPACITY;
+
     }
 
     @Override
@@ -194,14 +200,7 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
         if ( block instanceof ITube )
             collectorTank = ((ITube) block).getTube().tank();
 
-        FluidAttributes fluidAttributes = Tubes.fluid( collectorTank ).getAttributes();
 
-        PLUG_RENDER.sprite = fluidAttributes.getStillTexture();
-        PLUG_RENDER.colour = RenderHelper.getRGBA( fluidAttributes.getColor() );
-        PLUG_RENDER.maximum = collectorTank > 7 ? Constants.COLLECTOR_INNER_TANK_CAPACITY : Constants.COLLECTOR_OUTER_TANK_CAPACITY;
-
-        if ( world.isRemote )
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
     }
 

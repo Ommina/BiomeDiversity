@@ -60,6 +60,10 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
         if ( world.isRemote )
             Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
+        PLUG_RENDER.colour = RenderHelper.getRGBA( new Color( 127, 255, 142, 192 ).getRGB() );
+        PLUG_RENDER.spriteLocation = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
+        PLUG_RENDER.maximum = Config.collectorEnergyCapacity.get();
+
     }
 
     @Override
@@ -169,12 +173,6 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
 
         firstTick = false;
 
-        PLUG_RENDER.colour = RenderHelper.getRGBA( new Color( 127, 255, 142, 192 ).getRGB() );
-        PLUG_RENDER.sprite = BiomeDiversity.getId( "block/cluster/cluster_glow_internal" );
-        PLUG_RENDER.maximum = Config.collectorEnergyCapacity.get();
-
-        if ( world.isRemote )
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
     }
 

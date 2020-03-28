@@ -36,7 +36,6 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
 
     public TileEntityPlugBase( TileEntityType<?> tileEntityTypeIn ) {
         super( tileEntityTypeIn );
-
     }
 
     //region Overrides

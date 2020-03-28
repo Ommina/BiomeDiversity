@@ -37,14 +37,13 @@ public enum Tubes {
 
     Tubes( int tank, Point2D.Float location, @Nullable String fluidRegistryName ) {
 
-
         this.tank = tank;
         this.location = location;
         this.fluid = fluidRegistryName == null ? null : BiomeDiversity.getId( fluidRegistryName );
 
     }
 
-    Point2D.Float getTesrLocation() {
+    Point2D.Float getRendererLocation() {
 
         final float xoffset = 0;
         final float yoffset = 0;
@@ -77,7 +76,6 @@ public enum Tubes {
     public static Collection<SingleFluidRecipe> getRecipes() {
         return getAllFluids().stream().map( f -> new SingleFluidRecipe( f.getFluid() ) ).collect( Collectors.toList() );
     }
-
 
     public static List<FluidStack> getAllFluids() {
 

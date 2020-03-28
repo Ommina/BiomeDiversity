@@ -29,7 +29,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
-import ommina.biomediversity.blocks.collector.FastTesrCollector;
+import ommina.biomediversity.blocks.collector.RendererCollector;
 import ommina.biomediversity.blocks.plug.RendererPlug;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
 import ommina.biomediversity.blocks.rainbarrel.RendererRainBarrel;
@@ -73,6 +73,7 @@ public class BiomeDiversity {
         ModLoadingContext.get().registerConfig( ModConfig.Type.COMMON, Config.COMMON_CONFIG );
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::CommonSetup );
+        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::ClientSetup );
 
         Config.loadConfig( Config.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-client.toml" ) );
         Config.loadConfig( Config.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve( MODID + "-common.toml" ) );
@@ -82,12 +83,47 @@ public class BiomeDiversity {
         // Register the processIMC method for modloading
         //FMLJavaModLoadingContext.get().getModEventBus().addListener( this::processIMC );
 
-        // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::ClientSetup );
-
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register( this );
+
     }
+
+    private void CommonSetup( final FMLCommonSetupEvent event ) {
+
+        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
+
+        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
+
+        Network.init();
+
+        Config.parseFluidList();
+
+    }
+
+    private void ClientSetup( final FMLClientSetupEvent event ) {
+
+        ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
+        ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
+        ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
+
+
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, RendererRainBarrel::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, RendererTransmitter::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, RendererReceiver::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, RendererPlug::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, RendererPlug::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, RendererCollector::new );
+
+        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
+
+    }
+
+
+
+
+
+
+
 
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
     public static class ForgeEvents {
@@ -98,14 +134,7 @@ public class BiomeDiversity {
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT )
     public static class ClientEvents {
 
-        @SubscribeEvent
-        public static void BindTesr( final FMLClientSetupEvent event ) {
 
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, FastTesrCollector::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, RendererPlug::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, RendererPlug::new );
-
-        }
 
         @SubscribeEvent
         public static void addSprites( final TextureStitchEvent.Pre event ) {
@@ -181,31 +210,5 @@ public class BiomeDiversity {
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
 
-    private void ClientSetup( final FMLClientSetupEvent event ) {
-
-        ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
-        ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
-        ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
-
-
-        ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, RendererRainBarrel::new );
-        ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, RendererTransmitter::new );
-        ClientRegistry.bindTileEntityRenderer( ModTileEntities.RECEIVER, RendererReceiver::new );
-
-        //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
-
-    }
-
-    private void CommonSetup( final FMLCommonSetupEvent event ) {
-
-        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
-
-        CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
-
-        Network.init();
-
-        Config.parseFluidList();
-
-    }
 
 }

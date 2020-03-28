@@ -49,7 +49,7 @@ public class RendererPlug extends TileEntityRenderer<TileEntityPlugBase> {
 
             float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
 
-            RenderHelper.renderCube( buffer, matrix, xTranslate, yTranslate, zTranslate, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, renderData.colour, FACES_FLUID );
+            RenderHelper.renderCube( buffer, matrix, xTranslate, yTranslate, zTranslate, WIDTH_FLUID, height, LENGTH_FLUID, renderData.spriteLocation, renderData.colour, FACES_FLUID );
 
         }
 

@@ -107,16 +107,19 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
+    @Override
     public void onChunkUnloaded() {
 
         components.forEach( IClusterComponent::invalidateCollector );
         components.clear();
 
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-        return true;
     }
 
     @Override
