@@ -30,7 +30,7 @@ import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.collector.FastTesrCollector;
-import ommina.biomediversity.blocks.plug.FastTesrPlug;
+import ommina.biomediversity.blocks.plug.RendererPlug;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
 import ommina.biomediversity.blocks.rainbarrel.RendererRainBarrel;
 import ommina.biomediversity.blocks.receiver.RendererReceiver;
@@ -102,8 +102,8 @@ public class BiomeDiversity {
         public static void BindTesr( final FMLClientSetupEvent event ) {
 
             ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, FastTesrCollector::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, FastTesrPlug::new );
-            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, FastTesrPlug::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, RendererPlug::new );
+            ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, RendererPlug::new );
 
         }
 

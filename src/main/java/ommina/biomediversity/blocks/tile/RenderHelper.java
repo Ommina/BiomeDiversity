@@ -84,7 +84,7 @@ public class RenderHelper {
         double texX = Math.min( 16, w * 16f );
         double texZ = Math.min( 16, w * 16f );
 
-        IVertexBuilder builder = buffer.getBuffer( RenderType.getTranslucentNoCrumbling() );
+        IVertexBuilder builder = buffer.getBuffer( RenderType.getTranslucent() );
 
         matrix.push();
         matrix.translate( x, y, z );

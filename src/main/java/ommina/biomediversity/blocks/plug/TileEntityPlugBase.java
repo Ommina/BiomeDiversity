@@ -89,11 +89,6 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
     }
 
     @Override
-    public boolean hasFastRenderer() {
-        return true;
-    }
-
-    @Override
     public void read( CompoundNBT nbt ) {
 
         FINDER.setCollectorPos( NbtUtils.getBlockPos( "collectorpos", nbt ) );

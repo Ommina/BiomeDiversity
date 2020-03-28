@@ -1,56 +1,59 @@
-package ommina.biomediversity.blocks.receiver;
+package ommina.biomediversity.blocks.plug;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.tile.RenderHelper;
-import ommina.biomediversity.config.Config;
+
+import java.awt.*;
 
 import static ommina.biomediversity.blocks.tile.RenderHelper.*;
 
-public class RendererReceiver extends TileEntityRenderer<TileEntityReceiver> {
+public class RendererPlug extends TileEntityRenderer<TileEntityPlugBase> {
 
-    private static final float WIDTH_FLUID = 14f / 16f;
-    private static final float LENGTH_FLUID = 14f / 16f;
-    private static final float HEIGHT_FLUID = 24f / 16f;
+    private static final float WIDTH_FLUID = (16f - (1.001f * 2)) / 16f;
+    private static final float LENGTH_FLUID = (16f - (1.001f * 2)) / 16f;
+    private static final float HEIGHT_FLUID = 12f / 16f;
 
-    private static final float HEIGHT_GLOWBAR = 21f / 16f;
+    private static final float HEIGHT_GLOWBAR = 9f / 16f;
+
+    private static final float[] COLOUR_DISCONNECTED = RenderHelper.getRGBA( new Color( 254, 0, 0, 255 ).getRGB() );
+    private static final float[] COLOUR_CONNECTED = RenderHelper.getRGBA( new Color( 0, 200, 0, 255 ).getRGB() );
 
     private static TextureAtlasSprite spriteInternal;
     private static TextureAtlasSprite spriteExternal;
 
-    public RendererReceiver( final TileEntityRendererDispatcher tileEntityRendererDispatcher ) {
+    public RendererPlug( final TileEntityRendererDispatcher tileEntityRendererDispatcher ) {
         super( tileEntityRendererDispatcher );
     }
 
     //region Overrides
     @Override
-    public void render( TileEntityReceiver tile, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay ) {
+    public void render( TileEntityPlugBase tile, float partialTicks, MatrixStack matrix, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay ) {
 
         if ( spriteInternal == null || spriteExternal == null ) {
             spriteInternal = getSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
             spriteExternal = getSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
-        } // Attempting to use getAtlasSprite much earlier throws exceptions.  So while this null check every frame isn't ideal, it is hoped it is better for performance than refetching the sprite each frame instead
+        }
 
-        FluidStack fluid = tile.getTank( 0 ).getFluid();
+        PlugRenderData renderData = tile.getPlugRenderData();
 
-        if ( !fluid.isEmpty() ) {
+        if ( renderData.value > 0 ) {
 
             final float xTranslate = 1f / 16f;
             final float yTranslate = 1f / 16f;
             final float zTranslate = 1f / 16f;
 
-            float height = (HEIGHT_FLUID * ((float) fluid.getAmount() / (float) Config.transmitterCapacity.get())); // Yes, this IS supposed to be TransmitterCapacity (Receiver and Transmitter must share capacities)
+            float height = (HEIGHT_FLUID * ((float) renderData.value / (float) renderData.maximum));
 
-            RenderHelper.renderCube( buffer, matrix, xTranslate, yTranslate, zTranslate, WIDTH_FLUID, height, LENGTH_FLUID, fluid, FACES_FLUID );
+            RenderHelper.renderCube( buffer, matrix, xTranslate, yTranslate, zTranslate, WIDTH_FLUID, height, LENGTH_FLUID, renderData.sprite, renderData.colour, FACES_FLUID );
 
         }
 
-        float[] color = tile.getGlowbarColour();
+        float[] color = tile.isClusterComponentConnected() ? COLOUR_CONNECTED : COLOUR_DISCONNECTED;
 
         final float interalGlowSize = 1f / 16f / 2f;
         final float externalGlowSize = 1f / 16f;
@@ -67,7 +70,7 @@ public class RendererReceiver extends TileEntityRenderer<TileEntityReceiver> {
     private static void renderLight( IRenderTypeBuffer buffer, MatrixStack matrix, float offset, float size, TextureAtlasSprite sprite, float[] color ) {
 
         final float sideTranslate = 15f / 16f;
-        final float yTranslate = 3f / 16f;
+        final float yTranslate = 2f / 16f;
 
         RenderHelper.renderCube( buffer, matrix, offset, yTranslate, offset, size, HEIGHT_GLOWBAR, size, sprite, color, FACES_NORTHWEST );
         RenderHelper.renderCube( buffer, matrix, sideTranslate, yTranslate, offset, size, HEIGHT_GLOWBAR, size, sprite, color, FACES_NORTHEAST );

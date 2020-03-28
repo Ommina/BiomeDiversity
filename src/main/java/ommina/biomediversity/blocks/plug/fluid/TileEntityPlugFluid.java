@@ -66,6 +66,14 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
     }
 
     @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
+    @Override
     public void read( CompoundNBT tag ) {
 
         collectorTank = tag.getInt( "collectorTank" );

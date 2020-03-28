@@ -55,6 +55,14 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
     }
 
     @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
+    @Override
     public void onChunkUnloaded() {
 
         handlerEnergy.invalidate();
