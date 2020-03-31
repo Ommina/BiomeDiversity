@@ -11,6 +11,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.MarginedStructureStart;
 import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 
 public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
 
-    public static final int BASE_HEIGHT = 38; // centre of sphere
+    public static final int BASE_HEIGHT = 33; // centre of sphere
     public static final float FREQUENCY_MULTIPLIER = 0.002f;
     public static final float BASE_FREQUENCY = 0.0039f;
 
@@ -83,7 +84,7 @@ public class FluidWellStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 //endregion Overrides
 
-    public static class Start extends MarginedStructureStart {
+    public static class Start extends StructureStart {
 
         public Start( Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int referenceIn, long seed ) {
             super( structure, chunkX, chunkZ, boundingBox, referenceIn, seed );

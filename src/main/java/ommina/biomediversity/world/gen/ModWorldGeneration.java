@@ -11,6 +11,7 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
+import ommina.biomediversity.world.gen.feature.ModCarvers;
 import ommina.biomediversity.world.gen.feature.ModFeatures;
 
 public class ModWorldGeneration {
@@ -67,9 +68,13 @@ public class ModWorldGeneration {
     private static void addFluidWells( Biome biome ) {
 
         biome.addStructure( ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ) );
-        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
+        biome.addFeature( GenerationStage.Decoration.RAW_GENERATION,
              ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
 
+        //biomeIn.addCarver(GenerationStage.Carving.LIQUID, Biome.createCarver( WorldCarver.UNDERWATER_CAVE, new ProbabilityConfig(0.06666667F)));
+
+
+        biome.addCarver( GenerationStage.Carving.LIQUID, Biome.createCarver( ModCarvers.FLUID_WELL_CARVER, new ProbabilityConfig( 0.2f ) ) );
 
 //        biomeIn.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
 //             Feature.WOODLAND_MANSION.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));

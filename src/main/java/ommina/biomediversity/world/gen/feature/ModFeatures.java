@@ -27,6 +27,7 @@ public class ModFeatures {
         event.getRegistry().register( new PomegranateFeature( NoFeatureConfig::deserialize ).setRegistryName( "pomegranate" ) );
         event.getRegistry().register( new ColzaFeature( NoFeatureConfig::deserialize ).setRegistryName( "colza" ) );
 
+
         ModStructurePieceType.init();
 
     }
