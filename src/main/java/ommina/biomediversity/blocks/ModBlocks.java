@@ -25,6 +25,7 @@ import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.crops.ColzaBlock;
 import ommina.biomediversity.blocks.crops.FakePlantBlock;
 import ommina.biomediversity.blocks.crops.PomegranateBlock;
+import ommina.biomediversity.blocks.fluidwell.FluidWell;
 import ommina.biomediversity.blocks.peltier.Peltier;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergy;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
@@ -67,6 +68,7 @@ public class ModBlocks {
     @ObjectHolder( "transmitter" ) public static Transmitter TRANSMITTER;
     @ObjectHolder( "plug_energy" ) public static PlugEnergy PLUG_ENERGY;
     @ObjectHolder( "plug_fluid_byproduct" ) public static PlugFluidByproduct PLUG_FLUID_BYPRODUCT;
+    @ObjectHolder( "fluid_well" ) public static FluidWell FLUID_WELL;
 
     // Containers
     @ObjectHolder( "receiver" ) public static ContainerType<ReceiverContainer> RECEIVER_CONTAINER;
@@ -123,6 +125,7 @@ public class ModBlocks {
         register( event, "transmitter", new Transmitter() );
         register( event, "plug_energy", new PlugEnergy() );
         register( event, "plug_fluid_byproduct", new PlugFluidByproduct() );
+        register( event, "fluid_well", new FluidWell() );
 
         for ( int n = 1; n <= 11; n++ )
             register( event, BlockProgressive.PREFIX + n, new BlockProgressive( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).sound( SoundType.STONE ).tickRandomly().hardnessAndResistance( 3.3f - (float) n / 10 ), n ) );

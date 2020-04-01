@@ -1,4 +1,4 @@
-package ommina.biomediversity.blocks.rainbarrel;
+package ommina.biomediversity.blocks.fluidwell;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -8,27 +8,22 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.BlockTileEntity;
-import ommina.biomediversity.config.Constants;
 
-public class RainBarrel extends BlockTileEntity<TileEntityRainBarrel> {
+public class FluidWell extends BlockTileEntity<TileEntityFluidWell> {
 
-    // private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB( 0f, 0f, 0f, 1.0f, 15f / 16f, 1.0f );
-
-    public RainBarrel() {
-        super( Block.Properties.create( Material.ROCK ).harvestLevel( 2 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( Constants.DEFAULT_TILE_ENTITY_HARDNESS ).notSolid() );
+    public FluidWell() {
+        super( Block.Properties.create( Material.ROCK ).harvestLevel( 0 ).harvestTool( ToolType.PICKAXE ).hardnessAndResistance( 1.0f ) );
     }
 
     //region Overrides
     @Override
     public TileEntity createTileEntity( BlockState state, IBlockReader world ) {
-        return new TileEntityRainBarrel();
+        return new TileEntityFluidWell();
     }
 
     @Override
     public BlockRenderType getRenderType( BlockState state ) {
         return BlockRenderType.MODEL;
     }
-
-//endregion Overrides
 
 }

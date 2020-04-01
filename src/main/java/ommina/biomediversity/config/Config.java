@@ -52,6 +52,7 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue pomegranateGenerationEnabled;
     public static ForgeConfigSpec.BooleanValue colzaGenerationEnabled;
     public static ForgeConfigSpec.IntValue fluidWellGenerationRadiusBase;
+    public static ForgeConfigSpec.IntValue fluidWellProbability;
     public static ForgeConfigSpec.BooleanValue nocifiedStoneEnabled;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMinY;
     public static ForgeConfigSpec.IntValue nocifiedStoneGenerationMaxY;
@@ -185,8 +186,10 @@ public class Config {
 
             COMMON_BUILDER.comment( "Fluid Wells" ).push( SUBCATEGORY_FLUID_WELLS );
 
-            fluidWellGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'silt-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
-            fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated silt-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
+            fluidWellGenerationEnabled = COMMON_BUILDER.comment( "Enables generation of (fairly large) underground pools of 'mineral-water' fluid.  Suitable for consumption directly, or processed for a greater return." ).define( "enable_fluid_wells", true );
+            fluidWellGenerationRadiusBase = COMMON_BUILDER.comment( "Starting radius of the generated mineral-water well." ).defineInRange( "wellSizeRadiusBase", 13, 13 - 2, 13 + 2 );
+            fluidWellProbability = COMMON_BUILDER.comment( "Probability of generating a fluid well.  Larger values mean greater probability." ).defineInRange( "wellProbability", 5, 1, 2000 );
+
 
             COMMON_BUILDER.pop();
 

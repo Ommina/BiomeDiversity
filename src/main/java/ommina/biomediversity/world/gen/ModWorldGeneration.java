@@ -30,7 +30,7 @@ public class ModWorldGeneration {
             }
 
             if ( Config.fluidWellGenerationEnabled.get() )
-                addFluidWells( biome );
+                addFluidWells( biome, ModBlocks.FLUID_WELL );
 
             if ( Config.nocifiedStoneEnabled.get() && biome.getCategory() == Biome.Category.EXTREME_HILLS ) {
                 addOre( biome, ModBlocks.STONE_NOCIFIED_UNDAMAGED, Config.nocifiedStoneGenerationSizeBase.get() + Config.nocifiedStoneGenerationSizeVariance.get(), Config.nocifiedStoneGenerationAttempts.get(), Config.nocifiedStoneGenerationMinY.get(), Config.nocifiedStoneGenerationMaxY.get() );
@@ -64,11 +64,16 @@ public class ModWorldGeneration {
 
     }
 
-    private static void addFluidWells( Biome biome ) {
+    private static void addFluidWells( Biome biome, Block block ) {
 
-        biome.addStructure( ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ) );
-        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
-             ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
+        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES,
+             ModFeatures.FLUID_WELL.withConfiguration(
+                  new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), 1 ) )
+                  .withPlacement( Placement.COUNT_RANGE.configure( new CountRangeConfig( 1, 1, 0, 1 ) ) ) );
+
+
+        // biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
+        //      ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
 
 
 //        biomeIn.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
@@ -84,17 +89,6 @@ public class ModWorldGeneration {
 
         biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION,
              feature.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.COUNT_HEIGHTMAP_DOUBLE.configure( new FrequencyConfig( 4 ) ) ) );
-
-//             Feature.field_227248_z_.func_225566_b_(  )
-        //            );
-
-
-        //     biomeIn.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.BAMBOO.func_225566_b_(new ProbabilityConfig(0.0F)).func_227228_a_(Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_(new FrequencyConfig(16))));
-
-        //   biomeIn.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.field_227248_z_.func_225566_b_(field_226718_F_).func_227228_a_(Placement.COUNT_HEIGHTMAP_DOUBLE.func_227446_a_(new FrequencyConfig(1))));
-
-
-        //biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature( feature, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 4 ) ) );
 
     }
 

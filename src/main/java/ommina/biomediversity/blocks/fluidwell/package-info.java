@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 
-package ommina.biomediversity.world.gen.structure;
+package ommina.biomediversity.blocks.fluidwell;
 
 import mcp.MethodsReturnNonnullByDefault;
 
