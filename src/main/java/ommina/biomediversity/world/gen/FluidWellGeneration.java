@@ -43,21 +43,43 @@ public class FluidWellGeneration {
         if ( BiomeDiversity.DEBUG )
             BiomeDiversity.LOGGER.info( String.format( "  And creating the fluid well at %s with radius %s ...", centre.toString(), radius ) );
 
+        createSphere( world, centre, radius );
+
+        if ( BiomeDiversity.DEBUG )
+            BiomeDiversity.LOGGER.info( "   ... done." );
+
+    }
+
+    private static void createSphere( World world, BlockPos centre, int radius ) {
+
+        Random random = world.getRandom();
+
+        int lightLayers = random.nextInt( 5 );
+        int heavyLayers = random.nextInt( 6 );
+
+        BiomeDiversity.LOGGER.info( String.format( "  Light %s  Heavy %s", lightLayers, heavyLayers ) );
+
+        BlockState blockState;
+
         for ( int x = -radius; x <= radius; x++ )
             for ( int y = -radius; y <= radius; y++ )
                 for ( int z = -radius; z <= radius; z++ )
                     if ( Math.sqrt( (x * x) + (y * y) + (z * z) ) < radius ) {
                         BlockPos pos = centre.add( x, y, z );
 
+                        if ( y >= radius - lightLayers )
+                            blockState = ModBlocks.MINERALWATER_LIGHT.getDefaultState();
+                        else if ( y <= -radius + heavyLayers )
+                            blockState = ModBlocks.MINERALWATER_HEAVY.getDefaultState();
+                        else
+                            blockState = ModBlocks.MINERALWATER.getDefaultState();
+
                         if ( isReplaceable( world, pos ) )
-                            setBlockState( world, ModBlocks.MINERALWATER.getDefaultState(), pos );
+                            setBlockState( world, blockState, pos );
                         else
                             BiomeDiversity.LOGGER.warn( "notReplaceable" );
 
                     }
-
-        if ( BiomeDiversity.DEBUG )
-            BiomeDiversity.LOGGER.info( "   ... done." );
 
     }
 
@@ -82,7 +104,6 @@ public class FluidWellGeneration {
 
         if ( !ifluidstate.isEmpty() )
             world.getPendingFluidTicks().scheduleTick( blockpos, ifluidstate.getFluid(), 0 );
-
 
     }
 

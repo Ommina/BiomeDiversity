@@ -1,6 +1,7 @@
 package ommina.biomediversity.fluids;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.ILiquidContainer;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
@@ -47,6 +48,8 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
             if ( fluidStateIn.getBlockState().getBlock() == ModBlocks.NEUTRAL_BIOMETIC && worldIn.getBlockState( pos.offset( direction ) ).getBlock() == ModBlocks.BYPRODUCT ) {
                 worldIn.setBlockState( pos, ModBlocks.PROGRESSIVE1.getDefaultState(), 3 );
                 worldIn.playSound( null, pos, ModSounds.FLUID_HARDENING, SoundCategory.BLOCKS, 1.0f, 1.0f );
+                return;
+            } else if ( worldIn.getBlockState( pos ).getBlock() instanceof FlowingFluidBlock ) {
                 return;
             }
 

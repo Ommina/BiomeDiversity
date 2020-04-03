@@ -17,9 +17,11 @@ public class ModFluids {
     @ObjectHolder( "byproduct" ) public static FlowingFluid BYPRODUCT;
     @ObjectHolder( "neutralbiometic" ) public static FlowingFluid NEUTRALBIOMETIC;       //                       (indirectly by Mixer)
 
-    @ObjectHolder( "mineralwater" ) public static FlowingFluid MINERALWATER;             // WorldGen Spheres
-    @ObjectHolder( "junglewater" ) public static FlowingFluid JUNGLEWATER;               //          Jungle Biome
-    @ObjectHolder( "moltenorinocite" ) public static FlowingFluid MOLTENORINOCITE;       //          Melted Ore
+    @ObjectHolder( "mineralwater" ) public static FlowingFluid MINERALWATER_MEDIUM;      // WorldGen Spheres
+    @ObjectHolder( "lightmineralwater" ) public static FlowingFluid MINERALWATER_LIGHT;  // WorldGen Spheres
+    @ObjectHolder( "heavymineralwater" ) public static FlowingFluid MINERALWATER_HEAVY;  // WorldGen Spheres
+    @ObjectHolder( "junglewater" ) public static FlowingFluid JUNGLEWATER;               // WorldGen Jungle Biome
+    @ObjectHolder( "moltenorinocite" ) public static FlowingFluid MOLTENORINOCITE;       // WorldGen Melted Ore
 
 
     //public static BdFluid natural;

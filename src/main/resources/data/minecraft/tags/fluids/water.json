@@ -3,8 +3,12 @@
   "values": [
     "biomediversity:rainwater",
     "biomediversity:rainwater_flowing",
+    "biomediversity:lightmineralwater",
+    "biomediversity:lightmineralwater_flowing",
     "biomediversity:mineralwater",
     "biomediversity:mineralwater_flowing",
+    "biomediversity:heavymineralwater",
+    "biomediversity:heavymineralwater_flowing",
     "biomediversity:coolbiometic",
     "biomediversity:coolbiometic_flowing",
     "biomediversity:warmbiometic",

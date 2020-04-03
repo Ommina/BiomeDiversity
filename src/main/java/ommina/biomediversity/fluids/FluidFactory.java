@@ -20,7 +20,10 @@ public class FluidFactory {
         wrapper.add( new FluidWrapper( "byproduct", "fluid_blank" ).setViscosity( 500 ).setLuminosity( 3 ).setColour( new Color( 236, 14, 231, 192 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "neutralbiometic", "fluid_blank" ).setViscosity( 1000 ).setLuminosity( 7 ).setColour( new Color( 255, 244, 182, 255 ) ).setRarity( Rarity.EPIC ).build() );
 
-        wrapper.add( new FluidWrapper( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 68, 126, 129, 224 ) ).setRarity( Rarity.RARE ).build() );
+        wrapper.add( new FluidWrapper( "lightmineralwater", "fluid_blank" ).setViscosity( 100 ).setColour( new Color( 209, 154, 115, 214 ) ).setRarity( Rarity.RARE ).build() );
+        wrapper.add( new FluidWrapper( "mineralwater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 170, 126, 93, 224 ) ).setRarity( Rarity.RARE ).build() );
+        wrapper.add( new FluidWrapper( "heavymineralwater", "fluid_blank" ).setViscosity( 1000 ).setColour( new Color( 132, 97, 72, 234 ) ).setRarity( Rarity.RARE ).build() );
+
         wrapper.add( new FluidWrapper( "junglewater", "fluid_blank" ).setViscosity( 500 ).setColour( new Color( 59, 74, 15, 250 ) ).setRarity( Rarity.UNCOMMON ).build() );
         wrapper.add( new FluidWrapper( "moltenorinocite", "molten_metal" ).setViscosity( 15000 ).setLuminosity( 10 ).setColour( new Color( 70, 166, 41, 255 ) ).setRarity( Rarity.COMMON ).build() );
 

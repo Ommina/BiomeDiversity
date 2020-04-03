@@ -6,8 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.world.gen.FluidWellGeneration;
 
@@ -51,13 +49,9 @@ public class TileEntityFluidWell extends TileEntity implements ITickableTileEnti
         if ( !hasWorld() || !areSurroundingChunksLoaded( getWorld(), pos ) )
             return;
 
-        BiomeDiversity.LOGGER.warn( "Splash!" );
-
-        FluidWellGeneration.createSphere( world, pos  );
+        FluidWellGeneration.createSphere( world, pos );
 
         world.setBlockState( pos, Blocks.STONE.getDefaultState() );
-
-        BiomeDiversity.LOGGER.warn( "Still here!" );
 
     }
 //endregion Overrides
@@ -66,7 +60,6 @@ public class TileEntityFluidWell extends TileEntity implements ITickableTileEnti
 
         for ( Direction direction : Direction.Plane.HORIZONTAL ) {
             BlockPos p2 = pos.offset( direction, 16 );
-            BiomeDiversity.LOGGER.warn( "I'm at " + pos.toString() + " and am checking " + p2.toString() );
             if ( !world.isBlockLoaded( pos.offset( direction, 16 ) ) )
                 return false;
         }

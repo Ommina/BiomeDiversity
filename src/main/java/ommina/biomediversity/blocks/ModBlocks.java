@@ -76,7 +76,9 @@ public class ModBlocks {
     @ObjectHolder( "transmitter" ) public static ContainerType<TransmitterContainer> TRANSMITTER_CONTAINER;
 
     // Fluid Blocks  (Only those that we care about)
+    @ObjectHolder( "lightmineralwater" ) public static FlowingFluidBlock MINERALWATER_LIGHT;
     @ObjectHolder( "mineralwater" ) public static FlowingFluidBlock MINERALWATER;
+    @ObjectHolder( "heavymineralwater" ) public static FlowingFluidBlock MINERALWATER_HEAVY;
     @ObjectHolder( "junglewater" ) public static FlowingFluidBlock JUNGLEWATER;
     @ObjectHolder( "neutralbiometic" ) public static FlowingFluidBlock NEUTRAL_BIOMETIC;
     @ObjectHolder( "byproduct" ) public static FlowingFluidBlock BYPRODUCT;

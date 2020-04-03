@@ -57,7 +57,7 @@ public class ModItems {
     @ObjectHolder( "machine_sensor" ) public static Item MACHINE_SENSOR;
     @ObjectHolder( "machine_tank" ) public static Item MACHINE_TANK;
 
-    @ObjectHolder( "fluid_well" ) public static Item FLUID_WELL;
+//    @ObjectHolder( "fluid_well" ) public static Item FLUID_WELL;
 
     @SubscribeEvent
     public static void register( RegistryEvent.Register<Item> event ) {
@@ -101,7 +101,7 @@ public class ModItems {
         for ( int n = 1; n <= 12; n++ )
             register( event, BlockProgressive.PREFIX + n, new BlockItem( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( BlockProgressive.PREFIX + n ) ), new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
-        register( event, "fluid_well", new BlockItem( ModBlocks.FLUID_WELL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        //register( event, "fluid_well", new BlockItem( ModBlocks.FLUID_WELL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
     }
 

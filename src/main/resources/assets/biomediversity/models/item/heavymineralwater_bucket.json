@@ -1,0 +1,9 @@
+{
+  "parent": "forge:item/default",
+  "loader": "forge:bucket",
+  "textures": {
+    "base": "item/bucket",
+    "fluid": "forge:item/mask/bucket_fluid"
+  },
+  "fluid": "biomediversity:heavymineralwater"
+}

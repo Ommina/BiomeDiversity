@@ -306,9 +306,11 @@ public class Config {
 
         fluids.add( "minecraft:water:10" );
         fluids.add( BiomeDiversity.MODID + ":rainwater:30" );
-        fluids.add( BiomeDiversity.MODID + ":mineralwater:50" );
+        fluids.add( BiomeDiversity.MODID + ":mineralwater:60" );
         fluids.add( "minecraft:lava:120" );
         fluids.add( BiomeDiversity.MODID + ":byproduct:120" );
+        fluids.add( BiomeDiversity.MODID + ":lightmineralwater:160" );
+        fluids.add( BiomeDiversity.MODID + ":heavymineralwater:260" );
         fluids.add( BiomeDiversity.MODID + ":warmbiometic:540" );
         fluids.add( BiomeDiversity.MODID + ":coolbiometic:540" );
         fluids.add( BiomeDiversity.MODID + ":junglewater:640" );
