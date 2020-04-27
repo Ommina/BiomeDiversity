@@ -85,6 +85,10 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         return TANK.get( index );
     }
 
+    public List<BdFluidTank> getTanks() {
+        return TANK;
+    }
+
     @Override
     @Nullable
     public BlockPos getCollectorPos() {
@@ -232,6 +236,16 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
         return releasePerTick;
     }
 
+    @Nullable
+    public BdFluidTank getFluidTank( int tank) {
+
+        if ( tank < 0 || tank >= TANK_COUNT )
+            return null;
+
+        return TANK.get( tank );
+
+    }
+
     public void registerComponent( IClusterComponent component ) {
         components.add( component );
     }
@@ -241,6 +255,8 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     }
 
     private void doFirstTick() {
+
+        //TODO: Not required
 
         firstTick = false;
 

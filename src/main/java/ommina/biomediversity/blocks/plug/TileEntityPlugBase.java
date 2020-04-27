@@ -17,6 +17,9 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
+import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
+import ommina.biomediversity.blocks.plug.fluid.PlugFluidByproductContainer;
+import ommina.biomediversity.blocks.plug.fluid.TileEntityPlugFluid;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.util.NbtUtils;
@@ -42,7 +45,16 @@ public abstract class TileEntityPlugBase extends TileEntity implements IClusterC
     @Nullable
     @Override
     public Container createMenu( int i, PlayerInventory playerInventory, PlayerEntity playerEntity ) {
-        return new PlugEnergyContainer( i, world, pos, playerInventory, playerEntity );
+
+        TileEntity tile = world.getTileEntity( pos );
+
+        if ( tile instanceof TileEntityPlugEnergy )
+            return new PlugEnergyContainer( i, world, pos, playerInventory, playerEntity );
+        else if ( tile instanceof TileEntityPlugFluid )
+            return new PlugFluidByproductContainer( i, world, pos, playerInventory, playerEntity );
+
+        return null;
+
     }
 
     @Override

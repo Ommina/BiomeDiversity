@@ -32,6 +32,8 @@ import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.collector.RendererCollector;
 import ommina.biomediversity.blocks.plug.RendererPlug;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
+import ommina.biomediversity.blocks.plug.fluid.PlugFluidByproduct;
+import ommina.biomediversity.blocks.plug.fluid.PlugFluidByproductScreen;
 import ommina.biomediversity.blocks.rainbarrel.RendererRainBarrel;
 import ommina.biomediversity.blocks.receiver.RendererReceiver;
 import ommina.biomediversity.blocks.receiver.ReceiverScreen;
@@ -105,7 +107,7 @@ public class BiomeDiversity {
         ScreenManager.registerFactory( ModBlocks.RECEIVER_CONTAINER, ReceiverScreen::new );
         ScreenManager.registerFactory( ModBlocks.PLUG_ENERGY_CONTAINER, PlugEnergyScreen::new );
         ScreenManager.registerFactory( ModBlocks.TRANSMITTER_CONTAINER, TransmitterScreen::new );
-
+        ScreenManager.registerFactory( ModBlocks.PLUG_FLUID_BYPRODUCT_CONTAINER, PlugFluidByproductScreen::new );
 
         ClientRegistry.bindTileEntityRenderer( ModTileEntities.RAIN_BARREL, RendererRainBarrel::new );
         ClientRegistry.bindTileEntityRenderer( ModTileEntities.TRANSMITTER, RendererTransmitter::new );
@@ -141,7 +143,7 @@ public class BiomeDiversity {
 
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
-            event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
+            //event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
             //event.addSprite( BiomeDiversity.getId( "gui/biome" ) );
             event.addSprite( BiomeDiversity.getId( "gui/log_gauge" ) );
 
