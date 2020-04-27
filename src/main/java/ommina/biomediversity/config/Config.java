@@ -286,11 +286,11 @@ public class Config {
             powerBiomeWhitelist = COMMON_BUILDER.defineList( "biomes", Arrays.asList( "minecraft:*" ), o -> o instanceof String );
             powerFluidWhitelist = COMMON_BUILDER.defineList( "fluids", Config::getDefaultFluidList, o -> o instanceof String );
             powerMaxBiomeCount = COMMON_BUILDER.comment( "Maximum number of unique biomes that will be counted.  May be useful if there is a biome-adding mod installed, and the ease of finding new biomes sends energy production through the roof" ).defineInRange( "max_biome_count", 20, 1, 128 );
-            powerBiomeDiversity = COMMON_BUILDER.comment( "Bonus multiplier for each unique biome (from the biome list) with a paired Transmitter.\nUsed in conjunction with fluid stength to determine total energy produced." ).defineInRange( "biome_diversity", 1.088d, 1d, 3.0d );
+            powerBiomeDiversity = COMMON_BUILDER.comment( "Bonus multiplier for each unique biome (from the biome list) with a paired Transmitter.\nUsed in conjunction with fluid strength to determine total energy produced." ).defineInRange( "biome_diversity", 1.088d, 1d, 3.0d );
             powerBiomeAdjustment = COMMON_BUILDER.comment( "Value to add to energy produced by biome_diversity.  Applied BEFORE final multiplier" ).defineInRange( "biome_adjustment", -11, -10000, +10000 );
             powerFinalMultiplier = COMMON_BUILDER.comment( "After all other calculations are done, the result is multiplied by this value.\nValues greater than 1.00 will increase energy production dramatically.\nLikewise, less than 1.00 will reduce energy produced, and 0 will effectively disable energy entirely." ).defineInRange( "final_multiplier", 1d, 0d, 100d );
             powerMaxReceiversPerFluid = COMMON_BUILDER.comment( "Maximum number of times a fluid can be used before a suffering a energy-generation penalty.  Encourages using multiple fluids." ).defineInRange( "max_fluid_receivers", 8, 1, 999 );
-            powerRepeatedFluidPenalty = COMMON_BUILDER.comment( "Energy creation penalty for repeated fluids.  A percentage loss multipled by number of receivers over the limit." ).defineInRange( "repeater_fluid_penalty", 0.046d, 0d, 0.5d );
+            powerRepeatedFluidPenalty = COMMON_BUILDER.comment( "Energy creation penalty for repeated fluids.  A percentage loss multiplied by number of receivers over the limit." ).defineInRange( "repeater_fluid_penalty", 0.046d, 0d, 0.5d );
 
             COMMON_BUILDER.pop();
 

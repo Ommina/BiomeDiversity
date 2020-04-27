@@ -136,16 +136,15 @@ public class BiomeDiversity {
     @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT )
     public static class ClientEvents {
 
-
-
         @SubscribeEvent
         public static void addSprites( final TextureStitchEvent.Pre event ) {
 
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_internal" ) );
             event.addSprite( BiomeDiversity.getId( "block/cluster/cluster_glow_external" ) );
+
             //event.addSprite( BiomeDiversity.getId( "gui/overlay" ) );
             //event.addSprite( BiomeDiversity.getId( "gui/biome" ) );
-            event.addSprite( BiomeDiversity.getId( "gui/log_gauge" ) );
+            //event.addSprite( BiomeDiversity.getId( "gui/log_gauge" ) );
 
         }
 
