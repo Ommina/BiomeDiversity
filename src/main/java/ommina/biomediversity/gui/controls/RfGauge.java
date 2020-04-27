@@ -6,7 +6,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.energy.EnergyStorage;
 import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.gui.UV;
-import ommina.biomediversity.util.MathUtil;
 import ommina.biomediversity.util.Translator;
 
 import javax.annotation.Nullable;
@@ -41,26 +40,27 @@ public class RfGauge extends Control {
     @Override
     public void drawBackgroundLayer( int x, int y ) {
 
-        final float f = 1f / 256f;
-
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
         if ( BATTERY == null || BATTERY.getMaxEnergyStored() == 0 ) {
-            drawSprite( f, (float) position.x + x, (float) position.y + y, BG_UNCHARGEABLE.minU, BG_UNCHARGEABLE.minV, BG_UNCHARGEABLE.sizeU, BG_UNCHARGEABLE.sizeV );
+            drawSprite( TEXTURE_RESOLUTION, (float) position.x + x, (float) position.y + y, BG_UNCHARGEABLE.minU, BG_UNCHARGEABLE.minV, BG_UNCHARGEABLE.sizeU, BG_UNCHARGEABLE.sizeV );
             return;
         }
 
-        drawSprite( f, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
-
-        int h = MathUtil.clamp( height - (int) ((float) BATTERY.getEnergyStored() / (float) BATTERY.getMaxEnergyStored() * height), 0, height );
-        drawSprite( f, position.x + x, (float) position.y + y + h, FG.minU, FG.minV + h, FG.sizeU, FG.sizeV - h );
+        drawSprite( TEXTURE_RESOLUTION, (float) position.x + x, (float) position.y + y, BG.minU, BG.minV, BG.sizeU, BG.sizeV );
 
     }
 
     @Override
     public void drawForegroundLayer() {
 
-        // While the foreground ('filled') portion should probably be in here, it has been left in drawBackground, just to avoid the extra texture binding
+        if ( BATTERY == null || BATTERY.getMaxEnergyStored() == 0 )
+            return;
+
+        Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
+
+        drawSprite( TEXTURE_RESOLUTION, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.sizeU, FG.sizeV );
+
     }
 
     @Override

@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL11.GL_LINES;
 @OnlyIn( Dist.CLIENT )
 public abstract class Control extends AbstractGui {
 
-    public static final TextureAtlasSprite OVERLAY_SPRITE = RenderHelper.getSprite( BiomeDiversity.getId( "textures/gui/overlay" ) );
+    public static final TextureAtlasSprite OVERLAY_SPRITE = RenderHelper.getSprite( BiomeDiversity.getId( "gui/overlay" ) );
     public static final ResourceLocation OVERLAY_RESOURCE = BiomeDiversity.getId( "textures/gui/overlay.png" );
 
     public static final float[] BACKGROUND_COLOUR = RenderHelper.getRGBA( new Color( 139, 139, 139, 255 ).getRGB() );
@@ -33,7 +33,9 @@ public abstract class Control extends AbstractGui {
     public static final float[] LOWLIGHT_COLOUR = RenderHelper.getRGBA( new Color( 55, 55, 55, 255 ).getRGB() );
 
     protected static final NumberFormat format = NumberFormat.getInstance( Locale.getDefault() );
-    protected static FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+    protected static final FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+
+    protected static final float TEXTURE_RESOLUTION = 1f / 256f;
 
     protected Point position = new Point( 0, 0 );
 
@@ -144,12 +146,16 @@ public abstract class Control extends AbstractGui {
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder bufferbuilder = tessellator.getBuffer();
 
+        GlStateManager.enableAlphaTest();
+
         bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_TEX );
         bufferbuilder.pos( x, y + maxV, 1 ).tex( minU * f, (minV + maxV) * f ).endVertex();
         bufferbuilder.pos( x + maxU, y + maxV, 1 ).tex( (minU + maxU) * f, (minV + maxV) * f ).endVertex();
         bufferbuilder.pos( x + maxU, y, 1 ).tex( (minU + maxU) * f, minV * f ).endVertex();
         bufferbuilder.pos( x, y, 1 ).tex( minU * f, minV * f ).endVertex();
         tessellator.draw();
+
+        GlStateManager.disableAlphaTest();
 
     }
 

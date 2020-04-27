@@ -2,9 +2,9 @@ package ommina.biomediversity.gui.controls;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,7 +22,7 @@ import java.util.List;
 @OnlyIn( Dist.CLIENT )
 public class Tank extends Control {
 
-    public static UV FG = new UV( 0, 0, Sizes.TANK.width, Sizes.TANK.height );
+    private static final UV FG = new UV( 0, 0, Sizes.TANK.width, Sizes.TANK.height );
 
     private final BdFluidTank tank;
 
@@ -46,7 +46,7 @@ public class Tank extends Control {
             return;
 
         GlStateManager.disableBlend();
-        Minecraft.getInstance().getTextureManager().bindTexture( AtlasTexture.LOCATION_BLOCKS_TEXTURE );
+        Minecraft.getInstance().getTextureManager().bindTexture( PlayerContainer.LOCATION_BLOCKS_TEXTURE );
 
         Fluid fluid = fluidStack.getFluid();
 
@@ -57,9 +57,11 @@ public class Tank extends Control {
 
         GlStateManager.color4f( rgba[0], rgba[1], rgba[2], rgba[3] );
 
-        Control.drawSprite( x + position.x, y + position.y + height - heightTexture, 0, width, heightTexture, fluidStillSprite ); //TODO: Needs to be tiled; it's all squishy in the GUI
+        drawSprite( x + position.x, y + position.y + height - heightTexture, 0, width, heightTexture, fluidStillSprite );
 
         GlStateManager.color4f( 1f, 1f, 1f, 1f );
+
+        GlStateManager.enableBlend();
 
     }
 
@@ -67,11 +69,9 @@ public class Tank extends Control {
     @Override
     public void drawForegroundLayer() {
 
-        float f = 1f / 256f;
-
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
-        Control.drawSprite( f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );
+        drawSprite( TEXTURE_RESOLUTION, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.sizeU, FG.sizeV );
 
     }
 

@@ -19,9 +19,7 @@ public class LowHigh extends AbstractLowHigh {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
-        float f = 1f / 256f;
-
-        Control.drawSprite( f, position.x + x, position.y + y, BG.minU, BG.minV, BG.maxU, BG.maxV );
+        Control.drawSprite( TEXTURE_RESOLUTION, position.x + x, position.y + y, BG.minU, BG.minV, BG.maxU, BG.maxV );
 
     }
 
@@ -32,9 +30,7 @@ public class LowHigh extends AbstractLowHigh {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
-        float f = 1f / 256f;
-
-        Control.drawSprite( f, position.x, position.y + getY() - GAUGE_BAR_VERTICAL_LENGTH, FG.minU, FG.minV, FG.maxU, FG.maxV );
+        Control.drawSprite( TEXTURE_RESOLUTION, position.x, position.y + getY() - GAUGE_BAR_VERTICAL_LENGTH, FG.minU, FG.minV, FG.maxU, FG.maxV );
 
     }
 
