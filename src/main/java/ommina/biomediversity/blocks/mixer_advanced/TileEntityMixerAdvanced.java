@@ -1,0 +1,62 @@
+package ommina.biomediversity.blocks.mixer_advanced;
+
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.fml.network.PacketDistributor;
+import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.config.Config;
+import ommina.biomediversity.fluids.BdFluidTank;
+import ommina.biomediversity.network.BroadcastHelper;
+import ommina.biomediversity.network.GenericTankUpdatePacket;
+import ommina.biomediversity.network.ITankBroadcast;
+import ommina.biomediversity.network.Network;
+
+public class TileEntityMixerAdvanced extends TileEntity implements ITickableTileEntity, ITankBroadcast {
+
+    private static final int FLUID_PER_CYCLE = 200; // Effectively one bucket per second
+    private static final int TANK_COUNT = 1;
+    private static final int MINIMUM_DELTA = 200;
+    private final BdFluidTank TANK = new BdFluidTank( 0, Config.rainbarrelCapacity.get() );
+
+
+    private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
+
+    public TileEntityMixerAdvanced() {
+        super( ModTileEntities.RAIN_BARREL );
+
+        TANK.setCanDrain( true );
+        TANK.setCanFill( true );
+
+    }
+
+    //region Overrides
+    @Override
+    public void doBroadcast() {
+
+        if ( BROADCASTER.needsBroadcast() ) {
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
+            BROADCASTER.reset();
+        }
+
+    }
+
+    @Override
+    public void tick() {
+
+        if ( world.isRemote )
+            return;
+
+        // DoStuff
+
+    }
+
+    @Override
+    public BdFluidTank getTank( int index ) {
+        return TANK;
+    }
+
+//endregion Overrides
+
+
+}

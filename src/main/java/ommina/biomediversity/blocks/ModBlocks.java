@@ -26,6 +26,7 @@ import ommina.biomediversity.blocks.crops.ColzaBlock;
 import ommina.biomediversity.blocks.crops.FakePlantBlock;
 import ommina.biomediversity.blocks.crops.PomegranateBlock;
 import ommina.biomediversity.blocks.fluidwell.FluidWell;
+import ommina.biomediversity.blocks.mixer_advanced.MixerAdvanced;
 import ommina.biomediversity.blocks.peltier.Peltier;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergy;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
@@ -70,6 +71,7 @@ public class ModBlocks {
     @ObjectHolder( "plug_energy" ) public static PlugEnergy PLUG_ENERGY;
     @ObjectHolder( "plug_fluid_byproduct" ) public static PlugFluidByproduct PLUG_FLUID_BYPRODUCT;
     @ObjectHolder( "fluid_well" ) public static FluidWell FLUID_WELL;
+    @ObjectHolder( "mixer_advanced" ) public static MixerAdvanced MIXER_ADVANCED;
 
     // Containers
     @ObjectHolder( "receiver" ) public static ContainerType<ReceiverContainer> RECEIVER_CONTAINER;
@@ -135,6 +137,7 @@ public class ModBlocks {
         register( event, "plug_energy", new PlugEnergy() );
         register( event, "plug_fluid_byproduct", new PlugFluidByproduct() );
         register( event, "fluid_well", new FluidWell() );
+        register( event, "mixer_advanced", new MixerAdvanced() );
 
         for ( int n = 1; n <= 11; n++ )
             register( event, BlockProgressive.PREFIX + n, new BlockProgressive( Block.Properties.create( Material.ROCK ).harvestTool( ToolType.PICKAXE ).sound( SoundType.STONE ).tickRandomly().hardnessAndResistance( 3.3f - (float) n / 10 ), n ) );
@@ -150,7 +153,7 @@ public class ModBlocks {
 
         final String[] transparent = new String[]
              { "colza", "pomegranate", "world_colza", "world_pomegrante",
-                  "collector", "receiver", "transmitter", "plug_energy", "plug_fluid_byproduct" };
+                  "collector", "receiver", "transmitter", "plug_energy", "plug_fluid_byproduct", "mixer_advanced" };
 
         Arrays.stream( transparent ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), cutoutRenderType ) );
 

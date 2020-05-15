@@ -8,6 +8,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.fluidwell.TileEntityFluidWell;
+import ommina.biomediversity.blocks.mixer_advanced.TileEntityMixerAdvanced;
 import ommina.biomediversity.blocks.peltier.TileEntityPeltier;
 import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
 import ommina.biomediversity.blocks.plug.fluid.TileEntityPlugFluid;
@@ -27,6 +28,7 @@ public class ModTileEntities {
     @ObjectHolder( "plug_energy" ) public static TileEntityType<TileEntityPlugEnergy> PLUG_ENERGY;
     @ObjectHolder( "plug_fluid" ) public static TileEntityType<TileEntityPlugEnergy> PLUG_FLUID;
     @ObjectHolder( "fluid_well" ) public static TileEntityType<TileEntityCollector> FLUID_WELL;
+    @ObjectHolder( "mixer_advanced" ) public static TileEntityType<TileEntityMixerAdvanced> MIXER_ADVANCCED;
 
     @SubscribeEvent
     public static void register( final RegistryEvent.Register<TileEntityType<?>> event ) {
@@ -39,6 +41,7 @@ public class ModTileEntities {
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityPlugEnergy::new, ModBlocks.PLUG_ENERGY ).build( null ).setRegistryName( "plug_energy" ) );
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityPlugFluid::new, ModBlocks.PLUG_FLUID_BYPRODUCT ).build( null ).setRegistryName( "plug_fluid" ) );
         event.getRegistry().register( TileEntityType.Builder.create( TileEntityFluidWell::new, ModBlocks.FLUID_WELL ).build( null ).setRegistryName( "fluid_well" ) );
+        event.getRegistry().register( TileEntityType.Builder.create( TileEntityMixerAdvanced::new, ModBlocks.MIXER_ADVANCED ).build( null ).setRegistryName( "mixer_advanced" ) );
 
     }
 

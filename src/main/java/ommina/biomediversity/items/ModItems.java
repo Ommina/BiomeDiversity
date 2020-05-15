@@ -42,6 +42,7 @@ public class ModItems {
     @ObjectHolder( "plug_energy" ) public static Item PLUG_ENERGY;
     @ObjectHolder( "plug_fluid" ) public static Item PLUG_FLUID;
     @ObjectHolder( "peltier" ) public static Item PELTIER;
+    @ObjectHolder( "mixer_advanced" ) public static Item MIXER_ADVANCED;
 
     // Cool Items
     @ObjectHolder( "linkstaff" ) public static Item LINK_STAFF;
@@ -95,13 +96,12 @@ public class ModItems {
         register( event, "collector", new BlockItem( ModBlocks.COLLECTOR, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "peltier", new BlockItem( ModBlocks.PELTIER, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "rainbarrel", new BlockItem( ModBlocks.RAIN_BARREL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
+        register( event, "mixer_advanced", new BlockItem( ModBlocks.MIXER_ADVANCED, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "plug_energy", new BlockItem( ModBlocks.PLUG_ENERGY, new Item.Properties().group( BiomeDiversity.TAB ) ) );
         register( event, "plug_fluid_byproduct", new BlockItem( ModBlocks.PLUG_FLUID_BYPRODUCT, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
         for ( int n = 1; n <= 12; n++ )
             register( event, BlockProgressive.PREFIX + n, new BlockItem( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( BlockProgressive.PREFIX + n ) ), new Item.Properties().group( BiomeDiversity.TAB ) ) );
-
-        //register( event, "fluid_well", new BlockItem( ModBlocks.FLUID_WELL, new Item.Properties().group( BiomeDiversity.TAB ) ) );
 
     }
 
