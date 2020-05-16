@@ -111,22 +111,20 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     // minecraft 'net.minecraftforge:forge:1.14.2-26.0.43'
     minecraft "net.minecraftforge:forge:${project.forge_version}"
-
-    // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
-
-    //compile fg.deobf(project.dependencies.create("mcjty.theoneprobe:TheOneProbe-${top_version}") {
-    //    transitive = false
-    //})
+    
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:${jei_version}:api")  // compile against the JEI API but do not include it at runtime
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:${jei_version}")      // at runtime, use the full JEI jar
 
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}")
-    
-    
-    //deobfCompile "mcjty.theoneprobe:theoneprobe-1.15-2.0.0-3"
 
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchy_version}:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchy_version}")
+    
+
+    
+    
+    
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
