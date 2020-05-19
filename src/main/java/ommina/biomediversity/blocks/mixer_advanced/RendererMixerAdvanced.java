@@ -20,6 +20,7 @@ public class RendererMixerAdvanced extends TileEntityRenderer<TileEntityMixerAdv
 
     private static TextureAtlasSprite spriteFaceBlank;
 
+    private int rotate = 0;
     private int currentFace = 0;
     private int count = 0;
     private int currentSphere = 0;
@@ -59,11 +60,15 @@ public class RendererMixerAdvanced extends TileEntityRenderer<TileEntityMixerAdv
             p2 = t.getP2();
             p3 = t.getP3();
 
-            RenderHelper.drawTriangle( buffer, matrix, p1, p2, p3, spriteFaceBlank, r );
+            RenderHelper.drawTriangle( buffer, matrix, rotate, t, spriteFaceBlank, r );
 
         }
 
         count++;
+        rotate++;
+
+        if ( rotate >= 360 )
+            rotate = 0;
 
         if ( count >= 50 ) {
             count = 0;
@@ -72,7 +77,7 @@ public class RendererMixerAdvanced extends TileEntityRenderer<TileEntityMixerAdv
                 currentFace = 0;
                 currentSphere++;
                 if ( currentSphere > Icosphere.MAX_RECURSION )
-                    currentSphere=0;
+                    currentSphere = 0;
             }
 
         }

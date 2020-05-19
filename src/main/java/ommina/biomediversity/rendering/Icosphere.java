@@ -1,7 +1,6 @@
 package ommina.biomediversity.rendering;
 
 import javafx.geometry.Point3D;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,10 +13,8 @@ public class Icosphere {
         Adapted from: http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
      */
 
+    public static final int MAX_RECURSION = 2;
     private static final List<List<Triangle>> spheres = new ArrayList<List<Triangle>>();
-
-    public static final int MAX_RECURSION = 3;
-
     List<Point3D> geometry = new ArrayList<>();
     private int index;
 

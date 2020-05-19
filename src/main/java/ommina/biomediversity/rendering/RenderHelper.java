@@ -6,6 +6,7 @@ import javafx.geometry.Point3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -72,12 +73,19 @@ public class RenderHelper {
      * Draws a triangle to the provided buffer.
      * Points must be sent in a _counter-clockwise_ order
      */
-    public static void drawTriangle( IRenderTypeBuffer buffer, MatrixStack matrix, Point3D p1, Point3D p2, Point3D p3, TextureAtlasSprite sprite, float[] rgba ) {
+    public static void drawTriangle( IRenderTypeBuffer buffer, MatrixStack matrix, int rotation, Triangle triangle, TextureAtlasSprite sprite, float[] rgba ) {
 
         IVertexBuilder builder = buffer.getBuffer( RenderHelper.TRIANGLE );
 
+        Point3D p1 = triangle.getP1();
+        Point3D p2 = triangle.getP2();
+        Point3D p3 = triangle.getP3();
+
+        Quaternion quaternion = new Quaternion( (float) rotation, (float) rotation, (float) rotation, true );
+
         matrix.push();
         matrix.translate( 0.5, 0.5, 0.5 );
+        matrix.rotate( quaternion );
 
         double texX = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getX() - p2.getX() ), Math.abs( p1.getX() - p3.getX() ), Math.abs( p2.getX() - p3.getX() ) ).max().orElse( 1 ) );
         double texY = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getY() - p2.getY() ), Math.abs( p1.getY() - p3.getY() ), Math.abs( p2.getY() - p3.getY() ) ).max().orElse( 1 ) );
