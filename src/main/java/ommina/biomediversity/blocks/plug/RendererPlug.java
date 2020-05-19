@@ -6,11 +6,11 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 
 import java.awt.*;
 
-import static ommina.biomediversity.blocks.tile.RenderHelper.*;
+import static ommina.biomediversity.rendering.RenderHelper.*;
 
 public class RendererPlug extends TileEntityRenderer<TileEntityPlugBase> {
 

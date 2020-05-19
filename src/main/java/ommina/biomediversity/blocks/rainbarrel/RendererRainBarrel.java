@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraftforge.fluids.FluidStack;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.config.Config;
 
 import java.util.EnumSet;

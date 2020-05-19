@@ -41,20 +41,13 @@ public class MixerAdvanced extends BlockTileEntity<TileEntityMixerAdvanced> {
     }
 
     @Override
+    public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
+        return this.blocksMovement ? state.getShape( worldIn, pos ) : VoxelShapes.empty();
+    }
+
+    @Override
     public VoxelShape getRaytraceShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {
         return SHAPE;
     }
-
-    @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return this.blocksMovement ? state.getShape(worldIn, pos) : VoxelShapes.empty();
-    }
-
-    @Override
-    public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return state.getShape(worldIn, pos);
-    }
-
-
 
 }

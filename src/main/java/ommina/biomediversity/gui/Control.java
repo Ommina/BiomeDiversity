@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 
 import javax.annotation.Nullable;
 import java.awt.*;

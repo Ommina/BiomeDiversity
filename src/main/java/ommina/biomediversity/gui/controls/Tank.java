@@ -8,7 +8,7 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.gui.UV;

@@ -1,19 +1,25 @@
-package ommina.biomediversity.blocks.tile;
+package ommina.biomediversity.rendering;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import javafx.geometry.Point3D;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import ommina.biomediversity.BiomeDiversity;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.EnumSet;
+import java.util.stream.DoubleStream;
 
 public class RenderHelper {
 
@@ -22,6 +28,24 @@ public class RenderHelper {
     public static final EnumSet<RenderHelper.Faces> FACES_NORTHEAST = EnumSet.of( RenderHelper.Faces.NORTH, RenderHelper.Faces.EAST );
     public static final EnumSet<RenderHelper.Faces> FACES_SOUTHWEST = EnumSet.of( RenderHelper.Faces.SOUTH, RenderHelper.Faces.WEST );
     public static final EnumSet<RenderHelper.Faces> FACES_SOUTHEAST = EnumSet.of( RenderHelper.Faces.SOUTH, RenderHelper.Faces.EAST );
+
+    public static final RenderType TRIANGLE;
+
+    static {
+
+        RenderState.TransparencyState translucentTransparency = ObfuscationReflectionHelper.getPrivateValue( RenderState.class, null, "field_228515_g_" );
+        RenderState.TextureState mipmapBlockAtlasTexture = new RenderState.TextureState( PlayerContainer.LOCATION_BLOCKS_TEXTURE, false, true );
+        RenderState.LightmapState enableLightmap = new RenderState.LightmapState( true );
+
+        RenderType.State glState = RenderType.State.getBuilder()
+             .texture( mipmapBlockAtlasTexture )
+             .transparency( translucentTransparency )
+             .lightmap( enableLightmap )
+             .build( true );
+
+        TRIANGLE = RenderType.makeType( BiomeDiversity.getId( "triangle" ).toString(), DefaultVertexFormats.POSITION_COLOR_TEX_LIGHTMAP, GL11.GL_TRIANGLES, 3, false, false, glState );
+
+    }
 
     public enum Faces {
         TOP,
@@ -42,6 +66,29 @@ public class RenderHelper {
 
     public static TextureAtlasSprite getSprite( ResourceLocation resourceLocation ) {
         return Minecraft.getInstance().getAtlasSpriteGetter( PlayerContainer.LOCATION_BLOCKS_TEXTURE ).apply( resourceLocation );
+    }
+
+    /**
+     * Draws a triangle to the provided buffer.
+     * Points must be sent in a _counter-clockwise_ order
+     */
+    public static void drawTriangle( IRenderTypeBuffer buffer, MatrixStack matrix, Point3D p1, Point3D p2, Point3D p3, TextureAtlasSprite sprite, float[] rgba ) {
+
+        IVertexBuilder builder = buffer.getBuffer( RenderHelper.TRIANGLE );
+
+        matrix.push();
+        matrix.translate( 0.5, 0.5, 0.5 );
+
+        double texX = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getX() - p2.getX() ), Math.abs( p1.getX() - p3.getX() ), Math.abs( p2.getX() - p3.getX() ) ).max().orElse( 1 ) );
+        double texY = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getY() - p2.getY() ), Math.abs( p1.getY() - p3.getY() ), Math.abs( p2.getY() - p3.getY() ) ).max().orElse( 1 ) );
+        double texZ = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getZ() - p2.getZ() ), Math.abs( p1.getZ() - p3.getZ() ), Math.abs( p2.getZ() - p3.getZ() ) ).max().orElse( 1 ) );
+
+        builder.pos( matrix.getLast().getMatrix(), (float) p1.getX(), (float) p1.getY(), (float) p1.getZ() ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+        builder.pos( matrix.getLast().getMatrix(), (float) p2.getX(), (float) p2.getY(), (float) p2.getZ() ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).endVertex();
+        builder.pos( matrix.getLast().getMatrix(), (float) p3.getX(), (float) p3.getY(), (float) p3.getZ() ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).endVertex();
+
+        matrix.pop();
+
     }
 
     public static void renderCube( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, ResourceLocation resourceLocation, int color, EnumSet<Faces> faces ) {
@@ -71,6 +118,26 @@ public class RenderHelper {
         final float[] rgba = getRGBA( color.getRGB() );
 
         renderCube( buffer, matrix, x, y, z, w, h, l, sprite, rgba, faces );
+
+    }
+
+    public static void render( IRenderTypeBuffer buffer, MatrixStack matrix, double x, double y, double z, float w, float h, float l, TextureAtlasSprite sprite, float[] rgba ) {
+
+        double texY = Math.min( 16, h * 16f );
+        double texX = Math.min( 16, w * 16f );
+        double texZ = Math.min( 16, w * 16f );
+
+        IVertexBuilder builder = buffer.getBuffer( RenderType.getTranslucent() );
+
+        matrix.push();
+        matrix.translate( x, y, z );
+
+        builder.pos( matrix.getLast().getMatrix(), l, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+        builder.pos( matrix.getLast().getMatrix(), l, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getInterpolatedU( texZ ), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+        builder.pos( matrix.getLast().getMatrix(), 0, 0, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getMinV() ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+        builder.pos( matrix.getLast().getMatrix(), 0, h, 0 ).color( rgba[0], rgba[1], rgba[2], rgba[3] ).tex( sprite.getMinU(), sprite.getInterpolatedV( texY ) ).lightmap( 0, 176 ).normal( 0, 1, 0 ).endVertex();
+
+        matrix.pop();
 
     }
 

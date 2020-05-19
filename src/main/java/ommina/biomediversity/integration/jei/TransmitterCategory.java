@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.fluids.TransmitterFluidRecipe;
 import ommina.biomediversity.gui.Control;

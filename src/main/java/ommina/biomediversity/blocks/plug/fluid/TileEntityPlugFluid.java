@@ -22,7 +22,7 @@ import ommina.biomediversity.blocks.collector.Tubes;
 import ommina.biomediversity.blocks.plug.PlugRenderData;
 import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.network.GenericTilePacketRequest;

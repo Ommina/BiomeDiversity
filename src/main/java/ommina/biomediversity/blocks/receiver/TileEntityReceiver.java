@@ -23,7 +23,7 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.IClusterComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;

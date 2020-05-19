@@ -30,6 +30,7 @@ import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.collector.RendererCollector;
+import ommina.biomediversity.blocks.mixer_advanced.RendererMixerAdvanced;
 import ommina.biomediversity.blocks.plug.RendererPlug;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyScreen;
 import ommina.biomediversity.blocks.plug.fluid.PlugFluidByproduct;
@@ -115,6 +116,7 @@ public class BiomeDiversity {
         ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_ENERGY, RendererPlug::new );
         ClientRegistry.bindTileEntityRenderer( ModTileEntities.PLUG_FLUID, RendererPlug::new );
         ClientRegistry.bindTileEntityRenderer( ModTileEntities.COLLECTOR, RendererCollector::new );
+        ClientRegistry.bindTileEntityRenderer( ModTileEntities.MIXER_ADVANCCED, RendererMixerAdvanced::new );
 
         //Minecraft.getMinecraft().getItemColors().registerItemColorHandler( new DustTinter(), ModItems.fluidItems.values().toArray( new ItemBase[0] ) );
 

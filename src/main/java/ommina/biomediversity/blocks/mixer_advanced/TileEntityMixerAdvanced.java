@@ -19,11 +19,10 @@ public class TileEntityMixerAdvanced extends TileEntity implements ITickableTile
     private static final int MINIMUM_DELTA = 200;
     private final BdFluidTank TANK = new BdFluidTank( 0, Config.rainbarrelCapacity.get() );
 
-
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
 
     public TileEntityMixerAdvanced() {
-        super( ModTileEntities.RAIN_BARREL );
+        super( ModTileEntities.MIXER_ADVANCCED );
 
         TANK.setCanDrain( true );
         TANK.setCanFill( true );
@@ -57,6 +56,5 @@ public class TileEntityMixerAdvanced extends TileEntity implements ITickableTile
     }
 
 //endregion Overrides
-
 
 }

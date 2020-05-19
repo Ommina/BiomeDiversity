@@ -8,7 +8,7 @@ import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.plug.PlugCollectorDetails;
 import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.*;
 import ommina.biomediversity.util.Translator;

@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.RfGauge;
 import ommina.biomediversity.gui.controls.Tank;

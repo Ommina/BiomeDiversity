@@ -7,7 +7,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.blocks.tile.RenderHelper;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.*;
