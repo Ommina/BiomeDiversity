@@ -15,7 +15,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
-import ommina.biomediversity.blocks.cluster.IClusterComponent;
+import ommina.biomediversity.blocks.cluster.ICollectorComponent;
 import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.energy.BdEnergyStorage;
@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class TileEntityCollector extends TileEntity implements IClusterComponent, ITickableTileEntity, ITankBroadcast {
+public class TileEntityCollector extends TileEntity implements ICollectorComponent, ITickableTileEntity, ITankBroadcast {
 
     static final int TANK_COUNT = 12;
     private static final int MINIMUM_DELTA = 300;
@@ -42,7 +42,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     private final BroadcastHelper BROADCASTER;
 
     private final Reception RECEPTOR = new Reception();
-    private final Set<IClusterComponent> components = new HashSet<>();
+    private final Set<ICollectorComponent> components = new HashSet<>();
 
     private int delay = Constants.CLUSTER_TICK_DELAY;
     private int storedEnergy;
@@ -121,7 +121,7 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
     @Override
     public void onChunkUnloaded() {
 
-        components.forEach( IClusterComponent::invalidateCollector );
+        components.forEach( ICollectorComponent::invalidateCollector );
         components.clear();
 
     }
@@ -246,11 +246,11 @@ public class TileEntityCollector extends TileEntity implements IClusterComponent
 
     }
 
-    public void registerComponent( IClusterComponent component ) {
+    public void registerComponent( ICollectorComponent component ) {
         components.add( component );
     }
 
-    public void deregisterComponent( IClusterComponent component ) {
+    public void deregisterComponent( ICollectorComponent component ) {
         components.remove( component );
     }
 

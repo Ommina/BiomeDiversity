@@ -22,6 +22,8 @@ public class Constants {
 
     public static final int RF_RENDER_STEP_COUNT = 60; // Used to specifiy how frequently the client is updated with new stored RF values.  maxStored/Step_Count becomes the BroadcastHelper minimumDelta
 
+    public static final int ADVANCED_MIXER_TANK_CAPACITY = 8000;
+
     public static final float DEFAULT_TILE_ENTITY_HARDNESS = 3.2f;
 
     public static final int MIN_FLUID_STRENGTH = 1;

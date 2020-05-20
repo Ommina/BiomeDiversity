@@ -20,7 +20,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModTileEntities;
-import ommina.biomediversity.blocks.cluster.IClusterComponent;
+import ommina.biomediversity.blocks.cluster.ICollectorComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
 import ommina.biomediversity.rendering.RenderHelper;
@@ -43,7 +43,7 @@ import java.awt.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, IClusterComponent, INamedContainerProvider {
+public class TileEntityReceiver extends TileEntityAssociation implements ITickableTileEntity, ITankBroadcast, ICollectorComponent, INamedContainerProvider {
 
     private static final int TANK_COUNT = 1;
     private static final int MINIMUM_DELTA = 200;

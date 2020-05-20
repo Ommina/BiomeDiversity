@@ -68,8 +68,8 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     @Override
     public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
-        //if ( world.isRemote )
-        //    return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
+        if ( world.isRemote )
+            return ActionResultType.CONSUME;
 
         TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
         ItemStack heldItem = player.getHeldItem( hand );
@@ -87,23 +87,28 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
             if ( capability.isPresent() ) {
 
                 IFluidHandler tfi = capability.orElse( null );
+
                 IItemHandler playerInv = new InvWrapper( player.inventory );
 
-                FluidActionResult far = FluidUtil.tryEmptyContainerAndStow( heldItem, tfi, playerInv, 1000, player, true );
+                if ( heldItem.getCapability( CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null ).isPresent() ) {
 
-                if ( far.isSuccess() ) {
-                    world.playSound( null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 0F );
-                    player.setHeldItem( hand, far.getResult() );
+                    FluidActionResult far = FluidUtil.tryEmptyContainerAndStow( heldItem, tfi, playerInv, 1000, player, true );
+
+                    if ( far.isSuccess() ) {
+                        world.playSound( null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 0F );
+                        player.setHeldItem( hand, far.getResult() );
+                    }
+
+                    return ActionResultType.SUCCESS;
+
                 }
-
-                return ActionResultType.CONSUME;
 
             }
         }
 
         NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
-        return ActionResultType.PASS;
+        return ActionResultType.SUCCESS;
 
     }
 
@@ -163,12 +168,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         builder.add( IS_CONNECTED );
     }
 //endregion Overrides
-
-    // Overrides
-    //@Override
-    //public BlockRenderLayer getRenderLayer() {
-    //    return BlockRenderLayer.CUTOUT;
-    //}
 
     private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
 

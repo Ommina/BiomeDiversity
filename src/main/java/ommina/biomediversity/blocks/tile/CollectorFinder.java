@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.cluster.IClusterComponent;
+import ommina.biomediversity.blocks.cluster.ICollectorComponent;
 import ommina.biomediversity.blocks.collector.Collector;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.config.Config;
@@ -100,8 +100,8 @@ public class CollectorFinder {
                     BlockPos bp = new BlockPos( x, y, z );
                     if ( world.isBlockLoaded( bp ) ) {
                         TileEntity te = world.getTileEntity( bp );
-                        if ( te instanceof IClusterComponent ) {
-                            IClusterComponent tecc = (IClusterComponent) te;
+                        if ( te instanceof ICollectorComponent ) {
+                            ICollectorComponent tecc = (ICollectorComponent) te;
                             if ( tecc.isClusterComponentConnected() ) {
                                 collectorPos = tecc.getCollectorPos();
                                 if ( registrationState == RegistrationState.NEVER )

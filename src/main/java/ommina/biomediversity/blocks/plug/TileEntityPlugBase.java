@@ -14,7 +14,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.blocks.cluster.IClusterComponent;
+import ommina.biomediversity.blocks.cluster.ICollectorComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.plug.energy.PlugEnergyContainer;
 import ommina.biomediversity.blocks.plug.energy.TileEntityPlugEnergy;
@@ -27,7 +27,7 @@ import ommina.biomediversity.util.NbtUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class TileEntityPlugBase extends TileEntity implements IClusterComponent, INamedContainerProvider {
+public abstract class TileEntityPlugBase extends TileEntity implements ICollectorComponent, INamedContainerProvider {
 
     final protected CollectorFinder FINDER = new CollectorFinder();
     final protected PlugRenderData PLUG_RENDER = new PlugRenderData();

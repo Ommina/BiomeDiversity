@@ -4,9 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -15,10 +18,15 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.cluster.IClusterController;
 import ommina.biomediversity.config.Constants;
+import ommina.biomediversity.fluids.BdFluidTank;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -112,11 +120,6 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     }
 
-    //@Override
-    //public BlockRenderLayer getRenderLayer() {
-    //    return BlockRenderLayer.CUTOUT;
-    //}
-
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
         return state.get( FORMED ) ? RENDER_SHAPE_FORMED : VoxelShapes.fullCube();
@@ -128,6 +131,43 @@ public class Collector extends ClusterBlock implements IClusterController {
 
         if ( !world.isRemote() && world.getTileEntity( blockPos ) instanceof TileEntityCollector )
             world.getTileEntity( blockPos ).remove();
+
+    }
+
+    @Override
+    public ActionResultType onBlockActivated( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) { // onBlockActivated
+
+        if ( world.isRemote )
+            return ActionResultType.CONSUME;
+
+        if ( player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
+
+            Vec3d collectorVector = new Vec3d( pos.getX(), pos.getY(), pos.getZ() );
+            int tankActivated = ModBlocks.COLLECTOR.getTankActivated( player, hit.getHitVec(), collectorVector );
+
+            if ( tankActivated == -1 )
+                return ActionResultType.PASS;
+
+            TileEntity controller = world.getTileEntity( pos );
+
+            if ( !(controller instanceof TileEntityCollector) )
+                return ActionResultType.PASS;
+
+            ItemStack heldItem = player.getHeldItem( hand );
+            BdFluidTank tank = ((TileEntityCollector) controller).getTank( tankActivated );
+            IItemHandler playerInv = new InvWrapper( player.inventory );
+
+            FluidActionResult far = FluidUtil.tryFillContainerAndStow( heldItem, tank, playerInv, 1000, player, true );
+
+            if ( far.isSuccess() ) {
+                world.playSound( null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 0F );
+                player.setHeldItem( hand, far.getResult() );
+                return ActionResultType.SUCCESS;
+            }
+
+        }
+
+        return ActionResultType.PASS;
 
     }
 
@@ -187,18 +227,6 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     public int getTankActivated( PlayerEntity player, Vec3d hitVec, Vec3d collector ) {
         return rectangles.getTank( player, hitVec, collector );
-    }
-
-    private void updateClusterBlockStates( World world, BlockPos blockPos, boolean formed ) {
-
-        for ( int y = -1; y <= 1; y++ )
-            for ( int x = -1; x <= 1; x++ )
-                for ( int z = -1; z <= 1; z++ ) {
-                    BlockPos pos = blockPos.add( x, y, z );
-                    if ( world.getBlockState( pos ).getBlock() instanceof ClusterBlock )
-                        Block.replaceBlock( world.getBlockState( pos ), world.getBlockState( pos ).getBlock().getDefaultState().with( FORMED, formed ), world, pos, 3 );
-                }
-
     }
 
 }

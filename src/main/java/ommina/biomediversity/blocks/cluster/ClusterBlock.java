@@ -7,29 +7,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.blocks.collector.TileEntityCollector;
-import ommina.biomediversity.fluids.BdFluidTank;
 
 import javax.annotation.Nullable;
 
@@ -44,10 +32,6 @@ public class ClusterBlock extends GlassBlock {
     }
 
     //region Overrides
-    //@Override
-    //public BlockRenderLayer getRenderLayer() {
-    //    return BlockRenderLayer.CUTOUT;
-    //}
 
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
@@ -70,45 +54,17 @@ public class ClusterBlock extends GlassBlock {
     }
 
     @Override
-    public ActionResultType onBlockActivated( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) { // onBlockActivated
+    public ActionResultType onBlockActivated( BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit ) {
 
-        if ( player.isCrouching() || !state.get( FORMED ) )
+        if ( world.isRemote || player.isCrouching() || !state.get( FORMED ) )
             return super.onBlockActivated( state, world, pos, player, hand, hit );
 
-        if ( !world.isRemote && player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
+        BlockPos controllerPos = checkForController( world, pos );
 
-            BlockPos controllerPos = checkForController( world, pos );
+        if ( controllerPos == null )
+            return ActionResultType.PASS;
 
-            if ( controllerPos == null )
-                return ActionResultType.PASS;
-
-            Vec3d collectorVector = new Vec3d( controllerPos.getX(), controllerPos.getY(), controllerPos.getZ() );
-            int tankActivated = ModBlocks.COLLECTOR.getTankActivated( player, hit.getHitVec(), collectorVector );
-
-            //BiomeDiversity.LOGGER.info( "  tankActivated: " + tankActivated );
-
-            if ( tankActivated == -1 )
-                return super.onBlockActivated( state, world, pos, player, hand, hit );
-
-            TileEntity controller = world.getTileEntity( controllerPos );
-
-            if ( !(controller instanceof TileEntityCollector) )
-                return ActionResultType.PASS;
-
-            ItemStack heldItem = player.getHeldItem( hand );
-            BdFluidTank tank = ((TileEntityCollector) controller).getTank( tankActivated );
-            IItemHandler playerInv = new InvWrapper( player.inventory );
-
-            FluidActionResult far = FluidUtil.tryFillContainerAndStow( heldItem, tank, playerInv, 1000, player, true );
-
-            if ( far.isSuccess() ) {
-                world.playSound( null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 0F );
-                player.setHeldItem( hand, far.getResult() );
-            }
-
-        }
-
-        return ActionResultType.SUCCESS;
+        return world.getBlockState( controllerPos ).getBlock().onBlockActivated( state, world, controllerPos, player, hand, hit );
 
     }
 
@@ -147,5 +103,18 @@ public class ClusterBlock extends GlassBlock {
         return null;
 
     }
+
+    protected void updateClusterBlockStates( World world, BlockPos blockPos, boolean formed ) {
+
+        for ( int y = -1; y <= 1; y++ )
+            for ( int x = -1; x <= 1; x++ )
+                for ( int z = -1; z <= 1; z++ ) {
+                    BlockPos pos = blockPos.add( x, y, z );
+                    if ( world.getBlockState( pos ).getBlock() instanceof ClusterBlock )
+                        Block.replaceBlock( world.getBlockState( pos ), world.getBlockState( pos ).getBlock().getDefaultState().with( FORMED, formed ), world, pos, 3 );
+                }
+
+    }
+
 
 }

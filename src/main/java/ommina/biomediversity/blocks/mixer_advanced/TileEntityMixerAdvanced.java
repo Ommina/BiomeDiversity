@@ -5,7 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.ModTileEntities;
+import ommina.biomediversity.blocks.cluster.ICollectorComponent;
 import ommina.biomediversity.config.Config;
+import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTankUpdatePacket;
@@ -17,7 +19,8 @@ public class TileEntityMixerAdvanced extends TileEntity implements ITickableTile
     private static final int FLUID_PER_CYCLE = 200; // Effectively one bucket per second
     private static final int TANK_COUNT = 1;
     private static final int MINIMUM_DELTA = 200;
-    private final BdFluidTank TANK = new BdFluidTank( 0, Config.rainbarrelCapacity.get() );
+
+    private final BdFluidTank TANK = new BdFluidTank( 0, Constants.ADVANCED_MIXER_TANK_CAPACITY );
 
     private final BroadcastHelper BROADCASTER = new BroadcastHelper( TANK_COUNT, MINIMUM_DELTA, this );
 

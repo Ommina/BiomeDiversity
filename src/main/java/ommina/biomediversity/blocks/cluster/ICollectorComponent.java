@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
 
-public interface IClusterComponent {
+public interface ICollectorComponent {
 
     @Nullable
     BlockPos getCollectorPos();
