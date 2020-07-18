@@ -85,7 +85,7 @@ public class RenderHelper {
 
         matrix.push();
         matrix.translate( 0.5, 0.5, 0.5 );
-        matrix.rotate( quaternion );
+        //matrix.rotate( quaternion );
 
         double texX = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getX() - p2.getX() ), Math.abs( p1.getX() - p3.getX() ), Math.abs( p2.getX() - p3.getX() ) ).max().orElse( 1 ) );
         double texY = Math.min( 16.0, 16d * DoubleStream.of( Math.abs( p1.getY() - p2.getY() ), Math.abs( p1.getY() - p3.getY() ), Math.abs( p2.getY() - p3.getY() ) ).max().orElse( 1 ) );
