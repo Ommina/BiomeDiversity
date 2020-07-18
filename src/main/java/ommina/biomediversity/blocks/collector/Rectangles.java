@@ -2,7 +2,7 @@ package ommina.biomediversity.blocks.collector;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import ommina.biomediversity.util.MathUtil;
 
 import java.util.ArrayList;
@@ -11,18 +11,18 @@ import java.util.stream.Collectors;
 
 public class Rectangles {
 
-    private static final Vec3d MUL = new Vec3d( 0.0625d, 0.0625d, 0.0625d );
+    private static final Vector3d MUL = new Vector3d( 0.0625d, 0.0625d, 0.0625d );
 
     private final List<Rectangle> recs = new ArrayList<>( 32 );
 
     public class Rectangle {
 
         private final int tank;
-        private final Vec3d S1;
-        private final Vec3d S2;
-        private final Vec3d S3;
+        private final Vector3d S1;
+        private final Vector3d S2;
+        private final Vector3d S3;
 
-        public Rectangle( final int tank, final Vec3d S1, final Vec3d S2, final Vec3d S3 ) {
+        public Rectangle( final int tank, final Vector3d S1, final Vector3d S2, final Vector3d S3 ) {
 
             this.tank = tank;
             this.S1 = S1.mul( MUL );
@@ -34,9 +34,9 @@ public class Rectangles {
         /**
          * Euclidean distance between this and the specified vector, returned as double.
          */
-        public double distanceTo( Vec3d vec, Vec3d collector ) {
+        public double distanceTo( Vector3d vec, Vector3d collector ) {
 
-            Vec3d S4 = S1.add( collector );
+            Vector3d S4 = S1.add( collector );
 
             double d0 = vec.x - S4.x;
             double d1 = vec.y - S4.y;
@@ -52,13 +52,13 @@ public class Rectangles {
         return recs.add( rectangle );
     }
 
-    public boolean add( int tank, Vec3d S1, Vec3d S2, Vec3d S3 ) {
+    public boolean add( int tank, Vector3d S1, Vector3d S2, Vector3d S3 ) {
         return recs.add( new Rectangle( tank, S1, S2, S3 ) );
     }
 
-    public int getTank( PlayerEntity player, Vec3d hitVector, Vec3d collector ) {
+    public int getTank( PlayerEntity player, Vector3d hitVector, Vector3d collector ) {
 
-        Vec3d playerVec = player.getEyePosition( 1.0f ).add( player.getLookVec() );
+        Vector3d playerVec = player.getEyePosition( 1.0f ).add( player.getLookVec() );
 
         List<Rectangle> list = recs.stream().filter( r -> MathUtil.intersectsRayWithSquare( playerVec, hitVector, r.S1.add( collector ), r.S2.add( collector ), r.S3.add( collector ) ) ).collect( Collectors.toList() );
 

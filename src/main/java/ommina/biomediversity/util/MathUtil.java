@@ -2,7 +2,7 @@ package ommina.biomediversity.util;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class MathUtil {
 
@@ -38,23 +38,23 @@ public class MathUtil {
 
     }
 
-    public static boolean intersectsRayWithSquare( PlayerEntity player, Vec3d hitVector, Vec3d S1, Vec3d S2, Vec3d S3 ) {
+    public static boolean intersectsRayWithSquare( PlayerEntity player, Vector3d hitVector, Vector3d S1, Vector3d S2, Vector3d S3 ) {
 
         return intersectsRayWithSquare( player.getEyePosition( 1.0f ).add( player.getLookVec() ), hitVector, S1, S2, S3 );
 
     }
 
-    public static boolean intersectsRayWithSquare( Vec3d playerVector, Vec3d hitVector, Vec3d S1, Vec3d S2, Vec3d S3 ) {
+    public static boolean intersectsRayWithSquare( Vector3d playerVector, Vector3d hitVector, Vector3d S1, Vector3d S2, Vector3d S3 ) {
 
         // https://stackoverflow.com/questions/21114796/3d-ray-quad-intersection-test-in-java  (Thanks, user3146587!)
 
         // 1.
-        Vec3d dS21 = S2.subtract( S1 );
-        Vec3d dS31 = S3.subtract( S1 );
-        Vec3d n = dS21.crossProduct( dS31 );
+        Vector3d dS21 = S2.subtract( S1 );
+        Vector3d dS31 = S3.subtract( S1 );
+        Vector3d n = dS21.crossProduct( dS31 );
 
         // 2.
-        Vec3d dR = playerVector.subtract( hitVector );
+        Vector3d dR = playerVector.subtract( hitVector );
 
         double ndotdR = n.dotProduct( dR );
 
@@ -63,10 +63,10 @@ public class MathUtil {
         }
 
         double t = -n.dotProduct( playerVector.subtract( S1 ) ) / ndotdR;
-        Vec3d M = playerVector.add( dR.scale( t ) );
+        Vector3d M = playerVector.add( dR.scale( t ) );
 
         // 3.
-        Vec3d dMS1 = M.subtract( S1 );
+        Vector3d dMS1 = M.subtract( S1 );
         double u = dMS1.dotProduct( dS21 );
         double v = dMS1.dotProduct( dS31 );
 

@@ -10,10 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -142,7 +142,7 @@ public class Collector extends ClusterBlock implements IClusterController {
 
         if ( player.getHeldItem( hand ).getItem() == Items.BUCKET ) {
 
-            Vec3d collectorVector = new Vec3d( pos.getX(), pos.getY(), pos.getZ() );
+            Vector3d collectorVector = new Vector3d( pos.getX(), pos.getY(), pos.getZ() );
             int tankActivated = ModBlocks.COLLECTOR.getTankActivated( player, hit.getHitVec(), collectorVector );
 
             if ( tankActivated == -1 )
@@ -212,20 +212,20 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     private void addRectangle( int tank, float x, float z ) {
 
-        final Vec3d width_x = new Vec3d( 4, 0, 0 );
-        final Vec3d width_z = new Vec3d( 0, 0, 4 );
-        final Vec3d height = new Vec3d( 0, 37, 0 );
+        final Vector3d width_x = new Vector3d( 4, 0, 0 );
+        final Vector3d width_z = new Vector3d( 0, 0, 4 );
+        final Vector3d height = new Vector3d( 0, 37, 0 );
 
         final int y = -13;
 
-        rectangles.add( tank, new Vec3d( x, y, z ), width_x, height );
-        rectangles.add( tank, new Vec3d( x + 4f, y, z + 0.5 ), width_z, height );
-        rectangles.add( tank, new Vec3d( x, y, z + 4.5 ), width_x, height );
-        rectangles.add( tank, new Vec3d( x - 0.5, y, z + 0.5 ), width_z, height );
+        rectangles.add( tank, new Vector3d( x, y, z ), width_x, height );
+        rectangles.add( tank, new Vector3d( x + 4f, y, z + 0.5 ), width_z, height );
+        rectangles.add( tank, new Vector3d( x, y, z + 4.5 ), width_x, height );
+        rectangles.add( tank, new Vector3d( x - 0.5, y, z + 0.5 ), width_z, height );
 
     }
 
-    public int getTankActivated( PlayerEntity player, Vec3d hitVec, Vec3d collector ) {
+    public int getTankActivated( PlayerEntity player, Vector3d hitVec, Vector3d collector ) {
         return rectangles.getTank( player, hitVec, collector );
     }
 

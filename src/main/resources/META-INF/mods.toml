@@ -8,7 +8,7 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[31,)" #mandatory (31 is forge for 1.15.2)
+loaderVersion="[32,)" #mandatory (32 is forge for 1.16.1)
 
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/Ommina/BiomeDiversity/issues" #optional

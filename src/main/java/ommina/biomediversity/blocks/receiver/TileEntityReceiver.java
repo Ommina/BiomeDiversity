@@ -11,7 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -23,7 +22,6 @@ import ommina.biomediversity.blocks.ModTileEntities;
 import ommina.biomediversity.blocks.cluster.ICollectorComponent;
 import ommina.biomediversity.blocks.collector.TileEntityCollector;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
-import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.blocks.tile.TileEntityAssociation;
 import ommina.biomediversity.blocks.transmitter.TileEntityTransmitter;
 import ommina.biomediversity.config.Config;
@@ -34,6 +32,7 @@ import ommina.biomediversity.network.BroadcastHelper;
 import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.ITankBroadcast;
 import ommina.biomediversity.network.Network;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.util.NbtUtils;
 import ommina.biomediversity.world.chunkloader.ChunkLoader;
 import ommina.biomediversity.worlddata.TransmitterData;
@@ -84,7 +83,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PacketUpdateReceiver( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PacketUpdateReceiver( this ) );
             BROADCASTER.reset();
         }
 
@@ -93,7 +92,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public BdFluidTank getTank( int index ) {
         return TANK;
-   }
+    }
 
     @Override
     @Nullable
@@ -136,6 +135,14 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
         if ( collector != null )
             collector.deregisterComponent( this );
+
+    }
+
+    @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
     }
 
@@ -196,14 +203,6 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
 
     }
 //endregion Overrides
-
-    @Override
-    public void onLoad() {
-
-        if ( world.isRemote )
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
-
-    }
 
     public static void handle( PacketUpdateReceiver packet, Supplier<NetworkEvent.Context> ctx ) {
 

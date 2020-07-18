@@ -4,7 +4,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 public class ChunkLoader {
@@ -31,7 +30,7 @@ public class ChunkLoader {
         if ( server == null )
             return;
 
-        ServerWorld serverworld = server.getWorld( DimensionType.OVERWORLD ); //TODO: Can DimensionManager somehow let us use other dimensions as well?
+        ServerWorld serverworld = server.getWorld( World.field_234918_g_ ); //TODO: Can DimensionManager somehow let us use other dimensions as well?
 
         serverworld.getChunkProvider().forceChunk( pos, doForceLoad );
 

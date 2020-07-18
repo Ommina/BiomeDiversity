@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -22,11 +21,11 @@ import ommina.biomediversity.blocks.collector.Tubes;
 import ommina.biomediversity.blocks.plug.PlugRenderData;
 import ommina.biomediversity.blocks.plug.TileEntityPlugBase;
 import ommina.biomediversity.blocks.tile.CollectorFinder;
-import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.network.GenericTilePacketRequest;
 import ommina.biomediversity.network.Network;
+import ommina.biomediversity.rendering.RenderHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -66,20 +65,6 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
     }
 
     @Override
-    public void onLoad() {
-
-        if ( world.isRemote )
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
-
-        FluidAttributes fluidAttributes = Tubes.fluid( collectorTank ).getAttributes();
-
-        PLUG_RENDER.spriteLocation = fluidAttributes.getStillTexture();
-        PLUG_RENDER.colour = RenderHelper.getRGBA( fluidAttributes.getColor() );
-        PLUG_RENDER.maximum = collectorTank > 7 ? Constants.COLLECTOR_INNER_TANK_CAPACITY : Constants.COLLECTOR_OUTER_TANK_CAPACITY;
-
-    }
-
-    @Override
     public void read( CompoundNBT tag ) {
 
         collectorTank = tag.getInt( "collectorTank" );
@@ -114,7 +99,7 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
 
     @Override
     public void doBroadcast() {
-        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PlugFluidPacketUpdate( this ) );
+        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PlugFluidPacketUpdate( this ) );
     }
 
     @Override
@@ -123,6 +108,20 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
         fluidhandler.invalidate();
         tank = null;
         removeCollector();
+
+    }
+
+    @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+        FluidAttributes fluidAttributes = Tubes.fluid( collectorTank ).getAttributes();
+
+        PLUG_RENDER.spriteLocation = fluidAttributes.getStillTexture();
+        PLUG_RENDER.colour = RenderHelper.getRGBA( fluidAttributes.getColor() );
+        PLUG_RENDER.maximum = collectorTank > 7 ? Constants.COLLECTOR_INNER_TANK_CAPACITY : Constants.COLLECTOR_OUTER_TANK_CAPACITY;
 
     }
 
@@ -199,7 +198,6 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
 
         if ( block instanceof ITube )
             collectorTank = ((ITube) block).getTube().tank();
-
 
 
     }

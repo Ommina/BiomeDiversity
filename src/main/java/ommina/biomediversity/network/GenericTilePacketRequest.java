@@ -4,7 +4,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.collector.PacketUpdateCollector;
@@ -52,7 +51,7 @@ public class GenericTilePacketRequest {
             if ( world.isBlockLoaded( pos ) ) {
 
                 TileEntity tile = world.getTileEntity( pos );
-                PacketDistributor.TargetPoint pd = new PacketDistributor.TargetPoint( tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), 64.0f, DimensionType.OVERWORLD );
+                PacketDistributor.TargetPoint pd = new PacketDistributor.TargetPoint( tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), 64.0f, World.field_234918_g_ );
 
                 if ( tile instanceof TileEntityReceiver ) {
                     Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PacketUpdateReceiver( tile ) );
