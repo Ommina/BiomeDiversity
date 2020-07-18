@@ -10,6 +10,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -20,6 +21,10 @@ import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.cluster.ClusterBlock;
 import ommina.biomediversity.blocks.cluster.IClusterController;
 import ommina.biomediversity.config.Constants;
+import ommina.biomediversity.rendering.Icosphere;
+import ommina.biomediversity.rendering.Triangle;
+import ommina.biomediversity.rendering.mollertrumbore.MollerTrumbore;
+import ommina.biomediversity.rendering.mollertrumbore.Vec3f;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -136,6 +141,23 @@ public class MixerAdvanced extends ClusterBlock implements IClusterController {
 
         if ( world.isRemote )
             return ActionResultType.CONSUME;
+
+        Vec3d playerVec = player.getEyePosition( 1.0f ).add( player.getLookVec() );
+        Vec3f origin = new Vec3f( playerVec.x, playerVec.y, playerVec.z );
+
+        //for ( Triangle triangle : Icosphere.getSphere( 2 ).get( 0 ) ) {
+
+            Triangle triangle = Icosphere.getSphere( 2 ).get( 0 );
+
+            Vec3f v1 = new Vec3f( triangle.getP1().getX() + pos.getX(), triangle.getP1().getY() + pos.getY(), triangle.getP1().getZ() + pos.getZ() );
+            Vec3f v2 = new Vec3f( triangle.getP2().getX() + pos.getX(), triangle.getP2().getY() + pos.getY(), triangle.getP2().getZ() + pos.getZ() );
+            Vec3f v3 = new Vec3f( triangle.getP3().getX() + pos.getX(), triangle.getP3().getY() + pos.getY(), triangle.getP3().getZ() + pos.getZ() );
+
+            if ( MollerTrumbore.rayTriangleIntersect( origin, hit, v1, v2, v3 ) ) {
+                System.out.println( "hurray" );
+            } else
+                System.out.println( "sorry" );
+        //}
 
         return ActionResultType.PASS;
 
