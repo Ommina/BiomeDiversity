@@ -1,12 +1,12 @@
 package ommina.biomediversity.blocks.collector;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.LogicalSidedProvider;
@@ -74,7 +74,7 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new PacketUpdateCollector( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PacketUpdateCollector( this ) );
             BROADCASTER.reset();
         }
 
@@ -83,10 +83,6 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     @Override
     public BdFluidTank getTank( int index ) {
         return TANK.get( index );
-    }
-
-    public List<BdFluidTank> getTanks() {
-        return TANK;
     }
 
     @Override
@@ -111,14 +107,6 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     }
 
     @Override
-    public void onLoad() {
-
-        if ( world.isRemote )
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
-
-    }
-
-    @Override
     public void onChunkUnloaded() {
 
         components.forEach( ICollectorComponent::invalidateCollector );
@@ -127,14 +115,21 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     }
 
     @Override
-    public void read( CompoundNBT nbt ) {
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
+    @Override
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
         BATTERY.setEnergyStored( nbt.getInt( "energystored" ) );
 
         for ( int n = 0; n < TANK_COUNT; n++ )
             TANK.get( n ).read( nbt );
-
-        super.read( nbt );
 
     }
 
@@ -220,6 +215,10 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     }
 //endregion Overrides
 
+    public List<BdFluidTank> getTanks() {
+        return TANK;
+    }
+
     public void forceBroadcast() {
         BROADCASTER.forceBroadcast();
     }
@@ -237,7 +236,7 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     }
 
     @Nullable
-    public BdFluidTank getFluidTank( int tank) {
+    public BdFluidTank getFluidTank( int tank ) {
 
         if ( tank < 0 || tank >= TANK_COUNT )
             return null;

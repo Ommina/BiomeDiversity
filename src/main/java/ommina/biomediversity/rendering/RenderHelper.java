@@ -209,6 +209,7 @@ public class RenderHelper {
             left = left + width - fontRenderer.getStringWidth( text );
         }
 
+
         fontRenderer.drawString( text, left, top, colour );
 
     }

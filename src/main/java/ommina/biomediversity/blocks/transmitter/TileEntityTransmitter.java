@@ -1,5 +1,6 @@
 package ommina.biomediversity.blocks.transmitter;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -12,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -77,7 +77,7 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new GenericTankUpdatePacket( this ) );
             BROADCASTER.reset();
         }
 
@@ -119,17 +119,18 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     }
 
     @Override
-    public void read( CompoundNBT tag ) {
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
-        TANK.read( tag );
-        super.read( tag );
+        TANK.read( nbt );
+
     }
 
     @Override
-    public CompoundNBT write( CompoundNBT tag ) {
+    public CompoundNBT write( CompoundNBT nbt ) {
 
-        tag = TANK.write( tag );
-        return super.write( tag );
+        nbt = TANK.write( nbt );
+        return super.write( nbt );
 
     }
 

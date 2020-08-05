@@ -1,10 +1,11 @@
 package ommina.biomediversity.blocks.rainbarrel;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -44,17 +45,12 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
     }
 
-    @Override
-    public void onChunkUnloaded() {
-        handler.invalidate();
-    }
-
     //region Overrides
     @Override
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new GenericTankUpdatePacket( this ) );
             BROADCASTER.reset();
         }
 
@@ -76,12 +72,25 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
     }
 
+    @Override
+    public void onChunkUnloaded() {
+        handler.invalidate();
+    }
+
+    @Override
+    public void onLoad() {
+
+        if ( world.isRemote )
+            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
+
+    }
+
     @SuppressWarnings( "unchecked" )
     @Override
-    public void read( CompoundNBT tag ) {
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
-        TANK.read( tag );
-        super.read( tag );
+        TANK.read( nbt );
 
     }
 
@@ -91,14 +100,6 @@ public class TileEntityRainBarrel extends TileEntity implements ITickableTileEnt
 
         tag = TANK.write( tag );
         return super.write( tag );
-
-    }
-
-    @Override
-    public void onLoad() {
-
-        if ( world.isRemote )
-            Network.channel.sendToServer( new GenericTilePacketRequest( this.pos ) );
 
     }
 

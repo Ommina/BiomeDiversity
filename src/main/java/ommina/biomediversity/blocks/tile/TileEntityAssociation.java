@@ -1,5 +1,6 @@
 package ommina.biomediversity.blocks.tile;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.tileentity.TileEntity;
@@ -41,37 +42,36 @@ public abstract class TileEntityAssociation extends TileEntity {
 
     //region Overrides
     @Override
-    public void read( final CompoundNBT compound ) {
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
-        identifier = compound.getUniqueId( "identifier" );
+        identifier = nbt.getUniqueId( "identifier" );
 
-        if ( compound.hasUniqueId( "owner" ) )
-            owner = compound.getUniqueId( "owner" );
+        if ( nbt.hasUniqueId( "owner" ) )
+            owner = nbt.getUniqueId( "owner" );
 
-        if ( compound.hasUniqueId( "associatedidentifier" ) ) {
-            associatedIdentifier = compound.getUniqueId( "associatedidentifier" );
-            associatedPos = NbtUtils.getBlockPos( "associatedpos", compound );
+        if ( nbt.hasUniqueId( "associatedidentifier" ) ) {
+            associatedIdentifier = nbt.getUniqueId( "associatedidentifier" );
+            associatedPos = NbtUtils.getBlockPos( "associatedpos", nbt );
         }
-
-        super.read( compound );
 
     }
 
     @Override
-    public CompoundNBT write( final CompoundNBT compound ) {
+    public CompoundNBT write( final CompoundNBT nbt ) {
 
-        compound.putUniqueId( "identifier", identifier );
+        nbt.putUniqueId( "identifier", identifier );
 
         if ( owner != null )
-            compound.putUniqueId( "owner", owner );
+            nbt.putUniqueId( "owner", owner );
 
         if ( associatedIdentifier != null )
-            compound.putUniqueId( "associatedidentifier", associatedIdentifier );
+            nbt.putUniqueId( "associatedidentifier", associatedIdentifier );
 
         if ( associatedPos != null )
-            NbtUtils.putBlockPos( "associatedpos", compound, associatedPos );
+            NbtUtils.putBlockPos( "associatedpos", nbt, associatedPos );
 
-        return super.write( compound );
+        return super.write( nbt );
 
     }
 

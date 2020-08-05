@@ -1,5 +1,6 @@
 package ommina.biomediversity.blocks.plug;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -100,11 +101,10 @@ public abstract class TileEntityPlugBase extends TileEntity implements ICollecto
     }
 
     @Override
-    public void read( CompoundNBT nbt ) {
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
         FINDER.setCollectorPos( NbtUtils.getBlockPos( "collectorpos", nbt ) );
-
-        super.read( nbt );
 
     }
 

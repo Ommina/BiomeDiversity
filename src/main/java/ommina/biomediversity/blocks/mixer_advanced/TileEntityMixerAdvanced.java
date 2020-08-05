@@ -2,11 +2,9 @@ package ommina.biomediversity.blocks.mixer_advanced;
 
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import ommina.biomediversity.blocks.ModTileEntities;
-import ommina.biomediversity.blocks.cluster.ICollectorComponent;
-import ommina.biomediversity.config.Config;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.network.BroadcastHelper;
@@ -37,10 +35,15 @@ public class TileEntityMixerAdvanced extends TileEntity implements ITickableTile
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, DimensionType.OVERWORLD ) ), new GenericTankUpdatePacket( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new GenericTankUpdatePacket( this ) );
             BROADCASTER.reset();
         }
 
+    }
+
+    @Override
+    public BdFluidTank getTank( int index ) {
+        return TANK;
     }
 
     @Override
@@ -52,12 +55,6 @@ public class TileEntityMixerAdvanced extends TileEntity implements ITickableTile
         // DoStuff
 
     }
-
-    @Override
-    public BdFluidTank getTank( int index ) {
-        return TANK;
-    }
-
 //endregion Overrides
 
 }
