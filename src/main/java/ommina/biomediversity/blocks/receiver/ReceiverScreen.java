@@ -9,12 +9,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.gui.BaseContainerScreen;
 import ommina.biomediversity.gui.controls.RfGauge;
 import ommina.biomediversity.gui.controls.Tank;
 import ommina.biomediversity.gui.controls.Temperature;
 import ommina.biomediversity.gui.controls.Text;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.util.Translator;
 
 import java.awt.*;
@@ -47,7 +47,7 @@ public class ReceiverScreen extends BaseContainerScreen<ReceiverContainer> {
 
         Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( receiver.getBiomeRegistryName() ) );
         if ( biome != null ) {
-            Text biomeName = new Text( biome.getDisplayName().getString(), RenderHelper.Justification.LEFT, xSize );
+            Text biomeName = new Text( biome.toString(), RenderHelper.Justification.LEFT, xSize );  //TODO: Needs some sort of localized String
             biomeName.setPostion( BIOMENAME_TEXT );
             controls.add( biomeName );
         }

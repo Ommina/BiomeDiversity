@@ -54,6 +54,62 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     }
 
     //region Overrides
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement( BlockItemUseContext context ) {
+        return this.getDefaultState().with( IS_CONNECTED, true );
+    }
+
+    @Override
+    public void onBlockPlacedBy( World world, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack ) {
+
+        if ( livingEntity instanceof PlayerEntity ) {
+
+            PlayerEntity player = (PlayerEntity) livingEntity;
+            TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( blockPos );
+
+            Biome biome = world.getBiome( blockPos );
+
+            tile.setOwner( player.getUniqueID() );
+
+            if ( !world.isRemote ) {
+
+                world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+
+                    TransmitterData pd = cap.getTransmitter( player.getUniqueID(), tile.getIdentifier() );
+                    pd.setAmount( 0 );
+                    pd.temperature = MathHelper.clamp( biome.getTemperature( blockPos ), 0.0f, 1.0f );
+                    pd.rainfall = MathHelper.clamp( biome.getDownfall(), 0.0f, 1.0f );
+                    pd.biomeId = biome.getRegistryName();
+
+                } );
+
+            }
+
+        }
+
+        super.onBlockPlacedBy( world, blockPos, blockState, livingEntity, itemStack );
+    }
+
+    @Override
+    public void onBlockHarvested( World world, BlockPos pos, BlockState blockState, PlayerEntity playerEntity ) {
+
+        TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
+
+        if ( tile.hasLink() ) {
+            TileEntityAssociation.removeLink( world, tile, true );
+            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.removeTransmitter( tile ) );
+        }
+
+        super.onBlockHarvested( world, pos, blockState, playerEntity );
+
+    }
+
+    @Override
+    protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
+        builder.add( IS_CONNECTED );
+    }
+
     @Override
     public boolean hasTileEntity( BlockState state ) {
         return true;
@@ -111,62 +167,6 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
         return ActionResultType.SUCCESS;
 
     }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement( BlockItemUseContext context ) {
-        return this.getDefaultState().with( IS_CONNECTED, true );
-    }
-
-    @Override
-    public void onBlockPlacedBy( World world, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack ) {
-
-        if ( livingEntity instanceof PlayerEntity ) {
-
-            PlayerEntity player = (PlayerEntity) livingEntity;
-            TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( blockPos );
-
-            Biome biome = world.getBiome( blockPos );
-
-            tile.setOwner( player.getUniqueID() );
-
-            if ( !world.isRemote ) {
-
-                world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
-
-                    TransmitterData pd = cap.getTransmitter( player.getUniqueID(), tile.getIdentifier() );
-                    pd.setAmount( 0 );
-                    pd.temperature = MathHelper.clamp( biome.getTemperature( blockPos ), 0.0f, 1.0f );
-                    pd.rainfall = MathHelper.clamp( biome.getDownfall(), 0.0f, 1.0f );
-                    pd.biomeId = biome.getRegistryName();
-
-                } );
-
-            }
-
-        }
-
-        super.onBlockPlacedBy( world, blockPos, blockState, livingEntity, itemStack );
-    }
-
-    @Override
-    public void onBlockHarvested( World world, BlockPos pos, BlockState blockState, PlayerEntity playerEntity ) {
-
-        TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
-
-        if ( tile.hasLink() ) {
-            TileEntityAssociation.removeLink( world, tile, true );
-            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> cap.removeTransmitter( tile ) );
-        }
-
-        super.onBlockHarvested( world, pos, blockState, playerEntity );
-
-    }
-
-    @Override
-    protected void fillStateContainer( StateContainer.Builder<Block, BlockState> builder ) {
-        builder.add( IS_CONNECTED );
-    }
 //endregion Overrides
 
     private void debuggingCarrot( final World world, final BlockPos pos, final TileEntityTransmitter tile ) {
@@ -188,7 +188,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
         Biome b = world.getBiome( pos );
 
-        BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getDefaultTemperature() ) );
+        BiomeDiversity.LOGGER.info( String.format( " Biome: %s temp: (%.1f) ", b.getRegistryName(), b.getTemperature( pos ) ) );
 
     }
 //endregion Overrides

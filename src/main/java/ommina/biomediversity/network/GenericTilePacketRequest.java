@@ -51,7 +51,7 @@ public class GenericTilePacketRequest {
             if ( world.isBlockLoaded( pos ) ) {
 
                 TileEntity tile = world.getTileEntity( pos );
-                PacketDistributor.TargetPoint pd = new PacketDistributor.TargetPoint( tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), 64.0f, World.field_234918_g_ );
+                PacketDistributor.TargetPoint pd = new PacketDistributor.TargetPoint( tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), 64.0f, World.OVERWORLD );
 
                 if ( tile instanceof TileEntityReceiver ) {
                     Network.channel.send( PacketDistributor.NEAR.with( () -> pd ), new PacketUpdateReceiver( tile ) );

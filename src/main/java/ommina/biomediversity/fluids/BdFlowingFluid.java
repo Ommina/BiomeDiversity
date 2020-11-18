@@ -4,7 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.ILiquidContainer;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -31,7 +31,7 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
      * @param fluidStateIn FluidState of the fluid flowing into the block
      */
     @Override
-    protected void flowInto( IWorld worldIn, BlockPos pos, BlockState blockStateIn, Direction direction, IFluidState fluidStateIn ) {
+    protected void flowInto( IWorld worldIn, BlockPos pos, BlockState blockStateIn, Direction direction, FluidState fluidStateIn ) {
 
         if ( blockStateIn.getBlock() instanceof ILiquidContainer ) {
 
@@ -61,7 +61,7 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
 
 
     @Override
-    protected boolean canFlow( IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, IFluidState toFluidState, Fluid fluidIn ) {
+    protected boolean canFlow( IBlockReader worldIn, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fluidIn ) {
 
         //BiomeDiversity.LOGGER.info( "fromPos: " + fromPos.toString() + ", toPos: " + toPos.toString() + ", fromBlockState: " + fromBlockState.toString() + ", toBlockState: " + toBlockState.toString() + " toFluidState: " + toFluidState.toString() + " fluidIn: " + fluidIn.toString() );
 
@@ -84,18 +84,18 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
 
         //region Overrides
         @Override
-        protected void fillStateContainer( StateContainer.Builder<Fluid, IFluidState> builder ) {
+        protected void fillStateContainer( StateContainer.Builder<Fluid, FluidState> builder ) {
             super.fillStateContainer( builder );
             builder.add( LEVEL_1_8 );
         }
 
         @Override
-        public boolean isSource( IFluidState state ) {
+        public boolean isSource( FluidState state ) {
             return false;
         }
 
         @Override
-        public int getLevel( IFluidState state ) {
+        public int getLevel( FluidState state ) {
             return state.get( LEVEL_1_8 );
         }
 //endregion Overrides
@@ -110,12 +110,12 @@ public abstract class BdFlowingFluid extends ForgeFlowingFluid {
 
         //region Overrides
         @Override
-        public boolean isSource( IFluidState state ) {
+        public boolean isSource( FluidState state ) {
             return true;
         }
 
         @Override
-        public int getLevel( IFluidState state ) {
+        public int getLevel( FluidState state ) {
             return 8;
         }
 //endregion Overrides

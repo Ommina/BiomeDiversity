@@ -47,7 +47,7 @@ public class ClusterBlock extends GlassBlock {
     public void onPlayerDestroy( IWorld world, BlockPos blockPos, BlockState blockState ) {
 
         if ( !world.isRemote() )
-            checkForController( world.getWorld(), blockPos );
+            checkForController( world, blockPos );
 
         super.onPlayerDestroy( world, blockPos, blockState );
 
@@ -89,9 +89,9 @@ public class ClusterBlock extends GlassBlock {
 //endregion Overrides
 
     @Nullable
-    private BlockPos checkForController( World world, BlockPos blockPos ) {
+    private BlockPos checkForController( IWorld world, BlockPos blockPos ) {
 
-        if ( !world.isRemote )
+        if ( !world.isRemote() )
             for ( int y = -1; y <= 1; y++ )
                 for ( int x = -1; x <= 1; x++ )
                     for ( int z = -1; z <= 1; z++ )
@@ -104,7 +104,7 @@ public class ClusterBlock extends GlassBlock {
 
     }
 
-    protected void updateClusterBlockStates( World world, BlockPos blockPos, boolean formed ) {
+    protected void updateClusterBlockStates( IWorld world, BlockPos blockPos, boolean formed ) {
 
         for ( int y = -1; y <= 1; y++ )
             for ( int x = -1; x <= 1; x++ )

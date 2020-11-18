@@ -1,5 +1,6 @@
 package ommina.biomediversity.blocks.receiver;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -83,7 +84,7 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PacketUpdateReceiver( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.OVERWORLD ) ), new PacketUpdateReceiver( this ) );
             BROADCASTER.reset();
         }
 
@@ -147,11 +148,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     }
 
     @Override
-    public void read( CompoundNBT nbt ) {
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
         FINDER.setCollectorPos( NbtUtils.getBlockPos( "collectorpos", nbt ) );
-
-        super.read( nbt );
 
     }
 

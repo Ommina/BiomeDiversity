@@ -1,26 +1,13 @@
 package ommina.biomediversity.world.gen;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.FrequencyConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.registries.ForgeRegistries;
-import ommina.biomediversity.blocks.ModBlocks;
-import ommina.biomediversity.config.Config;
-import ommina.biomediversity.world.gen.feature.ModFeatures;
-
 public class ModWorldGeneration {
+/*
 
-    private static final OreFeature ORE_FEATURE_CONFIG = new OreFeature( OreFeatureConfig::deserialize );
+    private static final OreFeature ORE_FEATURE_CONFIG = new OreFeature( OreFeatureConfig );
 
     public static void generate() {
 
         for ( Biome biome : ForgeRegistries.BIOMES ) {
-
             if ( Config.orinociteOreEnabled.get() && biome.getCategory() != Biome.Category.THEEND && biome.getCategory() != Biome.Category.NETHER ) {
                 addOre( biome, ModBlocks.ORINOCITE_ORE, Config.orinociteOreGenerationSizeBase.get() + Config.orinociteOreGenerationSizeVariance.get(), Config.orinociteOreGenerationAttempts.get(), Config.orinociteOreGenerationMinY.get(), Config.orinociteOreGenerationMaxY.get() );
             }
@@ -45,10 +32,11 @@ public class ModWorldGeneration {
             }
 
         }
-
     }
 
     private static void addOre( Biome biome, Block block, int size, int chances, int minHeight, int maxHeight ) {
+
+        biome.getGenerationSettings().getFeatures().add(  )
 
         biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES,
              Feature.ORE.withConfiguration(
@@ -92,4 +80,5 @@ public class ModWorldGeneration {
 
     }
 
+*/
 }

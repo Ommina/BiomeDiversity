@@ -1,12 +1,11 @@
 package ommina.biomediversity.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import ommina.biomediversity.BiomeDiversity;
@@ -14,19 +13,18 @@ import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class FluidWellFeature extends Feature<OreFeatureConfig> {
 
-    public FluidWellFeature( Function<Dynamic<?>, ? extends OreFeatureConfig> config ) {
-        super( config );
+    public FluidWellFeature( Codec<OreFeatureConfig> configCodec ) {
+        super( configCodec );
     }
 
     //region Overrides
     @Override
-    public boolean place( IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, OreFeatureConfig config ) {
+    public boolean generate( ISeedReader world, ChunkGenerator p_241855_2_, Random random, BlockPos pos, OreFeatureConfig p_241855_5_ ) {
 
-        if ( rand.nextInt( 2000 ) > Config.fluidWellProbability.get() )
+        if ( random.nextInt( 2000 ) > Config.fluidWellProbability.get() )
             return true;
 
         pos = new BlockPos( pos.getX(), 1, pos.getZ() );

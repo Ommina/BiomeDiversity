@@ -1,33 +1,32 @@
 package ommina.biomediversity.world.gen.feature;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.world.gen.GeneratorHelper;
 
 import java.util.Random;
-import java.util.function.Function;
 
 public class JunglePoolFeature extends Feature<NoFeatureConfig> {
 
     private final int MINIMUM_Y = 40;
     private final int ATTEMPTS_PER_CHUNK = 4;
 
-    public JunglePoolFeature( Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn ) {
-        super( configFactoryIn );
+    public JunglePoolFeature( Codec<NoFeatureConfig> configCodec ) {
+        super( configCodec );
     }
 
     //region Overrides
     @Override
-    public boolean place( IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config ) {
+    public boolean generate( ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config ) {
 
         for ( int i = 0; i < ATTEMPTS_PER_CHUNK; i++ ) {
 

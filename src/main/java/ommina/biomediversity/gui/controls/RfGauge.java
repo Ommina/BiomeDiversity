@@ -1,5 +1,6 @@
 package ommina.biomediversity.gui.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,7 +39,7 @@ public class RfGauge extends Control {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
@@ -52,7 +53,7 @@ public class RfGauge extends Control {
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer(MatrixStack matrixStack) {
 
         if ( BATTERY == null || BATTERY.getMaxEnergyStored() == 0 )
             return;

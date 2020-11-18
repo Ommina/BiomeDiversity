@@ -74,7 +74,7 @@ public class TileEntityCollector extends TileEntity implements ICollectorCompone
     public void doBroadcast() {
 
         if ( BROADCASTER.needsBroadcast() ) {
-            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PacketUpdateCollector( this ) );
+            Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.OVERWORLD ) ), new PacketUpdateCollector( this ) );
             BROADCASTER.reset();
         }
 

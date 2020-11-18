@@ -1,11 +1,11 @@
 package ommina.biomediversity.gui.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.fluids.ModFluids;
-import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.gui.UV;
 import ommina.biomediversity.util.MathUtil;
 
@@ -39,12 +39,12 @@ public class Temperature extends DynamicRange {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
-        this.fillGradient( position.x + x, position.y + y, position.x + x + this.width, position.y + y + this.height, startColour, endColour );
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
+        this.fillGradient( matrixStack, position.x + x, position.y + y, position.x + x + this.width, position.y + y + this.height, startColour, endColour );
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer( MatrixStack matrixStack ) {
 
         setValue();
 

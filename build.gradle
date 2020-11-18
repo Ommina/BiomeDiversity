@@ -113,9 +113,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
 
-    compileOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.6:api")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58:api")
     // compile against the JEI API but do not include it at runtime
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.6")      // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58")      // at runtime, use the full JEI jar
 
     //compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}:api")
     //runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.15:${top_version}")

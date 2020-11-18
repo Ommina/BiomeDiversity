@@ -1,6 +1,7 @@
 package ommina.biomediversity.blocks.plug.fluid;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -65,21 +66,20 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
     }
 
     @Override
-    public void read( CompoundNBT tag ) {
+    public void read( BlockState blockState, CompoundNBT nbt ) {
+        super.read( blockState, nbt );
 
-        collectorTank = tag.getInt( "collectorTank" );
-
-        super.read( tag );
+        collectorTank = nbt.getInt( "collectorTank" );
 
     }
 
     @SuppressWarnings( "unchecked" )
     @Override
-    public CompoundNBT write( CompoundNBT tag ) {
+    public CompoundNBT write( CompoundNBT nbt ) {
 
-        tag.putInt( "collectorTank", collectorTank );
+        nbt.putInt( "collectorTank", collectorTank );
 
-        return super.write( tag );
+        return super.write( nbt );
 
     }
 
@@ -99,7 +99,7 @@ public class TileEntityPlugFluid extends TileEntityPlugBase implements ITickable
 
     @Override
     public void doBroadcast() {
-        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PlugFluidPacketUpdate( this ) );
+        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.OVERWORLD ) ), new PlugFluidPacketUpdate( this ) );
     }
 
     @Override

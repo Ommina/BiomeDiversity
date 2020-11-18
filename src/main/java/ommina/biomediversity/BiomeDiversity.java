@@ -93,7 +93,7 @@ public class BiomeDiversity {
 
     private void CommonSetup( final FMLCommonSetupEvent event ) {
 
-        DeferredWorkQueue.runLater( ModWorldGeneration::generate );
+        //DeferredWorkQueue.runLater( ModWorldGeneration::generate );
 
         CapabilityManager.INSTANCE.register( ITransmitterNetwork.class, new TransmitterNetworkStorage(), TransmitterNetwork::new );
 

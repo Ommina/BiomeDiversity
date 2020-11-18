@@ -1,5 +1,6 @@
 package ommina.biomediversity.gui.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -97,7 +98,7 @@ public class RfMeter extends Control {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
 
         this.fillGradientHorizontal( position.x + x, position.y + y, position.x + x + this.width, position.y + y + this.height, startColour, endColour );
 
@@ -108,7 +109,7 @@ public class RfMeter extends Control {
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer(MatrixStack matrixStack) {
 
         setValue();
 

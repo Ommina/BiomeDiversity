@@ -48,7 +48,7 @@ public class TransmitterScreen extends BaseContainerScreen<TransmitterContainer>
 
         Biome biome = ForgeRegistries.BIOMES.getValue( ResourceLocation.tryCreate( transmitter.getBiomeRegistryName() ) );
         if ( biome != null ) {
-            Text biomeName = new Text( biome.getDisplayName().getString(), RenderHelper.Justification.LEFT, xSize );
+            Text biomeName = new Text( biome.toString(), RenderHelper.Justification.LEFT, xSize ); //TODO: Needs some sort of localized String
             biomeName.setPostion( BIOMENAME_TEXT );
             controls.add( biomeName );
         }

@@ -1,5 +1,6 @@
 package ommina.biomediversity.integration.jei;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -89,9 +90,9 @@ public class CollectorOutputCategory implements IRecipeCategory<SingleFluidRecip
     }
 
     @Override
-    public void draw( SingleFluidRecipe recipe, double mouseX, double mouseY ) {
+    public void draw( SingleFluidRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY ) {
 
-        TANK_FLUID.drawBackgroundLayer( 0, 0 );
+        TANK_FLUID.drawBackgroundLayer( matrixStack, 0, 0 );
 
         //RenderHelper.drawText( Translator.translateToLocalFormatted( "jei.biomediversity.transmitter.text.energy", recipe.getStrength() ), TEXT_LOCATION.x, TEXT_LOCATION.y, GUI_WIDTH - Control.Sizes.TANK.width - Control.Sizes.LOW_HIGH.width - 9, RenderHelper.Justification.RIGHT, DEFAULT_TEXT_COLOUR );
 

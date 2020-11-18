@@ -1,5 +1,6 @@
 package ommina.biomediversity.gui.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import ommina.biomediversity.gui.Control;
@@ -15,7 +16,7 @@ public class LowHigh extends AbstractLowHigh {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
@@ -24,7 +25,7 @@ public class LowHigh extends AbstractLowHigh {
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer( MatrixStack matrixStack ) {
 
         setValue();
 

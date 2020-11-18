@@ -77,7 +77,7 @@ public class TileEntityPlugEnergy extends TileEntityPlugBase implements ITickabl
 
     @Override
     public void doBroadcast() {
-        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.field_234918_g_ ) ), new PlugEnergyPacketUpdate( this ) );
+        Network.channel.send( PacketDistributor.NEAR.with( () -> new PacketDistributor.TargetPoint( this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64.0f, World.OVERWORLD ) ), new PlugEnergyPacketUpdate( this ) );
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ommina.biomediversity.gui.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -8,10 +9,10 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
-import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.fluids.BdFluidTank;
 import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.gui.UV;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.util.MathUtil;
 import ommina.biomediversity.util.Translator;
 
@@ -35,7 +36,7 @@ public class Tank extends Control {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
 
         if ( tank.getCapacity() <= 0 )
             return;
@@ -57,7 +58,7 @@ public class Tank extends Control {
 
         GlStateManager.color4f( rgba[0], rgba[1], rgba[2], rgba[3] );
 
-        drawSprite( x + position.x, y + position.y + height - heightTexture, 0, width, heightTexture, fluidStillSprite );
+        drawSprite( matrixStack, x + position.x, y + position.y + height - heightTexture, 0, width, heightTexture, fluidStillSprite );
 
         GlStateManager.color4f( 1f, 1f, 1f, 1f );
 
@@ -67,7 +68,7 @@ public class Tank extends Control {
 
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer( MatrixStack matrixStack ) {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 

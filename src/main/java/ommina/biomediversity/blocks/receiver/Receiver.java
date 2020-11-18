@@ -52,10 +52,10 @@ public class Receiver extends Block {
         return SHAPE;
     }
 
-    @Override
-    public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
-        return this.blocksMovement ? state.getShape( worldIn, pos ) : VoxelShapes.empty();
-    }
+    //@Override
+    //public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
+    //    return  state.  this.blocksMovement ? state.getShape( worldIn, pos ) : VoxelShapes.empty();
+   // }
 
     @Override
     public VoxelShape getRenderShape( BlockState state, IBlockReader worldIn, BlockPos pos ) {

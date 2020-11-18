@@ -10,6 +10,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import ommina.biomediversity.blocks.ModBlocks;
@@ -34,7 +35,7 @@ public class MixerAdvanced extends ClusterBlock implements IClusterController {
 
     //region Overrides
     @Override
-    public boolean checkMultiblock( World world, BlockPos pos ) {
+    public boolean checkMultiblock( IWorld world, BlockPos pos ) {
 
         if ( multiblock == null )
             defineMultiblock();
@@ -112,10 +113,10 @@ public class MixerAdvanced extends ClusterBlock implements IClusterController {
         return BlockRenderType.MODEL;
     }
 
-    @Override
-    public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
-        return this.blocksMovement ? state.getShape( worldIn, pos ) : VoxelShapes.empty();
-    }
+    //@Override
+    //public VoxelShape getCollisionShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {
+    //    return this.blocksMovement ? state.getShape( worldIn, pos ) : VoxelShapes.empty();
+    //}
 
     @Override
     public VoxelShape getShape( BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context ) {

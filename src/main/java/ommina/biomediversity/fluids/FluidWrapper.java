@@ -45,7 +45,7 @@ public class FluidWrapper {
 
         fluid_still = DeferredRegistration.FLUIDS.register( name, () -> new BdFlowingFluid.Source( fluid_properties ) );
         fluid_flowing = DeferredRegistration.FLUIDS.register( name + "_flowing", () -> new BdFlowingFluid.Flowing( fluid_properties ) );
-        block = DeferredRegistration.BLOCKS.register( name, () -> new FlowingFluidBlock( fluid_still, Block.Properties.create( Material.WATER ).doesNotBlockMovement().hardnessAndResistance( 100f ).lightValue( luminosity ).noDrops() ) );
+        block = DeferredRegistration.BLOCKS.register( name, () -> new FlowingFluidBlock( fluid_still, Block.Properties.create( Material.WATER ).doesNotBlockMovement().hardnessAndResistance( 100f ).setLightLevel( l -> luminosity ).noDrops() ) );
         bucket = DeferredRegistration.ITEMS.register( name + "_bucket", () -> new BucketItem( fluid_still, new Item.Properties().containerItem( Items.BUCKET ).maxStackSize( 1 ).group( BiomeDiversity.TAB ) ) );
         fluid_properties = new ForgeFlowingFluid.Properties( fluid_still, fluid_flowing,
              FluidAttributes.builder( stillTexture, flowingTexture ).color( color.getRGB() ).luminosity( luminosity ).density( density ).temperature( temperature ).viscosity( viscosity ).rarity( rarity ) )

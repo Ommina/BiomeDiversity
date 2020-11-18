@@ -1,5 +1,6 @@
 package ommina.biomediversity.integration.jei.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.gui.Control;
@@ -16,12 +17,12 @@ public class JeiTank extends Control {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
-        drawBorder( x, y );
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
+        drawBorder( matrixStack, x, y );
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer( MatrixStack matrixStack ) {
     }
 
     @Nullable

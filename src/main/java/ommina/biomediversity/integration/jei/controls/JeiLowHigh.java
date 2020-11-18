@@ -1,5 +1,6 @@
 package ommina.biomediversity.integration.jei.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import ommina.biomediversity.config.Constants;
 import ommina.biomediversity.gui.Control;
@@ -16,9 +17,9 @@ public class JeiLowHigh extends AbstractLowHigh {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
 
-        drawBorder( x, y );
+        drawBorder( matrixStack, x, y );
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 
@@ -29,7 +30,7 @@ public class JeiLowHigh extends AbstractLowHigh {
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer(MatrixStack matrixStack) {
 
         Minecraft.getInstance().getTextureManager().bindTexture( OVERLAY_RESOURCE );
 

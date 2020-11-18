@@ -1,15 +1,19 @@
 package ommina.biomediversity.gui;
 
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import ommina.biomediversity.BiomeDiversity;
@@ -82,6 +86,18 @@ public abstract class Control extends AbstractGui {
 
 */
 
+    private static void innerBlit( Matrix4f matrix4f, int x, int y, int offset, int width, int height, float spriteMinU, float spriteMaxU, float spriteMinV, float spriteMaxV ) {
+        BufferBuilder lvt_10_1_ = Tessellator.getInstance().getBuffer();
+        lvt_10_1_.begin( 7, DefaultVertexFormats.POSITION_TEX );
+        lvt_10_1_.pos( matrix4f, (float) x, (float) width, (float) height ).tex( spriteMinU, spriteMaxV ).endVertex();
+        lvt_10_1_.pos( matrix4f, (float) y, (float) width, (float) height ).tex( spriteMaxU, spriteMaxV ).endVertex();
+        lvt_10_1_.pos( matrix4f, (float) y, (float) offset, (float) height ).tex( spriteMaxU, spriteMinV ).endVertex();
+        lvt_10_1_.pos( matrix4f, (float) x, (float) offset, (float) height ).tex( spriteMinU, spriteMinV ).endVertex();
+        lvt_10_1_.finishDrawing();
+        RenderSystem.enableAlphaTest();
+        WorldVertexBufferUploader.draw( lvt_10_1_ );
+    }
+
     public static void fill( double x1, double y1, double x2, double y2, int colour ) {
 
         if ( x1 < x2 ) {
@@ -137,8 +153,8 @@ public abstract class Control extends AbstractGui {
 
     }
 
-    public static void drawSprite( int x, int y, int offset, int width, int height, TextureAtlasSprite sprite ) {
-        innerBlit( x, x + width, y, y + height, offset, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV() );
+    public static void drawSprite( MatrixStack matrixStack, int x, int y, int offset, int width, int height, TextureAtlasSprite sprite ) {
+        innerBlit( matrixStack.getLast().getMatrix(), x, x + width, y, y + height, offset, sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV() );
     }
 
     public static void drawSprite( float f, float x, float y, int minU, int minV, int maxU, int maxV ) {
@@ -159,8 +175,8 @@ public abstract class Control extends AbstractGui {
 
     }
 
-    protected void fillGradientVertical( int p_fillGradient_1_, int p_fillGradient_2_, int p_fillGradient_3_, int p_fillGradient_4_, int startColour, int endColour ) {
-        super.fillGradient( p_fillGradient_1_, p_fillGradient_2_, p_fillGradient_3_, p_fillGradient_4_, startColour, endColour );
+    protected void fillGradientVertical( MatrixStack matrixStack, int p_fillGradient_1_, int p_fillGradient_2_, int p_fillGradient_3_, int p_fillGradient_4_, int startColour, int endColour ) {
+        super.fillGradient( matrixStack, p_fillGradient_1_, p_fillGradient_2_, p_fillGradient_3_, p_fillGradient_4_, startColour, endColour );
     }
 
     protected void fillGradientHorizontal( int p_fillGradient_1_, int p_fillGradient_2_, int p_fillGradient_3_, int p_fillGradient_4_, int startColour, int endColour ) {
@@ -197,9 +213,9 @@ public abstract class Control extends AbstractGui {
 
     }
 
-    public abstract void drawBackgroundLayer( int x, int y );
+    public abstract void drawBackgroundLayer( MatrixStack matrixStack, int x, int y );
 
-    public abstract void drawForegroundLayer();
+    public abstract void drawForegroundLayer(MatrixStack matrixStack);
 
     public static void horizontalLine( int x, int y, int length, int colour ) {
         fill( x, y, length + x, y + 1, colour );
@@ -209,7 +225,7 @@ public abstract class Control extends AbstractGui {
         fill( x, y, x + 1, length + y, colour );
     }
 
-    public void drawBorder( int x, int y ) {
+    public void drawBorder( MatrixStack matrixStack, int x, int y ) {
 
         if ( !hasBorder )
             return;

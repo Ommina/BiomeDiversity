@@ -1,5 +1,6 @@
 package ommina.biomediversity.gui.controls;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,12 +25,12 @@ public class Sprite extends Control {
 
     //region Overrides
     @Override
-    public void drawBackgroundLayer( int x, int y ) {
+    public void drawBackgroundLayer( MatrixStack matrixStack, int x, int y ) {
         //None
     }
 
     @Override
-    public void drawForegroundLayer() {
+    public void drawForegroundLayer(MatrixStack matrixStack) {
 
         Minecraft.getInstance().getTextureManager().bindTexture( sprite );
         Control.drawSprite( 16f / 256f, (float) position.x, (float) position.y, FG.minU, FG.minV, FG.maxU, FG.maxV );

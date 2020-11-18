@@ -30,7 +30,7 @@ public class ChunkLoader {
         if ( server == null )
             return;
 
-        ServerWorld serverworld = server.getWorld( World.field_234918_g_ ); //TODO: Can DimensionManager somehow let us use other dimensions as well?
+        ServerWorld serverworld = server.getWorld( World.OVERWORLD ); //TODO: Can DimensionManager somehow let us use other dimensions as well?
 
         serverworld.getChunkProvider().forceChunk( pos, doForceLoad );
 

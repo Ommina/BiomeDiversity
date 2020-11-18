@@ -1,5 +1,6 @@
 package ommina.biomediversity.integration.jei;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -11,13 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import ommina.biomediversity.BiomeDiversity;
-import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.fluids.FluidStrengths;
 import ommina.biomediversity.fluids.TransmitterFluidRecipe;
 import ommina.biomediversity.gui.Control;
 import ommina.biomediversity.integration.jei.controls.JeiLowHigh;
 import ommina.biomediversity.integration.jei.controls.JeiTank;
 import ommina.biomediversity.items.ModItems;
+import ommina.biomediversity.rendering.RenderHelper;
 import ommina.biomediversity.util.Translator;
 
 import java.awt.*;
@@ -96,15 +97,15 @@ public class TransmitterCategory implements IRecipeCategory<TransmitterFluidReci
     }
 
     @Override
-    public void draw( TransmitterFluidRecipe recipe, double mouseX, double mouseY ) {
+    public void draw( TransmitterFluidRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY ) {
 
-        TANK_FLUID.drawBackgroundLayer( 0, 0 );
+        TANK_FLUID.drawBackgroundLayer( matrixStack, 0, 0 );
 
         LOW_HIGH.setValue( recipe.getStrength() );
-        LOW_HIGH.drawBackgroundLayer( 0, 0 );
-        LOW_HIGH.drawForegroundLayer();
+        LOW_HIGH.drawBackgroundLayer( matrixStack, 0, 0 );
+        LOW_HIGH.drawForegroundLayer( matrixStack );
 
-        RenderHelper.drawText( Translator.translateToLocalFormatted( "jei.biomediversity.transmitter.text.energy", recipe.getStrength() ), TEXT_LOCATION.x, TEXT_LOCATION.y, GUI_WIDTH - Control.Sizes.TANK.width - Control.Sizes.LOW_HIGH.width - 9, RenderHelper.Justification.RIGHT, DEFAULT_TEXT_COLOUR );
+        RenderHelper.drawText( Translator.translateToLocalFormatted( "jei.biomediversity.transmitter.text.energy", recipe.getStrength() ), matrixStack, TEXT_LOCATION.x, TEXT_LOCATION.y, GUI_WIDTH - Control.Sizes.TANK.width - Control.Sizes.LOW_HIGH.width - 9, RenderHelper.Justification.RIGHT, DEFAULT_TEXT_COLOUR );
 
     }
 

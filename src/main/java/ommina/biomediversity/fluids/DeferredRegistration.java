@@ -11,18 +11,27 @@ import ommina.biomediversity.BiomeDiversity;
 
 public class DeferredRegistration {
 
-    public static final DeferredRegister<Block> BLOCKS = new DeferredRegister<>( ForgeRegistries.BLOCKS, BiomeDiversity.MODID );
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>( ForgeRegistries.ITEMS, BiomeDiversity.MODID );
-    public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>( ForgeRegistries.FLUIDS, BiomeDiversity.MODID );
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create( ForgeRegistries.BLOCKS, BiomeDiversity.MODID );
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create( ForgeRegistries.ITEMS, BiomeDiversity.MODID );
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create( ForgeRegistries.FLUIDS, BiomeDiversity.MODID );
 
     public static void setup() {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        DeferredRegistration.BLOCKS.register( modEventBus );
-        DeferredRegistration.ITEMS.register( modEventBus );
-        DeferredRegistration.FLUIDS.register( modEventBus );
+        BLOCKS.register( modEventBus );
+        ITEMS.register( modEventBus );
+        FLUIDS.register( modEventBus );
 
     }
 
 }
+/*
+    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+
+    public static final RegistryObject<Block> ROCK_BLOCK = BLOCKS.register("rock", () -> new Block(Block.Properties.create( Material.ROCK)));
+
+    public ExampleMod() {
+        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    }
+*/

@@ -47,7 +47,7 @@ public class Collector extends ClusterBlock implements IClusterController {
 
     //region Overrides
     @Override
-    public boolean checkMultiblock( World world, BlockPos pos ) {
+    public boolean checkMultiblock( IWorld world, BlockPos pos ) {
 
         if ( multiblock == null )
             defineMultiblock();

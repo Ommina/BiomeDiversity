@@ -199,7 +199,7 @@ public class RenderHelper {
 
     }
 
-    public static void drawText( String text, int left, int top, int width, Justification justification, int colour ) {
+    public static void drawText( String text, MatrixStack matrixStack, int left, int top, int width, Justification justification, int colour ) {
 
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
@@ -210,7 +210,7 @@ public class RenderHelper {
         }
 
 
-        fontRenderer.drawString( text, left, top, colour );
+        fontRenderer.drawString( matrixStack, text, left, top, colour );
 
     }
 
