@@ -20,7 +20,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
-import ommina.biomediversity.fluids.DeferredRegistration;
+import ommina.biomediversity.registry.DeferredRegistration;
 
 @ObjectHolder( BiomeDiversity.MODID )
 @Mod.EventBusSubscriber( modid = BiomeDiversity.MODID )

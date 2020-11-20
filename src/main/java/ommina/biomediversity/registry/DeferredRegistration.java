@@ -1,4 +1,4 @@
-package ommina.biomediversity.fluids;
+package ommina.biomediversity.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;

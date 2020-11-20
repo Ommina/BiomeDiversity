@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import ommina.biomediversity.BiomeDiversity;
+import ommina.biomediversity.registry.DeferredRegistration;
 
 import java.awt.*;
 import java.util.function.Supplier;

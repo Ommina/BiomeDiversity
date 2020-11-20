@@ -35,7 +35,6 @@ public class JunglePoolFeature extends Feature<NoFeatureConfig> {
 
             if ( blockpos.getY() >= MINIMUM_Y && isSuitableLocation( blockpos, world ) ) {
                 world.setBlockState( blockpos, ModBlocks.JUNGLEWATER.getDefaultState(), 2 );
-                BiomeDiversity.LOGGER.warn( "Moo! " + blockpos.toString() );
             }
         }
 

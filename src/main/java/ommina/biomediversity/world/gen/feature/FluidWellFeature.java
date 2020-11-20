@@ -23,7 +23,7 @@ public class FluidWellFeature extends Feature<NoFeatureConfig> {
 
     //region Overrides
     @Override
-    public boolean generate( ISeedReader world, ChunkGenerator p_241855_2_, Random random, BlockPos pos, NoFeatureConfig p_241855_5_ ) {
+    public boolean generate( ISeedReader world, ChunkGenerator p_241855_2_, Random random, BlockPos pos, NoFeatureConfig config ) {
 
         if ( random.nextInt( 2000 ) > Config.fluidWellProbability.get() )
             return true;
