@@ -13,7 +13,7 @@ public class FakePlantBlock extends Block {
         super( builder );
     }
 
-//region Overrides
+    //region Overrides
     @Override
     public void neighborChanged( BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean isMoving ) {
 
@@ -23,11 +23,6 @@ public class FakePlantBlock extends Block {
         super.neighborChanged( state, world, pos, block, neighborPos, isMoving );
 
     }
-
-    //@Override
-    //public BlockRenderLayer getRenderLayer() {
-    //    return BlockRenderLayer.CUTOUT;
-    //}
 
     @Override
     public boolean isValidPosition( BlockState state, IWorldReader world, BlockPos blockPos ) {

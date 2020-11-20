@@ -152,7 +152,7 @@ public class ModBlocks {
         final RenderType cutoutRenderType = RenderType.getCutout();
 
         final String[] transparent = new String[]
-             { "colza", "pomegranate", "world_colza", "world_pomegrante",
+             { "colza", "pomegranate", "world_colza", "world_pomegranate",
                   "collector", "receiver", "transmitter", "plug_energy", "plug_fluid_byproduct", "mixer_advanced" };
 
         Arrays.stream( transparent ).forEach( b -> RenderTypeLookup.setRenderLayer( ForgeRegistries.BLOCKS.getValue( BiomeDiversity.getId( b ) ), cutoutRenderType ) );
