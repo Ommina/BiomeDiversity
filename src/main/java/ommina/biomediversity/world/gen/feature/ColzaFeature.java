@@ -9,6 +9,7 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.blocks.crops.FakePlantBlock;
 
@@ -26,6 +27,8 @@ public class ColzaFeature extends Feature<NoFeatureConfig> {
     @Override
     public boolean generate( ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config ) {
 
+        pos = new BlockPos( pos.getX(), 255, pos.getZ() ); //TODO: Should this be changed to use the Placement rules when creating the ConfiguredFeature ?
+
         for ( BlockState blockstate = world.getBlockState( pos ); (blockstate.isAir( world, pos ) || blockstate.isIn( BlockTags.LEAVES )) && pos.getY() > 0; blockstate = world.getBlockState( pos ) ) {
             pos = pos.down();
         }
@@ -33,9 +36,10 @@ public class ColzaFeature extends Feature<NoFeatureConfig> {
         BlockState blockstate1 = COLZA_BLOCK.getDefaultState();
 
         for ( int i = 0; i < 4; ++i ) {
-            BlockPos blockpos = pos.add( rand.nextInt( 8 ) - rand.nextInt( 8 ), rand.nextInt( 4 ) - rand.nextInt( 4 ), rand.nextInt( 8 ) - rand.nextInt( 8 ) );
+            BlockPos blockpos = pos;
             if ( (world.isAirBlock( blockpos ) || world.getBlockState( blockpos ) == Blocks.GRASS.getDefaultState()) && blockstate1.isValidPosition( world, blockpos ) ) {
                 world.setBlockState( blockpos, blockstate1, 2 );
+                //BiomeDiversity.LOGGER.warn( "Colza at " + blockpos.toString() );
             }
         }
 

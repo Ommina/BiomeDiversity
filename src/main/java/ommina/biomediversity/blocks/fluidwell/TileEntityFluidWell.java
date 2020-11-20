@@ -12,7 +12,7 @@ import ommina.biomediversity.world.gen.FluidWellGeneration;
 /*
 
 OK, so about this.  This is worldgen.  This is not the place for it.  It will, ideally, eventually be replaced with a Carver, but working through carvers will have to be done by somebody
-with more skill in sifting through obfuscated code than I.  I gave up.
+with more skill in sifting through obfuscated code than I.  I gave up.  (Or maybe the geode code?  I still don't know.)
 
 For now, this is a TE that is created and placed during WorldGen as a Feature.  Every five seconds, it checks if the chunks around it are loaded.  If they all are, it creates the fluid sphere,
 destroys itself, and moves on.
@@ -51,7 +51,7 @@ public class TileEntityFluidWell extends TileEntity implements ITickableTileEnti
 
         FluidWellGeneration.createSphere( world, pos );
 
-        world.setBlockState( pos, Blocks.STONE.getDefaultState() );
+        world.setBlockState( pos, Blocks.STONE.getDefaultState() ); // Destroy itself once it is done
 
     }
 //endregion Overrides

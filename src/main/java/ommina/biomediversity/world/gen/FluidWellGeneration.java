@@ -1,6 +1,7 @@
 package ommina.biomediversity.world.gen;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -96,17 +97,14 @@ public class FluidWellGeneration {
 
     private static void setBlockState( IWorld world, BlockState blockstate, BlockPos blockpos ) {
 
-        /*
-
         if ( !world.setBlockState( blockpos, blockstate, 2 ) )
             BiomeDiversity.LOGGER.warn( "setBlockstate Failed at " + blockpos.toString() );
 
-        IFluidState ifluidstate = world.getFluidState( blockpos );
+        FluidState fluidstate = world.getFluidState( blockpos );
 
-        if ( !ifluidstate.isEmpty() )
-            world.getPendingFluidTicks().scheduleTick( blockpos, ifluidstate.getFluid(), 0 );
+        if ( !fluidstate.isEmpty() )
+            world.getPendingFluidTicks().scheduleTick( blockpos, fluidstate.getFluid(), 0 );
 
-            */
 
     }
 

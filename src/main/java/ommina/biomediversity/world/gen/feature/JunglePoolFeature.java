@@ -10,6 +10,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.world.gen.GeneratorHelper;
 
@@ -34,6 +35,7 @@ public class JunglePoolFeature extends Feature<NoFeatureConfig> {
 
             if ( blockpos.getY() >= MINIMUM_Y && isSuitableLocation( blockpos, world ) ) {
                 world.setBlockState( blockpos, ModBlocks.JUNGLEWATER.getDefaultState(), 2 );
+                BiomeDiversity.LOGGER.warn( "Moo! " + blockpos.toString() );
             }
         }
 

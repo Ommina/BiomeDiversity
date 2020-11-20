@@ -1,82 +1,107 @@
 package ommina.biomediversity.world.gen.feature;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.placement.TopSolidRangeConfig;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import ommina.biomediversity.BiomeDiversity;
 import ommina.biomediversity.blocks.ModBlocks;
 import ommina.biomediversity.config.Config;
+import ommina.biomediversity.fluids.DeferredRegistration;
 
 @ObjectHolder( BiomeDiversity.MODID )
-@Mod.EventBusSubscriber(  modid = BiomeDiversity.MODID )
+@Mod.EventBusSubscriber( modid = BiomeDiversity.MODID )
 public class ModFeatures {
 
-    @ObjectHolder( "jungle_pool" ) public static JunglePoolFeature JUNGLE_POOL;
-    @ObjectHolder( "fluid_well" ) public static FluidWellFeature FLUID_WELL;
-    @ObjectHolder( "pomegranate" ) public static PomegranateFeature POMEGRANTE;
-    @ObjectHolder( "colza" ) public static ColzaFeature COLZA;
+    public static RegistryObject<JunglePoolFeature> JUNGLE_POOL_FEATURE = DeferredRegistration.FEATURES.register( "jungle_pool", () -> new JunglePoolFeature( NoFeatureConfig.field_236558_a_ ) );
+    public static RegistryObject<FluidWellFeature> FLUID_WELL_FEATURE = DeferredRegistration.FEATURES.register( "fluid_well", () -> new FluidWellFeature( NoFeatureConfig.field_236558_a_ ) );
+    public static RegistryObject<PomegranateFeature> POMEGRANTE_FEATURE = DeferredRegistration.FEATURES.register( "pomegranate", () -> new PomegranateFeature( NoFeatureConfig.field_236558_a_ ) );
+    public static RegistryObject<ColzaFeature> COLZA_FEATURE = DeferredRegistration.FEATURES.register( "colza", () -> new ColzaFeature( NoFeatureConfig.field_236558_a_ ) );
 
-    private static ConfiguredFeature<?, ?> ORE_WOOL_OVERWORLD = Feature.ORE
-         .withConfiguration( new OreFeatureConfig(
-              OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-              Blocks.WHITE_WOOL.getDefaultState(),
-              9 ) ) // vein size
-         .withPlacement( Placement.RANGE.configure( new TopSolidRangeConfig( 5, 0, 10 ) ) )
-         .square()
-         .func_242731_b( 20 ); // number of veins per chunk
+    private static ConfiguredFeature<?, ?> JUNGLE_POOL;
+    private static ConfiguredFeature<?, ?> FLUID_WELL;
+    private static ConfiguredFeature<?, ?> POMEGRANTE;
+    private static ConfiguredFeature<?, ?> COLZA;
 
-    @SubscribeEvent
-    public static void register( final RegistryEvent.Register<Feature<?>> event ) {
+    private static boolean isFeatureRegistrationComplete = false;
 
-        event.getRegistry().register( new JunglePoolFeature( NoFeatureConfig.field_236558_a_ ).setRegistryName( "jungle_pool" ) );
-        event.getRegistry().register( new FluidWellFeature( OreFeatureConfig.CODEC ).setRegistryName( "fluid_well" ) );
-        event.getRegistry().register( new PomegranateFeature( NoFeatureConfig.field_236558_a_ ).setRegistryName( "pomegranate" ) );
-        event.getRegistry().register( new ColzaFeature( NoFeatureConfig.field_236558_a_ ).setRegistryName( "colza" ) );
+    private static void registerFeatures() {
 
+        if ( isFeatureRegistrationComplete )
+            return;
+
+        JUNGLE_POOL = JUNGLE_POOL_FEATURE.get()
+             .withConfiguration( new NoFeatureConfig() )
+             .withPlacement( Placement.CHANCE.configure( new ChanceConfig( 3 ) ) );
+
+        FLUID_WELL = FLUID_WELL_FEATURE.get()
+             .withConfiguration( new NoFeatureConfig() )
+             .withPlacement( Placement.RANGE.configure( new TopSolidRangeConfig( 5, 0, 10 ) ) )
+             .square()
+             .func_242731_b( 1 ); // number of veins per chunk
+
+        POMEGRANTE = POMEGRANTE_FEATURE.get()
+             .withConfiguration( new NoFeatureConfig() )
+             .withPlacement( Placement.CHANCE.configure( new ChanceConfig( 3 ) ) );
+
+        COLZA = COLZA_FEATURE.get()
+             .withConfiguration( new NoFeatureConfig() )
+             .withPlacement( Placement.CHANCE.configure( new ChanceConfig( 3 ) ) );
+
+        registerFeature( JUNGLE_POOL, "jungle_pool" );
+        registerFeature( FLUID_WELL, "fluid_well" );
+        registerFeature( POMEGRANTE, "pomegranate" );
+        registerFeature( COLZA, "colza" );
+
+        isFeatureRegistrationComplete = true;
+
+    }
+
+    private static void registerFeature( ConfiguredFeature<?, ?> feature, String registryName ) {
+        Registry.register( WorldGenRegistries.CONFIGURED_FEATURE, BiomeDiversity.getId( registryName ), feature );
     }
 
     @SubscribeEvent
     public static void addFeaturesToBiomes( BiomeLoadingEvent event ) {
 
+        registerFeatures();
 
         if ( Config.orinociteOreEnabled.get() && event.getCategory() != Biome.Category.THEEND && event.getCategory() != Biome.Category.NETHER ) {
             addOre( event, ModBlocks.ORINOCITE_ORE, Config.orinociteOreGenerationSizeBase.get() + Config.orinociteOreGenerationSizeVariance.get(), Config.orinociteOreGenerationAttempts.get(), Config.orinociteOreGenerationMinY.get(), Config.orinociteOreGenerationMaxY.get() );
         }
 
-        /*
-
         if ( Config.junglePoolGenerationEnabled.get() && event.getCategory() == Biome.Category.JUNGLE ) {
-            addJunglePools( biome );
+            addJunglePools( event );
         }
 
         if ( Config.fluidWellGenerationEnabled.get() )
-            addFluidWells( biome, ModBlocks.FLUID_WELL );
+            addFluidWells( event, ModBlocks.FLUID_WELL );
 
         if ( Config.nocifiedStoneEnabled.get() && event.getCategory() == Biome.Category.EXTREME_HILLS ) {
-            addOre( biome, ModBlocks.STONE_NOCIFIED_UNDAMAGED, Config.nocifiedStoneGenerationSizeBase.get() + Config.nocifiedStoneGenerationSizeVariance.get(), Config.nocifiedStoneGenerationAttempts.get(), Config.nocifiedStoneGenerationMinY.get(), Config.nocifiedStoneGenerationMaxY.get() );
+            addOre( event, ModBlocks.STONE_NOCIFIED_UNDAMAGED, Config.nocifiedStoneGenerationSizeBase.get() + Config.nocifiedStoneGenerationSizeVariance.get(), Config.nocifiedStoneGenerationAttempts.get(), Config.nocifiedStoneGenerationMinY.get(), Config.nocifiedStoneGenerationMaxY.get() );
         }
 
         if ( Config.pomegranateGenerationEnabled.get() && event.getCategory() == Biome.Category.SAVANNA ) {
-            addPlant( ModFeatures.POMEGRANTE, biome );
+            addPlant( ModFeatures.POMEGRANTE, event );
         }
 
         if ( Config.colzaGenerationEnabled.get() && event.getCategory() == Biome.Category.PLAINS ) {
-            addPlant( ModFeatures.COLZA, biome );
+            addPlant( ModFeatures.COLZA, event );
         }
 
-*/
     }
 
     private static void addOre( BiomeLoadingEvent biomeEvent, Block block, int size, int chances, int minHeight, int maxHeight ) {
@@ -86,52 +111,19 @@ public class ModFeatures {
              .withPlacement( Placement.RANGE.configure( new TopSolidRangeConfig( minHeight, 0, 10 ) ) )
              .func_242731_b( chances ) ); // bottomOffset, topOffset, maximum
 
-        //biome.getGenerationSettings().getFeatures().add(  )
-
-        //biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES,
-        //     Feature.ORE.withConfiguration(
-        //          new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), size ) )
-        //          .withPlacement( Placement.COUNT_RANGE.configure( new CountRangeConfig( chances, minHeight, 0, maxHeight ) ) ) );
-
     }
 
-    /*
-
-    private static void addJunglePools( Biome biome ) {
-
-        biome.addFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION,
-             ModFeatures.JUNGLE_POOL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
-
+    private static void addJunglePools( BiomeLoadingEvent biomeEvent ) {
+        biomeEvent.getGeneration().withFeature( GenerationStage.Decoration.TOP_LAYER_MODIFICATION, JUNGLE_POOL );
     }
 
-    private static void addFluidWells( Biome biome, Block block ) {
-
-        biome.addFeature( GenerationStage.Decoration.UNDERGROUND_ORES,
-             ModFeatures.FLUID_WELL.withConfiguration(
-                  new OreFeatureConfig( OreFeatureConfig.FillerBlockType.NATURAL_STONE, block.getDefaultState(), 1 ) )
-                  .withPlacement( Placement.COUNT_RANGE.configure( new CountRangeConfig( 1, 1, 0, 1 ) ) ) );
-
-
-        // biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES,
-        //      ModFeatures.FLUID_WELL.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.NOPE.configure( IPlacementConfig.NO_PLACEMENT_CONFIG ) ) );
-
-
-//        biomeIn.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
-//             Feature.WOODLAND_MANSION.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-
-
-        //       biomeIn.addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Feature.BURIED_TREASURE.func_225566_b_(new BuriedTreasureConfig(0.01F)).func_227228_a_(Placement.NOPE.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-        //      biome.addFeature( GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature( ModFeatures.FLUID_WELL, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig( 10 ) ) );
-
+    private static void addFluidWells( BiomeLoadingEvent biomeEvent, Block block ) {
+        biomeEvent.getGeneration().withFeature( GenerationStage.Decoration.UNDERGROUND_ORES, FLUID_WELL );
     }
 
-    private static void addPlant( Feature<NoFeatureConfig> feature, Biome biome ) {
-
-        biome.addFeature( GenerationStage.Decoration.VEGETAL_DECORATION,
-             feature.withConfiguration( IFeatureConfig.NO_FEATURE_CONFIG ).withPlacement( Placement.COUNT_HEIGHTMAP_DOUBLE.configure( new FrequencyConfig( 4 ) ) ) );
-
+    private static void addPlant( ConfiguredFeature<?, ?> feature, BiomeLoadingEvent biomeEvent ) {
+        biomeEvent.getGeneration().withFeature( GenerationStage.Decoration.VEGETAL_DECORATION, feature );
     }
-*/
 
 }
 
