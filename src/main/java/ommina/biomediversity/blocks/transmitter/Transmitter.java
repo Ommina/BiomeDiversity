@@ -125,7 +125,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
     public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return ActionResultType.CONSUME;
+            return ActionResultType.SUCCESS;
 
         TileEntityTransmitter tile = (TileEntityTransmitter) world.getTileEntity( pos );
         ItemStack heldItem = player.getHeldItem( hand );
@@ -134,7 +134,7 @@ public class Transmitter extends BlockTileEntity<TileEntityTransmitter> { // imp
 
             if ( heldItem.getItem() == Items.CARROT ) {
                 debuggingCarrot( world, pos, tile );
-                return ActionResultType.CONSUME;
+                return ActionResultType.SUCCESS;
             } else if ( heldItem.getItem() == ModItems.LINK_STAFF )
                 return ActionResultType.PASS;
 

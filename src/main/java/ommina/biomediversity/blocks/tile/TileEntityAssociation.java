@@ -43,7 +43,6 @@ public abstract class TileEntityAssociation extends TileEntity {
     //region Overrides
     @Override
     public void read( BlockState blockState, CompoundNBT nbt ) {
-        super.read( blockState, nbt );
 
         identifier = nbt.getUniqueId( "identifier" );
 
@@ -55,12 +54,16 @@ public abstract class TileEntityAssociation extends TileEntity {
             associatedPos = NbtUtils.getBlockPos( "associatedpos", nbt );
         }
 
+        super.read( blockState, nbt );
+
     }
 
     @Override
     public CompoundNBT write( final CompoundNBT nbt ) {
 
         nbt.putUniqueId( "identifier", identifier );
+
+        BiomeDiversity.LOGGER.warn( "Saving identifier: " + (identifier == null ? "null" : identifier) );
 
         if ( owner != null )
             nbt.putUniqueId( "owner", owner );

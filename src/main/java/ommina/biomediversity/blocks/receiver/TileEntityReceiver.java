@@ -88,6 +88,10 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
             BROADCASTER.reset();
         }
 
+        //Network.channel.sendTo( new PacketUpdateReceiver( this ), NetworkManager., NetworkDirection.PLAY_TO_CLIENT );
+
+        //INSTANCE.sendTo(packet, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+
     }
 
     @Override
@@ -127,6 +131,11 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
     @Override
     public ITextComponent getDisplayName() {
         return new StringTextComponent( getType().getRegistryName().getPath() );
+    }
+
+    @Override
+    public void handleUpdateTag( BlockState state, CompoundNBT tag ) {
+        BiomeDiversity.LOGGER.warn( "Moo!  Again.  " + tag.toString() );
     }
 
     @Override
@@ -328,90 +337,88 @@ public class TileEntityReceiver extends TileEntityAssociation implements ITickab
                 }
             }
 
-            return;
+        } else {
 
-        }
+            if ( FINDER.shouldRegister() ) {
+                registerSelf();
+            }
 
-        if ( FINDER.shouldRegister() ) {
-            registerSelf();
-        }
+            TileEntityCollector collector = collectorResult.getCollector();
 
-        TileEntityCollector collector = collectorResult.getCollector();
+            if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
 
-        if ( this.getAssociatedIdentifier() != null && this.getAssociatedPos() != null ) {
+                world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
 
-            world.getCapability( BiomeDiversity.TRANSMITTER_NETWORK_CAPABILITY, null ).ifPresent( cap -> {
+                    TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getAssociatedIdentifier() );
 
-                TransmitterData pd = cap.getTransmitter( this.getOwner(), this.getAssociatedIdentifier() );
+                    biomeRegistryName = pd.biomeId.toString();
+                    temperature = pd.temperature; // + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
+                    rainfall = pd.rainfall;
 
-                biomeRegistryName = pd.biomeId.toString();
-                temperature = pd.temperature; // + getTemperatureAdjustment( pd.temperature ); // TODO: Peltier
-                rainfall = pd.rainfall;
+                    if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
 
-                if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION ) {
+                        if ( !collector.isCollectorTurnedOff() && collector.canAcceptEnergyPulse() ) {
 
-                    if ( !collector.isCollectorTurnedOff() && collector.canAcceptEnergyPulse() ) {
+                            if ( !world.isBlockPowered( getPos() ) ) {
 
-                        if ( !world.isBlockPowered( getPos() ) ) {
+                                boolean isTransmitterLoaded = false;
 
-                            boolean isTransmitterLoaded = false;
+                                int drainAmount = Constants.CLUSTER_FLUID_CONSUMPTION;
 
-                            int drainAmount = Constants.CLUSTER_FLUID_CONSUMPTION;
+                                fluidHashCode = pd.fluid.hashCode();
+                                power = FluidStrengths.getStrength( fluidHashCode );
 
-                            fluidHashCode = pd.fluid.hashCode();
-                            power = FluidStrengths.getStrength( fluidHashCode );
+                                //if ( power != 0 )
+                                //    BiomeDiversity.LOGGER.warn( "power: " + power );
 
-                            //if ( power != 0 )
-                            //    BiomeDiversity.LOGGER.warn( "power: " + power );
+                                collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall );
 
-                            collector.collect( getPos(), fluidHashCode, power, biomeRegistryName, temperature, rainfall );
+                                pd.drain( drainAmount );
 
-                            pd.drain( drainAmount );
+                                isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
 
-                            isTransmitterLoaded = world.isBlockLoaded( this.getAssociatedPos() );
-
-                            if ( isTransmitterLoaded ) {
-                                TileEntity te = world.getTileEntity( this.getAssociatedPos() );
-                                if ( te instanceof TileEntityTransmitter ) {
-                                    TileEntityTransmitter tep = (TileEntityTransmitter) te;
-                                    tep.getTank( 0 ).drain_internal( Constants.CLUSTER_FLUID_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
+                                if ( isTransmitterLoaded ) {
+                                    TileEntity te = world.getTileEntity( this.getAssociatedPos() );
+                                    if ( te instanceof TileEntityTransmitter ) {
+                                        TileEntityTransmitter tep = (TileEntityTransmitter) te;
+                                        tep.getTank( 0 ).drain_internal( Constants.CLUSTER_FLUID_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE );
+                                    }
                                 }
+
+                                if ( pd.getAmount() + drainAmount - lastFluidAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
+                                    resetChunkloadDuration();
+
+                                lastFluidAmount = pd.getAmount();
+
                             }
-
-                            if ( pd.getAmount() + drainAmount - lastFluidAmount >= CHUNKLOAD_MIN_FLUID_INCREASE )
-                                resetChunkloadDuration();
-
-                            lastFluidAmount = pd.getAmount();
-
                         }
+
+                        if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION )
+                            this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
+                        else
+                            this.getTank( 0 ).setFluid( FluidStack.EMPTY );
+
+                        world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
+
                     }
 
-                    if ( pd.fluid != null && pd.getAmount() >= Constants.CLUSTER_FLUID_CONSUMPTION )
-                        this.getTank( 0 ).setFluid( new FluidStack( pd.fluid, pd.getAmount() ) );
-                    else
-                        this.getTank( 0 ).setFluid( FluidStack.EMPTY );
 
-                    world.notifyNeighborsOfStateChange( getPos(), this.getBlockState().getBlock() );
+                } );
 
-                }
+                doChunkloading();
 
-
-            } );
-
-            doChunkloading();
+            }
 
         }
 
         doBroadcast();
 
-        this.markDirty();
+        markDirty();
 
     }
 
     private boolean hasEnoughPowerToChunkload() {
-
         return !Config.receiverRequirePowerToChunkload.get() || BATTERY.getEnergyStored() >= Config.receiverPowerConsumptionChunloading.get() * Constants.CLUSTER_TICK_DELAY;
-
     }
 
     private void loadTransmitterChunk() {

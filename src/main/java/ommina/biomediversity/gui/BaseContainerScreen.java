@@ -32,7 +32,8 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
     @Override
     public void render( MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks ) {
 
-        //this.renderBackground();
+        this.renderBackground( matrixStack );
+
         super.render( matrixStack, mouseX, mouseY, partialTicks );
         // this.func_230459_a_( matrixStack, mouseX, mouseY );
     }

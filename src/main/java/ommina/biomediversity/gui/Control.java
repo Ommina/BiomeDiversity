@@ -87,27 +87,32 @@ public abstract class Control extends AbstractGui {
 */
 
     private static void innerBlit( Matrix4f matrix4f, int x, int y, int offset, int width, int height, float spriteMinU, float spriteMaxU, float spriteMinV, float spriteMaxV ) {
-        BufferBuilder lvt_10_1_ = Tessellator.getInstance().getBuffer();
-        lvt_10_1_.begin( 7, DefaultVertexFormats.POSITION_TEX );
-        lvt_10_1_.pos( matrix4f, (float) x, (float) width, (float) height ).tex( spriteMinU, spriteMaxV ).endVertex();
-        lvt_10_1_.pos( matrix4f, (float) y, (float) width, (float) height ).tex( spriteMaxU, spriteMaxV ).endVertex();
-        lvt_10_1_.pos( matrix4f, (float) y, (float) offset, (float) height ).tex( spriteMaxU, spriteMinV ).endVertex();
-        lvt_10_1_.pos( matrix4f, (float) x, (float) offset, (float) height ).tex( spriteMinU, spriteMinV ).endVertex();
-        lvt_10_1_.finishDrawing();
+
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+
+        bufferBuilder.begin( 7, DefaultVertexFormats.POSITION_TEX );
+        bufferBuilder.pos( matrix4f, (float) x, (float) width, (float) height ).tex( spriteMinU, spriteMaxV ).endVertex();
+        bufferBuilder.pos( matrix4f, (float) y, (float) width, (float) height ).tex( spriteMaxU, spriteMaxV ).endVertex();
+        bufferBuilder.pos( matrix4f, (float) y, (float) offset, (float) height ).tex( spriteMaxU, spriteMinV ).endVertex();
+        bufferBuilder.pos( matrix4f, (float) x, (float) offset, (float) height ).tex( spriteMinU, spriteMinV ).endVertex();
+
+        bufferBuilder.finishDrawing();
         RenderSystem.enableAlphaTest();
-        WorldVertexBufferUploader.draw( lvt_10_1_ );
+
+        WorldVertexBufferUploader.draw( bufferBuilder );
+
     }
 
-    public static void fill( double x1, double y1, double x2, double y2, int colour ) {
+    public static void fill( Matrix4f matrix4f, float x1, float y1, float x2, float y2, int colour ) {
 
         if ( x1 < x2 ) {
-            double i = x1;
+            float i = x1;
             x1 = x2;
             x2 = i;
         }
 
         if ( y1 < y2 ) {
-            double j = y1;
+            float j = y1;
             y1 = y2;
             y2 = j;
         }
@@ -122,10 +127,10 @@ public abstract class Control extends AbstractGui {
         //GlStateManager.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO );
 
         bufferbuilder.begin( 7, DefaultVertexFormats.POSITION_COLOR );
-        bufferbuilder.pos( x1, y2, 0.0D ).color( f[0], f[1], f[2], f[3] ).endVertex();
-        bufferbuilder.pos( x2, y2, 0.0D ).color( f[0], f[1], f[2], f[3] ).endVertex();
-        bufferbuilder.pos( x2, y1, 0.0D ).color( f[0], f[1], f[2], f[3] ).endVertex();
-        bufferbuilder.pos( x1, y1, 0.0D ).color( f[0], f[1], f[2], f[3] ).endVertex();
+        bufferbuilder.pos( matrix4f, x1, y2, 0.0f ).color( f[0], f[1], f[2], f[3] ).endVertex();
+        bufferbuilder.pos( matrix4f, x2, y2, 0.0f ).color( f[0], f[1], f[2], f[3] ).endVertex();
+        bufferbuilder.pos( matrix4f, x2, y1, 0.0f ).color( f[0], f[1], f[2], f[3] ).endVertex();
+        bufferbuilder.pos( matrix4f, x1, y1, 0.0f ).color( f[0], f[1], f[2], f[3] ).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture();
@@ -215,14 +220,14 @@ public abstract class Control extends AbstractGui {
 
     public abstract void drawBackgroundLayer( MatrixStack matrixStack, int x, int y );
 
-    public abstract void drawForegroundLayer(MatrixStack matrixStack);
+    public abstract void drawForegroundLayer( MatrixStack matrixStack );
 
-    public static void horizontalLine( int x, int y, int length, int colour ) {
-        fill( x, y, length + x, y + 1, colour );
+    public static void horizontalLine( MatrixStack matrixStack, int x, int y, int length, int colour ) {
+        fill( matrixStack.getLast().getMatrix(), x, y, length + x, y + 1, colour );
     }
 
-    public static void verticalLine( int x, int y, int length, int colour ) {
-        fill( x, y, x + 1, length + y, colour );
+    public static void verticalLine( MatrixStack matrixStack, int x, int y, int length, int colour ) {
+        fill( matrixStack.getLast().getMatrix(), x, y, x + 1, length + y, colour );
     }
 
     public void drawBorder( MatrixStack matrixStack, int x, int y ) {

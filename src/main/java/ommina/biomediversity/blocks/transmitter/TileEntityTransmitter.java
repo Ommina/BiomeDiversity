@@ -85,7 +85,6 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
 
     @Override
     public BdFluidTank getTank( int index ) {
-
         return TANK;
     }
 
@@ -103,6 +102,11 @@ public class TileEntityTransmitter extends TileEntityAssociation implements ITic
     @Override
     public ITextComponent getDisplayName() {
         return new StringTextComponent( getType().getRegistryName().getPath() );
+    }
+
+    @Override
+    public void handleUpdateTag( BlockState state, CompoundNBT tag ) {
+        BiomeDiversity.LOGGER.warn( "Moo!  Again.  " + tag.toString() );
     }
 
     @Override

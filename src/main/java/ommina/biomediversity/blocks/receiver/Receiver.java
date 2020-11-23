@@ -67,16 +67,11 @@ public class Receiver extends Block {
         return SHAPE;
     }
 
-    //@Override
-    //public BlockRenderLayer getRenderLayer() {
-    //    return BlockRenderLayer.CUTOUT;
-    //}
-
     @Override
     public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return ActionResultType.PASS;
+            return ActionResultType.SUCCESS;
 
         TileEntityReceiver tile = (TileEntityReceiver) world.getTileEntity( pos );
 
@@ -97,7 +92,7 @@ public class Receiver extends Block {
 
         NetworkHooks.openGui( (ServerPlayerEntity) player, tile, tile.getPos() );
 
-        return ActionResultType.PASS;
+        return ActionResultType.SUCCESS;
 
     }
 

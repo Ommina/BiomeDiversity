@@ -109,16 +109,16 @@ public class RfMeter extends Control {
     }
 
     @Override
-    public void drawForegroundLayer(MatrixStack matrixStack) {
+    public void drawForegroundLayer( MatrixStack matrixStack ) {
 
         setValue();
 
-        double theta = Thetas.get( value );
-        double y = Math.sin( Math.toRadians( theta ) ) * H;
-        double x = Math.cos( Math.toRadians( theta ) ) * H;
+        float theta = (float) Thetas.get( value );
+        float y = (float) Math.sin( Math.toRadians( theta ) ) * H;
+        float x = (float) Math.cos( Math.toRadians( theta ) ) * H;
 
         drawLine( startX, startY, startX + x, startY + y, Color.BLACK.getRGB() );
-        fill( startX - 0.5d, startY - 0.5d, startX + 0.5d, startY + 0.5d, Color.DARK_GRAY.getRGB() );
+        fill( matrixStack.getLast().getMatrix(), startX - 0.5f, startY - 0.5f, startX + 0.5f, startY + 0.5f, Color.DARK_GRAY.getRGB() );
 
     }
 

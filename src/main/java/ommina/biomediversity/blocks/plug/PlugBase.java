@@ -43,7 +43,7 @@ public abstract class PlugBase extends BlockTileEntity<TileEntityPlugBase> {
     public ActionResultType onBlockActivated( BlockState blockState, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult ) {
 
         if ( world.isRemote )
-            return super.onBlockActivated( blockState, world, pos, player, hand, rayTraceResult );
+            return ActionResultType.SUCCESS;
 
         TileEntityPlugBase tile = (TileEntityPlugBase) world.getTileEntity( pos );
 
