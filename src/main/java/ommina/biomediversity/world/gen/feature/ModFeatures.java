@@ -92,6 +92,7 @@ public class ModFeatures {
 
         if ( Config.nocifiedStoneEnabled.get() && event.getCategory() == Biome.Category.EXTREME_HILLS ) {
             addOre( event, ModBlocks.STONE_NOCIFIED_UNDAMAGED, Config.nocifiedStoneGenerationSizeBase.get() + Config.nocifiedStoneGenerationSizeVariance.get(), Config.nocifiedStoneGenerationAttempts.get(), Config.nocifiedStoneGenerationMinY.get(), Config.nocifiedStoneGenerationMaxY.get() );
+            //addOre( event, ModBlocks.STONE_NOCIFIED_UNDAMAGED, 5 + 3, 8, 10, 30 );
         }
 
         if ( Config.pomegranateGenerationEnabled.get() && event.getCategory() == Biome.Category.SAVANNA ) {
@@ -108,8 +109,9 @@ public class ModFeatures {
 
         biomeEvent.getGeneration().withFeature( GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(
              new OreFeatureConfig( OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, block.getDefaultState(), size ) )
-             .withPlacement( Placement.RANGE.configure( new TopSolidRangeConfig( minHeight, 0, 10 ) ) )
-             .func_242731_b( chances ) ); // bottomOffset, topOffset, maximum
+             .withPlacement( Placement.RANGE.configure( new TopSolidRangeConfig( minHeight, 0, maxHeight ) ) )
+             .square()
+             .func_242731_b( chances ) ); // .func_242728_a() /* spreadHorizontally */
 
     }
 
